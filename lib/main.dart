@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:track_trek/core/binding/initial_binding.dart';
 import 'package:track_trek/core/route/app_routes.dart';
 import 'package:track_trek/core/theme/theme.dart';
 import 'package:track_trek/view/initial/splash.dart';
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
 
        builder: (context, child) =>GetMaterialApp(
          title: 'Track Trek',
-
+initialBinding: CommonBinding(),
           theme: darkTheme,
          initialRoute: SplashScreen.routeName,
          getPages: AppRoutes.route(),

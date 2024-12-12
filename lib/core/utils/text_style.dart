@@ -21,6 +21,7 @@ const poppinsThin = TextStyle(
 const poppinsRegular = TextStyle(
   fontFamily: 'Poppins',
   fontWeight: FontWeight.w400,
+
 );
 
 const poppinsMedium = TextStyle(

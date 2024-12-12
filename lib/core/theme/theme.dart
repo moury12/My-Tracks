@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:track_trek/core/constant/fontsize_constant.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 
@@ -9,16 +10,25 @@ TextStyle style = const TextStyle(color: AppColors.whiteLightColor);
 
 const lightThemeFont = "Poppins", darkThemeFont = "Poppins";
 
-final darkTheme = ThemeData(
+final darkTheme = ThemeData.dark().copyWith(
     primaryColor: AppColors.primaryColor,
     scaffoldBackgroundColor: AppColors.blackBackgroundColor,
     brightness: Brightness.dark,
-    useMaterial3: true,
-    fontFamily: lightThemeFont,
+    // useMaterial3: true,
+    // fontFamily: darkThemeFont,
     splashColor: Colors.transparent,
     inputDecorationTheme: inputDecorationTheme,
     drawerTheme: const DrawerThemeData(
       backgroundColor: AppColors.drawerColor,
+    ),
+    textButtonTheme:  TextButtonThemeData(
+      style: TextButton.styleFrom(
+        foregroundColor: AppColors.blueColor,
+       // This is a custom color variable
+        textStyle: poppinsRegular.copyWith(
+          fontSize: 12
+        ),
+      ),
     ),
     textTheme: TextTheme(
       bodySmall: const TextStyle(
@@ -64,19 +74,15 @@ final InputDecorationTheme inputDecorationTheme = InputDecorationTheme(
         gapPadding: 0),
     focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: const BorderSide(color: AppColors.primaryColor, width: 1),
+        borderSide: const BorderSide(color:Colors.transparent, width: 1),
         gapPadding: 0),
     enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
         borderSide: const BorderSide(color: AppColors.blackBackgroundColor, width: 1),
         gapPadding: 0),
     fillColor: AppColors.blackBackgroundColor,
-    contentPadding: const EdgeInsets.symmetric(
-      vertical: 16,
-      horizontal: 24,
-    ),
-    hintStyle: const TextStyle(
-        color: AppColors.whiteLightColor, fontWeight: FontWeight.w300));
+
+   );
 
 //=========================== App Bar =============================
 final AppBarTheme appBarTheme = AppBarTheme(
@@ -88,7 +94,7 @@ final AppBarTheme appBarTheme = AppBarTheme(
   backgroundColor: AppColors.blackBackgroundColor,
   foregroundColor: AppColors.whiteLightColor,
   scrolledUnderElevation: 0,
-  titleTextStyle: poppinsMedium.copyWith(fontSize: 24.sp,),
+  titleTextStyle: poppinsMedium.copyWith(fontSize: 24,),
   actionsIconTheme: const IconThemeData(color: AppColors.whiteLightColor),
   systemOverlayStyle: const SystemUiOverlayStyle(
     // Status bar color
