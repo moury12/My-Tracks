@@ -64,7 +64,7 @@ class AppStaticString {
   static const String active = "Active";
   static const String totalAllowed = "Total Person Allowed: ";
   static const String dummyTime = "10:00AM - 12:00 PM";
-  static const String  email_user= "Email: ";
+  static const String  emailUser= "Email: ";
   static const String  contact= "Contact Info: ";
   static const String  dateOfBirth= "Date Of Birth: ";
   static const String  address= "Address: ";
@@ -102,6 +102,7 @@ class AppStaticString {
   static const String  joinEvent= "Join Event";
   static const String  date= "Date";
   static const String  save= "Save";
+  static const String  home= "Home";
   static const String  createSlot= "Create Slot";
   static const String  selectOneYouCreate= "Select the one you want to create";
   static const String  seat= "Seat: ";
@@ -133,7 +134,8 @@ class AppStaticString {
   static const String  newPass= "New Password";
   static const String  send= "Send";
   static const String  sendCode= "Send Code";
-  static const String  cancle= "Cancel";
+  static const String  cancel= "Cancel";
+  static const String  dummyAddress= "Pasadena, Oklahoma";
 
 
 

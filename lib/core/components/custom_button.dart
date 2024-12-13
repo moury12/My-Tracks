@@ -50,10 +50,9 @@ class CustomButton extends StatelessWidget {
           textAlign: TextAlign.center,
           title,
           style: TextStyle(
-            fontWeight: FontWeight.w500,
-            color: textColor,
-            fontSize: getFontSizeSemiSmall(context)
-          ),
+              fontWeight: FontWeight.w500,
+              color: textColor,
+              fontSize: getFontSizeSemiSmall(context)),
         ),
       ),
     );

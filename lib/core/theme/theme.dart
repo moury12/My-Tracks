@@ -14,6 +14,7 @@ final darkTheme = ThemeData.dark().copyWith(
     primaryColor: AppColors.primaryColor,
     scaffoldBackgroundColor: AppColors.blackBackgroundColor,
     brightness: Brightness.dark,
+
     // useMaterial3: true,
     // fontFamily: darkThemeFont,
     splashColor: Colors.transparent,
