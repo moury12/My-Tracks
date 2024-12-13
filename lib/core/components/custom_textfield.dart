@@ -37,7 +37,7 @@ class CustomTextField extends StatefulWidget {
       this.border,
       this.focusedBorder,
       this.enabledBorder,
-      this.fillColor,
+      this.fillColor=AppColors.textFieldColor,
       this.contentPadding = const EdgeInsets.only(left: 10),
       this.title});
 

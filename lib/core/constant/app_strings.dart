@@ -34,7 +34,7 @@ class AppStaticString {
   static const String email = "Email";
   static const String userName = "User Name";
   static const String password = "Password";
-  static const String confirmPassword = "Password";
+  static const String confirmPassword = "Confirm Password";
   static const String emailEnter = "Enter your Email";
   static const String userNameEnter = "Enter your User Name";
   static const String passwordEnter = "Enter Password";
@@ -132,6 +132,7 @@ class AppStaticString {
   static const String  currentPass= "Current Password";
   static const String  newPass= "New Password";
   static const String  send= "Send";
+  static const String  sendCode= "Send Code";
   static const String  cancle= "Cancel";
 
 

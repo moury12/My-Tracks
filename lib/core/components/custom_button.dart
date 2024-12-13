@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:track_trek/core/constant/fontsize_constant.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 
 class CustomButton extends StatelessWidget {
@@ -51,6 +52,7 @@ class CustomButton extends StatelessWidget {
           style: TextStyle(
             fontWeight: FontWeight.w500,
             color: textColor,
+            fontSize: getFontSizeSemiSmall(context)
           ),
         ),
       ),

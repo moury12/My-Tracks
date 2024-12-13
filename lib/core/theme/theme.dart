@@ -24,10 +24,7 @@ final darkTheme = ThemeData.dark().copyWith(
     textButtonTheme:  TextButtonThemeData(
       style: TextButton.styleFrom(
         foregroundColor: AppColors.blueColor,
-       // This is a custom color variable
-        textStyle: poppinsRegular.copyWith(
-          fontSize: 12
-        ),
+
       ),
     ),
     textTheme: TextTheme(
