@@ -13,7 +13,6 @@ import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/home/widgets/dynamic_tab_widget.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 
-
 class EventCardWidget extends StatelessWidget {
   const EventCardWidget({
     super.key,
@@ -37,70 +36,114 @@ class EventCardWidget extends StatelessWidget {
               children: [
                 Expanded(
                     child: Column(
-
-                      children: [
-                        Text(AppStaticString.dummyEvent,style: poppinsMedium.copyWith(fontSize:getFontSizeSmall(context)),),
-                        Text(
-
-                            '${AppStaticString.locationWithClone}Rock hill boston',maxLines: 1,overflow: TextOverflow.ellipsis,
-                            style: poppinsRegular.copyWith(fontSize:getFontSizeSmall(context)))
-                      ],
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                    )),space16W,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      AppStaticString.dummyEvent,
+                      style: poppinsMedium.copyWith(
+                          fontSize: getFontSizeSmall(context)),
+                    ),
+                    Text('${AppStaticString.locationWithClone}Rock hill boston',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: poppinsRegular.copyWith(
+                            fontSize: getFontSizeSmall(context)))
+                  ],
+                )),
+                space16W,
                 Expanded(
-                    child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-
-                      children: [
-                        Text(
-                            '${AppStaticString.dateWithClone} 05 january ',maxLines: 1,overflow: TextOverflow.ellipsis,
-                            style: poppinsRegular.copyWith(fontSize:getFontSizeSmall(context))),
-                        Text(AppStaticString.dummyTime,maxLines: 1,overflow: TextOverflow.ellipsis,
-                            style: poppinsRegular.copyWith(fontSize:getFontSizeSmall(context)))
-                      ],
-                    ))
+                    child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('${AppStaticString.dateWithClone} 05 january ',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: poppinsRegular.copyWith(
+                            fontSize: getFontSizeSmall(context))),
+                    Text(AppStaticString.dummyTime,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: poppinsRegular.copyWith(
+                            fontSize: getFontSizeSmall(context)))
+                  ],
+                ))
               ],
             ),
             space16H,
-            Obx(
-              () {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('${AppStaticString.priceWithClone}\$120',style: poppinsBlueMedium.copyWith(fontSize: getFontSizeSemiSmall(context)),),
-                    DividerVertical(),
-                    Text('${AppStaticString.totalSlot}20',style: poppinsRegular.copyWith(fontSize: getFontSizeSmall(context)),),
-                    HomeController.to.selectedLabel.value ==2?SizedBox.shrink(): DividerVertical(),
-                    HomeController.to.selectedLabel.value ==2?SizedBox.shrink():  Text('${AppStaticString.unsold}10',style: poppinsRegular.copyWith(fontSize: getFontSizeSmall(context))),
-                  ],
-                );
-              }
-            ),
+            Obx(() {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  PriceTextWidget(),
+                  DividerVertical(),
+                  Text(
+                    '${AppStaticString.totalSlot}20',
+                    style: poppinsRegular.copyWith(
+                        fontSize: getFontSizeSmall(context)),
+                  ),
+                  HomeController.to.selectedLabel.value == 2
+                      ? SizedBox.shrink()
+                      : DividerVertical(),
+                  HomeController.to.selectedLabel.value == 2
+                      ? SizedBox.shrink()
+                      : Text('${AppStaticString.unsold}10',
+                          style: poppinsRegular.copyWith(
+                              fontSize: getFontSizeSmall(context))),
+                ],
+              );
+            }),
             space16H,
-            RichText(text:  TextSpan(children:[
+            RichText(
+                text: TextSpan(children: [
               TextSpan(
-                text: AppStaticString.dummyDesc,style: poppinsRegular.copyWith(
-                  fontSize: getFontSizeSmall(context),
-                  color: AppColors.fadeWhiteColor
+                text: AppStaticString.dummyDesc,
+                style: poppinsRegular.copyWith(
+                    fontSize: getFontSizeSmall(context),
+                    color: AppColors.fadeWhiteColor),
               ),
-              ),
-              TextSpan(text: AppStaticString.seeMore,style: poppinsSemiBold.copyWith(
-                  fontSize: getFontSizeSmall(context)
-              ),)
+              TextSpan(
+                text: AppStaticString.seeMore,
+                style: poppinsSemiBold.copyWith(
+                    fontSize: getFontSizeSmall(context)),
+              )
             ])),
             space16H,
-            CustomButton(onTap: (){},child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(AppStaticString.viewAllParticipent,style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.blackLightColor,
-                    fontSize: getFontSizeSemiSmall(context))),
-                space8W,
-                Image.asset(arrowTopImgUrl,height: 24.w,)
-              ],),)
+            CustomButton(
+              onTap: () {},
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(AppStaticString.viewAllParticipent,
+                      style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.blackLightColor,
+                          fontSize: getFontSizeSemiSmall(context))),
+                  space8W,
+                  Image.asset(
+                    arrowTopImgUrl,
+                    height: 24.w,
+                  )
+                ],
+              ),
+            )
           ],
         ),
       ),
+    );
+  }
+}
+
+class PriceTextWidget extends StatelessWidget {
+  const PriceTextWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      '${AppStaticString.priceWithClone}\$120',
+      style:
+          poppinsBlueMedium.copyWith(fontSize: getFontSizeSemiSmall(context)),
     );
   }
 }

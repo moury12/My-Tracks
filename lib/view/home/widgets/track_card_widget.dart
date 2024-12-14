@@ -13,8 +13,10 @@ import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 
 class TrackCardWidget extends StatelessWidget {
+  final bool? fromManage;
   const TrackCardWidget({
     super.key,
+    this.fromManage = false,
   });
 
   @override
@@ -27,77 +29,155 @@ class TrackCardWidget extends StatelessWidget {
           children: [
             Padding(
               padding: padding14V,
-              child: ClipRRect(borderRadius: BorderRadius.circular(8.r),child: Image.asset(dummyEventImgUrl)),
+              child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8.r),
+                  child: Image.asset(dummyEventImgUrl)),
             ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(child:  Text(AppStaticString.dummyEvent,style: poppinsMedium.copyWith(
-                    fontSize: getFontSizeLarge(context)
-                ),)),
-
+                Expanded(
+                    child: Text(
+                  AppStaticString.dummyEvent,
+                  style: poppinsMedium.copyWith(
+                      fontSize: getFontSizeLarge(context)),
+                )),
                 space16W,
                 Expanded(
-                  child: Row(mainAxisAlignment: MainAxisAlignment.end,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Image.asset(locationIconUrl,height: 24.w,),
+                      Image.asset(
+                        locationIconUrl,
+                        height: 24.w,
+                      ),
                       space6W,
-                      Expanded(child:  Text(AppStaticString.dummyAddress,style: poppinsMedium.copyWith(
-                          fontSize: getFontSizeSmall(context)
-                      ),))
-                    ],),
+                      Expanded(
+                          child: Text(
+                        AppStaticString.dummyAddress,
+                        style: poppinsMedium.copyWith(
+                            fontSize: getFontSizeSmall(context)),
+                      ))
+                    ],
+                  ),
                 )
               ],
             ),
             space16H,
-            RichText(text:  TextSpan(children:[
+            RichText(
+                text: TextSpan(children: [
               TextSpan(
-                text: AppStaticString.dummyDesc,style: poppinsRegular.copyWith(
+                text: AppStaticString.dummyDesc,
+                style: poppinsRegular.copyWith(
                   fontSize: getFontSizeSmall(context),
-
+                ),
               ),
-              ),
-              TextSpan(text: AppStaticString.seeMore,style: poppinsSemiBold.copyWith(
-                  fontSize: getFontSizeSmall(context)
-              ),)
+              TextSpan(
+                text: AppStaticString.seeMore,
+                style: poppinsSemiBold.copyWith(
+                    fontSize: getFontSizeSmall(context)),
+              )
             ])),
             space16H,
-            Text('${AppStaticString.totalSlot}10',style: poppinsSemiBold.copyWith(
-                fontSize: getFontSizeLarge(context)
-            ),),
+            Text(
+              '${AppStaticString.totalSlot}10',
+              style:
+                  poppinsSemiBold.copyWith(fontSize: getFontSizeLarge(context)),
+            ),
             space16H,
-      Row(
-        children: [
-      Flexible(flex: 5,
-        child: SizedBox(height: 45.w,
-          child: Stack(
-            children: List.generate(5, (index)=>Positioned(left: (30*index).toDouble(),
-                child: ClipOval(child: Image.asset(dummyProfileImgUrl,height: 45.w,width: 45.w,fit: BoxFit.cover,)))),
-          ),
-        ),
-      ),
-      space8W,
-      Flexible(flex: 4,
-          child: CustomButton(onTap: (){},child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-            Text(AppStaticString.viewAll,style: TextStyle(
-                fontWeight: FontWeight.w400,
-                color: AppColors.blackLightColor,
-                fontSize: getFontSizeSemiSmall(context))),
-            space8W,
-            Image.asset(arrowTopImgUrl,height: 24.w,)
-          ],),))
-        ],
-      ),space16H,
+            fromManage == true
+                ? SizedBox.shrink()
+                : Row(
+                    children: [
+                      Flexible(
+                        flex: 5,
+                        child: SizedBox(
+                          height: 45.w,
+                          child: Stack(
+                            children: List.generate(
+                                5,
+                                (index) => Positioned(
+                                    left: (30 * index).toDouble(),
+                                    child: ProfileCircleImageWidget())),
+                          ),
+                        ),
+                      ),
+                      space8W,
+                      Flexible(
+                          flex: 4,
+                          child: CustomButton(
+                            onTap: () {},
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(AppStaticString.viewAll,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        color: AppColors.blackLightColor,
+                                        fontSize:
+                                            getFontSizeSemiSmall(context))),
+                                space8W,
+                                Image.asset(
+                                  arrowTopImgUrl,
+                                  height: 24.w,
+                                )
+                              ],
+                            ),
+                          ))
+                    ],
+                  ),
+            fromManage == true ? SizedBox.shrink() : space16H,
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                OptionWidget(icon: commentIconUrl, text: '120',),
-                OptionWidget(icon: reactIconUrl, text: '120',),
-                OptionWidget(icon: mapIconUrl, text: AppStaticString.map,),
-                OptionWidget(icon: shareIconUrl, text: AppStaticString.share,),
-              ],)
+                OptionWidget(
+                  icon: commentIconUrl,
+                  text: '120',
+                ),
+                OptionWidget(
+                  icon: reactIconUrl,
+                  text: '120',
+                ),
+                OptionWidget(
+                  icon: mapIconUrl,
+                  text: AppStaticString.map,
+                ),
+                fromManage == true
+                    ? SizedBox.shrink()
+                    : OptionWidget(
+                        icon: shareIconUrl,
+                        text: AppStaticString.share,
+                      ),
+              ],
+            ),
+            fromManage == true
+                ?space16H:SizedBox.shrink(),
+            fromManage == true
+                ? Row(
+                    children: [
+                      Expanded(
+                        child: CustomButton(
+                          onTap: () {},
+                          fillColor: Colors.transparent,
+                          borderColor: AppColors.redColor,
+                          height:48.h ,
+                          title: AppStaticString.delete,
+                          textColor: AppColors.redColor,
+                        ),
+                      ),
+                      space12W,
+                      Expanded(
+                        child: CustomButton(
+                          fillColor: AppColors.greenColor,
+                          borderColor: AppColors.greenColor,
+                          onTap: () {},
+                          height:48.h ,
+                          title: AppStaticString.active,
+                        ),
+                      )
+                    ],
+                  )
+                : SizedBox.shrink()
           ],
         ),
       ),
@@ -105,19 +185,46 @@ class TrackCardWidget extends StatelessWidget {
   }
 }
 
-class OptionWidget extends StatelessWidget {
-  final String icon;
-  final String text;
-  const OptionWidget({
-    super.key, required this.icon, required this.text,
+class ProfileCircleImageWidget extends StatelessWidget {
+  const ProfileCircleImageWidget({
+    super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: [
-      Image.asset(icon,height: 24.sp,),
-      space6W,
-      Text(text,style: poppinsRegular.copyWith(fontSize: getFontSizeSmall(context)),)
-    ],);
+    return ClipOval(
+        child: Image.asset(
+      dummyProfileImgUrl,
+      height: 45.w,
+      width: 45.w,
+      fit: BoxFit.cover,
+    ));
+  }
+}
+
+class OptionWidget extends StatelessWidget {
+  final String icon;
+  final String text;
+  const OptionWidget({
+    super.key,
+    required this.icon,
+    required this.text,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Image.asset(
+          icon,
+          height: 24.sp,
+        ),
+        space6W,
+        Text(
+          text,
+          style: poppinsRegular.copyWith(fontSize: getFontSizeSmall(context)),
+        )
+      ],
+    );
   }
 }

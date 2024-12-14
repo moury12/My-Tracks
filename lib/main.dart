@@ -28,8 +28,8 @@ class MyApp extends StatelessWidget {
          title: 'Track Trek',
 initialBinding: CommonBinding(),
           theme: darkTheme,
-         initialRoute: BottomNavigationScreen.routeName,
-         // initialRoute: SplashScreen.routeName,
+         // initialRoute: BottomNavigationScreen.routeName,
+         initialRoute: SplashScreen.routeName,
          getPages: AppRoutes.route(),
          debugShowCheckedModeBanner: false,
 

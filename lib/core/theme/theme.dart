@@ -94,14 +94,7 @@ final AppBarTheme appBarTheme = AppBarTheme(
   scrolledUnderElevation: 0,
   titleTextStyle: poppinsMedium.copyWith(fontSize: 24,),
   actionsIconTheme: const IconThemeData(color: AppColors.whiteLightColor),
-  systemOverlayStyle: const SystemUiOverlayStyle(
-    // Status bar color
 
-    statusBarColor: AppColors.whiteColor,
-    // Status bar brightness (optional)
-    statusBarIconBrightness: Brightness.light, // For Android (dark icons)
-    statusBarBrightness: Brightness.light, // For iOS (dark icons)
-  ),
 );
 
 ///========================= Bottom NavigationBar ==============================

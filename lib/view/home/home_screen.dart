@@ -36,54 +36,52 @@ class HomeScreen extends StatelessWidget {
         children: List.generate(5, (i) => EventCardWidget()),
       ),
     ));
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
+    return Column(
+      children: [
+
+        const HomeAppBar(),
+        Expanded(
+            child: ListView(
+          padding: padding16,
           children: [
-            const HomeAppBar(),
-            Expanded(
-                child: ListView(
-              padding: padding16,
-              children: [
-                Obx(() {
-                  return Row(
-                    children: [
-                      // const GradientContainerWidget(),
-                      // space24W,
-                      // const Expanded(
-                      //     child: BlackContainerWidget(
-                      //   text: AppStaticString.booked,
-                      // ))
-                      ...List.generate(
-                        HomeController.to.labelTabs.length,
-                        (index) => HomeController.to.selectedLabel.value ==
-                                index
-                            ? GradientContainerWidget(
+            Obx(() {
+              return Row(
+                children: [
+                  // const GradientContainerWidget(),
+                  // space24W,
+                  // const Expanded(
+                  //     child: BlackContainerWidget(
+                  //   text: AppStaticString.booked,
+                  // ))
+                  ...List.generate(
+                    HomeController.to.labelTabs.length,
+                    (index) => HomeController.to.selectedLabel.value == index
+                        ? Expanded(
+                          child: GradientContainerWidget(
+                              text: HomeController.to.labelTabs[index],
+                            ),
+                        )
+                        : HomeController.to.labelTabs[index].isEmpty
+                            ? space16W
+                            : Expanded(
+                                child: BlackContainerWidget(
+                                onTap: () {
+                                  HomeController.to.selectedLabel.value =
+                                      index;
+                                },
                                 text: HomeController.to.labelTabs[index],
-                              )
-                            : HomeController.to.labelTabs[index].isEmpty
-                                ? space16W
-                                : Expanded(
-                                    child: BlackContainerWidget(
-                                    onTap: () {
-                                      HomeController.to.selectedLabel.value =
-                                          index;
-                                    },
-                                    text: HomeController.to.labelTabs[index],
-                                  )),
-                      )
-                    ],
-                  );
-                }),
-                DynamicTabWidget(
-                  tabs: HomeController.to.tabs,
-                  tabContent: HomeController.to.tabContent,
-                )
-              ],
-            ))
+                              )),
+                  )
+                ],
+              );
+            }),
+            DynamicTabWidget(
+              tabs: HomeController.to.tabs,
+              tabContent: HomeController.to.tabContent,
+            )
           ],
-        ),
-      ),
+        ))
+      ],
     );
   }
 }

@@ -41,4 +41,5 @@ String profileFillIconUrl  ='assets/icons/profile_icon_fill.png';
 String notificationFillIconUrl  ='assets/icons/notification_icon_fill.png';
 String manageFillIconUrl  ='assets/icons/manage_icon_fill.png';
 String homeFillIconUrl  ='assets/icons/home_icon_fill.png';
+String arrowForwardIconUrl  ='assets/icons/arrow_forward_icon.png';
 String bookingFillIconUrl  ='assets/icons/booking_icon_fill.png';

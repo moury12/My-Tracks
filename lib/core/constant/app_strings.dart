@@ -27,6 +27,7 @@ class AppStaticString {
   static const String bookTrackSlot = "Book a track slot";
   static const String bookTRack = "Book a track";
   static const String forgotPass = "Forgot Password";
+  static const String trackManagement = "Track Management";
   ///--------- others text-----------///
   static const String signUpUser = "Sign up as a user or tracker?";
   static const String user = "User";

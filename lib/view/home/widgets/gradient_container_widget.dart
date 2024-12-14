@@ -22,23 +22,21 @@ class GradientContainerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: GestureDetector(onTap:onTap?? (){},
-        child: Container(
-          alignment: Alignment.center,
-          padding:padding16,
-          decoration:  BoxDecoration(
-              borderRadius:BorderRadius.circular(radius??12.r) ,
-              border: Border.all(width:borderWidth??0 ,color: borderColor??Colors.transparent),
-              gradient: LinearGradient(colors: [
-               firstColor?? AppColors.blueColor,
-              secondColor??  AppColors.blueColorDark,
-              ])
-          ),
-          child: child?? Text(text??'Running',style: poppinsMedium.copyWith(
-              fontSize: getFontSizeLarge(context),color:textColor?? AppColors.blackLightColor
-          ),),
+    return GestureDetector(onTap:onTap?? (){},
+      child: Container(
+        alignment: Alignment.center,
+        padding:padding16,
+        decoration:  BoxDecoration(
+            borderRadius:BorderRadius.circular(radius??12.r) ,
+            border: Border.all(width:borderWidth??0 ,color: borderColor??Colors.transparent),
+            gradient: LinearGradient(colors: [
+             firstColor?? AppColors.blueColor,
+            secondColor??  AppColors.blueColorDark,
+            ],end: Alignment.bottomRight)
         ),
+        child: child?? Text(text??'Running',style: poppinsMedium.copyWith(
+            fontSize: getFontSizeLarge(context),color:textColor?? AppColors.blackLightColor
+        ),),
       ),
     );
   }
