@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
+import 'package:track_trek/core/utils/app_color.dart';
 
 const poppinsLight = TextStyle(
   fontFamily: 'Poppins',
@@ -21,11 +22,15 @@ const poppinsThin = TextStyle(
 const poppinsRegular = TextStyle(
   fontFamily: 'Poppins',
   fontWeight: FontWeight.w400,
-
 );
 
 const poppinsMedium = TextStyle(
   fontFamily: 'Poppins',
+  fontWeight: FontWeight.w500,
+);
+const poppinsBlueMedium = TextStyle(
+  fontFamily: 'Poppins',
+  color: AppColors.blueColor,
   fontWeight: FontWeight.w500,
 );
 
@@ -53,31 +58,31 @@ const poppinsBlack = TextStyle(
 //------------------------------------------------
 
 TextStyle regularText(double size, {Color color = Colors.black}) => TextStyle(
-  fontSize: size,
-  color: color,
-  fontWeight: FontWeight.w400,
-);
+      fontSize: size,
+      color: color,
+      fontWeight: FontWeight.w400,
+    );
 
 TextStyle mediumText(double size, {Color color = Colors.black}) => TextStyle(
-  fontSize: size,
-  color: color,
-  fontWeight: FontWeight.w500,
-);
+      fontSize: size,
+      color: color,
+      fontWeight: FontWeight.w500,
+    );
 
 TextStyle semiBoldText(double size, {Color color = Colors.black}) => TextStyle(
-  fontSize: size,
-  color: color,
-  fontWeight: Platform.isIOS ? FontWeight.w500 : FontWeight.w600,
-);
+      fontSize: size,
+      color: color,
+      fontWeight: Platform.isIOS ? FontWeight.w500 : FontWeight.w600,
+    );
 
 TextStyle boldText(double size, {Color color = Colors.black}) => TextStyle(
-  fontSize: size,
-  color: color,
-  fontWeight: FontWeight.w700,
-);
+      fontSize: size,
+      color: color,
+      fontWeight: FontWeight.w700,
+    );
 
 TextStyle extraBoldText(double size, {Color color = Colors.black}) => TextStyle(
-  fontSize: size,
-  color: color,
-  fontWeight: FontWeight.w900,
-);
+      fontSize: size,
+      color: color,
+      fontWeight: FontWeight.w900,
+    );

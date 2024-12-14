@@ -17,10 +17,17 @@ class BottomNavigationScreen extends StatelessWidget {
     const CreateTrackEventScreen(),
     const NotificationScreen(),
     const PromoteScreen()
-  ];
+  ];  /*final List<Widget> pages = [
+    const HomeScreen(),
+    const ManageScreen(),
+    const CreateTrackEventScreen(),
+    const NotificationScreen(),
+    const PromoteScreen()
+  ];*/
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // appBar: ,
       body: Obx(() => pages[CommonController.to.selectedIndex.value]),
       bottomNavigationBar: CustomBottomNavBar(),
     );
