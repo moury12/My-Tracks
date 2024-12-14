@@ -51,46 +51,7 @@ class ManageScreen extends StatelessWidget {
             (i) => Padding(
               padding:padding12T,
               child: MarronGradientContainerWidget(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ProfileCircleImageWidget(),
-                        space16W,
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                AppStaticString.dummyName,
-                                style: poppinsRegular.copyWith(
-                                    fontSize: getFontSizeDefault(context)),
-                              ),
-                              Text(
-                                '${AppStaticString.contact}mdhasan854@gmail.com',
-                                style: poppinsRegular.copyWith(
-                                    fontSize: getFontSizeSmall(context),
-                                    color: AppColors.fadeWhiteColor),
-                              ),Text(
-                                '${AppStaticString.email}mdhasan854@gmail.com',
-                                style: poppinsRegular.copyWith(
-                                    fontSize: getFontSizeSmall(context),
-                                    color: AppColors.fadeWhiteColor),
-                              ),Text(
-                                '${AppStaticString.dateOfBirth}mdhasan854@gmail.com',
-                                style: poppinsRegular.copyWith(
-                                    fontSize: getFontSizeSmall(context),
-                                    color: AppColors.fadeWhiteColor),
-                              ),Text(
-                                '${AppStaticString.address}mdhasan854@gmail.com',
-                                style: poppinsRegular.copyWith(
-                                    fontSize: getFontSizeSmall(context),
-                                    color: AppColors.fadeWhiteColor),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                    child: UserInfoContentWidget(),
                   ),
             )),
       ),
@@ -107,3 +68,4 @@ class ManageScreen extends StatelessWidget {
     ));
   }
 }
+

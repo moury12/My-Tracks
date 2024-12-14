@@ -10,6 +10,7 @@ import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/home/widgets/dynamic_tab_widget.dart';
 import 'package:track_trek/view/home/widgets/event_card_widget.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
+import 'package:track_trek/view/home/widgets/track_card_widget.dart';
 
 class MarronGradientContainerWidget extends StatelessWidget {
   final Widget? child;
@@ -84,6 +85,55 @@ class TrackEventInfoContentWidget extends StatelessWidget {
             )
           ],
         )
+      ],
+    );
+  }
+}
+class UserInfoContentWidget extends StatelessWidget {
+  const UserInfoContentWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ProfileCircleImageWidget(),
+        space16W,
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                AppStaticString.dummyName,
+                style: poppinsRegular.copyWith(
+                    fontSize: getFontSizeDefault(context)),
+              ),
+              Text(
+                '${AppStaticString.contact}mdhasan854@gmail.com',
+                style: poppinsRegular.copyWith(
+                    fontSize: getFontSizeSmall(context),
+                    color: AppColors.fadeWhiteColor),
+              ),Text(
+                '${AppStaticString.email}mdhasan854@gmail.com',
+                style: poppinsRegular.copyWith(
+                    fontSize: getFontSizeSmall(context),
+                    color: AppColors.fadeWhiteColor),
+              ),Text(
+                '${AppStaticString.dateOfBirth}mdhasan854@gmail.com',
+                style: poppinsRegular.copyWith(
+                    fontSize: getFontSizeSmall(context),
+                    color: AppColors.fadeWhiteColor),
+              ),Text(
+                '${AppStaticString.address}mdhasan854@gmail.com',
+                style: poppinsRegular.copyWith(
+                    fontSize: getFontSizeSmall(context),
+                    color: AppColors.fadeWhiteColor),
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }

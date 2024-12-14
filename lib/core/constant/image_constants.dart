@@ -4,6 +4,7 @@ String  loginImg2Url='assets/login_img_2.png';
 String  dummyEventImgUrl='assets/dummy_event.png';
 String  dummyProfileImgUrl='assets/dummy_profile_img.png';
 String verticalDividerImgUrl  ='assets/vertical_divider.png';
+String horizontalDividerUrl  ='assets/horizontal_divider.png';
 
 
 ///---------------------Icons------------------------------///
