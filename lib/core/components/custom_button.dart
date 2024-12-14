@@ -14,7 +14,7 @@ class CustomButton extends StatelessWidget {
       this.marginHorizontal = 0,
       this.fillColor = AppColors.primaryColor,
       this.textColor = AppColors.blackLightColor,
-      this.borderColor = AppColors.primaryColor});
+      this.borderColor = AppColors.primaryColor,  this.child});
 
   final double height;
   final double width;
@@ -26,6 +26,7 @@ class CustomButton extends StatelessWidget {
   final VoidCallback onTap;
 
   final String title;
+  final Widget? child;
 
   final double marginVerticel;
   final double marginHorizontal;
@@ -46,7 +47,7 @@ class CustomButton extends StatelessWidget {
             border: Border.all(color: borderColor),
             borderRadius: BorderRadius.circular(8.r),
             color: fillColor),
-        child: Text(
+        child:child?? Text(
           textAlign: TextAlign.center,
           title,
           style: TextStyle(

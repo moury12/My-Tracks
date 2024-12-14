@@ -56,20 +56,18 @@ class BlackContainerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: GestureDetector(onTap:onTap?? (){},
-        child: Container(
-          alignment: Alignment.center,
-          padding:padding16,
-          decoration:  BoxDecoration(
-              borderRadius:BorderRadius.circular(12.r) ,
-              border: Border.all(width:1 ,color: AppColors.normalDarkWhite),
-             color: AppColors.blackExtraLightColor.withOpacity(.5)
-          ),
-          child: child?? Text(text??'Running',style: poppinsMedium.copyWith(
-              fontSize: getFontSizeLarge(context),color:AppColors.whiteLightColor
-          ),),
+    return GestureDetector(onTap:onTap?? (){},
+      child: Container(
+        alignment: Alignment.center,
+        padding:padding16,
+        decoration:  BoxDecoration(
+            borderRadius:BorderRadius.circular(12.r) ,
+            border: Border.all(width:1 ,color: AppColors.normalDarkWhite),
+           color: AppColors.blackExtraLightColor.withOpacity(.5)
         ),
+        child: child?? Text(text??'Running',style: poppinsMedium.copyWith(
+            fontSize: getFontSizeLarge(context),color:AppColors.whiteLightColor
+        ),),
       ),
     );
   }

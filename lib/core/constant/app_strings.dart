@@ -82,6 +82,7 @@ class AppStaticString {
   static const String  fee= "Fee: ";
   static const String  eventName= "Event Name";
   static const String  location= "Location";
+  static const String  locationWithClone= "Location: ";
   static const String  startDate= "Start Date";
   static const String  startTime= "Start Time";
   static const String  endDate= "End Date";
