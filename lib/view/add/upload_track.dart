@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:track_trek/controller/create_track_controller.dart';
 import 'package:track_trek/core/components/custom_appbar.dart';
+import 'package:track_trek/core/components/custom_button.dart';
 import 'package:track_trek/core/components/custom_drop_down_button.dart';
 import 'package:track_trek/core/components/custom_textfield.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
@@ -12,10 +13,10 @@ import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
+import 'package:track_trek/view/add/widgets/buttons.dart';
 import 'package:track_trek/view/add/widgets/track_slot_widget.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 import 'package:track_trek/view/manage/widgets/event_manage_card_widget.dart';
-
 
 class UploadTrackScreen extends StatelessWidget {
   static String routeName = '/upload';
@@ -23,9 +24,12 @@ class UploadTrackScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String? argument = Get.arguments;
     return Scaffold(
-      appBar: const CustomAppbar(
-        tile: AppStaticString.uploadTrack,
+      appBar: CustomAppbar(
+        tile: argument != null && argument == 'event'
+            ? AppStaticString.createEvent
+            :  AppStaticString.uploadTrack,
       ),
       body: Padding(
         padding: padding16,
@@ -34,7 +38,9 @@ class UploadTrackScreen extends StatelessWidget {
             spacing: 16.h,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
+              argument != null && argument == 'event'
+                  ? SizedBox.shrink()
+                  :    Row(
                 spacing: 16.w,
                 children: [
                   Expanded(
@@ -70,7 +76,9 @@ class UploadTrackScreen extends StatelessWidget {
               ),
 
               ///======================Week Days==================///
-              Obx(() {
+              argument != null && argument == 'event'
+                  ? SizedBox.shrink()
+                  : Obx(() {
                 return SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
@@ -105,7 +113,9 @@ class UploadTrackScreen extends StatelessWidget {
               }),
 
               ///===================dynamic available slot===================//
-              Text(
+              argument != null && argument == 'event'
+                  ? SizedBox.shrink()
+                  :  Text(
                 '${AppStaticString.availableSlot} 10',
                 style:
                     poppinsMedium.copyWith(fontSize: getFontSizeLarge(context)),
@@ -113,17 +123,21 @@ class UploadTrackScreen extends StatelessWidget {
 
               Row(
                 spacing: 4.w,
-                children: const [
+                children:  [
                   Expanded(
                       child: CustomTextField(
                     title: '${AppStaticString.slotNo} 1',
                     hintText: '1',
                   )),
-                  Expanded(
+                  argument != null && argument == 'event'
+                      ? SizedBox.shrink()
+                      :  Expanded(
                       child: CustomDropdown(
                     title: 'Start Time',
                   )),
-                  Expanded(
+                  argument != null && argument == 'event'
+                      ? SizedBox.shrink()
+                      :  Expanded(
                       child: CustomDropdown(
                     title: 'End Time',
                   )),
@@ -133,7 +147,9 @@ class UploadTrackScreen extends StatelessWidget {
               ///=====================input number of people=========================///
 
               CustomTextField(
-                title: AppStaticString.howManyPeopleCanTrack,
+                title: argument != null && argument == 'event'
+                    ? AppStaticString.totalSeat
+                    : AppStaticString.howManyPeopleCanTrack,
                 hintText: AppStaticString.typeHere,
                 textEditingController: CreateTrackController
                     .to.uploadTrackPeopleNumberController.value,
@@ -160,51 +176,20 @@ class UploadTrackScreen extends StatelessWidget {
               ),
 
               ///==================save button================///
-              Align(
-                alignment: Alignment.centerRight,
-                child: IntrinsicWidth(
-                  child: GradientContainerWidget(
-                    radius: 4.r,
-                    textStyle: poppinsRegular.copyWith(
-                        color: AppColors.blackLightColor,
-                        fontSize: getFontSizeSmall(context)),
-                    text: AppStaticString.save,
-                    padding: EdgeInsets.symmetric(horizontal: 4.w),
-                  ),
-                ),
-              ),
+              const SaveSmallButtonWidget(),
 
               ///========================create slot button=========================///
-              Align(
-                alignment: Alignment.centerRight,
-                child: IntrinsicWidth(
-                  child: GradientContainerWidget(
-                    radius: 4.r,
-                    padding: EdgeInsets.symmetric(horizontal: 8.w),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          AppStaticString.createSlot,
-                          style: poppinsRegular.copyWith(
-                              color: AppColors.blackLightColor,
-                              fontSize: getFontSizeSmall(context)),
-                        ),
-                        space8W,
-                        Image.asset(
-                          plusIconUrl,
-                          height: 14.w,
-                          width: 14.w,
-                          color: AppColors.blackLightColor,
-                        )
-                      ],
-                    ),
-                  ),
-                ),
+              const CreateSlotButtonSmallWidget(),
+               MarronGradientContainerWidget(
+                child: TrackSlotWidget(argument: argument,),
               ),
-               const MarronGradientContainerWidget(
-                child: TrackSlotWidget(),
-              )
+              argument != null && argument == 'event'
+                  ?  CustomButton(onTap: () {
+
+              },title: AppStaticString.publish,
+                fontSize: getFontSizeLarge(context),
+              ):SizedBox.shrink()
+
             ],
           ),
         ),
@@ -212,4 +197,3 @@ class UploadTrackScreen extends StatelessWidget {
     );
   }
 }
-

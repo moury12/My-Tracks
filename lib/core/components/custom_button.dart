@@ -16,7 +16,7 @@ class CustomButton extends StatelessWidget {
       this.fillColor = AppColors.primaryColor,
       this.textColor = AppColors.blackLightColor,
       this.borderColor = AppColors.primaryColor,
-      this.child, this.img, this.icon});
+      this.child, this.img, this.icon, this.fontSize});
 
   final double height;
   final double width;
@@ -33,6 +33,7 @@ class CustomButton extends StatelessWidget {
   final IconData? icon;
 
   final double marginVerticel;
+  final double? fontSize;
   final double marginHorizontal;
 
   @override
@@ -60,7 +61,7 @@ class CustomButton extends StatelessWidget {
                   style: TextStyle(
                       fontWeight: FontWeight.w500,
                       color: textColor,
-                      fontSize: getFontSizeSemiSmall(context)),
+                      fontSize:fontSize?? getFontSizeSemiSmall(context)),
                 ),
                 icon != null || img != null ? space8W : const SizedBox.shrink(),
                 img != null

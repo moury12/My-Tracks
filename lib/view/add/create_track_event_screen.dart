@@ -33,7 +33,7 @@ class CreateTrackEventScreen extends StatelessWidget {
               img: plusIconUrl,
 
               onTap: () {
-               Get.toNamed(CreateTrackScreen.routeName);
+               Get.toNamed(CreateTrackScreen.routeName,arguments: 'track');
               },
             ),
           ),
@@ -45,6 +45,7 @@ class CreateTrackEventScreen extends StatelessWidget {
               fillColor:AppColors.blueColor ,
               borderColor:AppColors.blueColor ,
               onTap: () {
+                Get.toNamed(CreateTrackScreen.routeName,arguments: 'event');
                 // Button Action
               },
             ),

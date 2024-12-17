@@ -27,7 +27,10 @@ class AppRoutes {
         GetPage(name: ForgetPasswordScreen.routeName, page: () => const ForgetPasswordScreen(),binding: AuthBinding()),
         GetPage(name: ForgetPasswordScreen.routeName, page: () => const ForgetPasswordScreen(),binding: AuthBinding()),
         GetPage(name: HomeScreen.routeName, page: () => const HomeScreen(),binding: HomeBinding()),
-        GetPage(name: CreateTrackScreen.routeName, page: () => const CreateTrackScreen(),binding: CreateTrackBinding()),
+        GetPage(name: CreateTrackScreen.routeName, page: () => const CreateTrackScreen(),bindings: [
+              CreateTrackBinding(),
+              CreateEventBinding()
+        ]),
         GetPage(name: UploadTrackScreen.routeName, page: () => const UploadTrackScreen(),binding: CreateTrackBinding()),
       ];
 }

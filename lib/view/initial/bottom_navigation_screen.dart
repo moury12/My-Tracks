@@ -25,7 +25,7 @@ class BottomNavigationScreen extends StatelessWidget {
   final List<String?> appbarTitle = [
     null,
     AppStaticString.trackManagement,
-    AppStaticString.createEvent,
+    AppStaticString.create,
     AppStaticString.notification,
     AppStaticString.promote
   ];

@@ -3,6 +3,7 @@ class AppStaticString {
 
   static const String signUp = "Sign Up";
   static const String login = "Login";
+  static const String create = "Create";
   static const String trakManage = "Track Management";
   static const String notification = "Notification";
   static const String manage = "Manage";
@@ -53,6 +54,7 @@ class AppStaticString {
   static const String totalSlot = "Total slot : ";
   static const String viewAll = "View all";
   static const String map = "Map";
+  static const String fieldName = "Field Name";
   static const String share = "Share";
   static const String track = "Track";
   static const String trackName = "Track Name";

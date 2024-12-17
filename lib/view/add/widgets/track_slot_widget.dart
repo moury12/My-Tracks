@@ -13,13 +13,16 @@ import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
+import 'package:track_trek/view/add/widgets/delete_alert_dialog.dart';
 import 'package:track_trek/view/add/widgets/point_text_widget.dart';
 import 'package:track_trek/view/add/widgets/track_slot_widget.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 import 'package:track_trek/view/manage/widgets/event_manage_card_widget.dart';
+
 class TrackSlotWidget extends StatelessWidget {
+  final String? argument;
   const TrackSlotWidget({
-    super.key,
+    super.key, this.argument,
   });
 
   @override
@@ -51,7 +54,9 @@ class TrackSlotWidget extends StatelessWidget {
           ],
         ),
         space6H,
-        Row(
+        argument != null && argument == 'event'
+            ? SizedBox.shrink()
+            :    Row(
           children: [
             ///================= slot week dynamic========================///
             Expanded(
@@ -78,7 +83,7 @@ class TrackSlotWidget extends StatelessWidget {
         space12H,
         ...List.generate(
           3,
-              (index) => const PointTextWidget(),
+          (index) => const PointTextWidget(),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -87,46 +92,7 @@ class TrackSlotWidget extends StatelessWidget {
               onTap: () {
                 showDialog(
                   context: context,
-                  builder: (context) => AlertDialog(
-                    backgroundColor: AppColors.blackColor,
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(AppStaticString.areYouSureToDelete,style: poppinsRegular.copyWith(fontSize: getFontSizeLarge(context)),),
-                        space16H,
-                        Row(
-                          spacing: 16.w,
-                          children: [
-                            Expanded(
-                                child: CustomButton(
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  },
-                                  height: 44.h,
-                                  width: 92.w,
-                                  title: AppStaticString.yes,
-                                  textColor: AppColors.whiteLightColor,
-                                  borderColor: AppColors.redBrightColor,
-                                  fillColor: AppColors.redBrightColor,
-                                )),
-                            Expanded(
-                                child: CustomButton(
-
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  },
-                                  height: 44.h,
-                                  width: 92.w,
-                                  title: AppStaticString.no,
-                                  textColor: AppColors.whiteLightColor,
-                                  borderColor: AppColors.greenColor,
-                                  fillColor: AppColors.greenColor,
-                                )),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+                  builder: (context) => const DeleteAlertDialog(),
                 );
               },
               child: Padding(
@@ -140,8 +106,8 @@ class TrackSlotWidget extends StatelessWidget {
             ),
             Text(
               AppStaticString.seeMore,
-              style: poppinsMedium.copyWith(
-                  fontSize: getFontSizeSmall(context)),
+              style:
+                  poppinsMedium.copyWith(fontSize: getFontSizeSmall(context)),
             ),
             space8W,
             const Icon(Icons.arrow_drop_down_outlined)
@@ -151,3 +117,4 @@ class TrackSlotWidget extends StatelessWidget {
     );
   }
 }
+
