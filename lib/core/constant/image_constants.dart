@@ -26,6 +26,7 @@ String logoutIconUrl  ='assets/icons/logout.png';
 String locationIconUrl  ='assets/icons/location.png';
 String homeIconUrl  ='assets/icons/home_icon.png';
 String historyIconUrl  ='assets/icons/history.png';
+String plusIconUrl  ='assets/icons/plus_icon.png';
 String promoteIconUrl  ='assets/icons/remote_icon.png';
 String reactIconUrl  ='assets/icons/react_icon.png';
 String profileIconUrl  ='assets/icons/profile_icon.png';

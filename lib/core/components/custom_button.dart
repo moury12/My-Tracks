@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 
@@ -14,7 +15,8 @@ class CustomButton extends StatelessWidget {
       this.marginHorizontal = 0,
       this.fillColor = AppColors.primaryColor,
       this.textColor = AppColors.blackLightColor,
-      this.borderColor = AppColors.primaryColor,  this.child});
+      this.borderColor = AppColors.primaryColor,
+      this.child, this.img, this.icon});
 
   final double height;
   final double width;
@@ -27,6 +29,8 @@ class CustomButton extends StatelessWidget {
 
   final String title;
   final Widget? child;
+  final String? img;
+  final IconData? icon;
 
   final double marginVerticel;
   final double marginHorizontal;
@@ -47,14 +51,33 @@ class CustomButton extends StatelessWidget {
             border: Border.all(color: borderColor),
             borderRadius: BorderRadius.circular(8.r),
             color: fillColor),
-        child:child?? Text(
-          textAlign: TextAlign.center,
-          title,
-          style: TextStyle(
-              fontWeight: FontWeight.w500,
-              color: textColor,
-              fontSize: getFontSizeSemiSmall(context)),
-        ),
+        child: child ??
+            Row(mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  textAlign: TextAlign.center,
+                  title,
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: textColor,
+                      fontSize: getFontSizeSemiSmall(context)),
+                ),
+                icon != null || img != null ? space8W : const SizedBox.shrink(),
+                img != null
+                    ? Image.asset(
+                        img ?? '',
+                        height: 14.w,
+                        width: 14.w,
+                  color: AppColors.blackColor,
+                      )
+                    : icon != null
+                        ? Icon(
+                            icon,
+                            size: 24.sp,
+                          )
+                        : const SizedBox.shrink(),
+              ],
+            ),
       ),
     );
   }

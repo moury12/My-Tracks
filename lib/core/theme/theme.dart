@@ -67,15 +67,15 @@ final darkTheme = ThemeData.dark().copyWith(
 
 final InputDecorationTheme inputDecorationTheme = InputDecorationTheme(
     border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(4.r),
         borderSide: const BorderSide(color: AppColors.blackBackgroundColor, width: 1),
         gapPadding: 0),
     focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(4.r),
         borderSide: const BorderSide(color:Colors.transparent, width: 1),
         gapPadding: 0),
     enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(4.r),
         borderSide: const BorderSide(color: AppColors.blackBackgroundColor, width: 1),
         gapPadding: 0),
     fillColor: AppColors.blackBackgroundColor,

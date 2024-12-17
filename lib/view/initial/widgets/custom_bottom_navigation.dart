@@ -11,56 +11,113 @@ import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 
-
 class CustomBottomNavBar extends StatelessWidget {
-
-
   @override
   Widget build(BuildContext context) {
     return Container(
-    padding: paddingH16V6.copyWith(bottom: 16.sp),
+      padding: paddingH16V6.copyWith(bottom: 16.sp),
       decoration: BoxDecoration(
         color: AppColors.navigationColor,
-        boxShadow: [
-
-        ],
+        boxShadow: [],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _buildNavItem(context,homeIconUrl,homeFillIconUrl, 0, AppStaticString.home),
-          _buildNavItem(context,manageIconUrl,manageFillIconUrl, 1, AppStaticString.manage),
-          GestureDetector(
-            onTap: (){
-              CommonController.to.updateIndex(2);
-            },
-              child: Image.asset(addIconUrl,height: 40.w,)),
-          _buildNavItem(context,notificationIconUrl,notificationFillIconUrl, 3, AppStaticString.notification),
-          _buildNavItem(context,promoteIconUrl,promoteFillIconUrl, 4, AppStaticString.promote),
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: _buildNavItem(context, homeIconUrl, homeFillIconUrl, 0,
+                      AppStaticString.home),
+                ),
+                Expanded(
+                  child: _buildNavItem(context, manageIconUrl,
+                      manageFillIconUrl, 1, AppStaticString.manage),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: padding12H,
+            child: GestureDetector(
+                onTap: () {
+                  CommonController.to.updateIndex(2);
+                },
+                child: Container(
+                  padding: padding12,
+                  height: 40.w,
+                  width: 40.w,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(image: AssetImage(addIconUrl))),
+                  child: Image.asset(
+                    plusIconUrl,
+                    height: 17.w,
+                    width: 17.w,
+                    color: CommonController.to.selectedIndex.value == 2
+                        ? null
+                        : AppColors.whiteLightColor,
+                  ),
+                )),
+          ),
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: _buildNavItem(context, notificationIconUrl,
+                      notificationFillIconUrl, 3, AppStaticString.notification),
+                ),
+                Expanded(
+                  child: _buildNavItem(context, promoteIconUrl,
+                      promoteFillIconUrl, 4, AppStaticString.promote),
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );
   }
 
-  Widget _buildNavItem(BuildContext context,String icon,String selectedIcon, int index, String label,) {
-    return GestureDetector(
-      onTap: () => CommonController.to.updateIndex(index),
-      child: Obx(
-            () {
-          bool isSelected = CommonController.to.selectedIndex.value == index;
+  Widget _buildNavItem(
+    BuildContext context,
+    String icon,
+    String selectedIcon,
+    int index,
+    String label,
+  ) {
+    return Tooltip(
+      message: label,
+      /*decoration: BoxDecoration(
+      color: Colors.black,
+      borderRadius: BorderRadius.circular(8),
+    ),*/
+      waitDuration: Duration(milliseconds: 500),
+      child: GestureDetector(
+        onTap: () => CommonController.to.updateIndex(index),
+        child: Obx(
+          () {
+            bool isSelected = CommonController.to.selectedIndex.value == index;
 
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset(isSelected?selectedIcon:icon, height: 24.w),
-              space8H,
-              Text(
-                label,
-                style:poppinsRegular.copyWith(fontSize: getFontSizeSemiSmall(context)) ,
-              ),
-            ],
-          );
-        },
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.asset(isSelected ? selectedIcon : icon, height: 24.w),
+                space8H,
+                Flexible(
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: poppinsRegular.copyWith(
+                        fontSize: getFontSizeSemiSmall(context)),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

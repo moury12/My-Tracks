@@ -27,6 +27,7 @@ class AppStaticString {
   static const String bookTrackSlot = "Book a track slot";
   static const String bookTRack = "Book a track";
   static const String forgotPass = "Forgot Password";
+  static const String uploadTrack = "Upload Track";
   static const String trackManagement = "Track Management";
   ///--------- others text-----------///
   static const String signUpUser = "Sign up as a user or tracker?";
@@ -53,6 +54,8 @@ class AppStaticString {
   static const String map = "Map";
   static const String share = "Share";
   static const String track = "Track";
+  static const String trackName = "Track Name";
+  static const String selectCategory = "Select Category";
   static const String event = "Event";
   static const String running = "Running";
   static const String booked = "Booked";
@@ -94,6 +97,7 @@ class AppStaticString {
   static const String  next= "Next";
   static const String  typeHere= "type here...";
   static const String  uploadPhoto= "Upload photo";
+  static const String  uploadImage= "Upload Image";
   static const String  slotNo= "Slot No";
   static const String  totalSeat= "Total seat";
   static const String  price= "Price";
