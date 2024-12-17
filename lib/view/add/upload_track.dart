@@ -181,7 +181,7 @@ class UploadTrackScreen extends StatelessWidget {
               ///========================create slot button=========================///
               const CreateSlotButtonSmallWidget(),
                MarronGradientContainerWidget(
-                child: TrackSlotWidget(argument: argument,),
+                child: TrackSlotWidget(),
               ),
               argument != null && argument == 'event'
                   ?  CustomButton(onTap: () {

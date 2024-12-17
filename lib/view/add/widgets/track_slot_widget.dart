@@ -54,9 +54,7 @@ class TrackSlotWidget extends StatelessWidget {
           ],
         ),
         space6H,
-        argument != null && argument == 'event'
-            ? SizedBox.shrink()
-            :    Row(
+          Row(
           children: [
             ///================= slot week dynamic========================///
             Expanded(
@@ -85,7 +83,13 @@ class TrackSlotWidget extends StatelessWidget {
           3,
           (index) => const PointTextWidget(),
         ),
-        Row(
+      argument!=null&& argument=='track_management'? Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+        Text(AppStaticString.viewAllParticipent,style: poppinsRegular.copyWith(fontSize: getFontSizeSmall(context)),),
+        space12W,
+        Image.asset(arrowTopImgUrl,color: AppColors.whiteLightColor,height: 14.w,width: 14.w,)
+      ],) :Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             GestureDetector(

@@ -9,6 +9,7 @@ import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
+import 'package:track_trek/view/add/widgets/track_slot_widget.dart';
 import 'package:track_trek/view/home/widgets/dynamic_tab_widget.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 import 'package:track_trek/view/home/widgets/track_card_widget.dart';
@@ -39,7 +40,7 @@ class ManageScreen extends StatelessWidget {
             5,
             (i) => Padding(
                   padding: padding12T,
-                  child: MarronGradientContainerWidget(),
+                  child: MarronGradientContainerWidget(child: TrackSlotWidget(argument: 'track_management',),),
                 )),
       ),
     ));
