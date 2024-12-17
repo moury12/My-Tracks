@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:track_trek/controller/track_management_controller.dart';
+import 'package:track_trek/core/components/custom_drop_down_button.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
@@ -36,12 +37,21 @@ class ManageScreen extends StatelessWidget {
     TrackManagementController.to.tabContent.add(Padding(
       padding: padding12V,
       child: Column(
-        children: List.generate(
+        children: [
+           CustomDropdown(
+            radius: 8.r,
+borderColor: AppColors.blackLightColor,
+            fillColor: AppColors.blackBackgroundColor,
+            hintColor: AppColors.whiteLightColor,
+
+            hintText: "Select Event",
+          ),
+          ...List.generate(
             5,
             (i) => Padding(
                   padding: padding12T,
-                  child: MarronGradientContainerWidget(child: TrackSlotWidget(argument: 'track_management',),),
-                )),
+                  child: const MarronGradientContainerWidget(child: TrackSlotWidget(argument: 'track_management',),),
+                )),]
       ),
     ));
     TrackManagementController.to.tabContent.add(Padding(
@@ -51,7 +61,7 @@ class ManageScreen extends StatelessWidget {
             5,
             (i) => Padding(
               padding:padding12T,
-              child: MarronGradientContainerWidget(
+              child: const MarronGradientContainerWidget(
                     child: UserInfoContentWidget(),
                   ),
             )),

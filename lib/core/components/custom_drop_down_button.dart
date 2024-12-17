@@ -8,7 +8,12 @@ import 'package:track_trek/core/utils/text_style.dart';
 
 class CustomDropdown extends StatefulWidget {
   final String? title;
-  const CustomDropdown({super.key,  this.title});
+  final String? hintText;
+  final Color? borderColor;
+  final Color? fillColor;
+  final Color? hintColor;
+  final double? radius;
+  const CustomDropdown({super.key,  this.title, this.hintText, this.borderColor, this.fillColor, this.hintColor, this.radius});
 
   @override
   State<CustomDropdown> createState() => _CustomDropdownState();
@@ -41,17 +46,18 @@ class _CustomDropdownState extends State<CustomDropdown> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(
-            color: AppColors.navigationColor,
-            borderRadius: BorderRadius.circular(4.r),
+            color:widget.fillColor?? AppColors.navigationColor,
+            border: Border.all(color:widget.borderColor?? Colors.transparent,),
+            borderRadius: BorderRadius.circular(widget.radius??4.r),
           ),
           child: DropdownButton<String>(
             value: selectedValue,
             isExpanded: true,
             underline: SizedBox(), // Removes the default underline
             hint: Text(
-              AppStaticString.typeHere,
+              widget.hintText?? AppStaticString.typeHere,
               style: TextStyle(
-                  color: AppColors.normalDarkWhite,
+                  color:widget.hintColor?? AppColors.normalDarkWhite,
                   fontWeight: FontWeight.w400,
                   fontSize: getFontSizeSmall(context)),
             ),
