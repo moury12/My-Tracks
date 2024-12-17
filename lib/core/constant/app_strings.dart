@@ -36,6 +36,7 @@ class AppStaticString {
   static const String email = "Email";
   static const String userName = "User Name";
   static const String password = "Password";
+  static const String areYouSureToDelete = "Are you sure you want to delete this content ?";
   static const String confirmPassword = "Confirm Password";
   static const String emailEnter = "Enter your Email";
   static const String userNameEnter = "Enter your User Name";
@@ -98,7 +99,7 @@ class AppStaticString {
   static const String  typeHere= "type here...";
   static const String  uploadPhoto= "Upload photo";
   static const String  uploadImage= "Upload Image";
-  static const String  slotNo= "Slot No";
+  static const String  slotNo= "Slot No:";
   static const String  totalSeat= "Total seat";
   static const String  price= "Price";
   static const String  publish= "Publish";

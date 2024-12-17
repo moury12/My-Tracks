@@ -14,6 +14,7 @@ class AppColors {
   static const Color textFieldColor = Color(0xff1B1B1D);
   static const Color navigationColor = Color(0xff1B1B1D);
   static const Color redColor = Color(0xffD43931);
+  static const Color redBrightColor = Color(0xffFF3B30);
   static const Color marronColor = Color(0xff351716);
   static const Color blackColor = Color(0xff111111);
   static const Color blackLightColor = Color(0xff19191A);

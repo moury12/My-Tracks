@@ -9,9 +9,13 @@ class CreateTrackController extends GetxController {
   Rx<TextEditingController> trackLocationController =
       TextEditingController().obs;
   Rx<TextEditingController> trackDescriptionController =
+      TextEditingController().obs; Rx<TextEditingController> uploadTrackPeopleNumberController = TextEditingController().obs;
+  Rx<TextEditingController> uploadTrackPriceController =
+      TextEditingController().obs;
+  Rx<TextEditingController> uploadTrackDescriptionController =
       TextEditingController().obs;
   RxList<String> weekDays = <String>[].obs;
-RxInt selectedDay =0.obs;
+  RxInt selectedDay = 0.obs;
   getWeekDays() {
     weekDays.value = generateWeekDays();
   }
@@ -25,9 +29,17 @@ RxInt selectedDay =0.obs;
     }
     return weekdays;
   }
+
   @override
   void onInit() {
- getWeekDays();
+    getWeekDays();
     super.onInit();
+  }
+  @override
+  void onClose() {
+    trackNameController.value.dispose();
+    trackLocationController.value.dispose();
+    trackDescriptionController.value.dispose();
+  super.onClose();
   }
 }

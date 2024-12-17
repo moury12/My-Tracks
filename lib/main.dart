@@ -1,3 +1,5 @@
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -10,7 +12,12 @@ import 'package:track_trek/view/initial/splash.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  runApp(const MyApp());
+  runApp(DevicePreview(
+    enabled: !kReleaseMode,
+    builder: (context) {
+      return const MyApp();
+    }
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -25,6 +32,9 @@ class MyApp extends StatelessWidget {
       useInheritedMediaQuery: true,
 
        builder: (context, child) =>GetMaterialApp(
+         useInheritedMediaQuery: true,
+         locale: DevicePreview.locale(context),
+         builder: DevicePreview.appBuilder,
          title: 'Track Trek',
 initialBinding: CommonBinding(),
           theme: darkTheme,

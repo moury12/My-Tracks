@@ -30,19 +30,23 @@ class UploadImageWidget extends StatelessWidget {
 }
 
 class LightBlackFillWidget extends StatelessWidget {
+  final Widget? child;
+  final double? width;
+  final double? height;
   const LightBlackFillWidget({
-    super.key,
+    super.key, this.child, this.width, this.height,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
-      height: 153.h,
+      width: width??double.infinity,
+      height:height?? 153.h,
+      alignment: Alignment.center,
       decoration: BoxDecoration(
           color: AppColors.navigationColor,
           borderRadius: BorderRadius.circular(4.r)),
-      child: const UploadImageIconTextWidget(),
+      child: child?? UploadImageIconTextWidget(),
     );
   }
 }

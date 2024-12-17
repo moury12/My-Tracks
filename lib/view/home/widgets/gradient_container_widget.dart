@@ -15,10 +15,11 @@ class GradientContainerWidget extends StatelessWidget {
   final double? radius;
   final double? borderWidth;
   final Widget? child;
+  final EdgeInsets? padding;
   final Function()? onTap;
 
   const GradientContainerWidget({
-    super.key, this.firstColor, this.secondColor, this.textColor, this.text, this.radius, this.borderColor, this.borderWidth, this.onTap, this.child, this.textStyle,
+    super.key, this.firstColor, this.secondColor, this.textColor, this.text, this.radius, this.borderColor, this.borderWidth, this.onTap, this.child, this.textStyle, this.padding,
   });
 
   @override
@@ -26,7 +27,7 @@ class GradientContainerWidget extends StatelessWidget {
     return GestureDetector(onTap:onTap?? (){},
       child: Container(
         alignment: Alignment.center,
-        padding:padding16,
+        padding:padding??padding16,
         decoration:  BoxDecoration(
             borderRadius:BorderRadius.circular(radius??12.r) ,
             border: Border.all(width:borderWidth??0 ,color: borderColor??Colors.transparent),

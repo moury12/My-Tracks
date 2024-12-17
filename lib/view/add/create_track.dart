@@ -26,42 +26,44 @@ class CreateTrackScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: padding16,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 16.h,
-          children: [
-            CustomTextField(
-              textEditingController:
-                  CreateTrackController.to.trackNameController.value,
-              title: AppStaticString.trackName,
-              hintText: AppStaticString.typeHere,
-            ),
-            CustomDropdown(
-              title: AppStaticString.selectCategory,
-            ),
-            UploadImageWidget(),
-            CustomTextField(
-              textEditingController:
-                  CreateTrackController.to.trackLocationController.value,
-              title: AppStaticString.location,
-              hintText: AppStaticString.typeHere,
-            ),
-            CustomTextField(
-              textEditingController:
-                  CreateTrackController.to.trackDescriptionController.value,
-              title: AppStaticString.description,
-              maxLines: 4,
-              keyboardType: TextInputType.multiline,
-              textInputAction: TextInputAction.newline,
-              hintText: AppStaticString.typeHere,
-            ),
-            CustomButton(
-              onTap: () {
-                Get.toNamed(UploadTrackScreen.routeName);
-              },
-              title: AppStaticString.next,
-            )
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 16.h,
+            children: [
+              CustomTextField(
+                textEditingController:
+                    CreateTrackController.to.trackNameController.value,
+                title: AppStaticString.trackName,
+                hintText: AppStaticString.typeHere,
+              ),
+              CustomDropdown(
+                title: AppStaticString.selectCategory,
+              ),
+              UploadImageWidget(),
+              CustomTextField(
+                textEditingController:
+                    CreateTrackController.to.trackLocationController.value,
+                title: AppStaticString.location,
+                hintText: AppStaticString.typeHere,
+              ),
+              CustomTextField(
+                textEditingController:
+                    CreateTrackController.to.trackDescriptionController.value,
+                title: AppStaticString.description,
+                maxLines: 4,
+                keyboardType: TextInputType.multiline,
+                textInputAction: TextInputAction.newline,
+                hintText: AppStaticString.typeHere,
+              ),
+              CustomButton(
+                onTap: () {
+                  Get.toNamed(UploadTrackScreen.routeName);
+                },
+                title: AppStaticString.next,
+              )
+            ],
+          ),
         ),
       ),
     );

@@ -6,6 +6,7 @@ EdgeInsets padding12=EdgeInsets.all(12.sp);
 EdgeInsets padding14=EdgeInsets.all(14.sp);
 EdgeInsets padding16H=EdgeInsets.symmetric(horizontal:16.sp);
 EdgeInsets padding12T=EdgeInsets.only(top:12.sp);
+EdgeInsets padding6T=EdgeInsets.only(top:6.sp);
 EdgeInsets padding16V=EdgeInsets.symmetric(vertical:16.sp);
 EdgeInsets padding14H=EdgeInsets.symmetric(horizontal:14.sp);
 EdgeInsets padding14V=EdgeInsets.symmetric(vertical:14.sp);
