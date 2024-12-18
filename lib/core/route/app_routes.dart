@@ -11,10 +11,14 @@ import 'package:track_trek/view/auth/forget_password.dart';
 import 'package:track_trek/view/auth/login.dart';
 import 'package:track_trek/view/auth/login.dart';
 import 'package:track_trek/view/auth/sign_up.dart';
+import 'package:track_trek/view/feedback/feedback_page.dart';
+import 'package:track_trek/view/feedback/feedback_page.dart';
 import 'package:track_trek/view/history/history_page.dart';
 import 'package:track_trek/view/history/history_page.dart';
 import 'package:track_trek/view/home/home_screen.dart';
 import 'package:track_trek/view/home/home_screen.dart';
+import 'package:track_trek/view/home/user_details_page.dart';
+import 'package:track_trek/view/home/user_details_page.dart';
 import 'package:track_trek/view/initial/bottom_navigation_screen.dart';
 import 'package:track_trek/view/initial/splash.dart';
 import 'package:track_trek/view/manage/event_user_page.dart';
@@ -42,5 +46,7 @@ class AppRoutes {
         GetPage(name: ProfileScreen.routeName, page: () => const ProfileScreen(),binding: ProfileBinding()),
         GetPage(name: EventUserScreen.routeName, page: () => const EventUserScreen()),
         GetPage(name: HistoryScreen.routeName, page: () => const HistoryScreen()),
+        GetPage(name: UserDetailsScreen.routeName, page: () => const UserDetailsScreen()),
+        GetPage(name: FeedbackScreen.routeName, page: () => const FeedbackScreen()),
       ];
 }

@@ -11,6 +11,9 @@ import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
+import 'package:track_trek/view/add/widgets/buttons.dart';
+import 'package:track_trek/view/add/widgets/delete_alert_dialog.dart';
+import 'package:track_trek/view/home/user_details_page.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 
 class TrackCardWidget extends StatelessWidget {
@@ -87,7 +90,7 @@ class TrackCardWidget extends StatelessWidget {
             ),
             space16H,
             fromManage == true
-                ? SizedBox.shrink()
+                ? const SizedBox.shrink()
                 : Row(
                     children: [
                       Flexible(
@@ -99,7 +102,7 @@ class TrackCardWidget extends StatelessWidget {
                                 5,
                                 (index) => Positioned(
                                     left: (30 * index).toDouble(),
-                                    child: ProfileCircleImageWidget())),
+                                    child: const ProfileCircleImageWidget())),
                           ),
                         ),
                       ),
@@ -107,7 +110,9 @@ class TrackCardWidget extends StatelessWidget {
                       Flexible(
                           flex: 4,
                           child: CustomButton(
-                            onTap: () {},
+                            onTap: () {
+                              Get.toNamed(UserDetailsScreen.routeName);
+                            },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -127,61 +132,169 @@ class TrackCardWidget extends StatelessWidget {
                           ))
                     ],
                   ),
-            fromManage == true ? SizedBox.shrink() : space16H,
+            fromManage == true ? const SizedBox.shrink() : space16H,
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 OptionWidget(
                   icon: commentIconUrl,
+                  function: () {
+                    showBottomSheet(
+                      context: context,
+                      builder: (context) => SizedBox(
+                        height: MediaQuery.of(context).size.height / 2,
+                        child: Center(
+                          child: SingleChildScrollView(
+                            child: Column(
+                              // mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  AppStaticString.comments,
+                                  style: poppinsMedium.copyWith(
+                                    fontSize: getFontSizeSmall(context),
+                                  ),
+                                ),
+                                space16H,
+                                Image.asset(horizontalDividerUrl),
+                                ...List.generate(
+                                  5,
+                                  (index) => Column(
+                                    children: [
+                                      Padding(
+                                        padding: padding16,
+                                        child: Row(
+                                          children: [
+                                            ProfileCircleImageWidget(),
+                                            space16W,
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  ///=======================user name dynamic + duration ========================///
+                                                  RichText(
+                                                    text: TextSpan(children: [
+                                                      TextSpan(
+                                                          text: AppStaticString
+                                                              .dummyName,
+                                                          style: poppinsRegular
+                                                              .copyWith(
+                                                                  fontSize:
+                                                                      getFontSizeSmall(
+                                                                          context))),
+                                                      TextSpan(text: ' 3d .',
+                                                          style: poppinsRegular
+                                                              .copyWith( color: AppColors.normalDarkWhite,
+                                                              fontSize:
+                                                              getFontSizeSmall(
+                                                                  context))),
+                                                    ]),
+                                                  ),
+                                                  space6H,
+
+                                                  ///=======================dynamic comment========================///
+                                                  Text(
+                                                      'Nice to see, in something elseNice to see, in something elseNice to see, in something else',style: poppinsRegular.copyWith(
+                                                    color: Color(0xffD2D2D2),
+                                                      fontSize: getFontSizeDefault(context)),)
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      Image.asset(horizontalDividerUrl)
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                   text: '120',
                 ),
-                OptionWidget(
-                  icon: reactIconUrl,
-                  text: '120',
+                Obx(
+                   () {
+                    return OptionWidget(
+                      function: () {
+                        HomeController.to.react.value=!HomeController.to.react.value;
+                      },
+                      icon:HomeController.to.react.value?reactFillIconUrl: reactIconUrl,
+                      text: '120',
+                    );
+                  }
                 ),
                 OptionWidget(
                   icon: mapIconUrl,
                   text: AppStaticString.map,
                 ),
                 fromManage == true
-                    ? SizedBox.shrink()
+                    ? const SizedBox.shrink()
                     : OptionWidget(
-                  function: () async{
-                   await Share.share('Check out this cool Flutter app!');
-                  },
+                        function: () async {
+                          await Share.share('Check out this cool Flutter app!');
+                        },
                         icon: shareIconUrl,
                         text: AppStaticString.share,
                       ),
               ],
             ),
-            fromManage == true
-                ?space16H:SizedBox.shrink(),
+            fromManage == true ? space16H : const SizedBox.shrink(),
             fromManage == true
                 ? Row(
                     children: [
                       Expanded(
                         child: CustomButton(
-                          onTap: () {},
+                          onTap: () {
+                            showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (context) => const DeleteAlertDialog(),
+                            );
+                          },
                           fillColor: Colors.transparent,
                           borderColor: AppColors.redColor,
-                          height:48.h ,
+                          height: 48.h,
                           title: AppStaticString.delete,
                           textColor: AppColors.redColor,
                         ),
                       ),
                       space12W,
+
+                      ///========================active button========================///
                       Expanded(
                         child: CustomButton(
                           fillColor: AppColors.greenColor,
                           borderColor: AppColors.greenColor,
-                          onTap: () {},
-                          height:48.h ,
+                          onTap: () {
+                            showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (context) => DefaultDialogWithButton(
+                                content: Text(
+                                  AppStaticString.areYouSureWantToReactivate,
+                                  textAlign: TextAlign.center,
+                                  style: poppinsRegular.copyWith(
+                                      fontSize: getFontSizeDefault(context),
+                                      color: AppColors.whiteLightColor),
+                                ),
+                                textColor: AppColors.redColor,
+                                borderColor: AppColors.marronColor,
+                                firstButtonText: AppStaticString.no,
+                                secendtButtonText: AppStaticString.yes,
+                              ),
+                            );
+                          },
+                          height: 48.h,
                           title: AppStaticString.active,
                         ),
                       )
                     ],
                   )
-                : SizedBox.shrink()
+                : const SizedBox.shrink()
           ],
         ),
       ),
@@ -193,7 +306,9 @@ class ProfileCircleImageWidget extends StatelessWidget {
   final double? height;
   final double? width;
   const ProfileCircleImageWidget({
-    super.key, this.height, this.width,
+    super.key,
+    this.height,
+    this.width,
   });
 
   @override
@@ -201,8 +316,8 @@ class ProfileCircleImageWidget extends StatelessWidget {
     return ClipOval(
         child: Image.asset(
       dummyProfileImgUrl,
-      height:height?? 45.w,
-      width:width?? 45.w,
+      height: height ?? 45.w,
+      width: width ?? 45.w,
       fit: BoxFit.cover,
     ));
   }
@@ -215,12 +330,13 @@ class OptionWidget extends StatelessWidget {
   const OptionWidget({
     super.key,
     required this.icon,
-    required this.text, this.function,
+    required this.text,
+    this.function,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: function,
       child: Row(
         children: [

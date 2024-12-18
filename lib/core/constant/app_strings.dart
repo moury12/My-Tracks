@@ -7,6 +7,7 @@ class AppStaticString {
   static const String trakManage = "Track Management";
   static const String notification = "Notification";
   static const String manage = "Manage";
+  static const String userDetails = "User Details";
   static const String promote = "Promote";
   static const String promoteTrack = "Promote track";
   static const String upcomingEvent = "Add Upcoming Event";
@@ -119,6 +120,7 @@ class AppStaticString {
   static const String  selectOneYouCreate= "Select the one you want to create";
   static const String  seat= "Seat: ";
   static const String  selectDay= "Select Day";
+  static const String  areYouSureWantToReactivate= "Are you sure you want to reactivate this truck for January?";
   static const String  availableSlot= "Available Slot: ";
   static const String  howManyPeopleCanTrack= "How many people can the track";
   static const String  contactNumber= "Contact Number";
@@ -134,6 +136,7 @@ class AppStaticString {
   static const String  total= "Total";
   static const String  confrim= "Confirm";
   static const String  runningBooking= "Running Booking";
+  static const String  comments= "Comments";
   static const String  bookSlot= "Book a Slot";
   static const String  allowedPeople= "Allowed People : ";
   static const String  priceAmount= "Price amount";

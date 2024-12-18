@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:track_trek/core/components/custom_button.dart';
@@ -19,10 +20,17 @@ class DeleteAlertDialog extends StatelessWidget {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            AppStaticString.areYouSureToDelete,
-            style: poppinsRegular.copyWith(
-                fontSize: getFontSizeLarge(context)),
+          Row(crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Text(textAlign: TextAlign.center,
+                  AppStaticString.areYouSureToDelete,
+                  style: poppinsRegular.copyWith(fontSize: getFontSizeLarge(context)),
+                ),
+              ),IconButton(onPressed: () {
+                Navigator.pop(context);
+              }, icon: Icon(CupertinoIcons.multiply)),
+            ],
           ),
           space16H,
           Row(
@@ -30,28 +38,28 @@ class DeleteAlertDialog extends StatelessWidget {
             children: [
               Expanded(
                   child: CustomButton(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    height: 44.h,
-                    width: 92.w,
-                    title: AppStaticString.yes,
-                    textColor: AppColors.whiteLightColor,
-                    borderColor: AppColors.redBrightColor,
-                    fillColor: AppColors.redBrightColor,
-                  )),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                height: 44.h,
+                width: 92.w,
+                title: AppStaticString.yes,
+                textColor: AppColors.whiteLightColor,
+                borderColor: AppColors.redBrightColor,
+                fillColor: AppColors.redBrightColor,
+              )),
               Expanded(
                   child: CustomButton(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    height: 44.h,
-                    width: 92.w,
-                    title: AppStaticString.no,
-                    textColor: AppColors.whiteLightColor,
-                    borderColor: AppColors.greenColor,
-                    fillColor: AppColors.greenColor,
-                  )),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                height: 44.h,
+                width: 92.w,
+                title: AppStaticString.no,
+                textColor: AppColors.whiteLightColor,
+                borderColor: AppColors.greenColor,
+                fillColor: AppColors.greenColor,
+              )),
             ],
           ),
         ],

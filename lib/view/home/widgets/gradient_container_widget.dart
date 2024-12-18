@@ -51,10 +51,11 @@ class BlackContainerWidget extends StatelessWidget {
   final Widget? child;
   final double? radius;
   final Color? borderColor;
+  final Color? textColor;
   final Color? fillColor;
   final Function()? onTap;
 
-  const BlackContainerWidget({super.key, this.text, this.onTap, this.child, this.textStyle, this.radius, this.borderColor, this.fillColor});
+  const BlackContainerWidget({super.key, this.text, this.onTap, this.child, this.textStyle, this.radius, this.borderColor, this.fillColor, this.textColor});
 
 
 
@@ -70,7 +71,7 @@ class BlackContainerWidget extends StatelessWidget {
            color: fillColor??AppColors.blackExtraLightColor.withOpacity(.5)
         ),
         child: child?? Text(text??'Running',style: textStyle?? poppinsMedium.copyWith(
-            fontSize: getFontSizeLarge(context),color:AppColors.whiteLightColor
+            fontSize: getFontSizeLarge(context),color:textColor??AppColors.whiteLightColor
         ),),
       ),
     );

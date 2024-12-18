@@ -22,7 +22,7 @@ class CustomTextField extends StatefulWidget {
       this.onChanged,
       this.maxLines = 1,
       this.validator,
-      this.hintText,
+      this.hintText=AppStaticString.typeHere,
       this.hintStyle,
       this.suffixIcon,
       this.suffixIconColor,

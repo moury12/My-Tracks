@@ -7,6 +7,7 @@ import 'package:track_trek/core/constant/fontsize_constant.dart';
 import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/utils/text_style.dart';
+import 'package:track_trek/view/feedback/feedback_page.dart';
 import 'package:track_trek/view/history/history_page.dart';
 import 'package:track_trek/view/profile/profile_page.dart';
 
@@ -31,7 +32,11 @@ class CustomDrawerWidget extends StatelessWidget {
       },),
       DrawerContentWidget(icon: termsConditionIconUrl, text: AppStaticString.termsCondition,),
       DrawerContentWidget(icon: privacyPolicyIconUrl, text: AppStaticString.privacyPolicy,),
-      DrawerContentWidget(icon: feedBackIconUrl, text: AppStaticString.feedback,),
+      DrawerContentWidget(onTap: () {
+        Navigator.pop(context);
+        Get.toNamed(FeedbackScreen.routeName);
+      },
+        icon: feedBackIconUrl, text: AppStaticString.feedback,),
       DrawerContentWidget(
         icon: profileIconUrl, text: AppStaticString.profile,onTap: () {
         Navigator.pop(context);
@@ -55,7 +60,7 @@ class DrawerContentWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap:onTap??(){} ,
       child: Column(
         children: [

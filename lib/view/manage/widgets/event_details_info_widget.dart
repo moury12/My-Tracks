@@ -14,7 +14,7 @@ class EventDetailsInfoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      spacing: 10.h,
+     
       children: [
         ///=============dynamic event name+ date====================///
         const RowBlackTextWidget(

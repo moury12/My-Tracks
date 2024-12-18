@@ -47,6 +47,8 @@ padding: padding16,
                           fontSize: getFontSizeExtraLarge(context)),)),
                   ],
                 ),
+                ///===================dynamic week day =============================///
+
                 Text(
                   AppStaticString.dummyDay,
                   style: poppinsMedium.copyWith(
@@ -57,7 +59,10 @@ padding: padding16,
                   style: poppinsMedium.copyWith(
                       fontSize: getFontSizeSmall(context)),
 
-                ),Text(
+                ),
+                ///===================dynamic start date time =============================///
+
+                Text(
                   AppStaticString.dummyTime,
                   style: poppinsMedium.copyWith(
                     color: AppColors.primaryColor,
@@ -68,7 +73,10 @@ padding: padding16,
                   style: poppinsMedium.copyWith(
                       fontSize: getFontSizeSmall(context)),
 
-                ),Text(
+                ),
+                ///===================dynamic end date time =============================///
+
+                Text(
                   AppStaticString.dummyTime,
                   style: poppinsMedium.copyWith(
                     color: AppColors.blueColor,

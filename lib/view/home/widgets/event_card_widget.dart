@@ -14,6 +14,7 @@ import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/home/widgets/dynamic_tab_widget.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
+import 'package:track_trek/view/manage/event_user_page.dart';
 
 class EventCardWidget extends StatelessWidget {
   final bool? noButton;
@@ -112,7 +113,9 @@ class EventCardWidget extends StatelessWidget {
             ])),
             space16H,
           noButton==false?  CustomButton(
-              onTap: () {},
+              onTap: () {
+                Get.toNamed(EventUserScreen.routeName);
+              },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

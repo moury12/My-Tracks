@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:track_trek/core/components/custom_button.dart';
@@ -89,52 +90,11 @@ class AddButtonInContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ///============================pending============================///
     return GestureDetector(
       onTap: () {
-        showDialog(
+        showDialog(barrierDismissible: false,
           context: context,
-          builder: (context) => AlertDialog(
-            backgroundColor: AppColors.blackBackgroundColor,
-            content: Column(
-              spacing: 16.h,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CustomTextField(
-                  title: AppStaticString.fieldName,
-                  fillColor: AppColors.blackBackgroundColor,
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(4.r),
-                      borderSide: const BorderSide(
-                          color: AppColors.blackBorderColor, width: 1),
-                      gapPadding: 0),
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(4.r),
-                      borderSide: const BorderSide(
-                          color: AppColors.blackBorderColor, width: 1),
-                      gapPadding: 0),
-
-                  // border: a,
-                ),
-                Row(
-                  spacing: 12.w,
-                  children: [
-                    const Expanded(
-                        child: BlackContainerWidget(
-                      text: AppStaticString.cancel,
-                      fillColor: AppColors.blackBackgroundColor,
-                    )),
-                    Expanded(
-                      child: CustomButton(
-                        onTap: () {},
-                        title: AppStaticString.save,
-                      ),
-                    )
-                  ],
-                )
-              ],
-            ),
-          ),
+          builder: (context) => const DefaultDialogWithButton(),
         );
       },
       child: Container(
@@ -151,6 +111,105 @@ class AddButtonInContainer extends StatelessWidget {
           width: 20.w,
         ),
       ),
+    );
+  }
+}
+
+class DefaultDialogWithButton extends StatelessWidget {
+  final Widget? content;
+  final String? firstButtonText;
+  final String? secendtButtonText;
+  final Color? borderColor;
+  final Color? textColor;
+  final Color? fillColor;
+  final double? radius;
+  const DefaultDialogWithButton({
+    super.key, this.content, this.firstButtonText, this.secendtButtonText, this.borderColor, this.textColor, this.fillColor, this.radius,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: AppColors.blackBackgroundColor,
+
+      content: SizedBox(
+    width: double.maxFinite,
+        child: Column(
+          spacing: 16.h,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: content??  CustomTextField(
+                    title: AppStaticString.fieldName,
+                    fillColor: AppColors.blackBackgroundColor,
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(4.r),
+                        borderSide: const BorderSide(
+                            color: AppColors.blackBorderColor, width: 1),
+                        gapPadding: 0),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(4.r),
+                        borderSide: const BorderSide(
+                            color: AppColors.blackBorderColor, width: 1),
+                        gapPadding: 0),
+
+                    // border: a,
+                  ),
+                ),
+                IconButton(onPressed: () {
+                  Navigator.pop(context);
+                }, icon: const Icon(CupertinoIcons.multiply)),
+              ],
+            ),
+            RowButton(borderColor: borderColor, radius: radius, firstButtonText: firstButtonText, textColor: textColor, secendtButtonText: secendtButtonText)
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class RowButton extends StatelessWidget {
+  const RowButton({
+    super.key,
+     this.borderColor,
+     this.radius,
+     this.firstButtonText,
+     this.textColor,
+     this.secendtButtonText,
+  });
+
+  final Color? borderColor;
+  final double? radius;
+  final String? firstButtonText;
+  final Color? textColor;
+  final String? secendtButtonText;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+       spacing: 12.w,
+      children: [
+        Expanded(
+            child:CustomButton(
+              onTap: () {},
+              fillColor: Colors.transparent,
+              borderColor:borderColor?? AppColors.blackBorderColor,
+              radius:radius,
+              title:firstButtonText?? AppStaticString.cancel,
+              textColor:textColor?? AppColors.whiteLightColor,
+            ), ),
+        Expanded(
+          child: CustomButton(
+
+            radius:radius,
+            onTap: () {},
+            title: secendtButtonText?? AppStaticString.save,
+          ),
+        )
+      ],
     );
   }
 }

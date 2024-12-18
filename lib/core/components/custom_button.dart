@@ -16,9 +16,10 @@ class CustomButton extends StatelessWidget {
       this.fillColor = AppColors.primaryColor,
       this.textColor = AppColors.blackLightColor,
       this.borderColor = AppColors.primaryColor,
-      this.child, this.img, this.icon, this.fontSize});
+      this.child, this.img, this.icon, this.fontSize,  this.radius});
 
   final double height;
+  final double? radius;
   final double width;
   final Color fillColor;
   final Color borderColor;
@@ -47,10 +48,11 @@ class CustomButton extends StatelessWidget {
             vertical: marginVerticel, horizontal: marginHorizontal),
         alignment: Alignment.center,
         height: height,
+
         width: width,
         decoration: BoxDecoration(
             border: Border.all(color: borderColor),
-            borderRadius: BorderRadius.circular(8.r),
+            borderRadius: BorderRadius.circular(radius??8.r),
             color: fillColor),
         child: child ??
             Row(mainAxisAlignment: MainAxisAlignment.center,
