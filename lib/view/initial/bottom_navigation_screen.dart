@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:track_trek/controller/common_controller.dart';
 import 'package:track_trek/core/components/custom_appbar.dart';
+import 'package:track_trek/core/components/custom_drawer_widget.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/view/add/create_track_event_screen.dart';
 import 'package:track_trek/view/home/home_screen.dart';
@@ -13,46 +14,63 @@ import 'package:track_trek/view/promote/promote_screen.dart';
 class BottomNavigationScreen extends StatelessWidget {
   static const String routeName = '/nav';
   BottomNavigationScreen({super.key});
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  final List<Widget> pages = [
-    const HomeScreen(),
-    const ManageScreen(),
-    const CreateTrackEventScreen(),
-    const NotificationScreen(),
-    const PromoteScreen(),
-  ];
+
 
   final List<String?> appbarTitle = [
     null,
     AppStaticString.trackManagement,
     AppStaticString.create,
     AppStaticString.notification,
-    AppStaticString.promote
+    AppStaticString.promoteTrack
   ];
 
   @override
   Widget build(BuildContext context) {
+
+    final List<Widget> pages = [
+      HomeScreen(openDrawer: () {
+        _scaffoldKey.currentState?.openDrawer();
+      },),
+      const ManageScreen(),
+      const CreateTrackEventScreen(),
+      const NotificationScreen(),
+      const PromoteScreen(),
+    ];
     return Obx(() {
-      // Get the selected index
+
       int selectedIndex = CommonController.to.selectedIndex.value;
 
-      return Scaffold(
+      return PopScope(
+        canPop:selectedIndex!=0? false:true,
+        onPopInvokedWithResult: (didPop, result) {
+          if(selectedIndex!=0){
+            CommonController.to.updateIndex(0);
 
-        appBar: appbarTitle[selectedIndex] == null
-            ? const PreferredSize(
-                preferredSize: Size.zero, child: SizedBox.shrink())
-            : CustomAppbar(
-                tile: appbarTitle[selectedIndex],
-              ),
-        body: SafeArea(child: Column(
+          }
+        },
+        child: Scaffold(
+          drawer:selectedIndex==0? const CustomDrawerWidget():null,
+            key: _scaffoldKey,
+          appBar: appbarTitle[selectedIndex] == null
+              ? const PreferredSize(
+                  preferredSize: Size.zero, child: SizedBox.shrink())
+              : CustomAppbar(
 
-          children: [
-            selectedIndex==0?SizedBox(height: MediaQuery.of(context).viewPadding.top):SizedBox.shrink(),
-            Expanded(child: pages[selectedIndex]),
-          ],
-        )),
-        bottomNavigationBar: CustomBottomNavBar(),
+                  tile: appbarTitle[selectedIndex],
+                ),
+          body: SafeArea(child: Column(
+
+            children: [
+              selectedIndex==0?SizedBox(height: MediaQuery.of(context).viewPadding.top):const SizedBox.shrink(),
+              Expanded(child: pages[selectedIndex]),
+            ],
+          )),
+          bottomNavigationBar: CustomBottomNavBar(),
+        ),
       );
     });
   }
 }
+

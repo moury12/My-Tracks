@@ -19,8 +19,10 @@ final darkTheme = ThemeData.dark().copyWith(
     // fontFamily: darkThemeFont,
     splashColor: Colors.transparent,
     inputDecorationTheme: inputDecorationTheme,
+    ///============================Drawer===================================///
+
     drawerTheme: const DrawerThemeData(
-      backgroundColor: AppColors.drawerColor,
+      backgroundColor: AppColors.blackBackgroundColor,
     ),
     textButtonTheme:  TextButtonThemeData(
       style: TextButton.styleFrom(
@@ -66,6 +68,10 @@ final darkTheme = ThemeData.dark().copyWith(
 ////=================== Input Decoration =======================
 
 final InputDecorationTheme inputDecorationTheme = InputDecorationTheme(
+  disabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(4.r),
+      borderSide: const BorderSide(color:Colors.transparent, width: 1),
+      gapPadding: 0),
     border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(4.r),
         borderSide: const BorderSide(color: AppColors.blackBackgroundColor, width: 1),

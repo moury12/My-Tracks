@@ -35,6 +35,8 @@ class AppStaticString {
   static const String user = "User";
   static const String host = "Host";
   static const String email = "Email";
+  static const String nameWithClone = "Name: ";
+  static const String name = "Name";
   static const String userName = "User Name";
   static const String password = "Password";
   static const String areYouSureToDelete = "Are you sure you want to delete this content ?";

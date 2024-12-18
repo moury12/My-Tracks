@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:track_trek/core/components/custom_button.dart';
 import 'package:track_trek/core/components/custom_textfield.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
@@ -14,7 +15,8 @@ class CreateSlotButtonSmallWidget extends StatelessWidget {
   final Function()? onTap;
 
   const CreateSlotButtonSmallWidget({
-    super.key, this.onTap,
+    super.key,
+    this.onTap,
   });
 
   @override
@@ -26,7 +28,7 @@ class CreateSlotButtonSmallWidget extends StatelessWidget {
         child: IntrinsicWidth(
           child: GradientContainerWidget(
             radius: 4.r,
-            padding: EdgeInsets.symmetric(horizontal: 8.w,vertical: 4.h),
+            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -55,13 +57,14 @@ class CreateSlotButtonSmallWidget extends StatelessWidget {
 class SaveSmallButtonWidget extends StatelessWidget {
   final Function()? onTap;
   const SaveSmallButtonWidget({
-    super.key, this.onTap,
+    super.key,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap:onTap ,
+      onTap: onTap,
       child: Align(
         alignment: Alignment.centerRight,
         child: IntrinsicWidth(
@@ -71,13 +74,14 @@ class SaveSmallButtonWidget extends StatelessWidget {
                 color: AppColors.blackLightColor,
                 fontSize: getFontSizeSmall(context)),
             text: AppStaticString.save,
-            padding: EdgeInsets.all( 4.w),
+            padding: EdgeInsets.all(4.w),
           ),
         ),
       ),
     );
   }
 }
+
 class AddButtonInContainer extends StatelessWidget {
   const AddButtonInContainer({
     super.key,
@@ -88,19 +92,50 @@ class AddButtonInContainer extends StatelessWidget {
     ///============================pending============================///
     return GestureDetector(
       onTap: () {
-        showDialog(context: context, builder: (context) => const AlertDialog(
-         backgroundColor: AppColors.textFieldColor,
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CustomTextField(
-                title: AppStaticString.fieldName,
-                // border: a,
-              )
-            ],
-          ),
-        ),);
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            backgroundColor: AppColors.blackBackgroundColor,
+            content: Column(
+              spacing: 16.h,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CustomTextField(
+                  title: AppStaticString.fieldName,
+                  fillColor: AppColors.blackBackgroundColor,
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(4.r),
+                      borderSide: const BorderSide(
+                          color: AppColors.blackBorderColor, width: 1),
+                      gapPadding: 0),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(4.r),
+                      borderSide: const BorderSide(
+                          color: AppColors.blackBorderColor, width: 1),
+                      gapPadding: 0),
 
+                  // border: a,
+                ),
+                Row(
+                  spacing: 12.w,
+                  children: [
+                    const Expanded(
+                        child: BlackContainerWidget(
+                      text: AppStaticString.cancel,
+                      fillColor: AppColors.blackBackgroundColor,
+                    )),
+                    Expanded(
+                      child: CustomButton(
+                        onTap: () {},
+                        title: AppStaticString.save,
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
+          ),
+        );
       },
       child: Container(
         padding: padding12,

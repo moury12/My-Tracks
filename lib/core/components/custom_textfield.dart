@@ -39,7 +39,7 @@ class CustomTextField extends StatefulWidget {
       this.enabledBorder,
       this.fillColor=AppColors.textFieldColor,
       this.contentPadding = const EdgeInsets.only(left: 10),
-      this.title});
+      this.title, this.isEnable=true});
 
   final TextEditingController? textEditingController;
   final FocusNode? focusNode;
@@ -68,6 +68,7 @@ class CustomTextField extends StatefulWidget {
   final OutlineInputBorder? enabledBorder;
 
   final bool isPassword;
+  final bool? isEnable;
   final EdgeInsetsGeometry contentPadding;
   final bool readOnly;
   final int? maxLength;
@@ -98,6 +99,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         widget.title != null ? space8H : SizedBox.shrink(),
         TextFormField(
           onTap: widget.onTap,
+          enabled:widget.isEnable ,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           inputFormatters: widget.inputFormatters,
           onFieldSubmitted: widget.onFieldSubmitted,

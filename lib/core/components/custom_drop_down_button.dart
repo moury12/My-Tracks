@@ -10,10 +10,11 @@ class CustomDropdown extends StatefulWidget {
   final String? title;
   final String? hintText;
   final Color? borderColor;
+  final Color? iconColor;
   final Color? fillColor;
   final Color? hintColor;
   final double? radius;
-  const CustomDropdown({super.key,  this.title, this.hintText, this.borderColor, this.fillColor, this.hintColor, this.radius});
+  const CustomDropdown({super.key,  this.title, this.hintText, this.borderColor, this.fillColor, this.hintColor, this.radius, this.iconColor});
 
   @override
   State<CustomDropdown> createState() => _CustomDropdownState();
@@ -41,8 +42,8 @@ class _CustomDropdownState extends State<CustomDropdown> {
         style: poppinsRegular.copyWith(
             fontSize: getFontSizeSemiSmall(context)),
       )
-          : SizedBox.shrink(),
-        widget.title != null ? space8H : SizedBox.shrink(),
+          : const SizedBox.shrink(),
+        widget.title != null ? space8H : const SizedBox.shrink(),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(
@@ -53,7 +54,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
           child: DropdownButton<String>(
             value: selectedValue,
             isExpanded: true,
-            underline: SizedBox(), // Removes the default underline
+            underline: const SizedBox(), // Removes the default underline
             hint: Text(
               widget.hintText?? AppStaticString.typeHere,
               style: TextStyle(
@@ -61,7 +62,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
                   fontWeight: FontWeight.w400,
                   fontSize: getFontSizeSmall(context)),
             ),
-            icon: const Icon(Icons.keyboard_arrow_down, color: AppColors.whiteLightColor),
+            icon:  Icon(Icons.keyboard_arrow_down, color:widget.iconColor?? AppColors.whiteLightColor),
             items: dropdownItems.map((e) => DropdownMenuItem<String>(
              value: e,
               child: Text(e),
@@ -70,7 +71,6 @@ class _CustomDropdownState extends State<CustomDropdown> {
               setState(() {
                 selectedValue = value;
               });
-              print("Selected: $value");
             },
           ),
         ),

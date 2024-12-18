@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:track_trek/controller/home_controller.dart';
 import 'package:track_trek/core/components/custom_button.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
@@ -145,6 +146,9 @@ class TrackCardWidget extends StatelessWidget {
                 fromManage == true
                     ? SizedBox.shrink()
                     : OptionWidget(
+                  function: () async{
+                   await Share.share('Check out this cool Flutter app!');
+                  },
                         icon: shareIconUrl,
                         text: AppStaticString.share,
                       ),
@@ -186,8 +190,10 @@ class TrackCardWidget extends StatelessWidget {
 }
 
 class ProfileCircleImageWidget extends StatelessWidget {
+  final double? height;
+  final double? width;
   const ProfileCircleImageWidget({
-    super.key,
+    super.key, this.height, this.width,
   });
 
   @override
@@ -195,8 +201,8 @@ class ProfileCircleImageWidget extends StatelessWidget {
     return ClipOval(
         child: Image.asset(
       dummyProfileImgUrl,
-      height: 45.w,
-      width: 45.w,
+      height:height?? 45.w,
+      width:width?? 45.w,
       fit: BoxFit.cover,
     ));
   }
@@ -205,26 +211,30 @@ class ProfileCircleImageWidget extends StatelessWidget {
 class OptionWidget extends StatelessWidget {
   final String icon;
   final String text;
+  final Function()? function;
   const OptionWidget({
     super.key,
     required this.icon,
-    required this.text,
+    required this.text, this.function,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Image.asset(
-          icon,
-          height: 24.sp,
-        ),
-        space6W,
-        Text(
-          text,
-          style: poppinsRegular.copyWith(fontSize: getFontSizeSmall(context)),
-        )
-      ],
+    return GestureDetector(
+      onTap: function,
+      child: Row(
+        children: [
+          Image.asset(
+            icon,
+            height: 24.sp,
+          ),
+          space6W,
+          Text(
+            text,
+            style: poppinsRegular.copyWith(fontSize: getFontSizeSmall(context)),
+          )
+        ],
+      ),
     );
   }
 }

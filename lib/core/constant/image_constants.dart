@@ -11,6 +11,7 @@ String horizontalDividerUrl  ='assets/horizontal_divider.png';
 ///
 ///
 String arrowTopImgUrl ='assets/icons/arrow_top.png';
+String trackImgUrl ='assets/track_img_url.png';
 String addPhotoIconUrl  ='assets/icons/add_photo_icon.png';
 String addIconUrl  ='assets/icons/add_icon.png';
 String editIconUrl  ='assets/icons/edit_icon.png';

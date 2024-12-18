@@ -7,8 +7,9 @@ import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 class HomeAppBar extends StatelessWidget {
+  final Function()? openDrawer;
   const HomeAppBar({
-    super.key,
+    super.key, this.openDrawer,
   });
 
   @override
@@ -44,7 +45,9 @@ class HomeAppBar extends StatelessWidget {
             ],
           ),
           Spacer(),
-          Image.asset(drawerIconUrl,height: 50.w,)
+          GestureDetector(
+            onTap:openDrawer??(){} ,
+              child: Image.asset(drawerIconUrl,height: 50.w,))
         ],
       ),
     );

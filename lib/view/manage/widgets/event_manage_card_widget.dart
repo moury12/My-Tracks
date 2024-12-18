@@ -140,9 +140,10 @@ class UserInfoContentWidget extends StatelessWidget {
 
 class UserInfoText extends StatelessWidget {
   final String text;
+  final Color? color;
   const UserInfoText({
     super.key,
-    required this.text,
+    required this.text, this.color,
   });
 
   @override
@@ -150,7 +151,7 @@ class UserInfoText extends StatelessWidget {
     return Text(
       text,
       style: poppinsRegular.copyWith(
-          fontSize: getFontSizeSmall(context), color: AppColors.fadeWhiteColor),
+          fontSize: getFontSizeSmall(context), color:color?? AppColors.fadeWhiteColor),
     );
   }
 }

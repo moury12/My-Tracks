@@ -16,8 +16,9 @@ import 'package:track_trek/view/home/widgets/dynamic_tab_widget.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 
 class EventCardWidget extends StatelessWidget {
+  final bool? noButton;
   const EventCardWidget({
-    super.key,
+    super.key,  this.noButton=false,
   });
 
   @override
@@ -76,18 +77,18 @@ class EventCardWidget extends StatelessWidget {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  PriceTextWidget(),
-                  DividerVertical(),
+                  const PriceTextWidget(),
+                  const DividerVertical(),
                   Text(
                     '${AppStaticString.totalSlot}20',
                     style: poppinsRegular.copyWith(
                         fontSize: getFontSizeSmall(context)),
                   ),
                   HomeController.to.selectedLabel.value == 2
-                      ? SizedBox.shrink()
-                      : DividerVertical(),
+                      ? const SizedBox.shrink()
+                      : const DividerVertical(),
                   HomeController.to.selectedLabel.value == 2
-                      ? SizedBox.shrink()
+                      ? const SizedBox.shrink()
                       : Text('${AppStaticString.unsold}10',
                           style: poppinsRegular.copyWith(
                               fontSize: getFontSizeSmall(context))),
@@ -110,7 +111,7 @@ class EventCardWidget extends StatelessWidget {
               )
             ])),
             space16H,
-            CustomButton(
+          noButton==false?  CustomButton(
               onTap: () {},
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -127,7 +128,7 @@ class EventCardWidget extends StatelessWidget {
                   )
                 ],
               ),
-            )
+            ):const SizedBox.shrink()
           ],
         ),
       ),

@@ -49,9 +49,12 @@ class BlackContainerWidget extends StatelessWidget {
   final TextStyle? textStyle;
 
   final Widget? child;
+  final double? radius;
+  final Color? borderColor;
+  final Color? fillColor;
   final Function()? onTap;
 
-  const BlackContainerWidget({super.key, this.text, this.onTap, this.child, this.textStyle});
+  const BlackContainerWidget({super.key, this.text, this.onTap, this.child, this.textStyle, this.radius, this.borderColor, this.fillColor});
 
 
 
@@ -62,9 +65,9 @@ class BlackContainerWidget extends StatelessWidget {
         alignment: Alignment.center,
         padding:padding16,
         decoration:  BoxDecoration(
-            borderRadius:BorderRadius.circular(12.r) ,
-            border: Border.all(width:.5.w ,color: AppColors.greyColor.withOpacity(.5)),
-           color: AppColors.blackExtraLightColor.withOpacity(.5)
+            borderRadius:BorderRadius.circular(radius??12.r) ,
+            border: Border.all(width:.5.w ,color:borderColor?? AppColors.greyColor.withOpacity(.5)),
+           color: fillColor??AppColors.blackExtraLightColor.withOpacity(.5)
         ),
         child: child?? Text(text??'Running',style: textStyle?? poppinsMedium.copyWith(
             fontSize: getFontSizeLarge(context),color:AppColors.whiteLightColor

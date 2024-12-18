@@ -1,15 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:track_trek/controller/home_controller.dart';
-import 'package:track_trek/core/components/custom_button.dart';
-import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
-import 'package:track_trek/core/constant/fontsize_constant.dart';
-import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
-import 'package:track_trek/core/utils/app_color.dart';
-import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/home/widgets/dynamic_tab_widget.dart';
 import 'package:track_trek/view/home/widgets/event_card_widget.dart';
 import 'package:track_trek/view/home/widgets/home_app_bar.dart';
@@ -18,8 +11,9 @@ import 'widgets/gradient_container_widget.dart';
 import 'widgets/track_card_widget.dart';
 
 class HomeScreen extends StatelessWidget {
+  final Function()? openDrawer;
   static const String routeName = '/home';
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, this.openDrawer});
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +27,13 @@ class HomeScreen extends StatelessWidget {
     HomeController.to.tabContent.add(Padding(
       padding: padding12V,
       child: Column(
-        children: List.generate(5, (i) => EventCardWidget()),
+        children: List.generate(5, (i) => const EventCardWidget()),
       ),
     ));
     return Column(
       children: [
 
-        const HomeAppBar(),
+         HomeAppBar(openDrawer:openDrawer ,),
         Expanded(
             child: ListView(
           padding: padding16,
