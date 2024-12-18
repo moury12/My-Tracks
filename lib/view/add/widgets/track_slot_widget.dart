@@ -17,12 +17,14 @@ import 'package:track_trek/view/add/widgets/delete_alert_dialog.dart';
 import 'package:track_trek/view/add/widgets/point_text_widget.dart';
 import 'package:track_trek/view/add/widgets/track_slot_widget.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
+import 'package:track_trek/view/manage/event_user_page.dart';
 import 'package:track_trek/view/manage/widgets/event_manage_card_widget.dart';
 
 class TrackSlotWidget extends StatelessWidget {
   final String? argument;
   const TrackSlotWidget({
-    super.key, this.argument,
+    super.key,
+    this.argument,
   });
 
   @override
@@ -54,7 +56,7 @@ class TrackSlotWidget extends StatelessWidget {
           ],
         ),
         space6H,
-          Row(
+        Row(
           children: [
             ///================= slot week dynamic========================///
             Expanded(
@@ -83,42 +85,58 @@ class TrackSlotWidget extends StatelessWidget {
           3,
           (index) => const PointTextWidget(),
         ),
-      argument!=null&& argument=='track_management'? Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-        Text(AppStaticString.viewAllParticipent,style: poppinsRegular.copyWith(fontSize: getFontSizeSmall(context)),),
-        space12W,
-        Image.asset(arrowTopImgUrl,color: AppColors.whiteLightColor,height: 14.w,width: 14.w,)
-      ],) :Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            GestureDetector(
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => const DeleteAlertDialog(),
-                );
-              },
-              child: Padding(
-                padding: EdgeInsets.all(8.sp),
-                child: Image.asset(
-                  deleteIconUrl,
-                  height: 24.w,
-                  width: 24.w,
+        argument != null && argument == 'track_management'
+            ? GestureDetector(
+                onTap: () {
+                  Get.toNamed(EventUserScreen.routeName);
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      AppStaticString.viewAllParticipent,
+                      style: poppinsRegular.copyWith(
+                          fontSize: getFontSizeSmall(context)),
+                    ),
+                    space12W,
+                    Image.asset(
+                      arrowTopImgUrl,
+                      color: AppColors.whiteLightColor,
+                      height: 14.w,
+                      width: 14.w,
+                    )
+                  ],
                 ),
-              ),
-            ),
-            Text(
-              AppStaticString.seeMore,
-              style:
-                  poppinsMedium.copyWith(fontSize: getFontSizeSmall(context)),
-            ),
-            space8W,
-            const Icon(Icons.arrow_drop_down_outlined)
-          ],
-        )
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => const DeleteAlertDialog(),
+                      );
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.all(8.sp),
+                      child: Image.asset(
+                        deleteIconUrl,
+                        height: 24.w,
+                        width: 24.w,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    AppStaticString.seeMore,
+                    style: poppinsMedium.copyWith(
+                        fontSize: getFontSizeSmall(context)),
+                  ),
+                  space8W,
+                  const Icon(Icons.arrow_drop_down_outlined)
+                ],
+              )
       ],
     );
   }
 }
-

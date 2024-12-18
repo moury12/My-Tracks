@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:track_trek/controller/track_management_controller.dart';
 import 'package:track_trek/core/binding/auth_binding.dart';
 import 'package:track_trek/core/binding/create_track_event_binding.dart';
 import 'package:track_trek/core/binding/home_binding.dart';
@@ -14,6 +15,8 @@ import 'package:track_trek/view/home/home_screen.dart';
 import 'package:track_trek/view/home/home_screen.dart';
 import 'package:track_trek/view/initial/bottom_navigation_screen.dart';
 import 'package:track_trek/view/initial/splash.dart';
+import 'package:track_trek/view/manage/event_user_page.dart';
+import 'package:track_trek/view/manage/event_user_page.dart';
 
 class AppRoutes {
   static route() => [
@@ -32,5 +35,6 @@ class AppRoutes {
               CreateEventBinding()
         ]),
         GetPage(name: UploadTrackScreen.routeName, page: () => const UploadTrackScreen(),binding: CreateTrackBinding()),
+        GetPage(name: EventUserScreen.routeName, page: () => const EventUserScreen()),
       ];
 }

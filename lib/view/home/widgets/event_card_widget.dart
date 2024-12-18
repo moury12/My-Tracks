@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -149,8 +151,10 @@ class PriceTextWidget extends StatelessWidget {
 }
 
 class DividerVertical extends StatelessWidget {
+  final Color? color;
+  final double? height;
   const DividerVertical({
-    super.key,
+    super.key, this.color, this.height,
   });
 
   @override
@@ -159,7 +163,8 @@ class DividerVertical extends StatelessWidget {
       padding: padding6H,
       child: Image.asset(
         verticalDividerImgUrl,
-        height: 10.w,
+        height: height??10.w,
+        color: color??null,
       ),
     );
   }

@@ -103,6 +103,7 @@ class AppStaticString {
   static const String  uploadImage= "Upload Image";
   static const String  slotNo= "Slot No:";
   static const String  totalSeat= "Total seat";
+  static const String  totalSeatWithClone= "Total seat: ";
   static const String  price= "Price";
   static const String  publish= "Publish";
   static const String  wantDltMsg= "Are you sure you want to delete this content ?";

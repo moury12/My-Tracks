@@ -27,6 +27,7 @@ class ManageScreen extends StatelessWidget {
     TrackManagementController.to.tabContent.add(Padding(
       padding: padding12V,
       child: Column(
+        ///============================track part=============================///
         children: List.generate(
             5,
             (i) => const TrackCardWidget(
@@ -34,37 +35,45 @@ class ManageScreen extends StatelessWidget {
                 )),
       ),
     ));
+
+    ///============================event part=============================///
+
     TrackManagementController.to.tabContent.add(Padding(
       padding: padding12V,
-      child: Column(
-        children: [
-           CustomDropdown(
-            radius: 8.r,
-borderColor: AppColors.blackLightColor,
-            fillColor: AppColors.blackBackgroundColor,
-            hintColor: AppColors.whiteLightColor,
-
-            hintText: "Select Event",
-          ),
-          ...List.generate(
+      child: Column(children: [
+        CustomDropdown(
+          radius: 8.r,
+          borderColor: AppColors.blackLightColor,
+          fillColor: AppColors.blackBackgroundColor,
+          hintColor: AppColors.whiteLightColor,
+          hintText: "Select Event",
+        ),
+        ...List.generate(
             5,
             (i) => Padding(
                   padding: padding12T,
-                  child: const MarronGradientContainerWidget(child: TrackSlotWidget(argument: 'track_management',),),
-                )),]
-      ),
+                  child: const MarronGradientContainerWidget(
+                    child: TrackSlotWidget(
+                      argument: 'track_management',
+                    ),
+                  ),
+                )),
+      ]),
     ));
+
+    ///============================renters part=============================///
+
     TrackManagementController.to.tabContent.add(Padding(
       padding: padding12V,
       child: Column(
         children: List.generate(
             5,
             (i) => Padding(
-              padding:padding12T,
-              child: const MarronGradientContainerWidget(
+                  padding: padding12T,
+                  child: const MarronGradientContainerWidget(
                     child: UserInfoContentWidget(),
                   ),
-            )),
+                )),
       ),
     ));
 
@@ -79,4 +88,3 @@ borderColor: AppColors.blackLightColor,
     ));
   }
 }
-
