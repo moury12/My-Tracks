@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:track_trek/controller/auth_controller.dart';
 import 'package:track_trek/core/components/custom_appbar.dart';
 import 'package:track_trek/core/components/custom_button.dart';
@@ -10,6 +11,7 @@ import 'package:track_trek/core/constant/fontsize_constant.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
+import 'package:track_trek/view/auth/otp_page.dart';
 
 class ForgetPasswordScreen extends StatelessWidget {
   static const String routeName ='/forget-pass';
@@ -51,9 +53,12 @@ class ForgetPasswordScreen extends StatelessWidget {
           ),
         ),
       ),
+      ///==============send code for reset pass ==========================///
       bottomNavigationBar: Padding(
         padding: padding16.copyWith(bottom: 24.sp),
-        child: CustomButton(onTap: (){},title:AppStaticString.sendCode ,),
+        child: CustomButton(onTap: (){
+          Get.toNamed(OTPScreen.routeName);
+        },title:AppStaticString.sendCode ,),
       ),
     );
   }

@@ -9,8 +9,12 @@ import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 
 class DeleteAlertDialog extends StatelessWidget {
+  final Widget? title;
+  final Widget? widgets;
+  final String? text1;
+  final String? text2;
   const DeleteAlertDialog({
-    super.key,
+    super.key, this.title, this.widgets, this.text1, this.text2,
   });
 
   @override
@@ -20,19 +24,20 @@ class DeleteAlertDialog extends StatelessWidget {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Row(crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Text(textAlign: TextAlign.center,
-                  AppStaticString.areYouSureToDelete,
-                  style: poppinsRegular.copyWith(fontSize: getFontSizeLarge(context)),
-                ),
-              ),IconButton(onPressed: () {
+          Row(
+            children: [Spacer(),
+              IconButton(onPressed: () {
                 Navigator.pop(context);
               }, icon: Icon(CupertinoIcons.multiply)),
             ],
           ),
+          title??SizedBox.shrink(),
+          Text(textAlign: TextAlign.center,
+            AppStaticString.areYouSureToDelete,
+            style: poppinsRegular.copyWith(fontSize: getFontSizeLarge(context)),
+          ),
           space16H,
+          widgets??SizedBox.shrink(),
           Row(
             spacing: 16.w,
             children: [
@@ -43,7 +48,7 @@ class DeleteAlertDialog extends StatelessWidget {
                 },
                 height: 44.h,
                 width: 92.w,
-                title: AppStaticString.yes,
+                title: text1??AppStaticString.yes,
                 textColor: AppColors.whiteLightColor,
                 borderColor: AppColors.redBrightColor,
                 fillColor: AppColors.redBrightColor,
@@ -55,7 +60,7 @@ class DeleteAlertDialog extends StatelessWidget {
                 },
                 height: 44.h,
                 width: 92.w,
-                title: AppStaticString.no,
+                title: text2??AppStaticString.no,
                 textColor: AppColors.whiteLightColor,
                 borderColor: AppColors.greenColor,
                 fillColor: AppColors.greenColor,

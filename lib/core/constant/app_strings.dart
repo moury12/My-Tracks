@@ -20,8 +20,10 @@ class AppStaticString {
   static const String eventHistory = "Event History";
   static const String termsCondition = "Terms & Conditions";
   static const String search = "Search";
+  static const String otp = "OTP";
   static const String settings = "Settings";
   static const String changePass = "Change password";
+  static const String newPass = "New Password";
   static const String feedback = "Feedback";
   static const String privacyPolicy = "Privacy Policy";
   static const String payment = "Payment";
@@ -35,9 +37,12 @@ class AppStaticString {
   static const String signUpUser = "Sign up as a user or tracker?";
   static const String user = "User";
   static const String host = "Host";
+  static const String logOut = "Log Out";
   static const String email = "Email";
   static const String nameWithClone = "Name: ";
   static const String name = "Name";
+  static const String enterCode = "Enter the code";
+  static const String enter4Digit = "Enter the 4 digit code that we just sent to";
   static const String userName = "User Name";
   static const String password = "Password";
   static const String areYouSureToDelete = "Are you sure you want to delete this content ?";
@@ -60,7 +65,10 @@ class AppStaticString {
   static const String fieldName = "Field Name";
   static const String share = "Share";
   static const String track = "Track";
+  static const String setNewPass = "Set a new password";
+  static const String createANewPass = "Create a new password. Ensure it differs from previous ones for security";
   static const String trackName = "Track Name";
+  static const String updatePass = "Update Password";
   static const String selectCategory = "Select Category";
   static const String event = "Event";
   static const String running = "Running";
@@ -146,7 +154,7 @@ class AppStaticString {
   static const String  bookingFor= "Booking For";
   static const String  deleteAcc= "Delete Account";
   static const String  currentPass= "Current Password";
-  static const String  newPass= "New Password";
+
   static const String  send= "Send";
   static const String  sendCode= "Send Code";
   static const String  cancel= "Cancel";

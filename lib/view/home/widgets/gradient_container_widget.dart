@@ -61,7 +61,7 @@ class BlackContainerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(onTap:onTap?? (){},
+    return InkWell(onTap:onTap?? (){},
       child: Container(
         alignment: Alignment.center,
         padding:padding16,

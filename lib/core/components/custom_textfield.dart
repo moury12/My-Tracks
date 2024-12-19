@@ -39,7 +39,7 @@ class CustomTextField extends StatefulWidget {
       this.enabledBorder,
       this.fillColor=AppColors.textFieldColor,
       this.contentPadding = const EdgeInsets.only(left: 10),
-      this.title, this.isEnable=true});
+      this.title, this.isEnable=true, this.height});
 
   final TextEditingController? textEditingController;
   final FocusNode? focusNode;
@@ -71,6 +71,7 @@ class CustomTextField extends StatefulWidget {
   final bool? isEnable;
   final EdgeInsetsGeometry contentPadding;
   final bool readOnly;
+  final double? height;
   final int? maxLength;
   final bool? isCollapsed;
   final bool? isDense;
@@ -97,53 +98,66 @@ class _CustomTextFieldState extends State<CustomTextField> {
               )
             : SizedBox.shrink(),
         widget.title != null ? space8H : SizedBox.shrink(),
-        TextFormField(
-          onTap: widget.onTap,
-          enabled:widget.isEnable ,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          inputFormatters: widget.inputFormatters,
-          onFieldSubmitted: widget.onFieldSubmitted,
-          readOnly: widget.readOnly,
-          controller: widget.textEditingController,
-          focusNode: widget.focusNode,
-          maxLength: widget.maxLength,
-          keyboardType: widget.keyboardType,
-          textInputAction: widget.textInputAction,
-          cursorColor: widget.cursorColor,
-          style: widget.inputTextStyle??TextStyle(
-              color: AppColors.whiteLightColor, fontWeight: FontWeight.w400,fontSize: getFontSizeSmall(context)),
-          onChanged: widget.onChanged,
-          maxLines: widget.maxLines,
-          obscureText: widget.isPassword ? obscureText : false,
-          validator: widget.validator,
-          decoration: InputDecoration(
-              contentPadding: EdgeInsets.symmetric(horizontal:16.sp,vertical: 8.sp),
+        SizedBox(
+          height: widget.height ?? null, // Set the desired height here
+          child: TextFormField(
+            textAlign:widget.textAlign,
+            onTap: widget.onTap,
+            enabled: widget.isEnable,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            inputFormatters: widget.inputFormatters,
+            onFieldSubmitted: widget.onFieldSubmitted,
+            readOnly: widget.readOnly,
+            controller: widget.textEditingController,
+            focusNode: widget.focusNode,
+            maxLength: widget.maxLength,
+            keyboardType: widget.keyboardType,
+            textInputAction: widget.textInputAction,
+            cursorColor: widget.cursorColor,
+            style: widget.inputTextStyle ??
+                TextStyle(
+                    color: AppColors.whiteLightColor,
+                    fontWeight: FontWeight.w400,
+                    fontSize: getFontSizeSmall(context)),
+            onChanged: widget.onChanged,
+            maxLines: widget.maxLines,
+            obscureText: widget.isPassword ? obscureText : false,
+            validator: widget.validator,
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.symmetric(
+                  horizontal: 16.sp, vertical: 16.sp), // Adjust vertical padding
               fillColor: widget.fillColor,
               isCollapsed: widget.isCollapsed,
               isDense: widget.isDense,
               errorMaxLines: 2,
               hintText: widget.hintText,
-              hintStyle: widget.hintStyle??TextStyle(
-                  color: AppColors.normalDarkWhite, fontWeight: FontWeight.w400,fontSize: getFontSizeSmall(context)),
+              hintStyle: widget.hintStyle ??
+                  TextStyle(
+                      color: AppColors.normalDarkWhite,
+                      fontWeight: FontWeight.w400,
+                      fontSize: getFontSizeSmall(context)),
               filled: true,
               prefixIcon: widget.prefixIcon,
               suffixIcon: widget.isPassword
                   ? GestureDetector(
-                      onTap: toggle,
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 16, right: 16, top: 16, bottom: 16),
-                        child: obscureText
-                            ? const Icon(Icons.visibility_off_outlined)
-                            : const Icon(Icons.visibility_outlined),
-                      ),
-                    )
+                onTap: toggle,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      left: 16, right: 16, top: 16, bottom: 16),
+                  child: obscureText
+                      ? const Icon(Icons.visibility_off_outlined)
+                      : const Icon(Icons.visibility_outlined),
+                ),
+              )
                   : widget.suffixIcon,
               suffixIconColor: widget.suffixIconColor,
               border: widget.border,
               focusedBorder: widget.focusedBorder,
-              enabledBorder: widget.enabledBorder),
+              enabledBorder: widget.enabledBorder,
+            ),
+          ),
         ),
+
       ],
     );
   }

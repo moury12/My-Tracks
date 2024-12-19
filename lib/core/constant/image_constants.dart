@@ -30,6 +30,7 @@ String historyIconUrl  ='assets/icons/history.png';
 String plusIconUrl  ='assets/icons/plus_icon.png';
 String promoteIconUrl  ='assets/icons/remote_icon.png';
 String reactIconUrl  ='assets/icons/react_icon.png';
+String keyIconUrl  ='assets/icons/key_icon.png';
 String reactFillIconUrl  ='assets/icons/react_fill_icon.png';
 String profileIconUrl  ='assets/icons/profile_icon.png';
 String privacyPolicyIconUrl  ='assets/icons/privacy_policy.png';
