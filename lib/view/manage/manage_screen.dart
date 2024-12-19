@@ -30,7 +30,7 @@ class ManageScreen extends StatelessWidget {
         ///============================track part=============================///
         children: List.generate(
             5,
-            (i) => const TrackCardWidget(
+            (i) =>  TrackCardWidget(
                   fromManage: true,
                 )),
       ),

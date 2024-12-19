@@ -7,8 +7,8 @@ import 'package:track_trek/view/home/widgets/dynamic_tab_widget.dart';
 import 'package:track_trek/view/home/widgets/event_card_widget.dart';
 import 'package:track_trek/view/home/widgets/home_app_bar.dart';
 
-import 'widgets/gradient_container_widget.dart';
-import 'widgets/track_card_widget.dart';
+import '../widgets/gradient_container_widget.dart';
+import '../widgets/track_card_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   final Function()? openDrawer;
@@ -21,7 +21,7 @@ class HomeScreen extends StatelessWidget {
     HomeController.to.tabContent.add(Padding(
       padding: padding12V,
       child: Column(
-        children: List.generate(5, (i) => const TrackCardWidget()),
+        children: List.generate(5, (i) =>  TrackCardWidget(react: HomeController.to.react,)),
       ),
     ));
     HomeController.to.tabContent.add(Padding(

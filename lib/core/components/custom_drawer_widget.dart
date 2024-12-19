@@ -95,7 +95,7 @@ class CustomDrawerWidget extends StatelessWidget {
             ),
             BlackContainerWidget(
               onTap: () {
-                Get.toNamed(LoginScreen.routeName);
+                Get.offAllNamed(LoginScreen.routeName);
               },
               borderColor: Colors.transparent,
               radius: 0,

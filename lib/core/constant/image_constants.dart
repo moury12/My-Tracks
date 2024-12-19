@@ -5,6 +5,8 @@ String  dummyEventImgUrl='assets/dummy_event.png';
 String  dummyProfileImgUrl='assets/dummy_profile_img.png';
 String verticalDividerImgUrl  ='assets/vertical_divider.png';
 String horizontalDividerUrl  ='assets/horizontal_divider.png';
+String dummyBannerUrl  ='assets/dummy_banner.png';
+String dummyBanner2Url  ='assets/dummy_banner2.png';
 
 
 ///---------------------Icons------------------------------///
@@ -18,6 +20,7 @@ String editIconUrl  ='assets/icons/edit_icon.png';
 String deleteIconUrl  ='assets/icons/delete_icon.png';
 String commentIconUrl  ='assets/icons/comment.png';
 String calenderIconUrl  ='assets/icons/calender_icon.png';
+String doubleArrowIconUrl  ='assets/icons/double_arrow_icon.png';
 String bookingIconUrl  ='assets/icons/booking_icon.png';
 String feedBackIconUrl  ='assets/icons/feedback.png';
 String drawerIconUrl  ='assets/icons/drawer_icon.png';

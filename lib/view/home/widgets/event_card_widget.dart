@@ -14,12 +14,22 @@ import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/home/widgets/dynamic_tab_widget.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
+import 'package:track_trek/view/home/widgets/track_card_widget.dart';
 import 'package:track_trek/view/manage/event_user_page.dart';
 
 class EventCardWidget extends StatelessWidget {
   final bool? noButton;
+  final bool? fromUser;
+  final String? buttonText;
+  final String? buttonImg;
+  final Function()? onTap;
   const EventCardWidget({
-    super.key,  this.noButton=false,
+    super.key,
+    this.noButton = false,
+    this.fromUser = false,
+    this.buttonText,
+    this.buttonImg,
+    this.onTap,
   });
 
   @override
@@ -28,12 +38,14 @@ class EventCardWidget extends StatelessWidget {
       padding: padding12T,
       child: BlackContainerWidget(
         child: Column(
+          spacing: 12.h,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             ClipRRect(
                 borderRadius: BorderRadius.circular(8.r),
+
+                ///==============dynamic event image==============///
                 child: Image.asset(dummyEventImgUrl)),
-            space12H,
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -42,11 +54,16 @@ class EventCardWidget extends StatelessWidget {
                     child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    ///==============dynamic event name==============///
+
                     Text(
                       AppStaticString.dummyEvent,
                       style: poppinsMedium.copyWith(
                           fontSize: getFontSizeSmall(context)),
                     ),
+
+                    ///==============dynamic event location==============///
+
                     Text('${AppStaticString.locationWithClone}Rock hill boston',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -59,11 +76,16 @@ class EventCardWidget extends StatelessWidget {
                     child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    ///==============dynamic event date==============///
+
                     Text('${AppStaticString.dateWithClone} 05 january ',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: poppinsRegular.copyWith(
                             fontSize: getFontSizeSmall(context))),
+
+                    ///==============dynamic event time==============///
+
                     Text(AppStaticString.dummyTime,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -73,50 +95,81 @@ class EventCardWidget extends StatelessWidget {
                 ))
               ],
             ),
-            space16H,
-            Obx(() {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const PriceTextWidget(),
-                  const DividerVertical(),
-                  Text(
-                    '${AppStaticString.totalSlot}20',
-                    style: poppinsRegular.copyWith(
-                        fontSize: getFontSizeSmall(context)),
-                  ),
-                  HomeController.to.selectedLabel.value == 2
-                      ? const SizedBox.shrink()
-                      : const DividerVertical(),
-                  HomeController.to.selectedLabel.value == 2
-                      ? const SizedBox.shrink()
-                      : Text('${AppStaticString.unsold}10',
+            !fromUser!
+                ? Obx(() {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const BlueTextWidget(),
+                        const DividerVertical(),
+
+                        ///==============dynamic event total slot==============///
+
+                        Text(
+                          '${AppStaticString.totalSlot}20',
                           style: poppinsRegular.copyWith(
-                              fontSize: getFontSizeSmall(context))),
-                ],
-              );
-            }),
-            space16H,
-            RichText(
-                text: TextSpan(children: [
-              TextSpan(
-                text: AppStaticString.dummyDesc,
-                style: poppinsRegular.copyWith(
-                    fontSize: getFontSizeSmall(context),
-                    color: AppColors.fadeWhiteColor),
-              ),
-              TextSpan(
-                text: AppStaticString.seeMore,
-                style: poppinsSemiBold.copyWith(
-                    fontSize: getFontSizeSmall(context)),
-              )
-            ])),
-            space16H,
-          noButton==false?  CustomButton(
-              onTap: () {
-                Get.toNamed(EventUserScreen.routeName);
-              },
-              child: Row(
+                              fontSize: getFontSizeSmall(context)),
+                        ),
+                        HomeController.to.selectedLabel.value == 2
+                            ? const SizedBox.shrink()
+                            : const DividerVertical(),
+                        HomeController.to.selectedLabel.value == 2
+                            ? const SizedBox.shrink()
+
+                            ///==============dynamic event unsold==============///
+
+                            : Text('${AppStaticString.unsold}10',
+                                style: poppinsRegular.copyWith(
+                                    fontSize: getFontSizeSmall(context))),
+                      ],
+                    );
+                  })
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                          child: BlueTextWidget(
+                        text: '${AppStaticString.totalSeatWithClone} 20',
+                      )),
+                      DividerVertical(
+                        color: AppColors.blueColor,
+                      ),
+                      Expanded(
+                          child: BlueTextWidget(
+                        text: '${AppStaticString.unsold} 20',
+                      )),
+                      space8W,
+                      Expanded(
+                          child: OptionWidget(
+                              icon: shareIconUrl, text: AppStaticString.share))
+                    ],
+                  ),
+            !fromUser!
+                ? RichText(
+                    text: TextSpan(children: [
+                    TextSpan(
+                      text: AppStaticString.dummyDesc,
+                      style: poppinsRegular.copyWith(
+                          fontSize: getFontSizeSmall(context),
+                          color: AppColors.fadeWhiteColor),
+                    ),
+                    TextSpan(
+                      text: AppStaticString.seeMore,
+                      style: poppinsSemiBold.copyWith(
+                          fontSize: getFontSizeSmall(context)),
+                    )
+                  ]))
+                : SizedBox.shrink(),
+            noButton == false
+                ? CustomButton(
+                    onTap: onTap ??
+                        () {
+                          Get.toNamed(EventUserScreen.routeName);
+                        },
+                    title: buttonText ?? AppStaticString.viewAllParticipent,
+                    img: buttonImg ?? arrowTopImgUrl,
+                    /*child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(AppStaticString.viewAllParticipent,
@@ -130,8 +183,9 @@ class EventCardWidget extends StatelessWidget {
                     height: 24.w,
                   )
                 ],
-              ),
-            ):const SizedBox.shrink()
+              ),*/
+                  )
+                : const SizedBox.shrink()
           ],
         ),
       ),
@@ -139,15 +193,19 @@ class EventCardWidget extends StatelessWidget {
   }
 }
 
-class PriceTextWidget extends StatelessWidget {
-  const PriceTextWidget({
+class BlueTextWidget extends StatelessWidget {
+  final String? text;
+  const BlueTextWidget({
     super.key,
+    this.text,
   });
 
   @override
   Widget build(BuildContext context) {
     return Text(
-      '${AppStaticString.priceWithClone}\$120',
+      maxLines: 2,
+      overflow: TextOverflow.ellipsis,
+      text ?? '${AppStaticString.priceWithClone}\$120',
       style:
           poppinsBlueMedium.copyWith(fontSize: getFontSizeSemiSmall(context)),
     );
@@ -158,7 +216,9 @@ class DividerVertical extends StatelessWidget {
   final Color? color;
   final double? height;
   const DividerVertical({
-    super.key, this.color, this.height,
+    super.key,
+    this.color,
+    this.height,
   });
 
   @override
@@ -167,8 +227,8 @@ class DividerVertical extends StatelessWidget {
       padding: padding6H,
       child: Image.asset(
         verticalDividerImgUrl,
-        height: height??10.w,
-        color: color??null,
+        height: height ?? 10.w,
+        color: color ?? null,
       ),
     );
   }

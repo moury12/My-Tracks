@@ -32,13 +32,14 @@ class CustomBottomNavBar extends StatelessWidget {
                       AppStaticString.home),
                 ),
                 Expanded(
-                  child: _buildNavItem(context, manageIconUrl,
+                  child: CommonController.to.selectedOption.value==0?_buildNavItem(context, bookingIconUrl,
+                      bookingFillIconUrl, 1, AppStaticString.booking): _buildNavItem(context, manageIconUrl,
                       manageFillIconUrl, 1, AppStaticString.manage),
                 ),
               ],
             ),
           ),
-          Padding(
+          CommonController.to.selectedOption.value==0?SizedBox.shrink() :Padding(
             padding: padding12H,
             child: GestureDetector(
                 onTap: () {

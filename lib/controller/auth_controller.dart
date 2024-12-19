@@ -13,15 +13,17 @@ class AuthController extends GetxController {
   Rx<TextEditingController> passLoginController = TextEditingController().obs;
   Rx<TextEditingController> passNewController = TextEditingController().obs;
   Rx<TextEditingController> confirmPassNewController = TextEditingController().obs;
+  Rx<TextEditingController> otpPinController = TextEditingController().obs;
+  Rx<String> otpScreen = ''.obs;
 
-final otpControllers = List.generate(4,(index) => TextEditingController(),);
-final otpFocusNode = List.generate(4,(index) => FocusNode(),);
+ final otpControllers = List.generate(4,(index) => TextEditingController().obs,);
+final otpFocusNode = List.generate(4,(index) => FocusNode().obs,);
 var focusedFieldIndex =-1.obs;
   @override
   void onInit() {
    for(int i =0; i<otpFocusNode.length;i++){
-     otpFocusNode[i].addListener(() {
-       if(otpFocusNode[i].hasFocus){
+     otpFocusNode[i].value.addListener(() {
+       if(otpFocusNode[i].value.hasFocus){
          focusedFieldIndex=i;
        }
      },);
@@ -39,10 +41,10 @@ var focusedFieldIndex =-1.obs;
     passLoginController.value.dispose();
     emailForgotController.value.dispose();
     for (var controller in otpControllers) {
-      controller.dispose();
+      controller.value.dispose();
     }
     for (var focusNode in otpFocusNode) {
-      focusNode.dispose();
+      focusNode.value.dispose();
     }
     super.onClose();
   }

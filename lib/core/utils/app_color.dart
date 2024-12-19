@@ -22,7 +22,9 @@ class AppColors {
   static const Color blackExtraLightColor = Color(0xff3E3E3E);
   static const Color greyColor = Color(0xff808080);
   static const Color fadeWhiteColor = Color(0xff8D8D8D);
+  static const Color pinkColor = Color(0xffB122FA);
   static const Color greenColor = Color(0xff34C759);
+  static const Color yellowColor = Color(0xffFEBD0B);
 
   static const Color whiteColor = Color.fromARGB(255, 255, 255, 255);
 }

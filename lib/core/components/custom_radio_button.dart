@@ -13,7 +13,7 @@ class CustomRadioButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: () {
         // Update the selected option in CommonController
         CommonController.to.selectedOption.value = index;
@@ -27,14 +27,14 @@ class CustomRadioButton extends StatelessWidget {
             shape: BoxShape.circle,
             border: Border.all(
               color: CommonController.to.selectedOption.value == index
-                  ? AppColors.whiteLightColor
-                  : AppColors.primaryColor,
+                  ?AppColors.primaryColor
+                  : AppColors.whiteLightColor,
               width: CommonController.to.selectedOption.value == index
-                  ? 2.sp
-                  : 6.sp,
+                  ? 6.sp
+                  : 2.sp,
             ),
           ),
-          child: CommonController.to.selectedOption.value == index
+          child: CommonController.to.selectedOption.value != index
               ? Container(
             decoration: const BoxDecoration(
               shape: BoxShape.circle,

@@ -61,7 +61,7 @@ class BlackContainerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(onTap:onTap?? (){},
+    return InkWell(onTap:onTap,
       child: Container(
         alignment: Alignment.center,
         padding:padding16,

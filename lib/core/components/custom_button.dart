@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
 import 'package:track_trek/core/utils/app_color.dart';
+import 'package:track_trek/core/utils/text_style.dart';
 
 class CustomButton extends StatelessWidget {
   const CustomButton(
@@ -60,17 +61,15 @@ class CustomButton extends StatelessWidget {
                 Text(
                   textAlign: TextAlign.center,
                   title,
-                  style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      color: textColor,
-                      fontSize:fontSize?? getFontSizeSemiSmall(context)),
+                  style: poppinsMedium.copyWith(color: textColor,
+                      fontSize:fontSize?? getFontSizeSemiSmall(context))
                 ),
                 icon != null || img != null ? space8W : const SizedBox.shrink(),
                 img != null
                     ? Image.asset(
                         img ?? '',
-                        height: 14.w,
-                        width: 14.w,
+                        height: 24.w,
+                        width: 24.w,
                   color: AppColors.blackColor,
                       )
                     : icon != null

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 EdgeInsets padding16=EdgeInsets.all(16.sp);
 EdgeInsets padding12=EdgeInsets.all(12.sp);
+EdgeInsets padding8=EdgeInsets.all(8.sp);
 EdgeInsets padding14=EdgeInsets.all(14.sp);
 EdgeInsets padding16H=EdgeInsets.symmetric(horizontal:16.sp);
 EdgeInsets padding12T=EdgeInsets.only(top:12.sp);

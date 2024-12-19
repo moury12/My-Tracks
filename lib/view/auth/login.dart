@@ -78,7 +78,7 @@ class LoginScreen extends StatelessWidget {
 
                 CustomButton(
                   onTap: () {
-                    Get.toNamed(BottomNavigationScreen.routeName);
+                    Get.offAllNamed(BottomNavigationScreen.routeName);
                   },
                   title: AppStaticString.login,
                 ),

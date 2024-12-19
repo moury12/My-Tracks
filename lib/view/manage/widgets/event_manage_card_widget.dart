@@ -57,7 +57,7 @@ class TrackEventInfoContentWidget extends StatelessWidget {
         space12H,
         Row(
           children: [
-            const PriceTextWidget(),
+            const BlueTextWidget(),
             const DividerVertical(),
             Expanded(
               child: Row(

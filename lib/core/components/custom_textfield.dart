@@ -99,7 +99,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             : SizedBox.shrink(),
         widget.title != null ? space8H : SizedBox.shrink(),
         SizedBox(
-          height: widget.height ?? null, // Set the desired height here
+          height: widget.height ?? 60.h, // Set the desired height here
           child: TextFormField(
             textAlign:widget.textAlign,
             onTap: widget.onTap,

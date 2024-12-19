@@ -13,14 +13,19 @@ import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/add/widgets/buttons.dart';
 import 'package:track_trek/view/add/widgets/delete_alert_dialog.dart';
-import 'package:track_trek/view/home/user_details_page.dart';
+import 'package:track_trek/view/home/host/user_details_page.dart';
+import 'package:track_trek/view/home/widgets/event_card_widget.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 
 class TrackCardWidget extends StatelessWidget {
   final bool? fromManage;
-  const TrackCardWidget({
+  final bool? fromUser;
+  late final RxBool? react;
+  TrackCardWidget({
     super.key,
     this.fromManage = false,
+    this.fromUser = false,
+    this.react,
   });
 
   @override
@@ -31,12 +36,10 @@ class TrackCardWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: padding14V,
-              child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8.r),
-                  child: Image.asset(dummyEventImgUrl)),
-            ),
+            ClipRRect(
+                borderRadius: BorderRadius.circular(8.r),
+                child: Image.asset(dummyEventImgUrl)),
+            space12H,
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -67,7 +70,7 @@ class TrackCardWidget extends StatelessWidget {
                 )
               ],
             ),
-            space16H,
+            space12H,
             RichText(
                 text: TextSpan(children: [
               TextSpan(
@@ -82,14 +85,64 @@ class TrackCardWidget extends StatelessWidget {
                     fontSize: getFontSizeSmall(context)),
               )
             ])),
-            space16H,
-            Text(
-              '${AppStaticString.totalSlot}10',
-              style:
-                  poppinsSemiBold.copyWith(fontSize: getFontSizeLarge(context)),
-            ),
-            space16H,
-            fromManage == true
+            space12H,
+            fromUser == true
+                ? Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+
+                    children: [
+                      ///======================dynamic user profile img=======================///
+
+                      const ProfileCircleImageWidget(),
+                      space8W,
+                       Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(AppStaticString.dummyName,style: poppinsLight.copyWith(
+                              fontSize: getFontSizeSmall(context)
+                            ),),
+                            Row(
+                              spacing: 4.w,
+                              children: [
+                                Text(AppStaticString.ratingWithClone,style: poppinsLight.copyWith(
+                                    fontSize: getFontSizeSmall(context)
+                                ),),
+                                Icon(
+                                  Icons.star_border_outlined,
+                                  color: AppColors.yellowColor,
+                                  size: 15.sp,
+                                ),
+
+                                ///======================dynamic user rating=======================///
+                                Text('4.5',style: poppinsLight.copyWith(
+                                    fontSize: getFontSizeSmall(context)
+                                ),)
+                              ],
+                            ),
+
+                          ],
+                        ),
+                      ),
+                      DividerVertical(height: 24.h ,),
+                      ///======================dynamic user total slot=======================///
+
+                       Expanded(
+                          child: Text(textAlign: TextAlign.center,
+                            '${AppStaticString.totalSlot} 10',style: poppinsLight.copyWith(
+                              fontSize: getFontSizeSmall(context)
+                          ),))
+                    ],
+                  )
+            ///======================dynamic total slot=======================///
+
+                : Text(
+                    '${AppStaticString.totalSlot}10',
+                    style: poppinsSemiBold.copyWith(
+                        fontSize: getFontSizeLarge(context)),
+                  ),
+            fromUser == true ? const SizedBox.shrink() : space12H,
+            fromManage == true || fromUser == true
                 ? const SizedBox.shrink()
                 : Row(
                     children: [
@@ -132,7 +185,7 @@ class TrackCardWidget extends StatelessWidget {
                           ))
                     ],
                   ),
-            fromManage == true ? const SizedBox.shrink() : space16H,
+            fromManage == true ? const SizedBox.shrink() : space12H,
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -154,7 +207,7 @@ class TrackCardWidget extends StatelessWidget {
                                     fontSize: getFontSizeSmall(context),
                                   ),
                                 ),
-                                space16H,
+                                space12H,
                                 Image.asset(horizontalDividerUrl),
                                 ...List.generate(
                                   5,
@@ -164,7 +217,7 @@ class TrackCardWidget extends StatelessWidget {
                                         padding: padding16,
                                         child: Row(
                                           children: [
-                                            ProfileCircleImageWidget(),
+                                            const ProfileCircleImageWidget(),
                                             space16W,
                                             Expanded(
                                               child: Column(
@@ -182,21 +235,28 @@ class TrackCardWidget extends StatelessWidget {
                                                                   fontSize:
                                                                       getFontSizeSmall(
                                                                           context))),
-                                                      TextSpan(text: ' 3d .',
-                                                          style: poppinsRegular
-                                                              .copyWith( color: AppColors.normalDarkWhite,
+                                                      TextSpan(
+                                                          text: ' 3d .',
+                                                          style: poppinsRegular.copyWith(
+                                                              color: AppColors
+                                                                  .normalDarkWhite,
                                                               fontSize:
-                                                              getFontSizeSmall(
-                                                                  context))),
+                                                                  getFontSizeSmall(
+                                                                      context))),
                                                     ]),
                                                   ),
                                                   space6H,
 
                                                   ///=======================dynamic comment========================///
                                                   Text(
-                                                      'Nice to see, in something elseNice to see, in something elseNice to see, in something else',style: poppinsRegular.copyWith(
-                                                    color: Color(0xffD2D2D2),
-                                                      fontSize: getFontSizeDefault(context)),)
+                                                    'Nice to see, in something elseNice to see, in something elseNice to see, in something else',
+                                                    style: poppinsRegular.copyWith(
+                                                        color: const Color(
+                                                            0xffD2D2D2),
+                                                        fontSize:
+                                                            getFontSizeDefault(
+                                                                context)),
+                                                  )
                                                 ],
                                               ),
                                             )
@@ -216,17 +276,18 @@ class TrackCardWidget extends StatelessWidget {
                   },
                   text: '120',
                 ),
-                Obx(
-                   () {
-                    return OptionWidget(
-                      function: () {
-                        HomeController.to.react.value=!HomeController.to.react.value;
-                      },
-                      icon:HomeController.to.react.value?reactFillIconUrl: reactIconUrl,
-                      text: '120',
-                    );
-                  }
-                ),
+                Obx(() {
+                  return OptionWidget(
+                    function: () {
+                      if (react != null) {
+                        react!.value = !react!.value;
+                      }
+                    },
+                    icon:
+                        react!.value == true ? reactFillIconUrl : reactIconUrl,
+                    text: '120',
+                  );
+                }),
                 OptionWidget(
                   icon: mapIconUrl,
                   text: AppStaticString.map,
@@ -242,7 +303,7 @@ class TrackCardWidget extends StatelessWidget {
                       ),
               ],
             ),
-            fromManage == true ? space16H : const SizedBox.shrink(),
+            fromManage == true ? space12H : const SizedBox.shrink(),
             fromManage == true
                 ? Row(
                     children: [
@@ -293,6 +354,16 @@ class TrackCardWidget extends StatelessWidget {
                         ),
                       )
                     ],
+                  )
+                : const SizedBox.shrink(),
+            fromUser == true
+                ? Padding(
+                    padding: EdgeInsets.only(top: 16.h),
+                    child: CustomButton(
+                      onTap: () {},
+                      title: AppStaticString.bookSlot,
+                      img: doubleArrowIconUrl,
+                    ),
                   )
                 : const SizedBox.shrink()
           ],

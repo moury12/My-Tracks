@@ -19,6 +19,7 @@ import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/auth/login.dart';
+import 'package:track_trek/view/initial/bottom_navigation_screen.dart';
 
 class SignUpScreen extends StatelessWidget {
   static const String routeName = '/sign-up';
@@ -26,6 +27,7 @@ class SignUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: const CustomAppbar(
         tile: AppStaticString.signUp,
@@ -110,7 +112,9 @@ class SignUpScreen extends StatelessWidget {
                 ),
                 space16H,
                 CustomButton(
-                  onTap: () {},
+                  onTap: () {
+                    Get.offAllNamed(BottomNavigationScreen.routeName);
+                  },
                   title: AppStaticString.signUp,
                 ),
                 Row(
