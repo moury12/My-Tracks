@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:track_trek/controller/common_controller.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
@@ -67,7 +68,7 @@ class CustomDrawerWidget extends StatelessWidget {
                       icon: feedBackIconUrl,
                       text: AppStaticString.feedback,
                     ),
-                    DrawerContentWidget(
+                    CommonController.to.selectedOption.value==0?const SizedBox.shrink():   DrawerContentWidget(
                       icon: profileIconUrl,
                       text: AppStaticString.profile,
                       onTap: () {
@@ -75,7 +76,7 @@ class CustomDrawerWidget extends StatelessWidget {
                         Get.toNamed(ProfileScreen.routeName);
                       },
                     ),
-                    DrawerContentWidget(
+                    CommonController.to.selectedOption.value==0?const SizedBox.shrink():  DrawerContentWidget(
                       icon: promoteIconUrl,
                       text: AppStaticString.promoteTrack,
                     ),

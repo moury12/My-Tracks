@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,7 +11,6 @@ import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
-import 'package:track_trek/view/home/widgets/dynamic_tab_widget.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 import 'package:track_trek/view/home/widgets/track_card_widget.dart';
 import 'package:track_trek/view/manage/event_user_page.dart';
@@ -128,14 +126,17 @@ class EventCardWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Expanded(
+                      ///=====================dynamic total slot==================///
+                      const Expanded(
                           child: BlueTextWidget(
                         text: '${AppStaticString.totalSeatWithClone} 20',
                       )),
-                      DividerVertical(
+                      const DividerVertical(
                         color: AppColors.blueColor,
                       ),
-                      Expanded(
+                      ///=====================dynamic unsold==================///
+
+                      const Expanded(
                           child: BlueTextWidget(
                         text: '${AppStaticString.unsold} 20',
                       )),
@@ -160,7 +161,7 @@ class EventCardWidget extends StatelessWidget {
                           fontSize: getFontSizeSmall(context)),
                     )
                   ]))
-                : SizedBox.shrink(),
+                : const SizedBox.shrink(),
             noButton == false
                 ? CustomButton(
                     onTap: onTap ??
@@ -203,7 +204,7 @@ class BlueTextWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      maxLines: 2,
+      maxLines: 2,textAlign: TextAlign.center,
       overflow: TextOverflow.ellipsis,
       text ?? '${AppStaticString.priceWithClone}\$120',
       style:
@@ -228,7 +229,7 @@ class DividerVertical extends StatelessWidget {
       child: Image.asset(
         verticalDividerImgUrl,
         height: height ?? 10.w,
-        color: color ?? null,
+        color: color,
       ),
     );
   }

@@ -31,7 +31,8 @@ class ManageScreen extends StatelessWidget {
         children: List.generate(
             5,
             (i) =>  TrackCardWidget(
-                  fromManage: true,
+                  fromManage: true, react: false.obs,
+              
                 )),
       ),
     ));

@@ -20,12 +20,12 @@ import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 class TrackCardWidget extends StatelessWidget {
   final bool? fromManage;
   final bool? fromUser;
-  late final RxBool? react;
+  late final RxBool react;
   TrackCardWidget({
     super.key,
     this.fromManage = false,
     this.fromUser = false,
-    this.react,
+   required this.react,
   });
 
   @override

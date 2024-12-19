@@ -70,7 +70,8 @@ class CustomBottomNavBar extends StatelessWidget {
                       notificationFillIconUrl, 3, AppStaticString.notification),
                 ),
                 Expanded(
-                  child: _buildNavItem(context, promoteIconUrl,
+                  child:CommonController.to.selectedOption.value==0?_buildNavItem(context, profileIconUrl,
+                      profileFillIconUrl, 4, AppStaticString.profile): _buildNavItem(context, promoteIconUrl,
                       promoteFillIconUrl, 4, AppStaticString.promote),
                 ),
               ],
@@ -95,7 +96,7 @@ class CustomBottomNavBar extends StatelessWidget {
       borderRadius: BorderRadius.circular(8),
     ),*/
       waitDuration: Duration(milliseconds: 500),
-      child: GestureDetector(
+      child: InkWell(
         onTap: () => CommonController.to.updateIndex(index),
         child: Obx(
           () {

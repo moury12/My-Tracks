@@ -49,13 +49,14 @@ class BlackContainerWidget extends StatelessWidget {
   final TextStyle? textStyle;
 
   final Widget? child;
+  final EdgeInsets? padding;
   final double? radius;
   final Color? borderColor;
   final Color? textColor;
   final Color? fillColor;
   final Function()? onTap;
 
-  const BlackContainerWidget({super.key, this.text, this.onTap, this.child, this.textStyle, this.radius, this.borderColor, this.fillColor, this.textColor});
+  const BlackContainerWidget({super.key, this.text, this.onTap, this.child, this.textStyle, this.radius, this.borderColor, this.fillColor, this.textColor, this.padding});
 
 
 
@@ -64,7 +65,7 @@ class BlackContainerWidget extends StatelessWidget {
     return InkWell(onTap:onTap,
       child: Container(
         alignment: Alignment.center,
-        padding:padding16,
+        padding:padding??padding16,
         decoration:  BoxDecoration(
             borderRadius:BorderRadius.circular(radius??12.r) ,
             border: Border.all(width:.5.w ,color:borderColor?? AppColors.greyColor.withOpacity(.5)),

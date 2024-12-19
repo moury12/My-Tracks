@@ -14,16 +14,19 @@ import 'package:track_trek/view/home/widgets/track_card_widget.dart';
 import 'package:track_trek/view/manage/widgets/event_manage_card_widget.dart';
 
 class ProfileScreen extends StatelessWidget {
+  final bool? showAppbar;
   static const String routeName = '/profile';
-  const ProfileScreen({super.key});
+  const ProfileScreen({super.key,  this.showAppbar=true});
 
   @override
   Widget build(BuildContext context) {
+    Get.put(ProfileController());
     String? argument = Get.arguments;
     return Scaffold(
-      appBar: const CustomAppbar(
+      appBar: showAppbar!?const CustomAppbar(
         tile: AppStaticString.profile,
-      ),
+      ):const PreferredSize(
+          preferredSize: Size.zero, child: SizedBox.shrink()),
       body: SingleChildScrollView(
         child: Padding(
           padding: padding16,

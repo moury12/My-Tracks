@@ -21,11 +21,15 @@ class DynamicTabWidget extends StatelessWidget {
 
 
     return DefaultTabController(
-      length: tabs.length, // Dynamically set the number of tabs
+      length: tabs.length,
+      // Dynamically set the number of tabs
       child: Column(
         children: [
           space16H,
           Obx(() => TabBar(
+            // padding: EdgeInsets.zero,
+
+            // isScrollable: true,
             dividerHeight: 4.h,
             indicatorSize: TabBarIndicatorSize.tab,
             indicator: UnderlineTabIndicator(

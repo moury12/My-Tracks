@@ -5,11 +5,13 @@ import 'package:track_trek/core/components/custom_appbar.dart';
 import 'package:track_trek/core/components/custom_drawer_widget.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/view/add/create_track_event_screen.dart';
+import 'package:track_trek/view/booking/booking_management.dart';
 import 'package:track_trek/view/home/host/home_screen.dart';
 import 'package:track_trek/view/home/user/home_user_page.dart';
 import 'package:track_trek/view/initial/widgets/custom_bottom_navigation.dart';
 import 'package:track_trek/view/manage/manage_screen.dart';
 import 'package:track_trek/view/notification/notification_screen.dart';
+import 'package:track_trek/view/profile/profile_page.dart';
 import 'package:track_trek/view/promote/promote_screen.dart';
 
 class BottomNavigationScreen extends StatelessWidget {
@@ -19,10 +21,10 @@ class BottomNavigationScreen extends StatelessWidget {
 
   final List<String?> appbarTitle = [
     null,
-    AppStaticString.trackManagement,
+    CommonController.to.selectedOption.value==0?AppStaticString.bookingManagement: AppStaticString.trackManagement,
     AppStaticString.create,
     AppStaticString.notification,
-    AppStaticString.promoteTrack
+    CommonController.to.selectedOption.value==0?AppStaticString.profile:   AppStaticString.promoteTrack
   ];
 
   @override
@@ -37,10 +39,10 @@ class BottomNavigationScreen extends StatelessWidget {
           _scaffoldKey.currentState?.openDrawer();
         },
       ),
-      const ManageScreen(),
+      CommonController.to.selectedOption.value==0?const BookingManagementScreen(): const ManageScreen(),
       const CreateTrackEventScreen(),
       const NotificationScreen(),
-      const PromoteScreen(),
+      CommonController.to.selectedOption.value==0?const ProfileScreen(showAppbar: false,):  const PromoteScreen(),
     ];
     return Obx(() {
       int selectedIndex = CommonController.to.selectedIndex.value;
