@@ -99,9 +99,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
             : SizedBox.shrink(),
         widget.title != null ? space8H : SizedBox.shrink(),
         SizedBox(
-          height: widget.height ?? 60.h, // Set the desired height here
+          height: widget.height , // Set the desired height here
           child: TextFormField(
             textAlign:widget.textAlign,
+
             onTap: widget.onTap,
             enabled: widget.isEnable,
             autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -124,8 +125,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             obscureText: widget.isPassword ? obscureText : false,
             validator: widget.validator,
             decoration: InputDecoration(
-              contentPadding: EdgeInsets.symmetric(
-                  horizontal: 16.sp, vertical: 16.sp), // Adjust vertical padding
+              contentPadding:EdgeInsets.zero, // Adjust vertical padding
               fillColor: widget.fillColor,
               isCollapsed: widget.isCollapsed,
               isDense: widget.isDense,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:track_trek/controller/home_controller.dart';
 import 'package:track_trek/core/components/custom_button.dart';
@@ -13,6 +14,7 @@ import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/add/widgets/buttons.dart';
 import 'package:track_trek/view/add/widgets/delete_alert_dialog.dart';
+import 'package:track_trek/view/book-track-join-event/book_track_join_event_page.dart';
 import 'package:track_trek/view/home/host/user_details_page.dart';
 import 'package:track_trek/view/home/widgets/event_card_widget.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
@@ -291,6 +293,9 @@ class TrackCardWidget extends StatelessWidget {
                 OptionWidget(
                   icon: mapIconUrl,
                   text: AppStaticString.map,
+                  function: () {
+                    _showMapBottomSheet(context);
+                  },
                 ),
                 fromManage == true
                     ? const SizedBox.shrink()
@@ -335,12 +340,15 @@ class TrackCardWidget extends StatelessWidget {
                               barrierDismissible: false,
                               context: context,
                               builder: (context) => DefaultDialogWithButton(
-                                content: Text(
-                                  AppStaticString.areYouSureWantToReactivate,
-                                  textAlign: TextAlign.center,
-                                  style: poppinsRegular.copyWith(
-                                      fontSize: getFontSizeDefault(context),
-                                      color: AppColors.whiteLightColor),
+                                content: Padding(
+                                  padding:  EdgeInsets.only(bottom: 12.h),
+                                  child: Text(
+                                    AppStaticString.areYouSureWantToReactivate,
+                                    textAlign: TextAlign.center,
+                                    style: poppinsRegular.copyWith(
+                                        fontSize: getFontSizeDefault(context),
+                                        color: AppColors.whiteLightColor),
+                                  ),
                                 ),
                                 textColor: AppColors.redColor,
                                 borderColor: AppColors.marronColor,
@@ -360,7 +368,9 @@ class TrackCardWidget extends StatelessWidget {
                 ? Padding(
                     padding: EdgeInsets.only(top: 16.h),
                     child: CustomButton(
-                      onTap: () {},
+                      onTap: () {
+                        Get.toNamed(BookTrackJoinEventScreen.routeName);
+                      },
                       title: AppStaticString.bookSlot,
                       img: doubleArrowIconUrl,
                     ),
@@ -369,6 +379,41 @@ class TrackCardWidget extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void _showMapBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true, // Allows full-screen height if needed
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        return SizedBox(
+          height: MediaQuery.of(context).size.height * 0.7,
+          child: Stack(
+            children: [
+              GoogleMap(
+                initialCameraPosition: const CameraPosition(
+                  target: LatLng(37.7749, -122.4194), // Replace with desired coordinates
+                  zoom: 10,
+                ),
+                myLocationEnabled: true,
+                myLocationButtonEnabled: true,
+              ),
+              Positioned(
+                top: 8,
+                right: 8,
+                child: IconButton(
+                  icon: const Icon(Icons.close, color: Colors.black),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

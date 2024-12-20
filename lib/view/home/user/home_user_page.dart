@@ -8,7 +8,9 @@ import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
+import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/utils/app_color.dart';
+import 'package:track_trek/view/book-track-join-event/book_track_join_event_page.dart';
 import 'package:track_trek/view/home/widgets/category_circle_widget.dart';
 import 'package:track_trek/view/home/widgets/event_card_widget.dart';
 import 'package:track_trek/view/home/widgets/home_app_bar.dart';
@@ -98,6 +100,9 @@ class HomeUserScreen extends StatelessWidget {
                   (index) => SizedBox(
                       width: MediaQuery.sizeOf(context).width/1.3,
                       child: EventCardWidget(
+                        onTap: () {
+                          Get.toNamed(BookTrackJoinEventScreen.routeName,arguments: event);
+                        },
                         fromUser: true,
                         buttonText: AppStaticString.joinEvent,
                         buttonImg: doubleArrowIconUrl,

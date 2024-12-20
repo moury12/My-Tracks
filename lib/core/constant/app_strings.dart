@@ -37,6 +37,7 @@ class AppStaticString {
   static const String signUpUser = "Sign up as a user or tracker?";
   static const String user = "User";
   static const String host = "Host";
+  static const String allowedPeople = "Allowed People :";
   static const String logOut = "Log Out";
   static const String email = "Email";
   static const String nameWithClone = "Name: ";
@@ -146,7 +147,7 @@ class AppStaticString {
   static const String  runningBooking= "Running Booking";
   static const String  comments= "Comments";
   static const String  bookSlot= "Book a Slot";
-  static const String  allowedPeople= "Allowed People : ";
+
   static const String  priceAmount= "Price amount";
   static const String  selectPeople= "Select People";
   static const String  drivingLicence= "Driving Licence";

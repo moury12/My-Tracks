@@ -117,14 +117,16 @@ class AddButtonInContainer extends StatelessWidget {
 
 class DefaultDialogWithButton extends StatelessWidget {
   final Widget? content;
+  final Widget? rowButton;
   final String? firstButtonText;
+  final String? title;
   final String? secendtButtonText;
   final Color? borderColor;
   final Color? textColor;
   final Color? fillColor;
   final double? radius;
   const DefaultDialogWithButton({
-    super.key, this.content, this.firstButtonText, this.secendtButtonText, this.borderColor, this.textColor, this.fillColor, this.radius,
+    super.key, this.content, this.firstButtonText, this.secendtButtonText, this.borderColor, this.textColor, this.fillColor, this.radius, this.title, this.rowButton,
   });
 
   @override
@@ -135,35 +137,50 @@ class DefaultDialogWithButton extends StatelessWidget {
       content: SizedBox(
     width: double.maxFinite,
         child: Column(
-          spacing: 16.h,
+          // spacing: 16.h,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Row(crossAxisAlignment: CrossAxisAlignment.start,
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(
-                  child: content??  CustomTextField(
-                    title: AppStaticString.fieldName,
-                    fillColor: AppColors.blackBackgroundColor,
-                    focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(4.r),
-                        borderSide: const BorderSide(
-                            color: AppColors.blackBorderColor, width: 1),
-                        gapPadding: 0),
-                    enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(4.r),
-                        borderSide: const BorderSide(
-                            color: AppColors.blackBorderColor, width: 1),
-                        gapPadding: 0),
-
-                    // border: a,
-                  ),
-                ),
-                IconButton(onPressed: () {
+                Expanded(child: SizedBox.shrink()),
+               Expanded(
+                 child: Text(title??'',style: poppinsMedium.copyWith(
+                   fontSize: getFontSizeLarge(context),
+                 
+                 ),),
+               ),
+               IconButton(onPressed: () {
                   Navigator.pop(context);
                 }, icon: const Icon(CupertinoIcons.multiply)),
               ],
             ),
-            RowButton(borderColor: borderColor, radius: radius, firstButtonText: firstButtonText, textColor: textColor, secendtButtonText: secendtButtonText)
+            content?? Row(crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child:   Padding(
+                    padding:  EdgeInsets.only(bottom: 8.h),
+                    child: CustomTextField(
+                      title: AppStaticString.fieldName,
+                      fillColor: AppColors.blackBackgroundColor,
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4.r),
+                          borderSide: const BorderSide(
+                              color: AppColors.blackBorderColor, width: 1),
+                          gapPadding: 0),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4.r),
+                          borderSide: const BorderSide(
+                              color: AppColors.blackBorderColor, width: 1),
+                          gapPadding: 0),
+
+                      // border: a,
+                    ),
+                  ),
+                ),
+
+              ],
+            ),
+          rowButton??  RowButton(borderColor: borderColor, radius: radius, firstButtonText: firstButtonText, textColor: textColor, secendtButtonText: secendtButtonText)
           ],
         ),
       ),

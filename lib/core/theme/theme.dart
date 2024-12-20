@@ -14,6 +14,7 @@ final darkTheme = ThemeData.dark().copyWith(
     primaryColor: AppColors.primaryColor,
     scaffoldBackgroundColor: AppColors.blackBackgroundColor,
     brightness: Brightness.dark,
+
 bottomSheetTheme: BottomSheetThemeData(
   backgroundColor: AppColors.blackLightColor,
   showDragHandle: true,
@@ -21,9 +22,7 @@ bottomSheetTheme: BottomSheetThemeData(
   dragHandleColor: AppColors.greyColor,
     dragHandleSize: Size(74.w, 5.h)
 ),
-dialogTheme: DialogTheme(
 
-),
     // useMaterial3: true,
     // fontFamily: darkThemeFont,
     splashColor: Colors.transparent,
@@ -77,6 +76,7 @@ dialogTheme: DialogTheme(
 ////=================== Input Decoration =======================
 
 final InputDecorationTheme inputDecorationTheme = InputDecorationTheme(
+
   disabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(4.r),
       borderSide: const BorderSide(color:Colors.transparent, width: 1),

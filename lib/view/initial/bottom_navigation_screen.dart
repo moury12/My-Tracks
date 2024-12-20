@@ -21,28 +21,40 @@ class BottomNavigationScreen extends StatelessWidget {
 
   final List<String?> appbarTitle = [
     null,
-    CommonController.to.selectedOption.value==0?AppStaticString.bookingManagement: AppStaticString.trackManagement,
+    CommonController.to.selectedOption.value == 0
+        ? AppStaticString.bookingManagement
+        : AppStaticString.trackManagement,
     AppStaticString.create,
     AppStaticString.notification,
-    CommonController.to.selectedOption.value==0?AppStaticString.profile:   AppStaticString.promoteTrack
+    CommonController.to.selectedOption.value == 0
+        ? AppStaticString.profile
+        : AppStaticString.promoteTrack
   ];
 
   @override
   Widget build(BuildContext context) {
     final List<Widget> pages = [
-      CommonController.to.selectedOption.value==0? HomeUserScreen(
-        openDrawer: () {
-          _scaffoldKey.currentState?.openDrawer();
-        },
-      ):HomeScreen(
-        openDrawer: () {
-          _scaffoldKey.currentState?.openDrawer();
-        },
-      ),
-      CommonController.to.selectedOption.value==0?const BookingManagementScreen(): const ManageScreen(),
+      CommonController.to.selectedOption.value == 0
+          ? HomeUserScreen(
+              openDrawer: () {
+                _scaffoldKey.currentState?.openDrawer();
+              },
+            )
+          : HomeScreen(
+              openDrawer: () {
+                _scaffoldKey.currentState?.openDrawer();
+              },
+            ),
+      CommonController.to.selectedOption.value == 0
+          ? const BookingManagementScreen()
+          : const ManageScreen(),
       const CreateTrackEventScreen(),
       const NotificationScreen(),
-      CommonController.to.selectedOption.value==0?const ProfileScreen(showAppbar: false,):  const PromoteScreen(),
+      CommonController.to.selectedOption.value == 0
+          ? const ProfileScreen(
+              showAppbar: false,
+            )
+          : const PromoteScreen(),
     ];
     return Obx(() {
       int selectedIndex = CommonController.to.selectedIndex.value;

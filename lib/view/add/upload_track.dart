@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:table_calendar/table_calendar.dart';
 import 'package:track_trek/controller/create_track_controller.dart';
 import 'package:track_trek/core/components/custom_appbar.dart';
 import 'package:track_trek/core/components/custom_button.dart';
@@ -18,6 +19,8 @@ import 'package:track_trek/view/add/widgets/track_slot_widget.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 import 'package:track_trek/view/manage/widgets/event_manage_card_widget.dart';
 
+import 'widgets/show_custom_calender_widget.dart';
+
 class UploadTrackScreen extends StatelessWidget {
   static String routeName = '/upload';
   const UploadTrackScreen({super.key});
@@ -29,7 +32,7 @@ class UploadTrackScreen extends StatelessWidget {
       appBar: CustomAppbar(
         tile: argument != null && argument == 'event'
             ? AppStaticString.createEvent
-            :  AppStaticString.uploadTrack,
+            : AppStaticString.uploadTrack,
       ),
       body: Padding(
         padding: padding16,
@@ -40,90 +43,75 @@ class UploadTrackScreen extends StatelessWidget {
             children: [
               argument != null && argument == 'event'
                   ? SizedBox.shrink()
-                  :    Row(
-                spacing: 16.w,
-                children: [
-                  Expanded(
-                    child: GradientContainerWidget(
-                      onTap: () {},
-                      radius: 4.r,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            AppStaticString.selectDay,
-                            style: poppinsRegular.copyWith(
-                                color: AppColors.blackLightColor,
-                                fontSize: getFontSizeDefault(context)),
-                          ),
-                          space8W,
-                          Image.asset(
-                            calenderIconUrl,
-                            height: 24.w,
-                            width: 24.w,
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
+                  : Row(
+                      spacing: 16.w,
+                      children: [
+                        Expanded(
+                          child: SelectDateButton(),
+                        ),
 
-                  ///=============dynamic days==================///
-                  const PrimaryColorContainer(
-                    text: '15 Days',
-                  ),
-                  space16W
-                ],
-              ),
+                        ///=============dynamic days==================///
+                        const PrimaryColorContainer(
+                          text: '15 Days',
+                        ),
+                        space16W
+                      ],
+                    ),
 
               ///======================Week Days==================///
               argument != null && argument == 'event'
                   ? SizedBox.shrink()
                   : Obx(() {
-                return SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    spacing: 10.w,
-                    children: [
-                      ...List.generate(
-                        CreateTrackController.to.weekDays.length,
-                        (index) => CreateTrackController.to.selectedDay.value ==
-                                index
-                            ? GradientContainerWidget(
-                                text: CreateTrackController.to.weekDays[index],
-                                textStyle: poppinsRegular.copyWith(
-                                    color: AppColors.blackLightColor,
-                                    fontSize: getFontSizeDefault(context)),
-                              )
-                            : CreateTrackController.to.weekDays[index].isEmpty
-                                ? space16W
-                                : BlackContainerWidget(
-                                    textStyle: poppinsRegular.copyWith(
-                                        fontSize: getFontSizeDefault(context)),
-                                    onTap: () {
-                                      CreateTrackController
-                                          .to.selectedDay.value = index;
-                                    },
-                                    text: CreateTrackController
-                                        .to.weekDays[index],
-                                  ),
-                      )
-                    ],
-                  ),
-                );
-              }),
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          spacing: 10.w,
+                          children: [
+                            ...List.generate(
+                              CreateTrackController.to.weekDays.length,
+                              (index) => CreateTrackController
+                                          .to.selectedDay.value ==
+                                      index
+                                  ? GradientContainerWidget(
+                                      text: CreateTrackController
+                                          .to.weekDays[index],
+                                      textStyle: poppinsRegular.copyWith(
+                                          color: AppColors.blackLightColor,
+                                          fontSize:
+                                              getFontSizeDefault(context)),
+                                    )
+                                  : CreateTrackController
+                                          .to.weekDays[index].isEmpty
+                                      ? space16W
+                                      : BlackContainerWidget(
+                                          textStyle: poppinsRegular.copyWith(
+                                              fontSize:
+                                                  getFontSizeDefault(context)),
+                                          onTap: () {
+                                            CreateTrackController
+                                                .to.selectedDay.value = index;
+                                          },
+                                          text: CreateTrackController
+                                              .to.weekDays[index],
+                                        ),
+                            )
+                          ],
+                        ),
+                      );
+                    }),
 
               ///===================dynamic available slot===================//
               argument != null && argument == 'event'
                   ? SizedBox.shrink()
-                  :  Text(
-                '${AppStaticString.availableSlot} 10',
-                style:
-                    poppinsMedium.copyWith(fontSize: getFontSizeLarge(context)),
-              ),
+                  : Text(
+                      '${AppStaticString.availableSlot} 10',
+                      style: poppinsMedium.copyWith(
+                          fontSize: getFontSizeLarge(context)),
+                    ),
 
               Row(
                 spacing: 4.w,
-                children:  [
+                children: [
                   Expanded(
                       child: CustomTextField(
                     title: '${AppStaticString.slotNo} 1',
@@ -131,16 +119,16 @@ class UploadTrackScreen extends StatelessWidget {
                   )),
                   argument != null && argument == 'event'
                       ? SizedBox.shrink()
-                      :  Expanded(
-                      child: CustomDropdown(
-                    title: 'Start Time',
-                  )),
+                      : Expanded(
+                          child: CustomDropdown(
+                          title: 'Start Time',
+                        )),
                   argument != null && argument == 'event'
                       ? SizedBox.shrink()
-                      :  Expanded(
-                      child: CustomDropdown(
-                    title: 'End Time',
-                  )),
+                      : Expanded(
+                          child: CustomDropdown(
+                          title: 'End Time',
+                        )),
                 ],
               ),
 
@@ -180,20 +168,59 @@ class UploadTrackScreen extends StatelessWidget {
 
               ///========================create slot button=========================///
               const CreateSlotButtonSmallWidget(),
-               MarronGradientContainerWidget(
+              MarronGradientContainerWidget(
                 child: TrackSlotWidget(),
               ),
               argument != null && argument == 'event'
-                  ?  CustomButton(onTap: () {
-
-              },title: AppStaticString.publish,
-                fontSize: getFontSizeLarge(context),
-              ):SizedBox.shrink()
-
+                  ? CustomButton(
+                      onTap: () {},
+                      title: AppStaticString.publish,
+                      fontSize: getFontSizeLarge(context),
+                    )
+                  : SizedBox.shrink()
             ],
           ),
         ),
       ),
     );
   }
+}
+
+class SelectDateButton extends StatelessWidget {
+  final Function()? onTap;
+  const SelectDateButton({
+    super.key,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GradientContainerWidget(
+      onTap: onTap ??
+          () {
+            showCustomCalenderWidget(context);
+          },
+      radius: 4.r,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Text(
+              AppStaticString.selectDay,
+              style: poppinsRegular.copyWith(
+                  color: AppColors.blackLightColor,
+                  fontSize: getFontSizeDefault(context)),
+            ),
+          ),
+          space8W,
+          Image.asset(
+            calenderIconUrl,
+            height: 24.w,
+            width: 24.w,
+          )
+        ],
+      ),
+    );
+  }
+
 }

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
 import 'package:track_trek/core/constant/image_constants.dart';
+import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
+import 'package:track_trek/view/home/host/user_details_page.dart';
 import 'package:track_trek/view/home/widgets/event_card_widget.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 import 'package:track_trek/view/home/widgets/track_card_widget.dart';
@@ -31,8 +34,10 @@ class MarronGradientContainerWidget extends StatelessWidget {
 }
 
 class TrackEventInfoContentWidget extends StatelessWidget {
+  final bool noArrowButton;
   const TrackEventInfoContentWidget({
     super.key,
+    this.noArrowButton = false,
   });
 
   @override
@@ -69,12 +74,17 @@ class TrackEventInfoContentWidget extends StatelessWidget {
                           fontSize: getFontSizeSmall(context)),
                     ),
                   ),
-                  IconButton(
-                      onPressed: () {},
-                      icon: Image.asset(
-                        arrowForwardIconUrl,
-                        height: 24.w,
-                      ))
+                  noArrowButton == true
+                      ? const SizedBox.shrink()
+                      : IconButton(
+                          onPressed: () {
+                            Get.toNamed(UserDetailsScreen.routeName,
+                                arguments: userPanel);
+                          },
+                          icon: Image.asset(
+                            arrowForwardIconUrl,
+                            height: 24.w,
+                          ))
                 ],
               ),
             )
@@ -88,7 +98,8 @@ class TrackEventInfoContentWidget extends StatelessWidget {
 class UserInfoContentWidget extends StatelessWidget {
   final String? seatNo;
   const UserInfoContentWidget({
-    super.key, this.seatNo,
+    super.key,
+    this.seatNo,
   });
 
   @override
@@ -127,9 +138,11 @@ class UserInfoContentWidget extends StatelessWidget {
               const UserInfoText(
                 text: '${AppStaticString.address}mdhasan854@gmail.com',
               ),
-            seatNo!=null?  const UserInfoText(
-                text: '${AppStaticString.seat}07',
-              ):const SizedBox.shrink(),
+              seatNo != null
+                  ? const UserInfoText(
+                      text: '${AppStaticString.seat}07',
+                    )
+                  : const SizedBox.shrink(),
             ],
           ),
         ),
@@ -143,7 +156,8 @@ class UserInfoText extends StatelessWidget {
   final Color? color;
   const UserInfoText({
     super.key,
-    required this.text, this.color,
+    required this.text,
+    this.color,
   });
 
   @override
@@ -151,7 +165,8 @@ class UserInfoText extends StatelessWidget {
     return Text(
       text,
       style: poppinsRegular.copyWith(
-          fontSize: getFontSizeSmall(context), color:color?? AppColors.fadeWhiteColor),
+          fontSize: getFontSizeSmall(context),
+          color: color ?? AppColors.fadeWhiteColor),
     );
   }
 }

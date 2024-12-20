@@ -14,7 +14,8 @@ import 'package:track_trek/view/home/widgets/tab_content_view.dart';
 class DynamicTabWidget extends StatelessWidget {
   final RxList<String> tabs;
   final RxList<Widget> tabContent;
-  const DynamicTabWidget({super.key, required this.tabs, required this.tabContent});
+  final Function(int)? function;
+  const DynamicTabWidget({super.key, required this.tabs, required this.tabContent, this.function});
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +48,9 @@ class DynamicTabWidget extends StatelessWidget {
             unselectedLabelStyle: poppinsMedium.copyWith(
                 fontSize: getFontSizeLarge(context)),
             dividerColor: AppColors.blackLightColor,
+            onTap:function?? (value) {
+
+            },
             tabs: tabs
                 .map((tabName) => Padding(
               padding: padding16b24,

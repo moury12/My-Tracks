@@ -10,6 +10,7 @@ import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
+import 'package:track_trek/view/add/widgets/show_custom_calender_widget.dart';
 import 'package:track_trek/view/add/widgets/track_slot_widget.dart';
 import 'package:track_trek/view/home/widgets/dynamic_tab_widget.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
@@ -83,6 +84,13 @@ class ManageScreen extends StatelessWidget {
       child: Padding(
         padding: padding16.copyWith(top: 0),
         child: DynamicTabWidget(
+          function: (val) {
+            if(val==2){
+              showCustomCalenderWidget(context,goButton: true,onTap: () {
+                Navigator.pop(context);
+              },);
+            }
+          },
             tabs: TrackManagementController.to.tabs,
             tabContent: TrackManagementController.to.tabContent),
       ),

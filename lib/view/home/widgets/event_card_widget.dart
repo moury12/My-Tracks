@@ -196,15 +196,16 @@ class EventCardWidget extends StatelessWidget {
 
 class BlueTextWidget extends StatelessWidget {
   final String? text;
+  final TextAlign? textAlign;
   const BlueTextWidget({
     super.key,
-    this.text,
+    this.text, this.textAlign,
   });
 
   @override
   Widget build(BuildContext context) {
     return Text(
-      maxLines: 2,textAlign: TextAlign.center,
+      maxLines: 2,textAlign:textAlign?? TextAlign.center,
       overflow: TextOverflow.ellipsis,
       text ?? '${AppStaticString.priceWithClone}\$120',
       style:

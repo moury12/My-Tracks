@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:track_trek/controller/common_controller.dart';
 import 'package:track_trek/core/components/custom_appbar.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
@@ -23,8 +24,8 @@ class HistoryScreen extends StatelessWidget {
 padding: padding16,
         itemBuilder: (context, index) => Padding(
           padding: EdgeInsets.only(bottom: 12.h),
-          child: const MarronGradientContainerWidget(
-            child: HistoryContentWidget(),
+          child:  MarronGradientContainerWidget(
+            child: HistoryContentWidget(addRating: CommonController.to.selectedOption.value==0,),
           ),
         ),
         itemCount: 5,

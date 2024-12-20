@@ -26,7 +26,7 @@ class CustomDrawerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Drawer(
-
+width: MediaQuery.sizeOf(context).width/1.5,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [ 
@@ -144,10 +144,12 @@ class DrawerContentWidget extends StatelessWidget {
                   color: AppColors.whiteLightColor,
                 ),
                 space16W,
-                Text(
-                  text,
-                  style: poppinsRegular.copyWith(
-                      fontSize: getFontSizeDefault(context)),
+                Expanded(
+                  child: Text(
+                    text,
+                    style: poppinsRegular.copyWith(
+                        fontSize: getFontSizeDefault(context)),
+                  ),
                 ),
               ],
             ),

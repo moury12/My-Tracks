@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
+import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 
 class CustomButton extends StatelessWidget {
   const CustomButton(
       {super.key,
-      this.height = 48,
+      this.height  ,
       this.width = double.maxFinite,
       required this.onTap,
       this.title = '',
@@ -19,7 +20,7 @@ class CustomButton extends StatelessWidget {
       this.borderColor = AppColors.primaryColor,
       this.child, this.img, this.icon, this.fontSize,  this.radius});
 
-  final double height;
+  final double? height;
   final double? radius;
   final double width;
   final Color fillColor;
@@ -49,7 +50,7 @@ class CustomButton extends StatelessWidget {
             vertical: marginVerticel, horizontal: marginHorizontal),
         alignment: Alignment.center,
         height: height,
-
+padding: padding12V,
         width: width,
         decoration: BoxDecoration(
             border: Border.all(color: borderColor),
