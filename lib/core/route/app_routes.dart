@@ -17,10 +17,15 @@ import 'package:track_trek/view/feedback/feedback_page.dart';
 import 'package:track_trek/view/history/history_page.dart';
 import 'package:track_trek/view/home/host/home_screen.dart';
 import 'package:track_trek/view/home/host/user_details_page.dart';
+import 'package:track_trek/view/promote/promote_track.dart';
+import 'package:track_trek/view/promote/promote_track.dart';
+import 'package:track_trek/view/search/search_page.dart';
 import 'package:track_trek/view/initial/bottom_navigation_screen.dart';
 import 'package:track_trek/view/initial/splash.dart';
 import 'package:track_trek/view/manage/event_user_page.dart';
 import 'package:track_trek/view/profile/profile_page.dart';
+import 'package:track_trek/view/search/search_result_page.dart';
+import 'package:track_trek/view/search/search_result_page.dart';
 import 'package:track_trek/view/settings/change_password_page.dart';
 import 'package:track_trek/view/settings/privacy_terms_page.dart';
 import 'package:track_trek/view/settings/settings_page.dart';
@@ -65,7 +70,17 @@ class AppRoutes {
         GetPage(
             name: ProfileScreen.routeName,
             page: () => const ProfileScreen(),
+            binding: ProfileBinding()),     GetPage(
+            name: PromoteTrackScreen.routeName,
+            page: () => const PromoteTrackScreen(),
             binding: ProfileBinding()),
+        GetPage(
+            name: SearchScreen.routeName,
+            page: () => const SearchScreen(),
+            binding: HomeBinding()), GetPage(
+            name: SearchResultScreen.routeName,
+            page: () => const SearchResultScreen(),
+            binding: HomeBinding()),
         GetPage(
             name: EventUserScreen.routeName,
             page: () => const EventUserScreen()),
@@ -79,10 +94,11 @@ class AppRoutes {
         GetPage(
             name: BookTrackJoinEventScreen.routeName,
             page: () => const BookTrackJoinEventScreen(),
-        binding: BookTrackJoinEventBinding()),  GetPage(
+            binding: BookTrackJoinEventBinding()),
+        GetPage(
             name: BookTrackJoinEventPaymentScreen.routeName,
             page: () => const BookTrackJoinEventPaymentScreen(),
-        binding: BookTrackJoinEventBinding()),
+            binding: BookTrackJoinEventBinding()),
         GetPage(
             name: SettingsScreen.routeName, page: () => const SettingsScreen()),
         GetPage(

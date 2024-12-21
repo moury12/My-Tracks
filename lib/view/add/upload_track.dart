@@ -1,7 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:track_trek/controller/create_track_controller.dart';
 import 'package:track_trek/core/components/custom_appbar.dart';
 import 'package:track_trek/core/components/custom_button.dart';
@@ -15,6 +15,7 @@ import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/add/widgets/buttons.dart';
+import 'package:track_trek/view/add/widgets/delete_alert_dialog.dart';
 import 'package:track_trek/view/add/widgets/track_slot_widget.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 import 'package:track_trek/view/manage/widgets/event_manage_card_widget.dart';
@@ -42,12 +43,91 @@ class UploadTrackScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               argument != null && argument == 'event'
-                  ? SizedBox.shrink()
+                  ? const SizedBox.shrink()
                   : Row(
                       spacing: 16.w,
                       children: [
                         Expanded(
-                          child: SelectDateButton(),
+                          child: SelectDateButton(
+                            onTap: () {
+                              showModalBottomSheet(
+                                showDragHandle: false,
+                                context: context,
+
+
+                                builder: (context) => Container(
+                                  padding: padding16,
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.vertical(
+                                          top: Radius.circular(8.r))),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(AppStaticString.selectDay,style:poppinsMedium.copyWith(fontSize: getFontSizeDefault(context)) ,),
+                                          const Spacer(),
+                                          IconButton(onPressed: () {Navigator.of(context).pop();
+                                          }, icon: const Icon(CupertinoIcons.multiply,color: AppColors.whiteLightColor,))
+                                        ],
+                                      ),
+                                      Obx(
+                                         () {
+                                          return Wrap(
+                                            spacing: 12.w ,
+                                            children: [
+                                              ...List.generate(
+                                                CreateTrackController
+                                                    .to.weekDays.length,
+                                                (index) => CreateTrackController
+                                                                .to.weekDays[index]
+                                                            ['selected'] ==
+                                                        true
+                                                    ? CustomButton(
+                                                  radius: 20.r,
+                                                  marginVerticel: 6.h,
+                                                        width: 100.w,
+                                                        title: CreateTrackController
+                                                                .to.weekDays[index]
+                                                            ['day_name'],
+                                                        onTap: () {
+                                                          CreateTrackController
+                                                              .to.toggleWeekDay(index);
+                                                        },
+                                                      )
+                                                    : CreateTrackController
+                                                            .to.weekDays[index].isEmpty
+                                                        ? space16W
+                                                        : CustomButton(
+                                                  radius: 20.r,
+                                                  marginVerticel: 6.h,
+                                                            width: 100.w,
+                                                            fillColor: AppColors
+                                                                .blackBackgroundColor,
+                                                            borderColor:
+                                                                AppColors.primaryColor,
+                                                            title: CreateTrackController
+                                                                    .to.weekDays[index]
+                                                                ['day_name'],
+                                                            textColor:
+                                                                AppColors.primaryColor,
+                                                            onTap: () {
+                                                              CreateTrackController
+                                                                  .to.toggleWeekDay(index);
+                                                            },
+                                                          ),
+                                              )
+                                            ],
+                                          );
+                                        }
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
                         ),
 
                         ///=============dynamic days==================///
@@ -60,7 +140,7 @@ class UploadTrackScreen extends StatelessWidget {
 
               ///======================Week Days==================///
               argument != null && argument == 'event'
-                  ? SizedBox.shrink()
+                  ? const SizedBox.shrink()
                   : Obx(() {
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
@@ -69,20 +149,17 @@ class UploadTrackScreen extends StatelessWidget {
                           children: [
                             ...List.generate(
                               CreateTrackController.to.weekDays.length,
-                              (index) => CreateTrackController
-                                          .to.selectedDay.value ==
-                                      index
-                                  ? GradientContainerWidget(
-                                      text: CreateTrackController
-                                          .to.weekDays[index],
-                                      textStyle: poppinsRegular.copyWith(
-                                          color: AppColors.blackLightColor,
-                                          fontSize:
-                                              getFontSizeDefault(context)),
-                                    )
-                                  : CreateTrackController
-                                          .to.weekDays[index].isEmpty
-                                      ? space16W
+                              (index) =>
+                                  CreateTrackController.to.selectedDay.value ==
+                                          index
+                                      ? GradientContainerWidget(
+                                          text: CreateTrackController
+                                              .to.weekDays[index]['day_name'],
+                                          textStyle: poppinsRegular.copyWith(
+                                              color: AppColors.blackLightColor,
+                                              fontSize:
+                                                  getFontSizeDefault(context)),
+                                        )
                                       : BlackContainerWidget(
                                           textStyle: poppinsRegular.copyWith(
                                               fontSize:
@@ -92,7 +169,7 @@ class UploadTrackScreen extends StatelessWidget {
                                                 .to.selectedDay.value = index;
                                           },
                                           text: CreateTrackController
-                                              .to.weekDays[index],
+                                              .to.weekDays[index]['day_name'],
                                         ),
                             )
                           ],
@@ -102,7 +179,7 @@ class UploadTrackScreen extends StatelessWidget {
 
               ///===================dynamic available slot===================//
               argument != null && argument == 'event'
-                  ? SizedBox.shrink()
+                  ? const SizedBox.shrink()
                   : Text(
                       '${AppStaticString.availableSlot} 10',
                       style: poppinsMedium.copyWith(
@@ -112,20 +189,20 @@ class UploadTrackScreen extends StatelessWidget {
               Row(
                 spacing: 4.w,
                 children: [
-                  Expanded(
+                  const Expanded(
                       child: CustomTextField(
                     title: '${AppStaticString.slotNo} 1',
                     hintText: '1',
                   )),
                   argument != null && argument == 'event'
-                      ? SizedBox.shrink()
-                      : Expanded(
+                      ? const SizedBox.shrink()
+                      : const Expanded(
                           child: CustomDropdown(
                           title: 'Start Time',
                         )),
                   argument != null && argument == 'event'
-                      ? SizedBox.shrink()
-                      : Expanded(
+                      ? const SizedBox.shrink()
+                      : const Expanded(
                           child: CustomDropdown(
                           title: 'End Time',
                         )),
@@ -168,16 +245,27 @@ class UploadTrackScreen extends StatelessWidget {
 
               ///========================create slot button=========================///
               const CreateSlotButtonSmallWidget(),
-              MarronGradientContainerWidget(
+              const MarronGradientContainerWidget(
                 child: TrackSlotWidget(),
               ),
               argument != null && argument == 'event'
                   ? CustomButton(
-                      onTap: () {},
+                      onTap: () {
+                        showDialog(context: context, builder: (context) => DeleteAlertDialog(
+                          showButton: false,
+                          title: Padding(
+                            padding:  EdgeInsets.only(bottom: 8.h),
+                            child: Image.asset(successIconUrl,height: 33.w,width: 33.w,),
+                          ),
+                           text:  AppStaticString.eventCreatedSuccessfully
+                        ),
+                        barrierDismissible: false
+                        );
+                      },
                       title: AppStaticString.publish,
                       fontSize: getFontSizeLarge(context),
                     )
-                  : SizedBox.shrink()
+                  : const SizedBox.shrink()
             ],
           ),
         ),
@@ -222,5 +310,4 @@ class SelectDateButton extends StatelessWidget {
       ),
     );
   }
-
 }

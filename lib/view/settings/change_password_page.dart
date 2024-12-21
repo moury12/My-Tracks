@@ -16,35 +16,41 @@ class ChangePasswordScreen extends StatelessWidget {
       appBar: const CustomAppbar(
         tile: AppStaticString.changePass,
       ),
-      body: Padding(
-        padding: padding16,
-        child: SingleChildScrollView(
-          child: Column(
-            spacing: 12.h,
-            children: const [
-              CustomTextField(
-                title: AppStaticString.currentPass,
-                isPassword: true,
+      body: Column(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: padding16,
+              child: SingleChildScrollView(
+                child: Column(
+                  spacing: 12.h,
+                  children: const [
+                    CustomTextField(
+                      title: AppStaticString.currentPass,
+                      isPassword: true,
+                    ),
+                    CustomTextField(
+                      title: AppStaticString.newPass,
+                      isPassword: true,
+                    ),
+                    CustomTextField(
+                      title: AppStaticString.confirmPassword,
+                      isPassword: true,
+                    ),
+                  ],
+                ),
               ),
-              CustomTextField(
-                title: AppStaticString.newPass,
-                isPassword: true,
-              ),
-              CustomTextField(
-                title: AppStaticString.confirmPassword,
-                isPassword: true,
-              ),
-            ],
+            ),
+          ),Padding(
+            padding: padding16,
+            child: CustomButton(
+              onTap: () {},
+              title: AppStaticString.save,
+            ),
           ),
-        ),
+        ],
       ),
-      bottomNavigationBar: Padding(
-        padding: padding16,
-        child: CustomButton(
-          onTap: () {},
-          title: AppStaticString.save,
-        ),
-      ),
+
     );
   }
 }

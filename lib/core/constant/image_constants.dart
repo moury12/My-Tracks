@@ -20,6 +20,7 @@ String addIconUrl  ='assets/icons/add_icon.png';
 String editIconUrl  ='assets/icons/edit_icon.png';
 String deleteIconUrl  ='assets/icons/delete_icon.png';
 String commentIconUrl  ='assets/icons/comment.png';
+String successIconUrl  ='assets/icons/sucess_icon_url.png';
 String starIconUrl  ='assets/icons/star_icon.png';
 String blackCircleIconUrl  ='assets/icons/black_circle_with_border.png';
 String starFillIconUrl  ='assets/icons/star_fill_icon.png';

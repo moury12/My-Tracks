@@ -10,11 +10,13 @@ import 'package:track_trek/core/utils/text_style.dart';
 
 class DeleteAlertDialog extends StatelessWidget {
   final Widget? title;
+  final String? text;
   final Widget? widgets;
+  final bool? showButton;
   final String? text1;
   final String? text2;
   const DeleteAlertDialog({
-    super.key, this.title, this.widgets, this.text1, this.text2,
+    super.key, this.title, this.widgets, this.text1, this.text2, this.showButton=true, this.text,
   });
 
   @override
@@ -33,12 +35,12 @@ class DeleteAlertDialog extends StatelessWidget {
           ),
           title??SizedBox.shrink(),
           Text(textAlign: TextAlign.center,
-            AppStaticString.areYouSureToDelete,
+          text??  AppStaticString.areYouSureToDelete,
             style: poppinsRegular.copyWith(fontSize: getFontSizeLarge(context)),
           ),
           space16H,
           widgets??SizedBox.shrink(),
-          Row(
+       showButton==true?   Row(
             spacing: 16.w,
             children: [
               Expanded(
@@ -66,7 +68,7 @@ class DeleteAlertDialog extends StatelessWidget {
                 fillColor: AppColors.greenColor,
               )),
             ],
-          ),
+          ):SizedBox.shrink(),
         ],
       ),
     );

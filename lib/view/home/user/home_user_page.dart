@@ -11,6 +11,7 @@ import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/view/book-track-join-event/book_track_join_event_page.dart';
+import 'package:track_trek/view/search/search_page.dart';
 import 'package:track_trek/view/home/widgets/category_circle_widget.dart';
 import 'package:track_trek/view/home/widgets/event_card_widget.dart';
 import 'package:track_trek/view/home/widgets/home_app_bar.dart';
@@ -33,6 +34,9 @@ class HomeUserScreen extends StatelessWidget {
           padding: padding16,
           children: [
             CustomTextField(
+              onTap:() {
+                Get.toNamed(SearchScreen.routeName);
+              } ,
               hintText: AppStaticString.searchHerr,
               prefixIcon: Padding(
                 padding: padding8,

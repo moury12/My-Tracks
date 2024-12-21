@@ -385,32 +385,24 @@ class TrackCardWidget extends StatelessWidget {
   void _showMapBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
+      showDragHandle: false,
+
+
       isScrollControlled: true, // Allows full-screen height if needed
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (context) {
         return SizedBox(
-          height: MediaQuery.of(context).size.height * 0.7,
-          child: Stack(
-            children: [
-              GoogleMap(
-                initialCameraPosition: const CameraPosition(
-                  target: LatLng(37.7749, -122.4194), // Replace with desired coordinates
-                  zoom: 10,
-                ),
-                myLocationEnabled: true,
-                myLocationButtonEnabled: true,
-              ),
-              Positioned(
-                top: 8,
-                right: 8,
-                child: IconButton(
-                  icon: const Icon(Icons.close, color: Colors.black),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ),
-            ],
+          height: MediaQuery.of(context).size.height/2,
+          child: GoogleMap(
+
+            initialCameraPosition: const CameraPosition(
+              target: LatLng(37.7749, -122.4194), // Replace with desired coordinates
+              zoom: 10,
+            ),
+            myLocationEnabled: true,
+            myLocationButtonEnabled: true,
           ),
         );
       },

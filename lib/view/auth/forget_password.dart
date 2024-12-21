@@ -23,43 +23,50 @@ class ForgetPasswordScreen extends StatelessWidget {
       appBar: const CustomAppbar(
         tile: AppStaticString.forgotPass,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: padding16,
-          child:  Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              space16H,
-              Text(
-                AppStaticString.forgetPass,
-                style: poppinsMedium.copyWith(
-                  color: AppColors.whiteBrightColor,
-                    fontSize: getFontSizeExtraLarge(context)),
-              ),   space16H,Text(
-                AppStaticString.enterEmailToSendCode,
-                textAlign: TextAlign.center,
-                style: poppinsRegular.copyWith(
-                    fontSize: getFontSizeSemiSmall(context)),
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: padding16,
+                child:  Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    space16H,
+                    Text(
+                      AppStaticString.forgetPass,
+                      style: poppinsMedium.copyWith(
+                        color: AppColors.whiteBrightColor,
+                          fontSize: getFontSizeExtraLarge(context)),
+                    ),   space16H,Text(
+                      AppStaticString.enterEmailToSendCode,
+                      textAlign: TextAlign.center,
+                      style: poppinsRegular.copyWith(
+                          fontSize: getFontSizeSemiSmall(context)),
+                    ),
+                    space16H,
+                    CustomTextField(
+                      textEditingController:
+                      AuthController.to.emailSignUpController.value,
+                      title: AppStaticString.email,
+                      hintText: AppStaticString.emailEnter,
+            
+                    ),
+                  ],
+                ),
               ),
-              space16H,
-              CustomTextField(
-                textEditingController:
-                AuthController.to.emailSignUpController.value,
-                title: AppStaticString.email,
-                hintText: AppStaticString.emailEnter,
-
-              ),
-            ],
+            ),
           ),
-        ),
+          Padding(
+            padding: padding16.copyWith(bottom: 24.sp),
+            child: CustomButton(onTap: (){
+              Get.toNamed(OTPScreen.routeName);
+            },title:AppStaticString.sendCode ,),
+          )
+        ],
       ),
       ///==============send code for reset pass ==========================///
-      bottomNavigationBar: Padding(
-        padding: padding16.copyWith(bottom: 24.sp),
-        child: CustomButton(onTap: (){
-          Get.toNamed(OTPScreen.routeName);
-        },title:AppStaticString.sendCode ,),
-      ),
+     
     );
   }
 }

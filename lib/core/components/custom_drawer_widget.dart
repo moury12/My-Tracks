@@ -14,6 +14,7 @@ import 'package:track_trek/view/feedback/feedback_page.dart';
 import 'package:track_trek/view/history/history_page.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 import 'package:track_trek/view/profile/profile_page.dart';
+import 'package:track_trek/view/promote/promote_track.dart';
 import 'package:track_trek/view/settings/privacy_terms_page.dart';
 import 'package:track_trek/view/settings/settings_page.dart';
 
@@ -26,10 +27,10 @@ class CustomDrawerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Drawer(
-width: MediaQuery.sizeOf(context).width/1.5,
+        width: MediaQuery.sizeOf(context).width / 1.5,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [ 
+          children: [
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
@@ -47,7 +48,8 @@ width: MediaQuery.sizeOf(context).width/1.5,
                     DrawerContentWidget(
                       onTap: () {
                         Navigator.pop(context);
-                        Get.toNamed(PrivacyTermsScreen.routeName, arguments: 'terms');
+                        Get.toNamed(PrivacyTermsScreen.routeName,
+                            arguments: 'terms');
                       },
                       icon: termsConditionIconUrl,
                       text: AppStaticString.termsCondition,
@@ -55,7 +57,8 @@ width: MediaQuery.sizeOf(context).width/1.5,
                     DrawerContentWidget(
                       onTap: () {
                         Navigator.pop(context);
-                        Get.toNamed(PrivacyTermsScreen.routeName, arguments: 'privacy');
+                        Get.toNamed(PrivacyTermsScreen.routeName,
+                            arguments: 'privacy');
                       },
                       icon: privacyPolicyIconUrl,
                       text: AppStaticString.privacyPolicy,
@@ -68,18 +71,26 @@ width: MediaQuery.sizeOf(context).width/1.5,
                       icon: feedBackIconUrl,
                       text: AppStaticString.feedback,
                     ),
-                    CommonController.to.selectedOption.value==0?const SizedBox.shrink():   DrawerContentWidget(
-                      icon: profileIconUrl,
-                      text: AppStaticString.profile,
-                      onTap: () {
-                        Navigator.pop(context);
-                        Get.toNamed(ProfileScreen.routeName);
-                      },
-                    ),
-                    CommonController.to.selectedOption.value==0?const SizedBox.shrink():  DrawerContentWidget(
-                      icon: promoteIconUrl,
-                      text: AppStaticString.promoteTrack,
-                    ),
+                    CommonController.to.selectedOption.value == 0
+                        ? const SizedBox.shrink()
+                        : DrawerContentWidget(
+                            icon: profileIconUrl,
+                            text: AppStaticString.profile,
+                            onTap: () {
+                              Navigator.pop(context);
+                              Get.toNamed(ProfileScreen.routeName);
+                            },
+                          ),
+                    CommonController.to.selectedOption.value == 0
+                        ? const SizedBox.shrink()
+                        : DrawerContentWidget(
+                            icon: promoteIconUrl,
+                            text: AppStaticString.promoteTrack,
+                            onTap: () {
+                              Navigator.pop(context);
+                              Get.toNamed(PromoteTrackScreen.routeName);
+                            },
+                          ),
                     DrawerContentWidget(
                       onTap: () {
                         Navigator.pop(context);
@@ -88,8 +99,6 @@ width: MediaQuery.sizeOf(context).width/1.5,
                       icon: settingsIconUrl,
                       text: AppStaticString.settings,
                     ),
-                        
-                        
                   ],
                 ),
               ),
@@ -102,12 +111,21 @@ width: MediaQuery.sizeOf(context).width/1.5,
               radius: 0,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-        
                 children: [
-                  Image.asset(logoutIconUrl,height: 24.w,width: 24.w,),
-                  space8W,Text(textAlign: TextAlign.center,
-                    AppStaticString.logOut,style:poppinsRegular.copyWith(fontSize: getFontSizeDefault(context)) ,)
-                ],),
+                  Image.asset(
+                    logoutIconUrl,
+                    height: 24.w,
+                    width: 24.w,
+                  ),
+                  space8W,
+                  Text(
+                    textAlign: TextAlign.center,
+                    AppStaticString.logOut,
+                    style: poppinsRegular.copyWith(
+                        fontSize: getFontSizeDefault(context)),
+                  )
+                ],
+              ),
             )
           ],
         ),

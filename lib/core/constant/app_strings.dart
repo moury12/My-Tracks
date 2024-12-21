@@ -20,6 +20,7 @@ class AppStaticString {
   static const String eventHistory = "Event History";
   static const String termsCondition = "Terms & Conditions";
   static const String search = "Search";
+  static const String searchResult = "Search Result";
   static const String otp = "OTP";
   static const String settings = "Settings";
   static const String changePass = "Change password";
@@ -46,6 +47,7 @@ class AppStaticString {
   static const String enter4Digit = "Enter the 4 digit code that we just sent to";
   static const String userName = "User Name";
   static const String password = "Password";
+  static const String eventCreatedSuccessfully = "Your event has been created correctly.";
   static const String areYouSureToDelete = "Are you sure you want to delete this content ?";
   static const String confirmPassword = "Confirm Password";
   static const String emailEnter = "Enter your Email";
@@ -72,6 +74,7 @@ class AppStaticString {
   static const String updatePass = "Update Password";
   static const String selectCategory = "Select Category";
   static const String event = "Event";
+  static const String done = "Done";
   static const String running = "Running";
   static const String booked = "Booked";
   static const String dateWithClone = "Date: ";
