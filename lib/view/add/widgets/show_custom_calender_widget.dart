@@ -14,67 +14,98 @@ Future<dynamic> showCustomCalenderWidget(BuildContext context,
     context: context,
     builder: (context) => SimpleDialog(
       backgroundColor: Colors.transparent,
-        children: [
-      GradientContainerWidget(
-        child: Column(
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.35,
-              width: MediaQuery.of(context).size.width * 0.9,
-              child: TableCalendar(
-                daysOfWeekVisible: false,
-                headerStyle: HeaderStyle(
-                    formatButtonPadding: EdgeInsets.zero,
-                    leftChevronIcon: Icon(Icons.arrow_back_ios,color: AppColors.blackLightColor,size: 15.sp,),
-                    rightChevronIcon: Icon(Icons.arrow_forward_ios,color: AppColors.blackLightColor,size: 15.sp,),
-                    formatButtonVisible: false,
-                    titleTextStyle: poppinsMedium.copyWith(
-                      fontSize: getFontSizeDefault(context),
-                      color: AppColors.blackLightColor,
-                    )),
-                calendarStyle: CalendarStyle(
-            
-                    disabledTextStyle: poppinsMedium.copyWith(
-                      fontSize: getFontSizeDefault(context),
-                      color: AppColors.normalDarkWhite,
-                    ),
-                    todayDecoration: BoxDecoration(
-                        color: AppColors.blackLightColor,
-                        borderRadius: BorderRadius.circular(8.r)),
-                    weekendTextStyle: poppinsMedium.copyWith(
-                      fontSize: getFontSizeDefault(context),
-                      color: AppColors.blackLightColor,
-                    ),
-            
-                    // holidayDecoration: BoxDecoration(color: AppColors.blackLightColor),
-                    cellMargin: EdgeInsets.zero,
-                    cellPadding: EdgeInsets.zero,
-                    defaultTextStyle: poppinsMedium.copyWith(
-                      fontSize: getFontSizeDefault(context),
-                      color: AppColors.blackLightColor,
-                    )),
-                weekNumbersVisible: false,
-                firstDay: DateTime.utc(2010, 10, 16),
-                lastDay: DateTime.utc(2030, 3, 14),
-                focusedDay: DateTime.now(),
-            
+      children: [
+        GradientContainerWidget(
+          child: SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height * 0.8, // Limit height
               ),
-            ),
-            goButton==true ?  InkWell(
-              onTap:onTap?? () {
-
-              },
-              child:Row(mainAxisAlignment: MainAxisAlignment.center,
+              child: Column(
+                mainAxisSize: MainAxisSize.min, // Adjusts size based on children
                 children: [
-                  Text('GO',style: poppinsMedium.copyWith(fontSize: getFontSizeLarge(context),color: AppColors.blackLightColor,),),
-                  space12W,
-                  Image.asset(arrowForwardIconUrl,height: 24.w,width: 24.w,color: AppColors.blackLightColor,)
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    height: MediaQuery.of(context).size.height/2,
+                    child: TableCalendar(
+                      daysOfWeekVisible: false,
+                      headerStyle: HeaderStyle(
+                        formatButtonPadding: EdgeInsets.zero,
+                        leftChevronIcon: Icon(
+                          Icons.arrow_back_ios,
+                          color: AppColors.blackLightColor,
+                          size: 15.sp,
+                        ),
+                        rightChevronIcon: Icon(
+                          Icons.arrow_forward_ios,
+                          color: AppColors.blackLightColor,
+                          size: 15.sp,
+                        ),
+                        formatButtonVisible: false,
+                        titleTextStyle: poppinsMedium.copyWith(
+                          fontSize: getFontSizeDefault(context),
+                          color: AppColors.blackLightColor,
+                        ),
+                      ),
+                      calendarStyle: CalendarStyle(
+                        disabledTextStyle: poppinsMedium.copyWith(
+                          fontSize: getFontSizeDefault(context),
+                          color: AppColors.normalDarkWhite,
+                        ),
+                        todayDecoration: BoxDecoration(
+                          color: AppColors.blackLightColor,
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                        weekendTextStyle: poppinsMedium.copyWith(
+                          fontSize: getFontSizeDefault(context),
+                          color: AppColors.blackLightColor,
+                        ),
+                        cellMargin: EdgeInsets.zero,
+                        cellPadding: EdgeInsets.zero,
+                        defaultTextStyle: poppinsMedium.copyWith(
+                          fontSize: getFontSizeDefault(context),
+                          color: AppColors.blackLightColor,
+                        ),
+                      ),
+                      weekNumbersVisible: false,
+                      firstDay: DateTime.utc(2010, 10, 16),
+                      lastDay: DateTime.utc(2030, 3, 14),
+                      focusedDay: DateTime.now(),
+                    ),
+                  ),
+                  goButton == true
+                      ? InkWell(
+                    onTap: onTap ??
+                            () {
+                          // Add your logic here
+                        },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'GO',
+                          style: poppinsMedium.copyWith(
+                            fontSize: getFontSizeLarge(context),
+                            color: AppColors.blackLightColor,
+                          ),
+                        ),
+                        space12W,
+                        Image.asset(
+                          arrowForwardIconUrl,
+                          height: 24.w,
+                          width: 24.w,
+                          color: AppColors.blackLightColor,
+                        )
+                      ],
+                    ),
+                  )
+                      : const SizedBox.shrink(),
                 ],
               ),
-            ):const SizedBox.shrink()
-          ],
+            ),
+          ),
         ),
-      ),
-    ]),
+      ],
+    ),
   );
 }

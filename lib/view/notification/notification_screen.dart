@@ -12,9 +12,9 @@ class NotificationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: padding16,
-      child: SingleChildScrollView(
+    return SingleChildScrollView(
+      child: Padding(
+        padding: padding16,
         child: Column(
           children: [
             Row(
@@ -36,7 +36,7 @@ class NotificationScreen extends StatelessWidget {
             ...List.generate(
               10,
               (index) =>
-        
+
                   ///=============notification title===================///
 
                   const NotificationTitleWidget(

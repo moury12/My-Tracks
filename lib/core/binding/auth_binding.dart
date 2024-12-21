@@ -11,7 +11,7 @@ class AuthBinding extends Bindings{
 }class ProfileBinding extends Bindings{
   @override
   void dependencies() {
-    Get.lazyPut<AuthController>(() => AuthController(), fenix: true);
+    Get.put<ProfileController>( ProfileController(), permanent: true);
 
   }
 

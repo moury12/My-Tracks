@@ -47,8 +47,8 @@ class CustomBottomNavBar extends StatelessWidget {
                 },
                 child: Container(
                   padding: padding12,
-                  height: 40.w,
-                  width: 40.w,
+                  // height: 40.w,
+                  // width: 40.w,
                   decoration: BoxDecoration(
                       image: DecorationImage(image: AssetImage(addIconUrl))),
                   child: Image.asset(

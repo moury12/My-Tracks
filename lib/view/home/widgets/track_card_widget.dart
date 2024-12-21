@@ -156,7 +156,7 @@ class TrackCardWidget extends StatelessWidget {
                             children: List.generate(
                                 5,
                                 (index) => Positioned(
-                                    left: (30 * index).toDouble(),
+                                    left: (30.w * index).toDouble(),
                                     child: const ProfileCircleImageWidget())),
                           ),
                         ),
@@ -191,105 +191,115 @@ class TrackCardWidget extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                ///================comments==============///
                 OptionWidget(
                   icon: commentIconUrl,
                   function: () {
-                    showBottomSheet(
+                    showModalBottomSheet(
+                      constraints: BoxConstraints.tightForFinite(      height: MediaQuery.of(context).size.height / 2,
+                        width: MediaQuery.of(context).size.width, ),
                       context: context,
-                      builder: (context) => SizedBox(
-                        height: MediaQuery.of(context).size.height / 2,
-                        child: Center(
-                          child: SingleChildScrollView(
-                            child: Column(
-                              // mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
+                      isScrollControlled: true, // Allows better control of the height and width
+                      builder: (context) => Container(
+                        // height: MediaQuery.of(context).size.height / 2,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          // color: Colors.white, // Background color for the bottom sheet
+                          borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
+                        ),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Text(
                                   AppStaticString.comments,
                                   style: poppinsMedium.copyWith(
                                     fontSize: getFontSizeSmall(context),
                                   ),
                                 ),
-                                space12H,
-                                Image.asset(horizontalDividerUrl),
-                                ...List.generate(
-                                  5,
-                                  (index) => Column(
-                                    children: [
-                                      Padding(
-                                        padding: padding16,
-                                        child: Row(
-                                          children: [
-                                            const ProfileCircleImageWidget(),
-                                            space16W,
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  ///=======================user name dynamic + duration ========================///
-                                                  RichText(
-                                                    text: TextSpan(children: [
+                              ),
+                              Divider(color: Colors.grey[300]),
+                              ...List.generate(
+                                5,
+                                    (index) => Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Row(
+                                        children: [
+                                          const ProfileCircleImageWidget(),
+                                          const SizedBox(width: 16.0),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                /// User name and duration
+                                                RichText(
+                                                  text: TextSpan(
+                                                    children: [
                                                       TextSpan(
-                                                          text: AppStaticString
-                                                              .dummyName,
-                                                          style: poppinsRegular
-                                                              .copyWith(
-                                                                  fontSize:
-                                                                      getFontSizeSmall(
-                                                                          context))),
+                                                        text: AppStaticString.dummyName,
+                                                        style: poppinsRegular.copyWith(
+                                                          fontSize: getFontSizeSmall(context),
+                                                        ),
+                                                      ),
                                                       TextSpan(
-                                                          text: ' 3d .',
-                                                          style: poppinsRegular.copyWith(
-                                                              color: AppColors
-                                                                  .normalDarkWhite,
-                                                              fontSize:
-                                                                  getFontSizeSmall(
-                                                                      context))),
-                                                    ]),
+                                                        text: ' 3d',
+                                                        style: poppinsRegular.copyWith(
+                                                          color: AppColors.normalDarkWhite,
+                                                          fontSize: getFontSizeSmall(context),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                  space6H,
-
-                                                  ///=======================dynamic comment========================///
-                                                  Text(
-                                                    'Nice to see, in something elseNice to see, in something elseNice to see, in something else',
-                                                    style: poppinsRegular.copyWith(
-                                                        color: const Color(
-                                                            0xffD2D2D2),
-                                                        fontSize:
-                                                            getFontSizeDefault(
-                                                                context)),
-                                                  )
-                                                ],
-                                              ),
-                                            )
-                                          ],
-                                        ),
+                                                ),
+                                                const SizedBox(height: 6.0),
+                                                /// Comment text
+                                                Text(
+                                                  'Nice to see, in something elseNice to see, in something elseNice to see, in something else',
+                                                  style: poppinsRegular.copyWith(
+                                                    color: const Color(0xffD2D2D2),
+                                                    fontSize: getFontSizeDefault(context),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      Image.asset(horizontalDividerUrl)
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
+                                    ),
+                                    Divider(color: Colors.grey[300]),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
                     );
+
                   },
                   text: '120',
                 ),
+                ///================react==============///
+
                 Obx(() {
                   return OptionWidget(
                     function: () {
                       if (react != null) {
-                        react!.value = !react!.value;
+                        react.value = !react.value;
                       }
                     },
                     icon:
-                        react!.value == true ? reactFillIconUrl : reactIconUrl,
+                        react.value == true ? reactFillIconUrl : reactIconUrl,
                     text: '120',
                   );
                 }),
+                ///================map==============///
+
                 OptionWidget(
                   icon: mapIconUrl,
                   text: AppStaticString.map,
@@ -299,6 +309,8 @@ class TrackCardWidget extends StatelessWidget {
                 ),
                 fromManage == true
                     ? const SizedBox.shrink()
+                ///================share==============///
+
                     : OptionWidget(
                         function: () async {
                           await Share.share('Check out this cool Flutter app!');
@@ -323,7 +335,7 @@ class TrackCardWidget extends StatelessWidget {
                           },
                           fillColor: Colors.transparent,
                           borderColor: AppColors.redColor,
-                          height: 48.h,
+                          // height: 48.h,
                           title: AppStaticString.delete,
                           textColor: AppColors.redColor,
                         ),
@@ -357,7 +369,7 @@ class TrackCardWidget extends StatelessWidget {
                               ),
                             );
                           },
-                          height: 48.h,
+                          // height: 48.h,
                           title: AppStaticString.active,
                         ),
                       )
@@ -384,6 +396,8 @@ class TrackCardWidget extends StatelessWidget {
 
   void _showMapBottomSheet(BuildContext context) {
     showModalBottomSheet(
+      constraints: BoxConstraints.tightForFinite(      height: MediaQuery.of(context).size.height / 2,
+        width: MediaQuery.of(context).size.width, ),
       context: context,
       showDragHandle: false,
 

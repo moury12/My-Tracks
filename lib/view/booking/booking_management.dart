@@ -16,9 +16,9 @@ class BookingManagementScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(BookingManagementController());
 
-    return Padding(
-      padding: padding16,
-      child: SingleChildScrollView(
+    return SingleChildScrollView(
+      child: Padding(
+        padding: padding16,
         child: Column(
           children: [
             Obx(() {

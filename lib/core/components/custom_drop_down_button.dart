@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
+import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 
@@ -52,18 +53,24 @@ class _CustomDropdownState extends State<CustomDropdown> {
             borderRadius: BorderRadius.circular(widget.radius??4.r),
           ),
           child: DropdownButton<String>(
+            padding: padding8,
             value: selectedValue,
             isExpanded: true,
-            underline: const SizedBox(), // Removes the default underline
+            underline: const SizedBox(),
+            style: poppinsMedium.copyWith(
+            color:widget.hintColor?? AppColors.normalDarkWhite,
+            fontWeight: FontWeight.w400,
+            fontSize: getFontSizeSmall(context)),// Removes the default underline
             hint: Text(
               widget.hintText?? AppStaticString.typeHere,
-              style: TextStyle(
+              style: poppinsMedium.copyWith(
                   color:widget.hintColor?? AppColors.normalDarkWhite,
                   fontWeight: FontWeight.w400,
                   fontSize: getFontSizeSmall(context)),
             ),
-            icon:  Icon(Icons.keyboard_arrow_down, color:widget.iconColor?? AppColors.whiteLightColor),
+            icon:  Icon(Icons.keyboard_arrow_down, color:widget.iconColor?? AppColors.whiteLightColor,size: 20.sp, ),
             items: dropdownItems.map((e) => DropdownMenuItem<String>(
+
              value: e,
               child: Text(e),
             ),).toList(),

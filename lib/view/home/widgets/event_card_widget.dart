@@ -38,6 +38,7 @@ class EventCardWidget extends StatelessWidget {
         child: Column(
           spacing: 12.h,
           mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
                 borderRadius: BorderRadius.circular(8.r),

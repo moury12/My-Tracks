@@ -30,9 +30,9 @@ class CreateTrackScreen extends StatelessWidget {
             ? AppStaticString.createEvent
             : AppStaticString.createTrack,
       ),
-      body: Padding(
-        padding: padding16,
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: padding16,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 16.h,

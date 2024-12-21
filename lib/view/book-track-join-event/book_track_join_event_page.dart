@@ -49,7 +49,7 @@ class BookTrackJoinEventScreen extends StatelessWidget {
                         itemCount: 5,
                         itemBuilder: (context, index) => BlackContainerWidget(
                           padding: padding16H,
-                          child: Image.asset(dummyEventImgUrl),
+                          child: Image.asset(dummyEventImgUrl,fit: BoxFit.cover,),
                         ),
                       ),
                     ),

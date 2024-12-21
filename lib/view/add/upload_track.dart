@@ -53,76 +53,79 @@ class UploadTrackScreen extends StatelessWidget {
                               showModalBottomSheet(
                                 showDragHandle: false,
                                 context: context,
-
+                                constraints: BoxConstraints.tightForFinite(      height: MediaQuery.of(context).size.height / 2,
+                                  width: MediaQuery.of(context).size.width, ),
 
                                 builder: (context) => Container(
                                   padding: padding16,
-                                  width: double.infinity,
+                            
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.vertical(
                                           top: Radius.circular(8.r))),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Text(AppStaticString.selectDay,style:poppinsMedium.copyWith(fontSize: getFontSizeDefault(context)) ,),
-                                          const Spacer(),
-                                          IconButton(onPressed: () {Navigator.of(context).pop();
-                                          }, icon: const Icon(CupertinoIcons.multiply,color: AppColors.whiteLightColor,))
-                                        ],
-                                      ),
-                                      Obx(
-                                         () {
-                                          return Wrap(
-                                            spacing: 12.w ,
-                                            children: [
-                                              ...List.generate(
-                                                CreateTrackController
-                                                    .to.weekDays.length,
-                                                (index) => CreateTrackController
-                                                                .to.weekDays[index]
-                                                            ['selected'] ==
-                                                        true
-                                                    ? CustomButton(
-                                                  radius: 20.r,
-                                                  marginVerticel: 6.h,
-                                                        width: 100.w,
-                                                        title: CreateTrackController
-                                                                .to.weekDays[index]
-                                                            ['day_name'],
-                                                        onTap: () {
-                                                          CreateTrackController
-                                                              .to.toggleWeekDay(index);
-                                                        },
-                                                      )
-                                                    : CreateTrackController
-                                                            .to.weekDays[index].isEmpty
-                                                        ? space16W
-                                                        : CustomButton(
-                                                  radius: 20.r,
-                                                  marginVerticel: 6.h,
-                                                            width: 100.w,
-                                                            fillColor: AppColors
-                                                                .blackBackgroundColor,
-                                                            borderColor:
-                                                                AppColors.primaryColor,
-                                                            title: CreateTrackController
-                                                                    .to.weekDays[index]
-                                                                ['day_name'],
-                                                            textColor:
-                                                                AppColors.primaryColor,
-                                                            onTap: () {
-                                                              CreateTrackController
-                                                                  .to.toggleWeekDay(index);
-                                                            },
-                                                          ),
-                                              )
-                                            ],
-                                          );
-                                        }
-                                      ),
-                                    ],
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(AppStaticString.selectDay,style:poppinsMedium.copyWith(fontSize: getFontSizeDefault(context)) ,),
+                                            const Spacer(),
+                                            IconButton(onPressed: () {Navigator.of(context).pop();
+                                            }, icon: const Icon(CupertinoIcons.multiply,color: AppColors.whiteLightColor,))
+                                          ],
+                                        ),
+                                        Obx(
+                                           () {
+                                            return Wrap(
+                                              spacing: 12.w ,
+                                              children: [
+                                                ...List.generate(
+                                                  CreateTrackController
+                                                      .to.weekDays.length,
+                                                  (index) => CreateTrackController
+                                                                  .to.weekDays[index]
+                                                              ['selected'] ==
+                                                          true
+                                                      ? CustomButton(
+                                                    radius: 20.r,
+                                                    marginVerticel: 6.h,
+                                                          width: 100.w,
+                                                          title: CreateTrackController
+                                                                  .to.weekDays[index]
+                                                              ['day_name'],
+                                                          onTap: () {
+                                                            CreateTrackController
+                                                                .to.toggleWeekDay(index);
+                                                          },
+                                                        )
+                                                      : CreateTrackController
+                                                              .to.weekDays[index].isEmpty
+                                                          ? space16W
+                                                          : CustomButton(
+                                                    radius: 20.r,
+                                                    marginVerticel: 6.h,
+                                                              width: 100.w,
+                                                              fillColor: AppColors
+                                                                  .blackBackgroundColor,
+                                                              borderColor:
+                                                                  AppColors.primaryColor,
+                                                              title: CreateTrackController
+                                                                      .to.weekDays[index]
+                                                                  ['day_name'],
+                                                              textColor:
+                                                                  AppColors.primaryColor,
+                                                              onTap: () {
+                                                                CreateTrackController
+                                                                    .to.toggleWeekDay(index);
+                                                              },
+                                                            ),
+                                                )
+                                              ],
+                                            );
+                                          }
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               );

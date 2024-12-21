@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -22,6 +24,7 @@ class DynamicTabWidget extends StatelessWidget {
 
 
     return DefaultTabController(
+
       length: tabs.length,
       // Dynamically set the number of tabs
       child: Column(
@@ -29,7 +32,7 @@ class DynamicTabWidget extends StatelessWidget {
           space16H,
           Obx(() => TabBar(
             // padding: EdgeInsets.zero,
-
+overlayColor: WidgetStatePropertyAll<Color>(AppColors.blackBorderColor),
             // isScrollable: true,
             dividerHeight: 4.h,
             indicatorSize: TabBarIndicatorSize.tab,

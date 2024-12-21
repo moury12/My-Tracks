@@ -47,7 +47,7 @@ class HomeUserScreen extends StatelessWidget {
                 ),
               ),
             ),
-
+space12H,
             ///================dynamic banner==================///
             SizedBox(
               height: 150.h,
@@ -59,12 +59,13 @@ class HomeUserScreen extends StatelessWidget {
                   itemBuilder: (_, index) {
                     return Padding(
                       padding: padding6H,
-                      child: Image.asset(HomeUserController.to.pages[index]),
+                      child: Image.asset(HomeUserController.to.pages[index],fit: BoxFit.fill,),
                     );
                   },
                 );
               }),
             ),
+            space12H,
             Center(
               child: SmoothPageIndicator(
                 controller: HomeUserController.to.controller.value,

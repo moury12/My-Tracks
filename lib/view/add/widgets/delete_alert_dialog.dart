@@ -48,8 +48,8 @@ class DeleteAlertDialog extends StatelessWidget {
                 onTap: () {
                   Navigator.pop(context);
                 },
-                height: 44.h,
-                width: 92.w,
+                // height: 44.h,
+               width: 92.w,
                 title: text1??AppStaticString.yes,
                 textColor: AppColors.whiteLightColor,
                 borderColor: AppColors.redBrightColor,
@@ -60,8 +60,8 @@ class DeleteAlertDialog extends StatelessWidget {
                 onTap: () {
                   Navigator.pop(context);
                 },
-                height: 44.h,
-                width: 92.w,
+                // height: 44.h,
+               width: 92.w,
                 title: text2??AppStaticString.no,
                 textColor: AppColors.whiteLightColor,
                 borderColor: AppColors.greenColor,
