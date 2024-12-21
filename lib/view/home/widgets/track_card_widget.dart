@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:track_trek/controller/home_controller.dart';
 import 'package:track_trek/core/components/custom_button.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
@@ -22,12 +21,12 @@ import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 class TrackCardWidget extends StatelessWidget {
   final bool? fromManage;
   final bool? fromUser;
-  late final RxBool react;
-  TrackCardWidget({
+  final RxBool react;
+  const TrackCardWidget({
     super.key,
     this.fromManage = false,
     this.fromUser = false,
-   required this.react,
+    required this.react,
   });
 
   @override
@@ -61,6 +60,9 @@ class TrackCardWidget extends StatelessWidget {
                         height: 24.w,
                       ),
                       space6W,
+
+                      ///======================dynamic address===================///
+
                       Expanded(
                           child: Text(
                         AppStaticString.dummyAddress,
@@ -73,43 +75,40 @@ class TrackCardWidget extends StatelessWidget {
               ],
             ),
             space12H,
-            RichText(
-                text: TextSpan(children: [
-              TextSpan(
-                text: AppStaticString.dummyDesc,
-                style: poppinsRegular.copyWith(
-                  fontSize: getFontSizeSmall(context),
-                ),
-              ),
-              TextSpan(
-                text: AppStaticString.seeMore,
-                style: poppinsSemiBold.copyWith(
-                    fontSize: getFontSizeSmall(context)),
-              )
-            ])),
+
+            ///====================dynamic description =====================///
+            const ExpandableText(
+              text:
+                  "${AppStaticString.dummyDesc}${AppStaticString.dummyDesc}${AppStaticString.dummyDesc}",
+              maxLines: 3, // Number of lines to show before truncating
+            ),
+
             space12H,
             fromUser == true
                 ? Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       ///======================dynamic user profile img=======================///
 
                       const ProfileCircleImageWidget(),
                       space8W,
-                       Expanded(
+                      Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(AppStaticString.dummyName,style: poppinsLight.copyWith(
-                              fontSize: getFontSizeSmall(context)
-                            ),),
+                            Text(
+                              AppStaticString.dummyName,
+                              style: poppinsLight.copyWith(
+                                  fontSize: getFontSizeSmall(context)),
+                            ),
                             Row(
                               spacing: 4.w,
                               children: [
-                                Text(AppStaticString.ratingWithClone,style: poppinsLight.copyWith(
-                                    fontSize: getFontSizeSmall(context)
-                                ),),
+                                Text(
+                                  AppStaticString.ratingWithClone,
+                                  style: poppinsLight.copyWith(
+                                      fontSize: getFontSizeSmall(context)),
+                                ),
                                 Icon(
                                   Icons.star_border_outlined,
                                   color: AppColors.yellowColor,
@@ -117,26 +116,33 @@ class TrackCardWidget extends StatelessWidget {
                                 ),
 
                                 ///======================dynamic user rating=======================///
-                                Text('4.5',style: poppinsLight.copyWith(
-                                    fontSize: getFontSizeSmall(context)
-                                ),)
+                                Text(
+                                  '4.5',
+                                  style: poppinsLight.copyWith(
+                                      fontSize: getFontSizeSmall(context)),
+                                )
                               ],
                             ),
-
                           ],
                         ),
                       ),
-                      DividerVertical(height: 24.h ,),
+                      DividerVertical(
+                        height: 24.h,
+                      ),
+
                       ///======================dynamic user total slot=======================///
 
-                       Expanded(
-                          child: Text(textAlign: TextAlign.center,
-                            '${AppStaticString.totalSlot} 10',style: poppinsLight.copyWith(
-                              fontSize: getFontSizeSmall(context)
-                          ),))
+                      Expanded(
+                          child: Text(
+                        textAlign: TextAlign.center,
+                        '${AppStaticString.totalSlot} 10',
+                        style: poppinsLight.copyWith(
+                            fontSize: getFontSizeSmall(context)),
+                      ))
                     ],
                   )
-            ///======================dynamic total slot=======================///
+
+                ///======================dynamic total slot=======================///
 
                 : Text(
                     '${AppStaticString.totalSlot}10',
@@ -196,16 +202,20 @@ class TrackCardWidget extends StatelessWidget {
                   icon: commentIconUrl,
                   function: () {
                     showModalBottomSheet(
-                      constraints: BoxConstraints.tightForFinite(      height: MediaQuery.of(context).size.height / 2,
-                        width: MediaQuery.of(context).size.width, ),
+                      constraints: BoxConstraints.tightForFinite(
+                        height: MediaQuery.of(context).size.height / 2,
+                        width: MediaQuery.of(context).size.width,
+                      ),
                       context: context,
-                      isScrollControlled: true, // Allows better control of the height and width
+                      isScrollControlled:
+                          true, // Allows better control of the height and width
                       builder: (context) => Container(
                         // height: MediaQuery.of(context).size.height / 2,
                         width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           // color: Colors.white, // Background color for the bottom sheet
-                          borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
+                          borderRadius:
+                              BorderRadius.vertical(top: Radius.circular(16.0)),
                         ),
                         child: SingleChildScrollView(
                           child: Column(
@@ -224,7 +234,7 @@ class TrackCardWidget extends StatelessWidget {
                               Divider(color: Colors.grey[300]),
                               ...List.generate(
                                 5,
-                                    (index) => Column(
+                                (index) => Column(
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.all(16.0),
@@ -234,35 +244,49 @@ class TrackCardWidget extends StatelessWidget {
                                           const SizedBox(width: 16.0),
                                           Expanded(
                                             child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 /// User name and duration
                                                 RichText(
                                                   text: TextSpan(
                                                     children: [
                                                       TextSpan(
-                                                        text: AppStaticString.dummyName,
-                                                        style: poppinsRegular.copyWith(
-                                                          fontSize: getFontSizeSmall(context),
+                                                        text: AppStaticString
+                                                            .dummyName,
+                                                        style: poppinsRegular
+                                                            .copyWith(
+                                                          fontSize:
+                                                              getFontSizeSmall(
+                                                                  context),
                                                         ),
                                                       ),
                                                       TextSpan(
                                                         text: ' 3d',
-                                                        style: poppinsRegular.copyWith(
-                                                          color: AppColors.normalDarkWhite,
-                                                          fontSize: getFontSizeSmall(context),
+                                                        style: poppinsRegular
+                                                            .copyWith(
+                                                          color: AppColors
+                                                              .normalDarkWhite,
+                                                          fontSize:
+                                                              getFontSizeSmall(
+                                                                  context),
                                                         ),
                                                       ),
                                                     ],
                                                   ),
                                                 ),
                                                 const SizedBox(height: 6.0),
+
                                                 /// Comment text
                                                 Text(
                                                   'Nice to see, in something elseNice to see, in something elseNice to see, in something else',
-                                                  style: poppinsRegular.copyWith(
-                                                    color: const Color(0xffD2D2D2),
-                                                    fontSize: getFontSizeDefault(context),
+                                                  style:
+                                                      poppinsRegular.copyWith(
+                                                    color:
+                                                        const Color(0xffD2D2D2),
+                                                    fontSize:
+                                                        getFontSizeDefault(
+                                                            context),
                                                   ),
                                                 ),
                                               ],
@@ -280,24 +304,22 @@ class TrackCardWidget extends StatelessWidget {
                         ),
                       ),
                     );
-
                   },
                   text: '120',
                 ),
+
                 ///================react==============///
 
                 Obx(() {
                   return OptionWidget(
                     function: () {
-                      if (react != null) {
-                        react.value = !react.value;
-                      }
+                      react.value = !react.value;
                     },
-                    icon:
-                        react.value == true ? reactFillIconUrl : reactIconUrl,
+                    icon: react.value == true ? reactFillIconUrl : reactIconUrl,
                     text: '120',
                   );
                 }),
+
                 ///================map==============///
 
                 OptionWidget(
@@ -309,7 +331,8 @@ class TrackCardWidget extends StatelessWidget {
                 ),
                 fromManage == true
                     ? const SizedBox.shrink()
-                ///================share==============///
+
+                    ///================share==============///
 
                     : OptionWidget(
                         function: () async {
@@ -353,7 +376,7 @@ class TrackCardWidget extends StatelessWidget {
                               context: context,
                               builder: (context) => DefaultDialogWithButton(
                                 content: Padding(
-                                  padding:  EdgeInsets.only(bottom: 12.h),
+                                  padding: EdgeInsets.only(bottom: 12.h),
                                   child: Text(
                                     AppStaticString.areYouSureWantToReactivate,
                                     textAlign: TextAlign.center,
@@ -396,11 +419,12 @@ class TrackCardWidget extends StatelessWidget {
 
   void _showMapBottomSheet(BuildContext context) {
     showModalBottomSheet(
-      constraints: BoxConstraints.tightForFinite(      height: MediaQuery.of(context).size.height / 2,
-        width: MediaQuery.of(context).size.width, ),
+      constraints: BoxConstraints.tightForFinite(
+        height: MediaQuery.of(context).size.height / 2,
+        width: MediaQuery.of(context).size.width,
+      ),
       context: context,
       showDragHandle: false,
-
 
       isScrollControlled: true, // Allows full-screen height if needed
       shape: const RoundedRectangleBorder(
@@ -408,11 +432,11 @@ class TrackCardWidget extends StatelessWidget {
       ),
       builder: (context) {
         return SizedBox(
-          height: MediaQuery.of(context).size.height/2,
-          child: GoogleMap(
-
-            initialCameraPosition: const CameraPosition(
-              target: LatLng(37.7749, -122.4194), // Replace with desired coordinates
+          height: MediaQuery.of(context).size.height / 2,
+          child: const GoogleMap(
+            initialCameraPosition: CameraPosition(
+              target: LatLng(
+                  37.7749, -122.4194), // Replace with desired coordinates
               zoom: 10,
             ),
             myLocationEnabled: true,
@@ -473,6 +497,62 @@ class OptionWidget extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+}
+
+class ExpandableText extends StatefulWidget {
+  final String text;
+  final TextStyle? textStyle;
+  final TextStyle? buttonStyle;
+  final int maxLines;
+
+  const ExpandableText({
+    super.key,
+    required this.text,
+    this.textStyle,
+    this.buttonStyle,
+    this.maxLines = 2,
+  });
+
+  @override
+  _ExpandableTextState createState() => _ExpandableTextState();
+}
+
+class _ExpandableTextState extends State<ExpandableText> {
+  bool _isExpanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          widget.text,
+          style: widget.textStyle ??
+              poppinsRegular.copyWith(
+                fontSize: getFontSizeSmall(context),
+              ),
+          maxLines: _isExpanded ? null : widget.maxLines,
+          overflow: _isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
+        ),
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              _isExpanded = !_isExpanded;
+            });
+          },
+          child: Text(
+            _isExpanded ? 'See Less' : 'See More',
+            style: widget.buttonStyle ??
+                poppinsSemiBold.copyWith(
+                  fontSize: getFontSizeSmall(context),
+                  // color: AppColors.primaryColor,
+                ),
+          ),
+        ),
+      ],
     );
   }
 }

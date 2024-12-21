@@ -1,5 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:track_trek/controller/common_controller.dart';
 
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
@@ -52,28 +57,41 @@ class LightBlackFillWidget extends StatelessWidget {
 }
 
 class UploadImageIconTextWidget extends StatelessWidget {
+  final Function()? function;
   const UploadImageIconTextWidget({
-    super.key,
+    super.key, this.function,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Image.asset(
-          addPhotoIconUrl,
-          height: 24.w,
-          width: 24.w,
-        ),
-        space6H,
-        Text(
-          AppStaticString.uploadPhoto,
-          style: poppinsLight.copyWith(
-              color: AppColors.normalDarkWhite,
-              fontSize: getFontSizeSmall(context)),
-        )
-      ],
+    return Obx(
+       () { 
+        return InkWell(
+          onTap: function??() {
+        CommonController.to.pickImage(ImageSource.gallery);
+          },
+          child:CommonController.to.image.isNotEmpty?
+               Image.file(File(CommonController.to.image.value) )
+
+          :Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                addPhotoIconUrl,
+                height: 24.w,
+                width: 24.w,
+              ),
+              space6H,
+              Text(
+                AppStaticString.uploadPhoto,
+                style: poppinsLight.copyWith(
+                    color: AppColors.normalDarkWhite,
+                    fontSize: getFontSizeSmall(context)),
+              )
+            ],
+          ),
+        );
+      }
     );
   }
 }

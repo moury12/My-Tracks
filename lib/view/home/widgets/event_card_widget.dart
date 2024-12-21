@@ -147,21 +147,13 @@ class EventCardWidget extends StatelessWidget {
                               icon: shareIconUrl, text: AppStaticString.share))
                     ],
                   ),
+            ///======================dynamic user===================///
             !fromUser!
-                ? RichText(
-                    text: TextSpan(children: [
-                    TextSpan(
-                      text: AppStaticString.dummyDesc,
-                      style: poppinsRegular.copyWith(
-                          fontSize: getFontSizeSmall(context),
-                          color: AppColors.fadeWhiteColor),
-                    ),
-                    TextSpan(
-                      text: AppStaticString.seeMore,
-                      style: poppinsSemiBold.copyWith(
-                          fontSize: getFontSizeSmall(context)),
-                    )
-                  ]))
+                ? const ExpandableText(
+              text:
+              "${AppStaticString.dummyDesc}${AppStaticString.dummyDesc}${AppStaticString.dummyDesc}",
+              maxLines: 3, // Number of lines to show before truncating
+            )
                 : const SizedBox.shrink(),
             noButton == false
                 ? CustomButton(
