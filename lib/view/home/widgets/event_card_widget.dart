@@ -12,6 +12,7 @@ import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
+import 'package:track_trek/view/home/host/event_slot_page.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 import 'package:track_trek/view/home/widgets/track_card_widget.dart';
 import 'package:track_trek/view/manage/event_user_page.dart';
@@ -166,7 +167,7 @@ class EventCardWidget extends StatelessWidget {
                 ? CustomButton(
                     onTap: onTap ??
                         () {
-                          Get.toNamed(EventUserScreen.routeName);
+                          Get.toNamed(EventSlotScreen.routeName);
                         },
                     title: buttonText ?? AppStaticString.viewAllParticipent,
                     img: buttonImg ?? arrowTopImgUrl,

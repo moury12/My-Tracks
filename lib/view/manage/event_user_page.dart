@@ -18,17 +18,17 @@ class EventUserScreen extends StatelessWidget {
       appBar: const CustomAppbar(
         tile: AppStaticString.eventUser,
       ),
-      body: Padding(
-        padding: padding16,
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: padding16,
           child: Column(
             spacing:8.h,
             children: [
-              const BlueContainerWidget(
-                child: EventDetailsInfoWidget(),
-              ),
-              space12H,
-              ...List.generate(3, (index) => const MarronGradientContainerWidget(child: UserInfoContentWidget(seatNo: '04',)),)
+              // const BlueContainerWidget(
+              //   child: EventDetailsInfoWidget(),
+              // ),
+              // space12H,
+              ...List.generate(10, (index) => const MarronGradientContainerWidget(child: UserInfoContentWidget(seatNo: '04',)),)
             ],
           ),
         ),

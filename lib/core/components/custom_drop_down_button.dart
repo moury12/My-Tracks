@@ -72,7 +72,7 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
             borderRadius: BorderRadius.circular(widget.radius ?? 4.r),
           ),
           child: DropdownButton<T>(
-            padding: padding8,
+            padding: padding8.copyWith(top: 0,bottom: 0),
             value: selectedValue, // Use local state here
             isExpanded: true,
             underline: const SizedBox(), // Removes the default underline

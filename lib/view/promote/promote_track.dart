@@ -20,9 +20,14 @@ class PromoteTrackScreen extends StatelessWidget {
           Expanded(
             child: ListView(
               padding: padding16,
-              children: [
-                const CustomDropdown(
+              children: const [
+                CustomDropdown(
                   hintText: AppStaticString.selectTrack,
+                  items: [
+                    'option 1',
+                    'option 2',
+                    'option 3',
+                  ],
                 )
               ],
             ),

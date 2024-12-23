@@ -4,6 +4,7 @@ class AppStaticString {
   static const String signUp = "Sign Up";
   static const String login = "Login";
   static const String create = "Create";
+  static const String eventSlot = "Event Slot";
   static const String trakManage = "Track Management";
   static const String notification = "Notification";
   static const String manage = "Manage";

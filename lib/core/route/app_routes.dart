@@ -14,6 +14,8 @@ import 'package:track_trek/view/book-track-join-event/book_track_join_event_page
 import 'package:track_trek/view/book-track-join-event/book_track_join_event_payment_page.dart';
 import 'package:track_trek/view/feedback/feedback_page.dart';
 import 'package:track_trek/view/history/history_page.dart';
+import 'package:track_trek/view/home/host/event_slot_page.dart';
+import 'package:track_trek/view/home/host/event_slot_page.dart';
 import 'package:track_trek/view/home/host/home_screen.dart';
 import 'package:track_trek/view/home/host/user_details_page.dart';
 import 'package:track_trek/view/promote/promote_track.dart';
@@ -52,6 +54,10 @@ class AppRoutes {
             name: ForgetPasswordScreen.routeName,
             page: () => const ForgetPasswordScreen(),
             binding: AuthBinding()),
+        GetPage(
+            name: EventSlotScreen.routeName,
+            page: () => const EventSlotScreen(),
+            binding: HomeBinding()),
         GetPage(
             name: HomeScreen.routeName,
             page: () => const HomeScreen(),
