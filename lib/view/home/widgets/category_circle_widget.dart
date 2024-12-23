@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:track_trek/controller/home_user_controller.dart';
+import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
 import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/utils/app_color.dart';
@@ -17,31 +18,38 @@ class CategoryCircleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        return Container(
-          // padding: EdgeInsets.all(4.sp),
-          clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(
-              border: Border.all(color:HomeUserController.to.selectedCategory.value==index? AppColors.pinkColor:AppColors.blackBorderColor),
-              shape: BoxShape.circle),
-          child: InkWell(
-            onTap: () {
-              HomeUserController.to.selectedCategory.value=index;
-            },
-            child: Padding(
-              padding: EdgeInsets.all(4.sp),
-              child: Container(
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(shape: BoxShape.circle),
-                child: ClipOval(
-                    child: Image.asset(
-                      height: 70.w,
-                      width: 70.w,
-                      dummyEventImgUrl,
-                      fit: BoxFit.cover,
-                    )),
+        return Column(
+          children: [
+            Container(
+              // padding: EdgeInsets.all(4.sp),
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                  border: Border.all(color:HomeUserController.to.selectedCategory.value==index? AppColors.pinkColor:AppColors.blackBorderColor),
+                  shape: BoxShape.circle),
+              child: InkWell(
+                onTap: () {
+                  HomeUserController.to.selectedCategory.value=index;
+                },
+                child: Padding(
+                  padding: EdgeInsets.all(4.sp),
+                  child: Container(
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(shape: BoxShape.circle),
+                    child: ClipOval(
+                        child: Image.asset(
+                          height: 70.w,
+                          width: 70.w,
+                          dummyEventImgUrl,
+                          fit: BoxFit.cover,
+                        )),
+                  ),
+                ),
               ),
             ),
-          ),
+            space4H,
+            ///================== dynamic category name=====================///
+            Text('Motocross',style: poppinsRegular.copyWith(fontSize:getFontSizeSmall(context)),)
+          ],
         );
       }
     );

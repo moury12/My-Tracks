@@ -33,7 +33,7 @@ class DynamicTabWidget extends StatelessWidget {
           Obx(() => TabBar(
             // padding: EdgeInsets.zero,
 overlayColor: WidgetStatePropertyAll<Color>(AppColors.blackBorderColor),
-            // isScrollable: true,
+             // isScrollable: true,
             dividerHeight: 4.h,
             indicatorSize: TabBarIndicatorSize.tab,
             indicator: UnderlineTabIndicator(
@@ -47,9 +47,9 @@ overlayColor: WidgetStatePropertyAll<Color>(AppColors.blackBorderColor),
             labelColor: AppColors.whiteLightColor,
             unselectedLabelColor: AppColors.whiteLightColor,
             labelStyle: poppinsRegular.copyWith(
-                fontSize: getFontSizeLarge(context)),
+                fontSize: getFontSizeDefault(context)),
             unselectedLabelStyle: poppinsMedium.copyWith(
-                fontSize: getFontSizeLarge(context)),
+                fontSize: getFontSizeDefault(context)),
             dividerColor: AppColors.blackLightColor,
             onTap:function?? (value) {
 

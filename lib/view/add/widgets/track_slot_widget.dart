@@ -64,23 +64,29 @@ class TrackSlotWidget extends StatelessWidget {
           space6H,
           Row(
             children:needToShowSeat==true?
-            [BlueTextWidget(
+            [ BlueTextWidget(
               text: '${AppStaticString.allowedPeople} 30   ${AppStaticString.unsold} 10',
               textAlign: TextAlign.start,
             )]: [
               ///================= slot week dynamic========================///
               Expanded(
-                flex: 1,
-                child: Text(
+
+                child: argument==userPanel?
+                Text(
+                  ///=================with total seat number================///
+                  'sunday(${AppStaticString.totalSeatWithClone}10)',
+                  style: poppinsRegular.copyWith(
+                      fontSize:  getFontSizeSmall(context)),
+                ):Text(
                   'sunday',
                   style: poppinsRegular.copyWith(
-                      fontSize: getFontSizeDefault(context)),
+                      fontSize:  getFontSizeSmall(context)),
                 ),
               ),
 
               ///================= slot time dynamic========================///
               Expanded(
-                  flex: 3,
+
                   child: Text(
                     AppStaticString.dummyTime,
                     textAlign: TextAlign.end,

@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:track_trek/core/binding/initial_binding.dart';
 import 'package:track_trek/core/route/app_routes.dart';
 import 'package:track_trek/core/theme/theme.dart';
-import 'package:track_trek/view/initial/bottom_navigation_screen.dart';
 import 'package:track_trek/view/initial/splash.dart';
 
 void main() {

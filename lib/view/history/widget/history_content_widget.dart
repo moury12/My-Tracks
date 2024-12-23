@@ -75,7 +75,7 @@ class HistoryContentWidget extends StatelessWidget {
         ///===================dynamic start date time =============================///
 
         Text(
-          AppStaticString.dummyTime,
+          '${AppStaticString.dummyDate}${AppStaticString.dummyTime}',
           style: poppinsMedium.copyWith(
               color: AppColors.primaryColor,
               fontSize: getFontSizeSmall(context)),
@@ -88,7 +88,7 @@ class HistoryContentWidget extends StatelessWidget {
         ///===================dynamic end date time =============================///
 
         Text(
-          AppStaticString.dummyTime,
+          '${AppStaticString.dummyDate}${AppStaticString.dummyTime}',
           style: poppinsMedium.copyWith(
               color: AppColors.blueColor, fontSize: getFontSizeSmall(context)),
         ),

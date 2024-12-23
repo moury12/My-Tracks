@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:track_trek/controller/common_controller.dart';
-import 'package:track_trek/controller/common_controller.dart';
 import 'package:track_trek/controller/splash_controller.dart';
 
 class InitialBinding extends Bindings {

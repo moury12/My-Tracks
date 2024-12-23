@@ -19,8 +19,8 @@ import 'package:track_trek/view/manage/widgets/event_manage_card_widget.dart';
 
 import '../home/widgets/event_card_widget.dart';
 
-class ManageScreen extends StatelessWidget {
-  const ManageScreen({super.key});
+class ManagementScreen extends StatelessWidget {
+  const ManagementScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -85,9 +85,10 @@ class ManageScreen extends StatelessWidget {
         padding: padding16.copyWith(top: 0),
         child: DynamicTabWidget(
           function: (val) {
+            TrackManagementController.to.selectedTabIndex.value = val;
             if(val==2){
-              showCustomCalenderWidget(context,goButton: true,onTap: () {
-                Navigator.pop(context);
+              showCustomCalenderWidget(context,goButton: true,onDateSelected: (value) {
+
               },);
             }
           },

@@ -130,7 +130,7 @@ class EventCardWidget extends StatelessWidget {
                       ///=====================dynamic total slot==================///
                       const Expanded(
                           child: BlueTextWidget(
-                        text: '${AppStaticString.totalSeatWithClone} 20',
+                        text: '${AppStaticString.totalSlot} 20',
                       )),
                       const DividerVertical(
                         color: AppColors.blueColor,

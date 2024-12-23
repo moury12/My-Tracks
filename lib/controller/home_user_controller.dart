@@ -14,18 +14,26 @@ class HomeUserController extends GetxController{
     initialPage: 0,
       viewportFraction: 0.9, keepPage: true).obs;
   List<String> pages =[dummyBannerUrl,dummyBanner2Url,dummyEventImgUrl];
-@override
+  @override
   void onInit() {
-   timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-     if(currentPage.value<pages.length){
-       currentPage.value++;
-     }
-     else{
-       currentPage.value=0;
-     }
-     controller.value.animateToPage(currentPage.value,
-         duration: const Duration(microseconds: 200), curve: Curves.linear);
-   },);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      timer = Timer.periodic(const Duration(seconds: 2), (timer) {
+        if (currentPage.value < pages.length - 1) {
+          currentPage.value++;
+        } else {
+          currentPage.value = 0;
+        }
+
+        if (controller.value.hasClients) {
+          controller.value.animateToPage(
+            currentPage.value,
+            duration: const Duration(milliseconds:400),
+            curve: Curves.linear,
+          );
+        }
+      });
+    });
     super.onInit();
   }
+
 }

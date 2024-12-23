@@ -17,6 +17,7 @@ import 'package:track_trek/view/add/widgets/track_slot_widget.dart';
 import 'package:track_trek/view/book-track-join-event/book_track_join_event_payment_page.dart';
 import 'package:track_trek/view/home/widgets/event_card_widget.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
+import 'package:track_trek/view/home/widgets/track_card_widget.dart';
 import 'package:track_trek/view/manage/widgets/event_manage_card_widget.dart';
 
 class BookTrackJoinEventScreen extends StatelessWidget {
@@ -190,11 +191,8 @@ class BookTrackJoinEventScreen extends StatelessWidget {
                             textAlign: TextAlign.start,
                           )
                         : SizedBox.shrink(),
-                    Text(
-                      AppStaticString.dummyDesc,
-                      style: poppinsRegular.copyWith(
-                          fontSize: getFontSizeSmall(context)),
-                    ),
+                    ExpandableText(text: AppStaticString.dummyDesc),
+
                     ...List.generate(
                       6,
                       (index) => MarronGradientContainerWidget(

@@ -57,9 +57,14 @@ space12H,
                   controller: HomeUserController.to.controller.value,
                   // itemCount: pages.length,
                   itemBuilder: (_, index) {
-                    return Padding(
-                      padding: padding6H,
-                      child: Image.asset(HomeUserController.to.pages[index],fit: BoxFit.fill,),
+                    return GestureDetector(
+                      onTap: () {
+                        Get.toNamed(BookTrackJoinEventScreen.routeName);
+                      },
+                      child: Padding(
+                        padding: padding6H,
+                        child: Image.asset(HomeUserController.to.pages[index],fit: BoxFit.contain,),
+                      ),
                     );
                   },
                 );

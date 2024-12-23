@@ -126,17 +126,17 @@ class UserInfoContentWidget extends StatelessWidget {
               ///===================dynamic phone==================///
 
               const UserInfoText(
-                  text: '${AppStaticString.contact}mdhasan854@gmail.com'),
+                  text: '${AppStaticString.contact}+995667834543'),
 
               ///===================dynamic date of birth==================///
 
               const UserInfoText(
-                  text: '${AppStaticString.dateOfBirth}mdhasan854@gmail.com'),
+                  text: '${AppStaticString.dateOfBirth}${AppStaticString.dummyDate}'),
 
               ///===================dynamic address==================///
 
               const UserInfoText(
-                text: '${AppStaticString.address}mdhasan854@gmail.com',
+                text: '${AppStaticString.address}${AppStaticString.dummyAddress}',
               ),
               seatNo != null
                   ? const UserInfoText(

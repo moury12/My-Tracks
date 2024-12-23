@@ -4,6 +4,7 @@ import 'package:track_trek/core/constant/app_strings.dart';
 
 class TrackManagementController extends GetxController {
   static TrackManagementController get to => Get.find();
+  var selectedTabIndex = 0.obs;
   RxList<String> tabs = <String>[
     AppStaticString.track,
     AppStaticString.event,

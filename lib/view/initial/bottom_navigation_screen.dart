@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:track_trek/controller/common_controller.dart';
+import 'package:track_trek/controller/track_management_controller.dart';
 import 'package:track_trek/core/components/custom_appbar.dart';
 import 'package:track_trek/core/components/custom_drawer_widget.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
@@ -33,6 +34,7 @@ class BottomNavigationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(TrackManagementController());
     final List<Widget> pages = [
       CommonController.to.selectedOption.value == 0
           ? HomeUserScreen(
@@ -47,7 +49,7 @@ class BottomNavigationScreen extends StatelessWidget {
             ),
       CommonController.to.selectedOption.value == 0
           ? const BookingManagementScreen()
-          : const ManageScreen(),
+          : const ManagementScreen(),
       const CreateTrackEventScreen(),
       const NotificationScreen(),
       CommonController.to.selectedOption.value == 0
@@ -73,7 +75,7 @@ class BottomNavigationScreen extends StatelessWidget {
               ? const PreferredSize(
                   preferredSize: Size.zero, child: SizedBox.shrink())
               : CustomAppbar(
-                  tile: appbarTitle[selectedIndex],
+                  tile: CommonController.to.selectedOption.value != 0&& selectedIndex==1?'${TrackManagementController.to.tabs[TrackManagementController.to.selectedTabIndex.value]} Management':appbarTitle[selectedIndex],
                 ),
           body: SafeArea(
               child: Column(

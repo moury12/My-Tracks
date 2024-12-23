@@ -83,6 +83,7 @@ class AppStaticString {
   static const String viewAllParticipent = "View all participant";
   static const String renters = "Renters";
   static const String delete = "Delete";
+  static const String deactivate = "Deactivate";
   static const String active = "Active";
   static const String totalAllowed = "Total Person Allowed: ";
   static const String dummyTime = "10:00AM - 12:00 PM";
@@ -95,6 +96,7 @@ class AppStaticString {
   static const String slotNumber = "Slot Number: ";
   static const String dummyPoint = "It is a long established fact that a reader will";
   static const String  dummyDay= "Sunday";
+  static const String  dummyDate= "05/12/2024 ";
   static const String  clearAll= "Clear All";
   static const String  new_= "New";
   static const String  selectTrack= "Select your track";
@@ -147,7 +149,7 @@ class AppStaticString {
   static const String  cvv= "CVV";
   static const String  total= "Total";
   static const String  confrim= "Confirm";
-  static const String  runningBooking= "Running Booking";
+  static const String  runningBooking= "Running";
   static const String  comments= "Comments";
   static const String  bookSlot= "Book a Slot";
 

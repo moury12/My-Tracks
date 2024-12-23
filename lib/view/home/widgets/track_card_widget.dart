@@ -359,7 +359,7 @@ class TrackCardWidget extends StatelessWidget {
                           fillColor: Colors.transparent,
                           borderColor: AppColors.redColor,
                           // height: 48.h,
-                          title: AppStaticString.delete,
+                          title: AppStaticString.deactivate,
                           textColor: AppColors.redColor,
                         ),
                       ),
@@ -544,7 +544,7 @@ class _ExpandableTextState extends State<ExpandableText> {
             });
           },
           child: Text(
-            _isExpanded ? 'See Less' : 'See More',
+            _isExpanded ? 'See Less' : AppStaticString.seeMore,
             style: widget.buttonStyle ??
                 poppinsSemiBold.copyWith(
                   fontSize: getFontSizeSmall(context),
