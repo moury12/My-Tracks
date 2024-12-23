@@ -99,6 +99,17 @@ class CreateTrackScreen extends StatelessWidget {
                       ],
                     )
                   : const SizedBox.shrink(),
+              CreateEventController.to.eventNameControllerList.isNotEmpty?
+                 Obx(
+                  () {
+                     return Column(
+                       children:  List.generate(CreateEventController.to.eventNameControllerList.length, (index) => CustomTextField(
+                         title: CreateEventController.to.eventNameControllerList[index] ,
+
+                       ),),
+                     );
+                   }
+                 ):SizedBox.shrink(),
               CustomButton(
                 onTap: () {
                   Get.toNamed(UploadTrackScreen.routeName,arguments: argument);

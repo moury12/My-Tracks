@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:track_trek/controller/home_controller.dart';
 import 'package:track_trek/core/components/custom_button.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
@@ -99,7 +100,10 @@ class EventCardWidget extends StatelessWidget {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const BlueTextWidget(),
+                         BlueTextWidget(
+                          text:  HomeController.to.selectedLabel.value == 2
+                              ?'${AppStaticString.totalSeatWithClone}120':null,
+                        ),
                         const DividerVertical(),
 
                         ///==============dynamic event total slot==============///
@@ -144,6 +148,9 @@ class EventCardWidget extends StatelessWidget {
                       space8W,
                       Expanded(
                           child: OptionWidget(
+                            function: () async {
+                              await Share.share('Check out this cool Flutter app!');
+                            },
                               icon: shareIconUrl, text: AppStaticString.share))
                     ],
                   ),
@@ -202,7 +209,7 @@ class BlueTextWidget extends StatelessWidget {
       overflow: TextOverflow.ellipsis,
       text ?? '${AppStaticString.priceWithClone}\$120',
       style:
-          poppinsBlueMedium.copyWith(fontSize: getFontSizeSemiSmall(context)),
+          poppinsBlueMedium.copyWith(fontSize: getFontSizeDefault(context)),
     );
   }
 }

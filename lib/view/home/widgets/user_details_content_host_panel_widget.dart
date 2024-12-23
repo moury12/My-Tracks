@@ -42,7 +42,7 @@ class UserDetailsContentOfHostPanel extends StatelessWidget {
           ],
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             ///======================= dynamic slot no======================///
             Text(
@@ -64,6 +64,7 @@ class UserDetailsContentOfHostPanel extends StatelessWidget {
           children: [
             Expanded(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 spacing: 6.h,
                 children: [
                   Text(AppStaticString.startTime,
@@ -80,6 +81,8 @@ class UserDetailsContentOfHostPanel extends StatelessWidget {
             ),
             Expanded(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+
                 spacing: 6.h,
                 children: [
                   Text(AppStaticString.endTime,

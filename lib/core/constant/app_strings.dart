@@ -94,6 +94,7 @@ class AppStaticString {
   static const String inProgress = "In Progress";
   static const String seeMore = "See More";
   static const String slotNumber = "Slot Number: ";
+  static const String slotWithClone = "Slot : ";
   static const String dummyPoint = "It is a long established fact that a reader will";
   static const String  dummyDay= "Sunday";
   static const String  dummyDate= "05/12/2024 ";
@@ -119,8 +120,8 @@ class AppStaticString {
   static const String  uploadPhoto= "Upload photo";
   static const String  uploadImage= "Upload Image";
   static const String  slotNo= "Slot No:";
-  static const String  totalSeat= "Total seat";
-  static const String  totalSeatWithClone= "Total seat: ";
+  static const String  totalSeat= "Total Seat";
+  static const String  totalSeatWithClone= "Total Seat: ";
   static const String  price= "Price";
   static const String  publish= "Publish";
   static const String  wantDltMsg= "Are you sure you want to delete this content ?";

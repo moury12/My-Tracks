@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:track_trek/controller/create_event_controller.dart';
 import 'package:track_trek/core/components/custom_button.dart';
 import 'package:track_trek/core/components/custom_textfield.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
@@ -92,7 +94,8 @@ class AddButtonInContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        showDialog(barrierDismissible: false,
+        showDialog(
+          barrierDismissible: false,
           context: context,
           builder: (context) => const DefaultDialogWithButton(),
         );
@@ -126,61 +129,88 @@ class DefaultDialogWithButton extends StatelessWidget {
   final Color? fillColor;
   final double? radius;
   const DefaultDialogWithButton({
-    super.key, this.content, this.firstButtonText, this.secendtButtonText, this.borderColor, this.textColor, this.fillColor, this.radius, this.title, this.rowButton,
+    super.key,
+    this.content,
+    this.firstButtonText,
+    this.secendtButtonText,
+    this.borderColor,
+    this.textColor,
+    this.fillColor,
+    this.radius,
+    this.title,
+    this.rowButton,
   });
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: AppColors.blackBackgroundColor,
-
       content: SizedBox(
-    width: double.maxFinite,
+        width: double.maxFinite,
         child: Column(
           // spacing: 16.h,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(child: SizedBox.shrink()),
-               Expanded(
-                 child: Text(title??'',style: poppinsMedium.copyWith(
-                   fontSize: getFontSizeLarge(context),
-                 
-                 ),),
-               ),
-               IconButton(onPressed: () {
-                  Navigator.pop(context);
-                }, icon: const Icon(CupertinoIcons.multiply)),
-              ],
-            ),
-            content?? Row(crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+                const Expanded(child: SizedBox.shrink()),
                 Expanded(
-                  child:   Padding(
-                    padding:  EdgeInsets.only(bottom: 8.h),
-                    child: CustomTextField(
-                      title: AppStaticString.fieldName,
-                      fillColor: AppColors.blackBackgroundColor,
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4.r),
-                          borderSide: const BorderSide(
-                              color: AppColors.blackBorderColor, width: 1),
-                          gapPadding: 0),
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4.r),
-                          borderSide: const BorderSide(
-                              color: AppColors.blackBorderColor, width: 1),
-                          gapPadding: 0),
-
-                      // border: a,
+                  child: Text(
+                    title ?? '',
+                    style: poppinsMedium.copyWith(
+                      fontSize: getFontSizeLarge(context),
                     ),
                   ),
                 ),
-
+                IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(CupertinoIcons.multiply)),
               ],
             ),
-          rowButton??  RowButton(borderColor: borderColor, radius: radius, firstButtonText: firstButtonText, textColor: textColor, secendtButtonText: secendtButtonText)
+            content ??
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(bottom: 8.h),
+                        child: CustomTextField(
+                          textEditingController: CreateEventController.to.fieldNameController.value,
+                          title: AppStaticString.fieldName,
+                          fillColor: AppColors.blackBackgroundColor,
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(4.r),
+                              borderSide: const BorderSide(
+                                  color: AppColors.blackBorderColor, width: 1),
+                              gapPadding: 0),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(4.r),
+                              borderSide: const BorderSide(
+                                  color: AppColors.blackBorderColor, width: 1),
+                              gapPadding: 0),
+
+                          // border: a,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+            rowButton ??
+                RowButton(
+                    borderColor: borderColor,
+                    save: () {
+                      Navigator.pop(context);
+                      CreateEventController.to.eventNameControllerList.add(CreateEventController.to.eventNameController.value.text);
+                      CreateEventController.to.eventControllerList.add(CreateEventController.to.eventNameController.value);
+                      print(CreateEventController.to.eventNameControllerList);
+                    },
+                    radius: radius,
+                    firstButtonText: firstButtonText,
+                    textColor: textColor,
+                    secendtButtonText: secendtButtonText)
           ],
         ),
       ),
@@ -191,39 +221,47 @@ class DefaultDialogWithButton extends StatelessWidget {
 class RowButton extends StatelessWidget {
   const RowButton({
     super.key,
-     this.borderColor,
-     this.radius,
-     this.firstButtonText,
-     this.textColor,
-     this.secendtButtonText,
+    this.borderColor,
+    this.radius,
+    this.firstButtonText,
+    this.textColor,
+    this.secendtButtonText, this.save, this.cancel,
   });
 
   final Color? borderColor;
   final double? radius;
   final String? firstButtonText;
   final Color? textColor;
+  final Function()? save;
+  final Function()? cancel;
   final String? secendtButtonText;
 
   @override
   Widget build(BuildContext context) {
     return Row(
-       spacing: 12.w,
+      spacing: 12.w,
       children: [
         Expanded(
-            child:CustomButton(
-              onTap: () {},
-              fillColor: Colors.transparent,
-              borderColor:borderColor?? AppColors.blackBorderColor,
-              radius:radius,
-              title:firstButtonText?? AppStaticString.cancel,
-              textColor:textColor?? AppColors.whiteLightColor,
-            ), ),
+          child: CustomButton(
+            onTap: cancel ??
+                () {
+                  Navigator.pop(context);
+                },
+            fillColor: Colors.transparent,
+            borderColor: borderColor ?? AppColors.blackBorderColor,
+            radius: radius,
+            title: firstButtonText ?? AppStaticString.cancel,
+            textColor: textColor ?? AppColors.whiteLightColor,
+          ),
+        ),
         Expanded(
           child: CustomButton(
-
-            radius:radius,
-            onTap: () {},
-            title: secendtButtonText?? AppStaticString.save,
+            radius: radius,
+            onTap: save ??
+                () {
+                  Navigator.pop(context);
+                },
+            title: secendtButtonText ?? AppStaticString.save,
           ),
         )
       ],

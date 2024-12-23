@@ -20,12 +20,23 @@ class CreateEventController extends GetxController {
       TextEditingController().obs;
   Rx<TextEditingController> uploadEventDescriptionController =
       TextEditingController().obs;
-
+  Rx<TextEditingController> fieldNameController =
+      TextEditingController().obs;
+RxList<TextEditingController> eventControllerList =<TextEditingController>[].obs;
+RxList<String> eventNameControllerList =<String>[].obs;
   @override
   void onInit() {
     super.onInit();
   }
-
+  // void addEventName() {
+  //   final eventName = eventNameController.text.trim();
+  //   if (eventName.isNotEmpty) {
+  //     eventNameControllerList.add(eventName);
+  //     eventNameController.clear(); // Optional: Clear the input field
+  //   } else {
+  //     Get.snackbar('Error', 'Event name cannot be empty');
+  //   }
+  // }
   @override
   void onClose() {
     eventNameController.value.dispose();

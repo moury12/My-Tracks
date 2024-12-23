@@ -135,7 +135,7 @@ class TrackCardWidget extends StatelessWidget {
                       Expanded(
                           child: Text(
                         textAlign: TextAlign.center,
-                        '${AppStaticString.totalSlot} 10',
+                        '${AppStaticString.slotWithClone} 10',
                         style: poppinsLight.copyWith(
                             fontSize: getFontSizeSmall(context)),
                       ))
