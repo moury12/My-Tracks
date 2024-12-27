@@ -40,33 +40,83 @@ class AuthService {
     return {};
   }
 
-  static Future<Map<String, dynamic>> activeUser({
+  static Future<bool> activeUser({
     required String email,
     required String code,
   }) async {
     try {
-      final url = Uri.parse(ApiClient.activeUserUrl);
+      final url = Uri.parse(ApiClient.activeAccUrl);
       final headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       };
-      final body = jsonEncode({'email': email, 'code': code});
+      final body = jsonEncode({'email': email, 'activationCode': code});
       final response = await http.post(url, headers: headers, body: body);
       final responseData = json.decode(response.body);
       log(responseData.toString());
       if (responseData['status'] != null &&
           responseData['status'] == 'Success') {
-        return responseData;
+        showCustomSnackbar(
+            title: AppStaticString.success,
+            message: responseData['message'],
+            type: SnackBarType.success);
+        return true;
       } else {
-        return responseData;
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
+        return false;
+      }
+    } catch (e) {
+      showCustomSnackbar(
+          title: AppStaticString.failed,
+          message: e.toString(),
+          type: SnackBarType.failed);
+      debugPrint(e.toString());
+      return false;
+    }
+  }
+
+  static Future<bool> forgetPasswordRequest({
+    required String email,
+  }) async {
+    try {
+      final url = Uri.parse(ApiClient.forgetPassUrl);
+      final headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      };
+      final body = jsonEncode({'email': email});
+      final response = await http.post(url, headers: headers, body: body);
+      final responseData = json.decode(response.body);
+      log(body.toString());
+      log(responseData.toString());
+      if (responseData['success'] != null && responseData['success'] == true) {
+        showCustomSnackbar(
+            title: AppStaticString.success,
+            message: responseData['message'],
+            type: SnackBarType.success);
+        return true;
+      } else {
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
+        return false;
       }
     } catch (e) {
       debugPrint(e.toString());
+      showCustomSnackbar(
+          title: AppStaticString.failed,
+          message: e.toString(),
+          type: SnackBarType.failed);
+
+      return false;
     }
-    return {};
   }
 
-  static Future<bool> registrationRequest({
+  static Future<Map<String, dynamic>> registrationRequest({
     required Map<String, dynamic> bodyMap,
     // File? file,
   }) async {
@@ -87,22 +137,21 @@ class AuthService {
             title: AppStaticString.success,
             message: responseData['message'],
             type: SnackBarType.success);
-        return true;
+        return responseData;
       } else {
         showCustomSnackbar(
-            title:AppStaticString.failed ,
+            title: AppStaticString.failed,
             message: responseData['message'],
             type: SnackBarType.failed);
-        return false;
+        return responseData;
       }
     } catch (e) {
       showCustomSnackbar(
-          title:AppStaticString.failed ,
+          title: AppStaticString.failed,
           message: e.toString(),
           type: SnackBarType.failed);
-      return false;
+      return {};
     }
-    return false;
   }
 
   static Future<Map<String, dynamic>> fetchUserProfile(

@@ -10,6 +10,7 @@ import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/utils/app_color.dart';
+import 'package:track_trek/core/utils/arguments.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/auth/new_password_page.dart';
 
@@ -18,23 +19,11 @@ class OTPScreen extends StatelessWidget {
 
   const OTPScreen({super.key});
 
-  void verifyOTP(BuildContext context) {
-    final otp = AuthController.to.otpControllers
-        .map(
-          (e) => e.value.text,
-        )
-        .join();
-    Get.toNamed(NewPasswordScreen.routeName);
-    // if (otp.length == 4) {
-    //   // Add OTP verification logic here
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     SnackBar(content: Text("OTP Entered: $otp")),
-    //   );
-    // }
-  }
+
 
   @override
   Widget build(BuildContext context) {
+    String? argument =Get.arguments;
     return Scaffold(
 
       appBar: const CustomAppbar(
@@ -55,11 +44,15 @@ class OTPScreen extends StatelessWidget {
                       style: poppinsMedium.copyWith(
                           fontSize: getButtonFontSizeLarge(context)),
                     ),
-                    Text(
-                      ///===============dynamic email=====================///
-                      '${AppStaticString.enter4Digit} email@gmail.com',
-                      style:
-                          poppinsMedium.copyWith(fontSize: getFontSizeSmall(context)),
+                    Obx(
+                     () {
+                        return Text(
+                          ///===============dynamic email=====================///
+                          '${AppStaticString.enter4Digit} ${argument!=null && argument==signingArgument?AuthController.to.emailSignUpController.value.text:'email@gmail.com'}',
+                          style:
+                              poppinsMedium.copyWith(fontSize: getFontSizeSmall(context)),
+                        );
+                      }
                     ),
                     PinCodeTextField(
                       cursorColor: AppColors.primaryColor,
@@ -78,8 +71,8 @@ class OTPScreen extends StatelessWidget {
                         disabledColor: Colors.transparent,
                         shape: PinCodeFieldShape.box,
                         borderRadius: BorderRadius.circular(12),
-                        fieldHeight: 70.w,
-                        fieldWidth: 70.w,
+                        // fieldHeight: 70.w,
+                        // fieldWidth: 70.w,
                         selectedColor: Colors.transparent,
                         inactiveColor: AppColors.blackBorderColor,
                         activeFillColor: AppColors.whiteLightColor,
@@ -92,7 +85,7 @@ class OTPScreen extends StatelessWidget {
                         // inactiveColor: AppColors.blue50,
                         // activeColor: AppColors.blue800,
                       ),
-                      length: 4,
+                      length: 6 ,
                       enableActiveFill: true,
                     ),
                     // Row(
@@ -111,7 +104,7 @@ class OTPScreen extends StatelessWidget {
             ),
             CustomButton(
               onTap: () {
-                verifyOTP(context);
+
               },
               title: AppStaticString.next,
             ),

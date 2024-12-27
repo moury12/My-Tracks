@@ -10,11 +10,10 @@ void showCustomSnackbar({
   required String message,
   required SnackBarType type,
   SnackPosition position = SnackPosition.BOTTOM, // Default position
-})
-{
+}) {
   Color backgroundColor = AppColors.primaryColor;
   IconData icon = Icons
-      .sentiment_dissatisfied_outlined; // Default color is red for failure/error
+      .sentiment_dissatisfied_outlined;
   Color textColor = Colors.white;
   switch (type) {
     case SnackBarType.success:
@@ -25,12 +24,12 @@ void showCustomSnackbar({
       backgroundColor = Colors.redAccent;
       Icons.sentiment_dissatisfied_outlined;
       break;
-  // TODO: Handle this case.
+    // TODO: Handle this case.
     case SnackBarType.alert:
       backgroundColor = Colors.orangeAccent;
-      icon= Icons.sentiment_neutral;
+      icon = Icons.sentiment_neutral;
       break;
-  // TODO: Handle this case.
+    // TODO: Handle this case.
   }
   Get.snackbar(
     title,
@@ -41,8 +40,8 @@ void showCustomSnackbar({
     colorText: textColor,
     dismissDirection: DismissDirection.horizontal,
     icon:
-   /* Image.asset(splashImgUrl),*/
-   Icon(
+        /* Image.asset(splashImgUrl),*/
+        Icon(
       icon,
       color: Colors.white,
       size: 30,

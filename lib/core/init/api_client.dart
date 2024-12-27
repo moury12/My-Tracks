@@ -2,6 +2,8 @@ class ApiClient {
   static const String baseUrl = 'http://192.168.10.22:8001';
   static String get loginUrl => '$baseUrl/auth/login';
   static String get registrationUrl => '$baseUrl/auth/register';
+  static String get activeAccUrl => '$baseUrl/auth/activate-account';
+  static String get forgetPassUrl => '$baseUrl/auth/forgot-password';
   static String get userProfileUrl => '$baseUrl/user/my-profile';
   static String get createTaskUrl => '$baseUrl/task/create-task';
   static String get getAllTaskUrl => '$baseUrl/task/get-all-task';
