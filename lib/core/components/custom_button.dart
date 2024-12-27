@@ -18,13 +18,14 @@ class CustomButton extends StatelessWidget {
       this.fillColor = AppColors.primaryColor,
       this.textColor = AppColors.blackLightColor,
       this.borderColor = AppColors.primaryColor,
-      this.child, this.img, this.icon, this.fontSize,  this.radius});
+      this.child, this.img, this.icon, this.fontSize,  this.radius, this.isLoading=false});
 
   final double? height;
   final double? radius;
   final double width;
   final Color fillColor;
   final Color borderColor;
+  final bool? isLoading;
 
   final Color textColor;
 
@@ -56,8 +57,8 @@ padding: padding12V,
             border: Border.all(color: borderColor),
             borderRadius: BorderRadius.circular(radius??8.r),
             color: fillColor),
-        child: child ??
-            Row(mainAxisAlignment: MainAxisAlignment.center,
+        child:
+            isLoading==true?const DefaultProgressIndicator():  child ?? Row(mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   textAlign: TextAlign.center,
@@ -82,6 +83,19 @@ padding: padding12V,
               ],
             ),
       ),
+    );
+  }
+}
+
+class DefaultProgressIndicator extends StatelessWidget {
+  const DefaultProgressIndicator({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return const CircularProgressIndicator(
+      color: AppColors.blackBackgroundColor,
     );
   }
 }

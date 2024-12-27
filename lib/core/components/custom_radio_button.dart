@@ -13,37 +13,31 @@ class CustomRadioButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        // Update the selected option in CommonController
-        CommonController.to.selectedOption.value = index;
-      },
-      child: Obx(() {
-        return Container(
-          height: 20.w,
-          width: 20.w,
-          padding: EdgeInsets.all(3.sp),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: CommonController.to.selectedOption.value == index
-                  ?AppColors.primaryColor
-                  : AppColors.whiteLightColor,
-              width: CommonController.to.selectedOption.value == index
-                  ? 6.sp
-                  : 2.sp,
-            ),
+    return Obx(() {
+      return Container(
+        height: 20.w,
+        width: 20.w,
+        padding: EdgeInsets.all(3.sp),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: CommonController.to.selectedOption.value == index
+                ?AppColors.primaryColor
+                : AppColors.whiteLightColor,
+            width: CommonController.to.selectedOption.value == index
+                ? 6.sp
+                : 2.sp,
           ),
-          child: CommonController.to.selectedOption.value != index
-              ? Container(
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppColors.whiteLightColor,
-            ),
-          )
-              : const SizedBox.shrink(),
-        );
-      }),
-    );
+        ),
+        child: CommonController.to.selectedOption.value != index
+            ? Container(
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            color: AppColors.whiteLightColor,
+          ),
+        )
+            : const SizedBox.shrink(),
+      );
+    });
   }
 }

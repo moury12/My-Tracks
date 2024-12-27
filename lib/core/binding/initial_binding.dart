@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 import 'package:track_trek/controller/common_controller.dart';
+import 'package:track_trek/controller/network_controller.dart';
+import 'package:track_trek/controller/network_controller.dart';
 import 'package:track_trek/controller/splash_controller.dart';
 
 class InitialBinding extends Bindings {
@@ -13,5 +15,6 @@ class CommonBinding extends Bindings {
   @override
   void dependencies() {
     Get.put<CommonController>(CommonController(), permanent: true);
+    Get.put<NetworkController>(NetworkController(), permanent: true);
   }
 }

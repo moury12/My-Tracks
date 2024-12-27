@@ -6,6 +6,7 @@ import 'package:track_trek/controller/auth_controller.dart';
 import 'package:track_trek/controller/auth_controller.dart';
 import 'package:track_trek/controller/auth_controller.dart';
 import 'package:track_trek/controller/common_controller.dart';
+import 'package:track_trek/controller/network_controller.dart';
 import 'package:track_trek/core/components/custom_appbar.dart';
 import 'package:track_trek/core/components/custom_button.dart';
 import 'package:track_trek/core/components/custom_radio_button.dart';
@@ -27,7 +28,7 @@ class SignUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
+    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
     return Scaffold(
       appBar: const CustomAppbar(
         tile: AppStaticString.signUp,
@@ -36,104 +37,175 @@ class SignUpScreen extends StatelessWidget {
         child: Center(
           child: Padding(
             padding: padding16,
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                space16H,
-                Image.asset(
-                  loginImgUrl,
-                  height: 92.w,
-                ),
-                space16H,
-                Text(
-                  AppStaticString.signUpUser,
-                  style: poppinsRegular.copyWith(
-                      fontSize: getFontSizeSemiSmall(context)),
-                ),
-                space16H,
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const CustomRadioButton(
-                      index: 0,
-                    ),
-                    space8W,
-                    Text(
-                      AppStaticString.user,
-                      style: poppinsRegular.copyWith(
-                          fontSize: getFontSizeSemiSmall(context)),
-                    ),
-                    space16W,
-                    const CustomRadioButton(
-                      index: 1,
-                    ),
-                    space8W,
-                    Text(
-                      AppStaticString.host,
-                      style: poppinsRegular.copyWith(
-                          fontSize: getFontSizeSemiSmall(context)),
-                    ),
-                  ],
-                ),
-                space16H,
-                CustomTextField(
-                  textEditingController:
-                      AuthController.to.emailSignUpController.value,
-                  title: AppStaticString.email,
-                  hintText: AppStaticString.emailEnter,
-                  fillColor: AppColors.textFieldColor,
-                ),
-                space16H,
-                CustomTextField(
-                  textEditingController:
-                      AuthController.to.nameSignUpController.value,
-                  title: AppStaticString.userName,
-                  hintText: AppStaticString.userNameEnter,
-                  fillColor: AppColors.textFieldColor,
-                ),
-                space16H,
-                CustomTextField(
-                  textEditingController:
-                      AuthController.to.passSignUpController.value,
-                  title: AppStaticString.password,
-                  hintText: AppStaticString.passwordEnter,
-                  fillColor: AppColors.textFieldColor,
-                  isPassword: true,
-                ),
-                space16H,
-                CustomTextField(
-                  textEditingController:
-                      AuthController.to.confirmPassSignUpController.value,
-                  title: AppStaticString.confirmPassword,
-                  hintText: AppStaticString.passwordEnter,
-                  fillColor: AppColors.textFieldColor,
-                  isPassword: true,
-                ),
-                space16H,
-                CustomButton(
-                  onTap: () {
-                    Get.offAllNamed(BottomNavigationScreen.routeName);
-                  },
-                  title: AppStaticString.signUp,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      AppStaticString.alreadyHaveAcc,
-                      style: poppinsRegular.copyWith(
-                          fontSize: getFontSizeSmall(context)),
-                    ),
-                    CustomTextButton(
-                      title: AppStaticString.signIn,
-                      onPressed: () {
-                        Get.toNamed(LoginScreen.routeName);
-                      },
-                    )
-                  ],
-                )
-              ],
+            child: Form(
+              key: formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  // space16H,
+                  Image.asset(
+                    loginImgUrl,
+                    height: 92.w,
+                  ),
+                  space16H,
+                  Text(
+                    AppStaticString.signUpUser,
+                    style: poppinsRegular.copyWith(
+                        fontSize: getFontSizeSemiSmall(context)),
+                  ),
+                  space16H,
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          CommonController.to.selectedOption.value = 0;
+                        },
+                        child: Row(
+                          children: [
+                            const CustomRadioButton(
+                              index: 0,
+                            ),space8W,
+                            Text(
+                              AppStaticString.user,
+                              style: poppinsRegular.copyWith(
+                                  fontSize: getFontSizeSemiSmall(context)),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      space16W,
+
+                      InkWell(
+                        onTap: () {
+                          CommonController.to.selectedOption.value = 1;
+                        },
+                        child: Row(
+                          children: [const CustomRadioButton(
+                            index: 1,
+                          ),
+                            space8W,
+                            Text(
+                              AppStaticString.host,
+                              style: poppinsRegular.copyWith(
+                                  fontSize: getFontSizeSemiSmall(context)),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  space16H,
+                  CustomTextField(
+                    textEditingController:
+                        AuthController.to.emailSignUpController.value,
+                    title: AppStaticString.email,
+                    hintText: AppStaticString.emailEnter,
+                    fillColor: AppColors.textFieldColor,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return AppStaticString.emailRequired;
+                      }
+                      if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                        return AppStaticString.enterValidEmail;
+                      }
+                      return null;
+                    },
+                  ),
+                  space16H,
+                  CustomTextField(
+                    textEditingController:
+                        AuthController.to.nameSignUpController.value,
+                    title: AppStaticString.userName,
+                    hintText: AppStaticString.userNameEnter,
+                    fillColor: AppColors.textFieldColor,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return AppStaticString.nameRequired;
+                      }
+                      return null;
+                    },
+                  ),
+                  space16H,
+                  CustomTextField(
+                    textEditingController:
+                        AuthController.to.passSignUpController.value,
+                    title: AppStaticString.password,
+                    hintText: AppStaticString.passwordEnter,
+                    fillColor: AppColors.textFieldColor,
+                    isPassword: true,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Password is required.";
+                      }
+                      if (value.length < 6) {
+                        return "Password must be at least 6 characters.";
+                      }
+                      return null;
+                    },
+                  ),
+                  space16H,
+                  CustomTextField(
+                    textEditingController:
+                        AuthController.to.confirmPassSignUpController.value,
+                    title: AppStaticString.confirmPassword,
+                    hintText: AppStaticString.passwordEnter,
+                    fillColor: AppColors.textFieldColor,
+                    isPassword: true,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Confirm password is required.";
+                      }
+                      if (value != AuthController.to.passSignUpController.value.text) {
+                        return "Passwords do not match.";
+                      }
+                      return null;
+                    },
+                  ),
+                  space16H,
+                  Obx(
+                    () {
+                      return CustomButton(
+                        isLoading: AuthController.to.isLoadingSignUp.value,
+                        onTap: () {
+                          if(formKey.currentState!.validate()){
+                            AuthController.to.registrationRequest();
+                          }
+                        },
+                        title: AppStaticString.signUp,
+                      );
+                    }
+                  ),
+                  // Obx(() {
+                  //   return Center(
+                  //     child: Text(
+                  //       NetworkController.to.isConnected.value
+                  //           ? "You are connected to the internet."
+                  //           : "No internet connection.",
+                  //       style: TextStyle(fontSize: 18),
+                  //     ),
+                  //   );
+                  // }),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        AppStaticString.alreadyHaveAcc,
+                        style: poppinsRegular.copyWith(
+                            fontSize: getFontSizeSmall(context)),
+                      ),
+                      CustomTextButton(
+                        title: AppStaticString.signIn,
+                        onPressed: () {
+                          Get.toNamed(LoginScreen.routeName);
+                        },
+                      )
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),

@@ -22,7 +22,7 @@ class CustomTextField extends StatefulWidget {
       this.onChanged,
       this.maxLines = 1,
       this.validator,
-      this.hintText=AppStaticString.typeHere,
+      this.hintText = AppStaticString.typeHere,
       this.hintStyle,
       this.suffixIcon,
       this.suffixIconColor,
@@ -37,9 +37,11 @@ class CustomTextField extends StatefulWidget {
       this.border,
       this.focusedBorder,
       this.enabledBorder,
-      this.fillColor=AppColors.textFieldColor,
+      this.fillColor = AppColors.textFieldColor,
       this.contentPadding = const EdgeInsets.only(left: 10),
-      this.title, this.isEnable=true, this.height});
+      this.title,
+      this.isEnable = true,
+      this.height});
 
   final TextEditingController? textEditingController;
   final FocusNode? focusNode;
@@ -99,10 +101,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
             : SizedBox.shrink(),
         widget.title != null ? space8H : SizedBox.shrink(),
         SizedBox(
-          height: widget.height , // Set the desired height here
+          height: widget.height, // Set the desired height here
           child: TextFormField(
-            textAlign:widget.textAlign,
-
+            textAlign: widget.textAlign,
             onTap: widget.onTap,
             enabled: widget.isEnable,
             autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -125,8 +126,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
             obscureText: widget.isPassword ? obscureText : false,
             validator: widget.validator,
             decoration: InputDecoration(
-
-              contentPadding:EdgeInsets.symmetric(horizontal: 16.sp, vertical: widget.maxLines!>1?12.sp:12.sp),   // Adjust vertical padding
+              contentPadding: EdgeInsets.symmetric(
+                  horizontal: 16.sp,
+                  vertical: widget.maxLines! > 1
+                      ? 12.sp
+                      : 12.sp), // Adjust vertical padding
               fillColor: widget.fillColor,
               isCollapsed: widget.isCollapsed,
               isDense: widget.isDense,
@@ -141,15 +145,15 @@ class _CustomTextFieldState extends State<CustomTextField> {
               prefixIcon: widget.prefixIcon,
               suffixIcon: widget.isPassword
                   ? GestureDetector(
-                onTap: toggle,
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      left: 16, right: 16, top: 16, bottom: 16),
-                  child: obscureText
-                      ? const Icon(Icons.visibility_off_outlined)
-                      : const Icon(Icons.visibility_outlined),
-                ),
-              )
+                      onTap: toggle,
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 16, right: 16, top: 16, bottom: 16),
+                        child: obscureText
+                            ? const Icon(Icons.visibility_off_outlined)
+                            : const Icon(Icons.visibility_outlined),
+                      ),
+                    )
                   : widget.suffixIcon,
               suffixIconColor: widget.suffixIconColor,
               border: widget.border,
@@ -158,7 +162,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
             ),
           ),
         ),
-
       ],
     );
   }

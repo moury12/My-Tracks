@@ -56,6 +56,12 @@ class AppStaticString {
   static const String passwordEnter = "Enter Password";
   static const String alreadyHaveAcc = "already have an account?";
   static const String signIn = "Sign In";
+  static const String emailRequired = "Email is required.";
+  static const String nameRequired = "Username is required.";
+  static const String passRequired = "Password is required.";
+  static const String enterValidEmail = "Enter a valid email.";
+  static const String passMustbe6 = "Password must be at least 6 characters.";
+  static const String passNotMatch = "Passwords do not match.";
   static const String loginToContinue = "Login to Continue Using the app";
   static const String forgetPass = "Forgot Password?";
   static const String dontHaveAcc = "Don’t have an account?";
@@ -164,7 +170,11 @@ class AppStaticString {
   static const String  currentPass= "Current Password";
 
   static const String  send= "Send";
+  static const String  success= "Success";
+  static const String  failed= "Failed";
+  static const String  alert= "Alert";
   static const String  sendCode= "Send Code";
+  static const String  connectToInternet= "Connect to the Internet";
   static const String  cancel= "Cancel";
   static const String  dummyAddress= "Pasadena, Oklahoma";
 
