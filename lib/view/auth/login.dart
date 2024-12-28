@@ -51,7 +51,7 @@ class LoginScreen extends StatelessWidget {
 
                 CustomTextField(
                   textEditingController:
-                  AuthController.to.emailForgotController.value,
+                  AuthController.to.emailLoginController.value,
                   title: AppStaticString.email,
                   hintText: AppStaticString.emailEnter,
                   fillColor: AppColors.textFieldColor,

@@ -106,7 +106,7 @@ class AppRoutes {
             name: SettingsScreen.routeName, page: () => const SettingsScreen()),
         GetPage(
             name: OTPScreen.routeName,
-            page: () => const OTPScreen(),
+            page: () =>  OTPScreen(),
             binding: AuthBinding()),
         GetPage(
             name: NewPasswordScreen.routeName,

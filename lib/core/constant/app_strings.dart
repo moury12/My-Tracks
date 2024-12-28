@@ -58,6 +58,7 @@ class AppStaticString {
   static const String signIn = "Sign In";
   static const String emailRequired = "Email is required.";
   static const String nameRequired = "Username is required.";
+  static const String otpFieldRequired = "Otp field is required.";
   static const String passRequired = "Password is required.";
   static const String enterValidEmail = "Enter a valid email.";
   static const String passMustbe6 = "Password must be at least 6 characters.";
@@ -75,6 +76,9 @@ class AppStaticString {
   static const String fieldName = "Field Name";
   static const String share = "Share";
   static const String track = "Track";
+  static const String passwordDoNotMatch ="Passwords do not match." ;
+  static const String passAtLeast6Character = "Password must be at least 6 characters.";
+  static const String confirmPassRequired = "Confirm password is required.";
   static const String setNewPass = "Set a new password";
   static const String createANewPass = "Create a new password. Ensure it differs from previous ones for security";
   static const String trackName = "Track Name";

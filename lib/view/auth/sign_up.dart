@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:track_trek/controller/auth_controller.dart';
-import 'package:track_trek/controller/auth_controller.dart';
-import 'package:track_trek/controller/auth_controller.dart';
-import 'package:track_trek/controller/auth_controller.dart';
 import 'package:track_trek/controller/common_controller.dart';
-import 'package:track_trek/controller/network_controller.dart';
 import 'package:track_trek/core/components/custom_appbar.dart';
 import 'package:track_trek/core/components/custom_button.dart';
 import 'package:track_trek/core/components/custom_radio_button.dart';
@@ -20,7 +16,6 @@ import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/auth/login.dart';
-import 'package:track_trek/view/initial/bottom_navigation_screen.dart';
 
 class SignUpScreen extends StatelessWidget {
   static const String routeName = '/sign-up';
@@ -28,6 +23,7 @@ class SignUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
     return Scaffold(
       appBar: const CustomAppbar(
@@ -138,10 +134,10 @@ class SignUpScreen extends StatelessWidget {
                     isPassword: true,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return "Password is required.";
+                        return AppStaticString.passRequired;
                       }
                       if (value.length < 6) {
-                        return "Password must be at least 6 characters.";
+                        return AppStaticString.passAtLeast6Character;
                       }
                       return null;
                     },
@@ -156,10 +152,10 @@ class SignUpScreen extends StatelessWidget {
                     isPassword: true,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return "Confirm password is required.";
+                        return AppStaticString.confirmPassRequired;
                       }
                       if (value != AuthController.to.passSignUpController.value.text) {
-                        return "Passwords do not match.";
+                        return AppStaticString.passwordDoNotMatch;
                       }
                       return null;
                     },

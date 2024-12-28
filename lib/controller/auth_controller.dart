@@ -8,17 +8,45 @@ import 'package:track_trek/core/service/auth_service.dart';
 import 'package:track_trek/core/utils/arguments.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/view/auth/login.dart';
+import 'package:track_trek/view/auth/new_password_page.dart';
 import 'package:track_trek/view/auth/otp_page.dart';
-import 'package:track_trek/view/auth/sign_up.dart';
-import 'package:track_trek/view/initial/bottom_navigation_screen.dart';
 
 class AuthController extends GetxController {
   static AuthController get to => Get.find();
+  @override
+  void onInit() {
+    reinitializeSignUpControllers();
+    super.onInit();
+  }
+
+  reinitializeSignUpControllers() {
+    emailSignUpController.value = TextEditingController(
+        text: kDebugMode ? 'mogan62374@pofmagic.com' : '');
+    nameSignUpController.value =
+        TextEditingController(text: kDebugMode ? 'mouri' : '');
+    passSignUpController.value =
+        TextEditingController(text: kDebugMode ? '123456' : '');
+    confirmPassSignUpController.value =
+        TextEditingController(text: kDebugMode ? '123456' : '');
+    passNewController.value =
+        TextEditingController(text: kDebugMode ? '123456' : '');
+    confirmPassNewController.value =
+        TextEditingController(text: kDebugMode ? '123456' : '');
+  }
+
   Rx<bool> isLoadingSignUp = false.obs;
+  Rx<bool> isLoadingActiveAcc = false.obs;
+  Rx<bool> isLoadingForgetPass = false.obs;
+  Rx<bool> isLoadingResetPass = false.obs;
+  Rx<bool> isLoadingForgetPassVerifyOtp = false.obs;
   Rx<TextEditingController> emailSignUpController =
-      TextEditingController(text: kDebugMode ? 'tanzibamouri28@gmail.com' : '')
+      TextEditingController(text: kDebugMode ? 'mogan62374@pofmagic.com' : '')
           .obs;
-  Rx<TextEditingController> emailForgotController = TextEditingController().obs;
+  Rx<TextEditingController> emailForgetController =
+      TextEditingController(text: kDebugMode ? 'mogan62374@pofmagic.com' : '')
+          .obs;
+  //tanzibamouri28@gmail.com
+
   Rx<TextEditingController> nameSignUpController =
       TextEditingController(text: kDebugMode ? 'mouri' : '').obs;
   Rx<TextEditingController> passSignUpController =
@@ -27,33 +55,103 @@ class AuthController extends GetxController {
       TextEditingController(text: kDebugMode ? '123456' : '').obs;
   Rx<TextEditingController> emailLoginController = TextEditingController().obs;
   Rx<TextEditingController> passLoginController = TextEditingController().obs;
-  Rx<TextEditingController> passNewController = TextEditingController().obs;
+  Rx<TextEditingController> passNewController =
+      TextEditingController(text: kDebugMode ? '123456' : '').obs;
   Rx<TextEditingController> confirmPassNewController =
-      TextEditingController().obs;
-  Rx<TextEditingController> otpPinController = TextEditingController().obs;
+      TextEditingController(text: kDebugMode ? '123456' : '').obs;
+
   Rx<String> otpScreen = ''.obs;
 
-  final otpControllers = List.generate(
-    4,
-    (index) => TextEditingController().obs,
-  );
-  final otpFocusNode = List.generate(
-    4,
-    (index) => FocusNode().obs,
-  );
   var focusedFieldIndex = -1.obs;
-  @override
-  void onInit() {
-    for (int i = 0; i < otpFocusNode.length; i++) {
-      otpFocusNode[i].value.addListener(
-        () {
-          if (otpFocusNode[i].value.hasFocus) {
-            focusedFieldIndex = i;
-          }
-        },
-      );
+
+  activeAccountRequest({required String otpPinController}) async {
+    if (NetworkController.to.isConnected.value) {
+      isLoadingActiveAcc.value = true;
+      bool isActivate = await AuthService.activeUser(
+          email: emailSignUpController.value.text, code: otpPinController);
+      if (isActivate) {
+        isLoadingActiveAcc.value = false;
+        otpPinController = '';
+        Get.offAllNamed(LoginScreen.routeName);
+      } else {
+        isLoadingActiveAcc.value = false;
+      }
+    } else {
+      isLoadingActiveAcc.value = false;
+      showCustomSnackbar(
+          title: AppStaticString.failed,
+          message: AppStaticString.connectToInternet,
+          type: SnackBarType.failed);
     }
-    super.onInit();
+  }
+
+  verifyOtpRequest({required String otpPinController}) async {
+    if (NetworkController.to.isConnected.value) {
+      isLoadingForgetPassVerifyOtp.value = true;
+      bool isActivate = await AuthService.forgetPassVerifyOtpUser(
+          email: emailForgetController.value.text, code: otpPinController);
+      if (isActivate) {
+        isLoadingForgetPassVerifyOtp.value = false;
+        otpPinController = '';
+        Get.toNamed(NewPasswordScreen.routeName);
+      } else {
+        isLoadingForgetPassVerifyOtp.value = false;
+      }
+    } else {
+      isLoadingForgetPassVerifyOtp.value = false;
+      showCustomSnackbar(
+          title: AppStaticString.failed,
+          message: AppStaticString.connectToInternet,
+          type: SnackBarType.failed);
+    }
+  }
+
+  forgetPassRequest() async {
+    if (NetworkController.to.isConnected.value) {
+      isLoadingForgetPass.value = true;
+      bool isActivate = await AuthService.forgetPasswordRequest(
+        email: emailForgetController.value.text,
+      );
+      if (isActivate) {
+        isLoadingForgetPass.value = false;
+        // emailForgetController.value.clear();
+        Get.toNamed(OTPScreen.routeName);
+      } else {
+        isLoadingForgetPass.value = false;
+      }
+    } else {
+      isLoadingForgetPass.value = false;
+      showCustomSnackbar(
+          title: AppStaticString.failed,
+          message: AppStaticString.connectToInternet,
+          type: SnackBarType.failed);
+    }
+  }
+
+  resetPassRequest() async {
+    if (NetworkController.to.isConnected.value) {
+      isLoadingResetPass.value = true;
+      bool isActivate = await AuthService.resetPasswordRequest(
+        email: emailForgetController.value.text,
+        newPassword: passNewController.value.text,
+        confirmPassword: confirmPassNewController.value.text,
+      );
+      if (isActivate) {
+        isLoadingResetPass.value = false;
+        emailForgetController.value.clear();
+        passNewController.value.clear();
+        confirmPassNewController.value.clear();
+        Get.offAllNamed(LoginScreen.routeName);
+      } else {
+        isLoadingResetPass.value = false;
+      }
+    } else {
+      isLoadingResetPass.value = false;
+      showCustomSnackbar(
+          title: AppStaticString.failed,
+          message: AppStaticString.connectToInternet,
+          type: SnackBarType.failed);
+    }
   }
 
   registrationRequest() async {
@@ -105,28 +203,27 @@ class AuthController extends GetxController {
   }
 
   clearSignUpController() {
-    emailSignUpController.value.dispose();
-    nameSignUpController.value.dispose();
-    passSignUpController.value.dispose();
-    confirmPassSignUpController.value.dispose();
-    // emailSignUpController.value.clear();
-    // nameSignUpController.value.clear();
-    // passSignUpController.value.clear();
-    // confirmPassSignUpController.value.clear();
+    // emailSignUpController.value.dispose();
+    // nameSignUpController.value.dispose();
+    // passSignUpController.value.dispose();
+    // confirmPassSignUpController.value.dispose();
+    emailSignUpController.value.clear();
+    nameSignUpController.value.clear();
+    passSignUpController.value.clear();
+    confirmPassSignUpController.value.clear();
   }
 
   @override
   void onClose() {
-
     emailLoginController.value.dispose();
     passLoginController.value.dispose();
-    emailForgotController.value.dispose();
-    for (var controller in otpControllers) {
-      controller.value.dispose();
-    }
-    for (var focusNode in otpFocusNode) {
-      focusNode.value.dispose();
-    }
+    emailForgetController.value.dispose();
+    emailSignUpController.value.dispose();
+    nameSignUpController.value.dispose();
+    passSignUpController.value.dispose();
+    confirmPassSignUpController.value.dispose();
+    passNewController.value.dispose();
+    confirmPassNewController.value.dispose();
     super.onClose();
   }
 }

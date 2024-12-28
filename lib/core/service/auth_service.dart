@@ -1,11 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_connect.dart';
-
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
@@ -27,6 +23,8 @@ class AuthService {
       final body = jsonEncode({'email': email, 'password': password});
       final response = await http.post(url, headers: headers, body: body);
       final responseData = json.decode(response.body);
+      log('-----------------login call--------------------');
+      log(body.toString());
       log(responseData.toString());
       if (responseData['status'] != null &&
           responseData['status'] == 'Success') {
@@ -53,9 +51,93 @@ class AuthService {
       final body = jsonEncode({'email': email, 'activationCode': code});
       final response = await http.post(url, headers: headers, body: body);
       final responseData = json.decode(response.body);
+      log('-----------------active user call--------------------');
+      log(body.toString());
       log(responseData.toString());
-      if (responseData['status'] != null &&
-          responseData['status'] == 'Success') {
+      if (responseData['success'] != null && responseData['success'] == true) {
+        showCustomSnackbar(
+            title: AppStaticString.success,
+            message: responseData['message'],
+            type: SnackBarType.success);
+        return true;
+      } else {
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
+        return false;
+      }
+    } catch (e) {
+      showCustomSnackbar(
+          title: AppStaticString.failed,
+          message: e.toString(),
+          type: SnackBarType.failed);
+      debugPrint(e.toString());
+      return false;
+    }
+  }
+
+  static Future<bool> forgetPassVerifyOtpUser({
+    required String email,
+    required String code,
+  }) async {
+    try {
+      final url = Uri.parse(ApiClient.forgetPassOtpVerifyUrl);
+      final headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      };
+      final body = jsonEncode({'email': email, 'code': code});
+      final response = await http.post(url, headers: headers, body: body);
+      final responseData = json.decode(response.body);
+      log('-----------------forget Pass verify call--------------------');
+      log(body.toString());
+      log(responseData.toString());
+      if (responseData['success'] != null && responseData['success'] == true) {
+        showCustomSnackbar(
+            title: AppStaticString.success,
+            message: responseData['message'],
+            type: SnackBarType.success);
+        return true;
+      } else {
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
+        return false;
+      }
+    } catch (e) {
+      showCustomSnackbar(
+          title: AppStaticString.failed,
+          message: e.toString(),
+          type: SnackBarType.failed);
+      debugPrint(e.toString());
+      return false;
+    }
+  }
+
+  static Future<bool> resetPasswordRequest({
+    required String email,
+    required String newPassword,
+    required String confirmPassword,
+  }) async {
+    try {
+      final url = Uri.parse(ApiClient.resetPassUrl);
+      final headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      };
+      final body = jsonEncode({
+        "email": email,
+        "confirmPassword": confirmPassword,
+        "newPassword": newPassword
+      });
+      final response = await http.post(url, headers: headers, body: body);
+      final responseData = json.decode(response.body);
+      log('-----------------reset password call--------------------');
+      log(body.toString());
+      log(responseData.toString());
+      if (responseData['success'] != null && responseData['success'] == true) {
         showCustomSnackbar(
             title: AppStaticString.success,
             message: responseData['message'],
@@ -90,6 +172,7 @@ class AuthService {
       final body = jsonEncode({'email': email});
       final response = await http.post(url, headers: headers, body: body);
       final responseData = json.decode(response.body);
+      log('-----------------forget pass call--------------------');
       log(body.toString());
       log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {

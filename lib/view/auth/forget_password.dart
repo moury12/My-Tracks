@@ -19,6 +19,8 @@ class ForgetPasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
     return Scaffold(
       appBar: const CustomAppbar(
         tile: AppStaticString.forgotPass,
@@ -29,39 +31,59 @@ class ForgetPasswordScreen extends StatelessWidget {
             child: SingleChildScrollView(
               child: Padding(
                 padding: padding16,
-                child:  Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    space16H,
-                    Text(
-                      AppStaticString.forgetPass,
-                      style: poppinsMedium.copyWith(
-                        color: AppColors.whiteBrightColor,
-                          fontSize: getFontSizeExtraLarge(context)),
-                    ),   space16H,Text(
-                      AppStaticString.enterEmailToSendCode,
-                      textAlign: TextAlign.center,
-                      style: poppinsRegular.copyWith(
-                          fontSize: getFontSizeSemiSmall(context)),
-                    ),
-                    space16H,
-                    CustomTextField(
-                      textEditingController:
-                      AuthController.to.emailSignUpController.value,
-                      title: AppStaticString.email,
-                      hintText: AppStaticString.emailEnter,
-            
-                    ),
-                  ],
+                child:  Form(
+                  key:formKey ,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      space16H,
+                      Text(
+                        AppStaticString.forgetPass,
+                        style: poppinsMedium.copyWith(
+                          color: AppColors.whiteBrightColor,
+                            fontSize: getFontSizeExtraLarge(context)),
+                      ),   space16H,Text(
+                        AppStaticString.enterEmailToSendCode,
+                        textAlign: TextAlign.center,
+                        style: poppinsRegular.copyWith(
+                            fontSize: getFontSizeSemiSmall(context)),
+                      ),
+                      space16H,
+                      CustomTextField(
+
+                        textEditingController:
+                        AuthController.to.emailForgetController.value,
+                        title: AppStaticString.email,
+                        hintText: AppStaticString.emailEnter,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                  return AppStaticString.emailRequired;
+                                }
+                                if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                  return AppStaticString.enterValidEmail;
+                                }
+                                return null;
+                              },
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
           Padding(
             padding: padding16.copyWith(bottom: 24.sp),
-            child: CustomButton(onTap: (){
-              Get.toNamed(OTPScreen.routeName);
-            },title:AppStaticString.sendCode ,),
+            child: Obx(
+             () {
+                return CustomButton(
+                  isLoading: AuthController.to.isLoadingForgetPass.value,
+                  onTap: (){
+                if(formKey.currentState!.validate()){
+                  AuthController.to.forgetPassRequest();
+                }
+                },title:AppStaticString.sendCode ,);
+              }
+            ),
           )
         ],
       ),
