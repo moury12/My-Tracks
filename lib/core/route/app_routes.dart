@@ -37,23 +37,20 @@ class AppRoutes {
             binding: InitialBinding()),
         GetPage(
             name: SignUpScreen.routeName,
-            page: () => const SignUpScreen(),
+            page: () =>  SignUpScreen(),
             binding: AuthBinding()),
         GetPage(
             name: LoginScreen.routeName,
-            page: () => const LoginScreen(),
+            page: () =>  LoginScreen(),
             binding: AuthBinding()),
         GetPage(
             name: BottomNavigationScreen.routeName,
             page: () => BottomNavigationScreen()),
         GetPage(
             name: ForgetPasswordScreen.routeName,
-            page: () => const ForgetPasswordScreen(),
+            page: () =>  ForgetPasswordScreen(),
             binding: AuthBinding()),
-        GetPage(
-            name: ForgetPasswordScreen.routeName,
-            page: () => const ForgetPasswordScreen(),
-            binding: AuthBinding()),
+
         GetPage(
             name: EventSlotScreen.routeName,
             page: () => const EventSlotScreen(),
@@ -110,7 +107,7 @@ class AppRoutes {
             binding: AuthBinding()),
         GetPage(
             name: NewPasswordScreen.routeName,
-            page: () => const NewPasswordScreen(),
+            page: () =>  NewPasswordScreen(),
             binding: AuthBinding()),
         GetPage(
             name: PrivacyTermsScreen.routeName,

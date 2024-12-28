@@ -19,12 +19,12 @@ import 'package:track_trek/view/auth/login.dart';
 
 class SignUpScreen extends StatelessWidget {
   static const String routeName = '/sign-up';
-  const SignUpScreen({super.key});
+   SignUpScreen({super.key});
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
 
-    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
     return Scaffold(
       appBar: const CustomAppbar(
         tile: AppStaticString.signUp,

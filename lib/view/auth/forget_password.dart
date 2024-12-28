@@ -15,11 +15,11 @@ import 'package:track_trek/view/auth/otp_page.dart';
 
 class ForgetPasswordScreen extends StatelessWidget {
   static const String routeName ='/forget-pass';
-  const ForgetPasswordScreen({super.key});
+   ForgetPasswordScreen({super.key});
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
     return Scaffold(
       appBar: const CustomAppbar(

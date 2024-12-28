@@ -7,6 +7,8 @@ import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
 import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
+import 'package:track_trek/core/global/string_variable.dart';
+import 'package:track_trek/core/init/hive_boxes.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/auth/login.dart';
@@ -105,6 +107,8 @@ class CustomDrawerWidget extends StatelessWidget {
             ),
             BlackContainerWidget(
               onTap: () {
+                Boxes.getUserData().delete(tokenKey);
+                Boxes.getUserData().delete(roleKey);
                 Get.offAllNamed(LoginScreen.routeName);
               },
               borderColor: Colors.transparent,

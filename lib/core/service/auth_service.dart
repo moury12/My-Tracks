@@ -6,11 +6,13 @@ import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
+import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/init/api_client.dart';
+import 'package:track_trek/core/init/hive_boxes.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 
 class AuthService {
-  static Future<Map<String, dynamic>> loginRequest({
+  static Future<bool> loginRequest({
     required String email,
     required String password,
   }) async {
@@ -26,16 +28,31 @@ class AuthService {
       log('-----------------login call--------------------');
       log(body.toString());
       log(responseData.toString());
-      if (responseData['status'] != null &&
-          responseData['status'] == 'Success') {
-        return responseData;
+      if (responseData['success'] != null &&
+          responseData['success'] == true) {
+        showCustomSnackbar(
+            title: AppStaticString.success,
+            message: responseData['message'],
+            type: SnackBarType.success);
+        Boxes.getUserData().put(tokenKey, responseData['data']['accessToken']);
+        Boxes.getUserData().put(roleKey, responseData['data']['role']);
+        return true;
       } else {
-        return responseData;
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
+        return false;
       }
     } catch (e) {
+      showCustomSnackbar(
+          title: AppStaticString.failed,
+          message: e.toString(),
+          type: SnackBarType.failed);
       debugPrint(e.toString());
+      return false;
     }
-    return {};
+    
   }
 
   static Future<bool> activeUser({

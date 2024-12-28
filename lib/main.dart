@@ -3,14 +3,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:track_trek/core/binding/initial_binding.dart';
+import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/route/app_routes.dart';
 import 'package:track_trek/core/theme/theme.dart';
 import 'package:track_trek/view/initial/splash.dart';
 
-void main() {
+void main()async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await Hive.initFlutter();
+  await Hive.openBox(userBoxName);
   runApp(DevicePreview(
     enabled: !kReleaseMode,
     builder: (context) {

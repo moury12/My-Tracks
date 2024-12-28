@@ -4,12 +4,16 @@ import 'package:get/get.dart';
 import 'package:track_trek/controller/common_controller.dart';
 import 'package:track_trek/controller/network_controller.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
+import 'package:track_trek/core/init/hive_boxes.dart';
 import 'package:track_trek/core/service/auth_service.dart';
 import 'package:track_trek/core/utils/arguments.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/view/auth/login.dart';
 import 'package:track_trek/view/auth/new_password_page.dart';
 import 'package:track_trek/view/auth/otp_page.dart';
+import 'package:track_trek/view/initial/bottom_navigation_screen.dart';
+
+import '../core/global/string_variable.dart';
 
 class AuthController extends GetxController {
   static AuthController get to => Get.find();
@@ -20,8 +24,8 @@ class AuthController extends GetxController {
   }
 
   reinitializeSignUpControllers() {
-    emailSignUpController.value = TextEditingController(
-        text: kDebugMode ? 'mogan62374@pofmagic.com' : '');
+    emailSignUpController.value =
+        TextEditingController(text: kDebugMode ? 'yolice5132@nongnue.com' : '');
     nameSignUpController.value =
         TextEditingController(text: kDebugMode ? 'mouri' : '');
     passSignUpController.value =
@@ -32,18 +36,23 @@ class AuthController extends GetxController {
         TextEditingController(text: kDebugMode ? '123456' : '');
     confirmPassNewController.value =
         TextEditingController(text: kDebugMode ? '123456' : '');
+    passLoginController.value =
+        TextEditingController(text: kDebugMode ? '123456' : '');
+    emailLoginController.value =
+        TextEditingController(text: kDebugMode ? 'yolice5132@nongnue.com' : '');
   }
 
   Rx<bool> isLoadingSignUp = false.obs;
+  Rx<bool> isLoadingLogin = false.obs;
   Rx<bool> isLoadingActiveAcc = false.obs;
   Rx<bool> isLoadingForgetPass = false.obs;
   Rx<bool> isLoadingResetPass = false.obs;
   Rx<bool> isLoadingForgetPassVerifyOtp = false.obs;
   Rx<TextEditingController> emailSignUpController =
-      TextEditingController(text: kDebugMode ? 'mogan62374@pofmagic.com' : '')
+      TextEditingController(text: kDebugMode ? 'yolice5132@nongnue.com' : '')
           .obs;
   Rx<TextEditingController> emailForgetController =
-      TextEditingController(text: kDebugMode ? 'mogan62374@pofmagic.com' : '')
+      TextEditingController(text: kDebugMode ? 'yolice5132@nongnue.com' : '')
           .obs;
   //tanzibamouri28@gmail.com
 
@@ -53,8 +62,11 @@ class AuthController extends GetxController {
       TextEditingController(text: kDebugMode ? '123456' : '').obs;
   Rx<TextEditingController> confirmPassSignUpController =
       TextEditingController(text: kDebugMode ? '123456' : '').obs;
-  Rx<TextEditingController> emailLoginController = TextEditingController().obs;
-  Rx<TextEditingController> passLoginController = TextEditingController().obs;
+  Rx<TextEditingController> emailLoginController =
+      TextEditingController(text: kDebugMode ? 'yolice5132@nongnue.com' : '')
+          .obs;
+  Rx<TextEditingController> passLoginController =
+      TextEditingController(text: kDebugMode ? '123456' : '').obs;
   Rx<TextEditingController> passNewController =
       TextEditingController(text: kDebugMode ? '123456' : '').obs;
   Rx<TextEditingController> confirmPassNewController =
@@ -121,6 +133,32 @@ class AuthController extends GetxController {
       }
     } else {
       isLoadingForgetPass.value = false;
+      showCustomSnackbar(
+          title: AppStaticString.failed,
+          message: AppStaticString.connectToInternet,
+          type: SnackBarType.failed);
+    }
+  }
+
+  loginRequest() async {
+    if (NetworkController.to.isConnected.value) {
+      isLoadingLogin.value = true;
+      bool isActivate = await AuthService.loginRequest(
+          email: emailForgetController.value.text,
+          password: passLoginController.value.text);
+      if (isActivate) {
+        isLoadingLogin.value = false;
+        // emailForgetController.value.clear();
+        CommonController.to.selectedIndex.value =
+            Boxes.getUserData().get(roleKey) == 'USER' ? 0 : 1;
+        emailLoginController.value.dispose();
+        passLoginController.value.dispose();
+        Get.offAllNamed(BottomNavigationScreen.routeName);
+      } else {
+        isLoadingLogin.value = false;
+      }
+    } else {
+      isLoadingLogin.value = false;
       showCustomSnackbar(
           title: AppStaticString.failed,
           message: AppStaticString.connectToInternet,
@@ -215,8 +253,8 @@ class AuthController extends GetxController {
 
   @override
   void onClose() {
-    emailLoginController.value.dispose();
-    passLoginController.value.dispose();
+    // emailLoginController.value.dispose();
+    // passLoginController.value.dispose();
     emailForgetController.value.dispose();
     emailSignUpController.value.dispose();
     nameSignUpController.value.dispose();
