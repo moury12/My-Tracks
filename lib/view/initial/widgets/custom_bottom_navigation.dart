@@ -32,14 +32,14 @@ class CustomBottomNavBar extends StatelessWidget {
                       AppStaticString.home),
                 ),
                 Expanded(
-                  child: CommonController.to.selectedOption.value==0?_buildNavItem(context, bookingIconUrl,
+                  child: CommonController.to.selectedRoleOption.value==0?_buildNavItem(context, bookingIconUrl,
                       bookingFillIconUrl, 1, AppStaticString.booking): _buildNavItem(context, manageIconUrl,
                       manageFillIconUrl, 1, AppStaticString.manage),
                 ),
               ],
             ),
           ),
-          CommonController.to.selectedOption.value==0?SizedBox.shrink() :Padding(
+          CommonController.to.selectedRoleOption.value==0?SizedBox.shrink() :Padding(
             padding: padding12H,
             child: GestureDetector(
                 onTap: () {
@@ -70,7 +70,7 @@ class CustomBottomNavBar extends StatelessWidget {
                       notificationFillIconUrl, 3, AppStaticString.notification),
                 ),
                 Expanded(
-                  child:CommonController.to.selectedOption.value==0?_buildNavItem(context, profileIconUrl,
+                  child:CommonController.to.selectedRoleOption.value==0?_buildNavItem(context, profileIconUrl,
                       profileFillIconUrl, 4, AppStaticString.profile): _buildNavItem(context, promoteIconUrl,
                       promoteFillIconUrl, 4, AppStaticString.promote),
                 ),

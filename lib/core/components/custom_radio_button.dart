@@ -21,15 +21,15 @@ class CustomRadioButton extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(
-            color: CommonController.to.selectedOption.value == index
+            color: CommonController.to.selectedRoleOption.value == index
                 ?AppColors.primaryColor
                 : AppColors.whiteLightColor,
-            width: CommonController.to.selectedOption.value == index
+            width: CommonController.to.selectedRoleOption.value == index
                 ? 6.sp
                 : 2.sp,
           ),
         ),
-        child: CommonController.to.selectedOption.value != index
+        child: CommonController.to.selectedRoleOption.value != index
             ? Container(
           decoration: const BoxDecoration(
             shape: BoxShape.circle,

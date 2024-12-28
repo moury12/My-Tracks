@@ -22,10 +22,11 @@ class AuthController extends GetxController {
     reinitializeSignUpControllers();
     super.onInit();
   }
-
+///=------------------user yolice5132@nongnue.com ======================///
+///=------------------user mepoc17213@myweblaw.com ======================///
   reinitializeSignUpControllers() {
     emailSignUpController.value =
-        TextEditingController(text: kDebugMode ? 'yolice5132@nongnue.com' : '');
+        TextEditingController(text: kDebugMode ? 'mepoc17213@myweblaw.com' : '');
     nameSignUpController.value =
         TextEditingController(text: kDebugMode ? 'mouri' : '');
     passSignUpController.value =
@@ -39,7 +40,7 @@ class AuthController extends GetxController {
     passLoginController.value =
         TextEditingController(text: kDebugMode ? '123456' : '');
     emailLoginController.value =
-        TextEditingController(text: kDebugMode ? 'yolice5132@nongnue.com' : '');
+        TextEditingController(text: kDebugMode ? 'mepoc17213@myweblaw.com' : '');
   }
 
   Rx<bool> isLoadingSignUp = false.obs;
@@ -49,10 +50,10 @@ class AuthController extends GetxController {
   Rx<bool> isLoadingResetPass = false.obs;
   Rx<bool> isLoadingForgetPassVerifyOtp = false.obs;
   Rx<TextEditingController> emailSignUpController =
-      TextEditingController(text: kDebugMode ? 'yolice5132@nongnue.com' : '')
+      TextEditingController(text: kDebugMode ? 'mepoc17213@myweblaw.com' : '')
           .obs;
   Rx<TextEditingController> emailForgetController =
-      TextEditingController(text: kDebugMode ? 'yolice5132@nongnue.com' : '')
+      TextEditingController(text: kDebugMode ? 'mepoc17213@myweblaw.com' : '')
           .obs;
   //tanzibamouri28@gmail.com
 
@@ -63,7 +64,7 @@ class AuthController extends GetxController {
   Rx<TextEditingController> confirmPassSignUpController =
       TextEditingController(text: kDebugMode ? '123456' : '').obs;
   Rx<TextEditingController> emailLoginController =
-      TextEditingController(text: kDebugMode ? 'yolice5132@nongnue.com' : '')
+      TextEditingController(text: kDebugMode ? 'mepoc17213@myweblaw.com' : '')
           .obs;
   Rx<TextEditingController> passLoginController =
       TextEditingController(text: kDebugMode ? '123456' : '').obs;
@@ -149,7 +150,7 @@ class AuthController extends GetxController {
       if (isActivate) {
         isLoadingLogin.value = false;
         // emailForgetController.value.clear();
-        CommonController.to.selectedIndex.value =
+        CommonController.to.selectedRoleOption.value =
             Boxes.getUserData().get(roleKey) == 'USER' ? 0 : 1;
         emailLoginController.value.dispose();
         passLoginController.value.dispose();
@@ -201,7 +202,7 @@ class AuthController extends GetxController {
         "email": emailSignUpController.value.text,
         "password": passSignUpController.value.text,
         "confirmPassword": confirmPassSignUpController.value.text,
-        "role": CommonController.to.selectedIndex.value == 0 ? 'USER' : 'HOST'
+        "role": CommonController.to.selectedRoleOption.value == 0 ? 'USER' : 'HOST'
       });
       Map<String, dynamic>? data = response['data'];
       if (response['success'] != null &&

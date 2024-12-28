@@ -73,7 +73,7 @@ class CustomDrawerWidget extends StatelessWidget {
                       icon: feedBackIconUrl,
                       text: AppStaticString.feedback,
                     ),
-                    CommonController.to.selectedOption.value == 0
+                    CommonController.to.selectedRoleOption.value == 0
                         ? const SizedBox.shrink()
                         : DrawerContentWidget(
                             icon: profileIconUrl,
@@ -83,7 +83,7 @@ class CustomDrawerWidget extends StatelessWidget {
                               Get.toNamed(ProfileScreen.routeName);
                             },
                           ),
-                    CommonController.to.selectedOption.value == 0
+                    CommonController.to.selectedRoleOption.value == 0
                         ? const SizedBox.shrink()
                         : DrawerContentWidget(
                             icon: promoteIconUrl,

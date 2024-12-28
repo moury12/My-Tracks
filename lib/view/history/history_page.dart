@@ -25,7 +25,7 @@ padding: padding16,
         itemBuilder: (context, index) => Padding(
           padding: EdgeInsets.only(bottom: 12.h),
           child:  MarronGradientContainerWidget(
-            child: HistoryContentWidget(addRating: CommonController.to.selectedOption.value==0,),
+            child: HistoryContentWidget(addRating: CommonController.to.selectedRoleOption.value==0,),
           ),
         ),
         itemCount: 5,

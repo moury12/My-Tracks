@@ -22,12 +22,12 @@ class BottomNavigationScreen extends StatelessWidget {
 
   final List<String?> appbarTitle = [
     null,
-    CommonController.to.selectedOption.value == 0
+    CommonController.to.selectedRoleOption.value == 0
         ? AppStaticString.bookingManagement
         : AppStaticString.trackManagement,
     AppStaticString.create,
     AppStaticString.notification,
-    CommonController.to.selectedOption.value == 0
+    CommonController.to.selectedRoleOption.value == 0
         ? AppStaticString.profile
         : AppStaticString.promoteTrack
   ];
@@ -36,7 +36,7 @@ class BottomNavigationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(TrackManagementController());
     final List<Widget> pages = [
-      CommonController.to.selectedOption.value == 0
+      CommonController.to.selectedRoleOption.value == 0
           ? HomeUserScreen(
               openDrawer: () {
                 _scaffoldKey.currentState?.openDrawer();
@@ -47,12 +47,12 @@ class BottomNavigationScreen extends StatelessWidget {
                 _scaffoldKey.currentState?.openDrawer();
               },
             ),
-      CommonController.to.selectedOption.value == 0
+      CommonController.to.selectedRoleOption.value == 0
           ? const BookingManagementScreen()
           : const ManagementScreen(),
       const CreateTrackEventScreen(),
       const NotificationScreen(),
-      CommonController.to.selectedOption.value == 0
+      CommonController.to.selectedRoleOption.value == 0
           ? const ProfileScreen(
               showAppbar: false,
             )
@@ -75,7 +75,7 @@ class BottomNavigationScreen extends StatelessWidget {
               ? const PreferredSize(
                   preferredSize: Size.zero, child: SizedBox.shrink())
               : CustomAppbar(
-                  tile: CommonController.to.selectedOption.value != 0&& selectedIndex==1?'${TrackManagementController.to.tabs[TrackManagementController.to.selectedTabIndex.value]} Management':appbarTitle[selectedIndex],
+                  tile: CommonController.to.selectedRoleOption.value != 0&& selectedIndex==1?'${TrackManagementController.to.tabs[TrackManagementController.to.selectedTabIndex.value]} Management':appbarTitle[selectedIndex],
                 ),
           body: SafeArea(
               child: Column(

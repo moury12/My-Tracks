@@ -56,7 +56,7 @@ class SignUpScreen extends StatelessWidget {
                     children: [
                       InkWell(
                         onTap: () {
-                          CommonController.to.selectedOption.value = 0;
+                          CommonController.to.selectedRoleOption.value = 0;
                         },
                         child: Row(
                           children: [
@@ -76,7 +76,7 @@ class SignUpScreen extends StatelessWidget {
 
                       InkWell(
                         onTap: () {
-                          CommonController.to.selectedOption.value = 1;
+                          CommonController.to.selectedRoleOption.value = 1;
                         },
                         child: Row(
                           children: [const CustomRadioButton(
