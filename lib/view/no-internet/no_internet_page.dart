@@ -51,11 +51,7 @@ class NoInternetScreen extends StatelessWidget {
                     // Ensure the onRetry function is invoked when there's internet
                     onRetry();
                   } else {
-                    showCustomSnackbar(
-                      title: AppStaticString.failed,
-                      message: AppStaticString.noInternetText,
-                      type: SnackBarType.failed,
-                    );
+                    noInternetShowCustomSnackbar();
                   }
                 },
                 title: AppStaticString.retry,
@@ -67,4 +63,6 @@ class NoInternetScreen extends StatelessWidget {
       ),
     );
   }
+
+
 }

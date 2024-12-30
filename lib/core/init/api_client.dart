@@ -5,7 +5,9 @@ class ApiClient {
   static String get activeAccUrl => '$baseUrl/auth/activate-account';
   static String get forgetPassUrl => '$baseUrl/auth/forgot-password';
   static String get resetPassUrl => '$baseUrl/auth/reset-password';
+  static String get changePassUrl => '$baseUrl/auth/change-password';
   static String get forgetPassOtpVerifyUrl => '$baseUrl/auth/forget-pass-otp-verify';
+  static String get deleteProfileUrl => '$baseUrl/user/delete-account';
   static String get userProfileUrl => '$baseUrl/user/profile';
   static String get userEditProfileUrl => '$baseUrl/user/edit-profile';
 

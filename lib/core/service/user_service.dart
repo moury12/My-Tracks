@@ -47,12 +47,13 @@ class UserService {
     return user;
   }
 
-  static Future<Map<String, dynamic>> updateProfileCall({
+  static Future<bool> updateProfileCall({
     required String name,
     required String phoneNumber,
     required String address,
     required File? file,
-  }) async {
+  })
+  async {
     try {
       final request = http.MultipartRequest(
         'PATCH',
@@ -95,17 +96,110 @@ class UserService {
             title: AppStaticString.success,
             message: data['message'],
             type: SnackBarType.success);
-        return data;
+        return true;
       } else {
         showCustomSnackbar(
             title: AppStaticString.failed,
             message: data['message'],
             type: SnackBarType.failed);
-        return data;
+        return false;
       }
     } catch (e) {
       debugPrint('Error during profile update: $e');
+      return false;
     }
-    return {};
+
+  }
+  static Future<bool> changePasswordRequest({
+    required String oldPassword,
+    required String newPassword,
+    required String confirmPassword,
+  })
+  async {
+    try {
+      final url = Uri.parse(ApiClient.changePassUrl);
+      final headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
+      };
+      final body = jsonEncode({
+        "oldPassword": oldPassword,
+        "newPassword": newPassword,
+        "confirmPassword": confirmPassword,
+
+      });
+      final response = await http.patch(url, headers: headers, body: body);
+      final responseData = json.decode(response.body);
+      log('-----------------change password call--------------------');
+      log(body.toString());
+      log(responseData.toString());
+      if (responseData['success'] != null && responseData['success'] == true) {
+        showCustomSnackbar(
+            title: AppStaticString.success,
+            message: responseData['message'],
+            type: SnackBarType.success);
+        return true;
+      } else {
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
+        return false;
+      }
+    } catch (e) {
+      showCustomSnackbar(
+          title: AppStaticString.failed,
+          message: e.toString(),
+          type: SnackBarType.failed);
+      debugPrint(e.toString());
+      return false;
+    }
+  }
+  static Future<bool> deleteAccountRequest({
+    required String email,
+    required String password,
+
+  })
+  async {
+    try {
+      final url = Uri.parse(ApiClient.deleteProfileUrl);
+      final headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
+      };
+      final body = jsonEncode({
+        "email": email,
+        "password": password,
+
+
+      });
+      final response = await http.delete(url, headers: headers, body: body);
+      final responseData = json.decode(response.body);
+      log('-----------------delete account call--------------------');
+      log(body.toString());
+      log(responseData.toString());
+      if (responseData['success'] != null && responseData['success'] == true) {
+        showCustomSnackbar(
+            title: AppStaticString.success,
+            message: responseData['message'],
+            type: SnackBarType.success);
+        return true;
+      } else {
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
+        return false;
+      }
+    } catch (e) {
+      showCustomSnackbar(
+          title: AppStaticString.failed,
+          message: e.toString(),
+          type: SnackBarType.failed);
+      debugPrint(e.toString());
+      return false;
+    }
   }
 }

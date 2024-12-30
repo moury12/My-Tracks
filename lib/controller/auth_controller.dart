@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:track_trek/controller/common_controller.dart';
 import 'package:track_trek/controller/network_controller.dart';
-import 'package:track_trek/controller/splash_controller.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/init/hive_boxes.dart';
 import 'package:track_trek/core/service/auth_service.dart';
@@ -12,7 +11,6 @@ import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/view/auth/login.dart';
 import 'package:track_trek/view/auth/new_password_page.dart';
 import 'package:track_trek/view/auth/otp_page.dart';
-import 'package:track_trek/view/initial/bottom_navigation_screen.dart';
 import 'package:track_trek/view/initial/splash.dart';
 
 import '../core/global/string_variable.dart';
@@ -35,8 +33,8 @@ class AuthController extends GetxController {
   Rx<bool> isLoadingResetPass = false.obs;
   Rx<bool> isLoadingForgetPassVerifyOtp = false.obs;
 
-  TextEditingController emailSignUpController =
-      TextEditingController()
+  Rx<TextEditingController> emailSignUpController =
+      TextEditingController().obs
           ;
 
   TextEditingController emailForgetController =
@@ -69,20 +67,20 @@ TextEditingController confirmPassNewController =
   var focusedFieldIndex = -1.obs;
   reinitializeSignUpControllers() {
     if (kDebugMode) {
-      // emailSignUpController.text = 'mepoc17213@myweblaw.com';
-      // nameSignUpController.text = 'mouri';
-      // passSignUpController.text = '123456';
-      // confirmPassSignUpController.text = '123456';
-      // emailLoginController.text = 'mepoc17213@myweblaw.com';
-      // passLoginController.text = '123456';
-      // passNewController.text = '123456';
-      // confirmPassNewController.text = '123456';
+      emailSignUpController.value.text = 'variw21228@nongnue.com';
+      nameSignUpController.text = 'mouri';
+      passSignUpController.text = '123456';
+      confirmPassSignUpController.text = '123456';
+      emailLoginController.text = 'mepoc17213@myweblaw.com';
+      passLoginController.text = '123456';
+      passNewController.text = '123456';
+      confirmPassNewController.text = '123456';
     }}
   activeAccountRequest({required String otpPinController}) async {
     if (NetworkController.to.isConnected.value) {
       isLoadingActiveAcc.value = true;
       bool isActivate = await AuthService.activeUser(
-          email: emailSignUpController.text, code: otpPinController);
+          email: emailSignUpController.value.text, code: otpPinController);
       if (isActivate) {
         isLoadingActiveAcc.value = false;
         otpPinController = '';
@@ -201,36 +199,34 @@ TextEditingController confirmPassNewController =
       Map<String, dynamic> response =
           await AuthService.registrationRequest(bodyMap: {
         "name": nameSignUpController.value.text,
-        "email": emailSignUpController.text,
+        "email": emailSignUpController.value.text,
         "password": passSignUpController.value.text,
         "confirmPassword": confirmPassSignUpController.value.text,
         "role": CommonController.to.selectedRoleOption.value == 0 ? 'USER' : 'HOST'
       });
       Map<String, dynamic>? data = response['data'];
       if (response['success'] != null &&
-          response['success'] == true &&
-          data != null &&
-          data['isActive'] == true) {
+          response['success'] == true ) {
         isLoadingSignUp.value = false;
         Get.toNamed(
-          LoginScreen.routeName,
+          OTPScreen.routeName,
         );
 
         clearSignUpController();
       } else {
         if (data != null && data['isActive'] == false) {
           Get.toNamed(OTPScreen.routeName, arguments: signingArgument);
-          /* showCustomSnackbar(
+           showCustomSnackbar(
             title: AppStaticString.failed,
               message: 'Your account not verified yet! please verify now!!',
             type: SnackBarType.failed
-             );*/
+             );
           isLoadingSignUp.value = false;
         } else {
-          showCustomSnackbar(
-              title: AppStaticString.failed,
-              message: 'Unexpected response from server',
-              type: SnackBarType.failed);
+          Get.offAllNamed(
+            LoginScreen.routeName,
+          );
+
           isLoadingSignUp.value = false;
         }
       }
@@ -244,11 +240,11 @@ TextEditingController confirmPassNewController =
   }
 
   clearSignUpController() {
-    // emailSignUpController.value.dispose();
+    // emailSignUpController.value.value.dispose();
     // nameSignUpController.value.dispose();
     // passSignUpController.value.dispose();
     // confirmPassSignUpController.value.dispose();
-    emailSignUpController.clear();
+    emailSignUpController.value.clear();
     nameSignUpController.clear();
     passSignUpController.clear();
     confirmPassSignUpController.clear();
@@ -256,10 +252,10 @@ TextEditingController confirmPassNewController =
 
   @override
   void onClose() {
-    // emailLoginController.value.dispose();
-    // passLoginController.value.dispose();
+    // emailLoginController.dispose();
+    // passLoginController.dispose();
     emailForgetController.dispose();
-    emailSignUpController.dispose();
+    emailSignUpController.value.dispose();
     nameSignUpController.dispose();
     passSignUpController.dispose();
     confirmPassSignUpController.dispose();

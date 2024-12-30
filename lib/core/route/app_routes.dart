@@ -15,7 +15,6 @@ import 'package:track_trek/view/book-track-join-event/book_track_join_event_paym
 import 'package:track_trek/view/feedback/feedback_page.dart';
 import 'package:track_trek/view/history/history_page.dart';
 import 'package:track_trek/view/home/host/event_slot_page.dart';
-import 'package:track_trek/view/home/host/event_slot_page.dart';
 import 'package:track_trek/view/home/host/home_screen.dart';
 import 'package:track_trek/view/home/host/user_details_page.dart';
 import 'package:track_trek/view/promote/promote_track.dart';
@@ -115,6 +114,6 @@ class AppRoutes {
             page: () => const PrivacyTermsScreen()),
         GetPage(
             name: ChangePasswordScreen.routeName,
-            page: () => const ChangePasswordScreen()),
+            page: () =>  ChangePasswordScreen()),
       ];
 }

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:track_trek/controller/common_controller.dart';
 
 import 'package:track_trek/core/constant/app_strings.dart';
@@ -11,6 +10,7 @@ import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
 import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/utils/app_color.dart';
+import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 
 class UploadImageWidget extends StatelessWidget {
@@ -68,7 +68,7 @@ class UploadImageIconTextWidget extends StatelessWidget {
        () { 
         return InkWell(
           onTap: function??() {
-        CommonController.to.pickImage(ImageSource.gallery);
+            pickImages(allowMultiple: true,);
           },
           child:CommonController.to.image.isNotEmpty?
                Image.file(File(CommonController.to.image.value) )

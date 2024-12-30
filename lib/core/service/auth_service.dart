@@ -12,8 +12,7 @@ class AuthService {
   static Future<bool> loginRequest({
     required String email,
     required String password,
-  })
-  async {
+  }) async {
     try {
       final url = Uri.parse(ApiClient.loginUrl);
       final headers = {
@@ -26,8 +25,7 @@ class AuthService {
       log('-----------------login call--------------------');
       log(body.toString());
       log(responseData.toString());
-      if (responseData['success'] != null &&
-          responseData['success'] == true) {
+      if (responseData['success'] != null && responseData['success'] == true) {
         showCustomSnackbar(
             title: AppStaticString.success,
             message: responseData['message'],
@@ -40,6 +38,8 @@ class AuthService {
             title: AppStaticString.failed,
             message: responseData['message'],
             type: SnackBarType.failed);
+
+
         return false;
       }
     } catch (e) {
@@ -50,14 +50,12 @@ class AuthService {
       debugPrint(e.toString());
       return false;
     }
-    
   }
 
   static Future<bool> activeUser({
     required String email,
     required String code,
-  })
-  async {
+  }) async {
     try {
       final url = Uri.parse(ApiClient.activeAccUrl);
       final headers = {
@@ -96,8 +94,7 @@ class AuthService {
   static Future<bool> forgetPassVerifyOtpUser({
     required String email,
     required String code,
-  })
-  async {
+  }) async {
     try {
       final url = Uri.parse(ApiClient.forgetPassOtpVerifyUrl);
       final headers = {
@@ -137,8 +134,7 @@ class AuthService {
     required String email,
     required String newPassword,
     required String confirmPassword,
-  })
-  async {
+  }) async {
     try {
       final url = Uri.parse(ApiClient.resetPassUrl);
       final headers = {
@@ -180,8 +176,7 @@ class AuthService {
 
   static Future<bool> forgetPasswordRequest({
     required String email,
-  })
-  async {
+  }) async {
     try {
       final url = Uri.parse(ApiClient.forgetPassUrl);
       final headers = {
@@ -221,8 +216,7 @@ class AuthService {
   static Future<Map<String, dynamic>> registrationRequest({
     required Map<String, dynamic> bodyMap,
     // File? file,
-  })
-  async {
+  }) async {
     try {
       final url = Uri.parse(ApiClient.registrationUrl);
       final headers = {
@@ -241,6 +235,13 @@ class AuthService {
             message: responseData['message'],
             type: SnackBarType.success);
         return responseData;
+      } else if (responseData['data']['isActive'] == true) {
+        showCustomSnackbar(
+            title: AppStaticString.success,
+            message: responseData['message'],
+            type: SnackBarType.success);
+        log('-----------------${responseData['data']['isActive']}--------------------');
+        return responseData;
       } else {
         showCustomSnackbar(
             title: AppStaticString.failed,
@@ -256,8 +257,4 @@ class AuthService {
       return {};
     }
   }
-
-
-
-
 }

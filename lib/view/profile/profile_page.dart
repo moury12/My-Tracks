@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -11,6 +13,7 @@ import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/init/api_client.dart';
 import 'package:track_trek/core/utils/app_color.dart';
+import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 import 'package:track_trek/view/home/widgets/track_card_widget.dart';
 import 'package:track_trek/view/manage/widgets/event_manage_card_widget.dart';
@@ -45,16 +48,51 @@ class ProfileScreen extends StatelessWidget {
                     child: Column(
                       spacing: 6.h,
                       children: [
-                        ProfileController.to.userModel.value.profileImage !=
-                                null
-                            ? CustomNetworkImage(
-                                boxShape: BoxShape.circle,
-                                imageUrl:
-                                    '${ApiClient.baseUrl}/${ProfileController.to.userModel.value.profileImage}',
-                                height: 70.w,
-                                width: 70.w)
-                            : ProfileCircleImageWidget(
-                                height: 70.w, width: 70.w),
+                        Stack(
+                          children: [
+                            Obx(
+                              () =>
+                                   ProfileController.to.userModel.value
+                                              .profileImage !=
+                                          null && ProfileController.to.uploadProfileImg.value.isEmpty
+                                      ? CustomNetworkImage(
+                                          boxShape: BoxShape.circle,
+                                          imageUrl:
+                                              '${ApiClient.baseUrl}/${ProfileController.to.userModel.value.profileImage}',
+                                          height: 70.w,
+                                          width: 70.w):
+                                   ProfileController.to.uploadProfileImg.value.isNotEmpty &&
+                                       argument != null &&
+                                       argument == 'edit'
+                                       ? ClipOval(
+                                     child: Image.file(
+                                         File(ProfileController
+                                             .to.uploadProfileImg.value),
+                                         height: 70.w,
+                                         width: 70.w,fit: BoxFit.cover,),
+                                   ): ProfileCircleImageWidget(
+                                          height: 70.w, width: 70.w),
+                            ),
+                            argument != null && argument == 'edit'
+                                ? Positioned(
+                                    bottom: -10.h,
+                                    right: -10.w,
+                                    child: IconButton(
+                                        onPressed: () async{
+                                         await pickImages(
+
+                                              singleImagePath: ProfileController
+                                                  .to.uploadProfileImg);
+
+                                        },
+                                        icon: Icon(
+                                          Icons.camera_alt_outlined,
+                                          color: AppColors.whiteLightColor,
+                                        )),
+                                  )
+                                : SizedBox.shrink()
+                          ],
+                        ),
 
                         ///====================dynamic name=====================///
                         Obx(() {
@@ -116,7 +154,7 @@ class ProfileScreen extends StatelessWidget {
                 return CustomTextField(
                   title: AppStaticString.email,
                   isEnable:
-                      argument != null && argument == 'edit' ? true : false,
+                      /*argument != null && argument == 'edit' ? true :*/ false,
                   textEditingController:
                       ProfileController.to.emailController.value,
                 );
@@ -124,6 +162,7 @@ class ProfileScreen extends StatelessWidget {
               Obx(() {
                 return CustomTextField(
                   title: AppStaticString.contactNumber,
+                  keyboardType: TextInputType.number,
                   isEnable:
                       argument != null && argument == 'edit' ? true : false,
                   textEditingController:
@@ -140,10 +179,17 @@ class ProfileScreen extends StatelessWidget {
                 );
               }),
               argument != null && argument == 'edit'
-                  ? CustomButton(
-                      onTap: () {},
-                      title: AppStaticString.save,
-                    )
+                  ? Obx(
+                  () {
+                      return CustomButton(
+                                      isLoading: ProfileController.to.isLoadingUpdateProfile.value,
+                          onTap: ()async {
+                           await ProfileController.to.updateProfileRequest();
+                          },
+                          title: AppStaticString.save,
+                        );
+                    }
+                  )
                   : const SizedBox.shrink()
             ],
           ),

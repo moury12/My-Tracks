@@ -96,7 +96,7 @@ class SignUpScreen extends StatelessWidget {
                   space16H,
                   CustomTextField(
                     textEditingController:
-                        AuthController.to.emailSignUpController,
+                        AuthController.to.emailSignUpController.value,
                     title: AppStaticString.email,
                     hintText: AppStaticString.emailEnter,
                     fillColor: AppColors.textFieldColor,

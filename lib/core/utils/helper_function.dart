@@ -1,7 +1,12 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:track_trek/core/constant/image_constants.dart';
+import 'package:track_trek/controller/profile_controller.dart';
+import 'package:track_trek/core/constant/app_strings.dart';
+import 'package:track_trek/core/global/string_variable.dart';
+import 'package:track_trek/core/init/hive_boxes.dart';
 import 'package:track_trek/core/utils/app_color.dart';
+import 'package:track_trek/view/auth/login.dart';
 
 enum SnackBarType { success, failed, alert }
 
@@ -50,4 +55,48 @@ void showCustomSnackbar({
     duration: Duration(
         seconds: 3), // Duration for how long the snackbar will be displayed
   );
+}
+
+Future<void> pickImages({bool allowMultiple =false, RxList<String>? uploadImages, RxString? singleImagePath}) async {
+  try {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.image, // Restrict to image files
+      allowMultiple: allowMultiple, // Allow multiple selection
+    );
+
+    if (result != null) {
+      final selectedPaths = result.paths.whereType<String>().toList();
+
+      if(allowMultiple=true&&uploadImages!=null&&uploadImages.isNotEmpty){
+        if (uploadImages!.length + selectedPaths.length <= 5) {
+          uploadImages.addAll(selectedPaths); // Add selected images to the list
+        }
+     else {
+        Get.snackbar(
+          "Limit Reached",
+          "You can only add up to 5 images.",
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      }}else{
+        singleImagePath!.value =result.files.single.path!;
+      }
+    }
+  } catch (e) {
+    debugPrint("File picker error: $e");
+  }
+}
+void noInternetShowCustomSnackbar() {
+  return showCustomSnackbar(
+    title: AppStaticString.failed,
+    message: AppStaticString.noInternetText,
+    type: SnackBarType.failed,
+  );
+}
+void logOutCall(){
+
+  Boxes.getUserData().delete(tokenKey);
+  Boxes.getUserData().delete(roleKey);
+  Boxes.getUserData().clear();
+  Get.delete<ProfileController>();
+  Get.offAllNamed(LoginScreen.routeName);
 }

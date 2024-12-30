@@ -13,10 +13,13 @@ class DeleteAlertDialog extends StatelessWidget {
   final String? text;
   final Widget? widgets;
   final bool? showButton;
+  final bool? isLoading;
   final String? text1;
   final String? text2;
+  final VoidCallback? yesFunction;
+  final VoidCallback? cancelFunction;
   const DeleteAlertDialog({
-    super.key, this.title, this.widgets, this.text1, this.text2, this.showButton=true, this.text,
+    super.key, this.title, this.widgets, this.text1, this.text2, this.showButton=true, this.text, this.yesFunction, this.cancelFunction, this.isLoading=false,
   });
 
   @override
@@ -45,7 +48,8 @@ class DeleteAlertDialog extends StatelessWidget {
             children: [
               Expanded(
                   child: CustomButton(
-                onTap: () {
+                    isLoading: isLoading,
+                onTap:yesFunction?? () {
                   Navigator.pop(context);
                 },
                 // height: 44.h,
@@ -57,7 +61,7 @@ class DeleteAlertDialog extends StatelessWidget {
               )),
               Expanded(
                   child: CustomButton(
-                onTap: () {
+                onTap:cancelFunction?? () {
                   Navigator.pop(context);
                 },
                 // height: 44.h,
