@@ -37,20 +37,19 @@ class AppRoutes {
             binding: InitialBinding()),
         GetPage(
             name: SignUpScreen.routeName,
-            page: () =>  SignUpScreen(),
+            page: () => SignUpScreen(),
             binding: AuthBinding()),
         GetPage(
             name: LoginScreen.routeName,
-            page: () =>  LoginScreen(),
+            page: () => LoginScreen(),
             binding: AuthBinding()),
         GetPage(
             name: BottomNavigationScreen.routeName,
             page: () => BottomNavigationScreen()),
         GetPage(
             name: ForgetPasswordScreen.routeName,
-            page: () =>  ForgetPasswordScreen(),
+            page: () => ForgetPasswordScreen(),
             binding: AuthBinding()),
-
         GetPage(
             name: EventSlotScreen.routeName,
             page: () => const EventSlotScreen(),
@@ -68,16 +67,18 @@ class AppRoutes {
             page: () => const UploadTrackScreen(),
             binding: CreateTrackBinding()),
         GetPage(
-            name: ProfileScreen.routeName,
-            page: () => const ProfileScreen(),
-            binding: ProfileBinding()),     GetPage(
+          name: ProfileScreen.routeName,
+          page: () => const ProfileScreen(), /*  binding: ProfileBinding()*/
+        ),
+        GetPage(
             name: PromoteTrackScreen.routeName,
             page: () => const PromoteTrackScreen(),
-            binding: ProfileBinding()),
+           /* binding: ProfileBinding()*/),
         GetPage(
             name: SearchScreen.routeName,
             page: () => const SearchScreen(),
-            binding: HomeBinding()), GetPage(
+            binding: HomeBinding()),
+        GetPage(
             name: SearchResultScreen.routeName,
             page: () => const SearchResultScreen(),
             binding: HomeBinding()),
@@ -103,11 +104,11 @@ class AppRoutes {
             name: SettingsScreen.routeName, page: () => const SettingsScreen()),
         GetPage(
             name: OTPScreen.routeName,
-            page: () =>  OTPScreen(),
+            page: () => OTPScreen(),
             binding: AuthBinding()),
         GetPage(
             name: NewPasswordScreen.routeName,
-            page: () =>  NewPasswordScreen(),
+            page: () => NewPasswordScreen(),
             binding: AuthBinding()),
         GetPage(
             name: PrivacyTermsScreen.routeName,

@@ -52,7 +52,7 @@ class ForgetPasswordScreen extends StatelessWidget {
                       CustomTextField(
 
                         textEditingController:
-                        AuthController.to.emailForgetController.value,
+                        AuthController.to.emailForgetController,
                         title: AppStaticString.email,
                         hintText: AppStaticString.emailEnter,
                               validator: (value) {

@@ -39,6 +39,9 @@ class AppStaticString {
   static const String signUpUser = "Sign up as a user or tracker?";
   static const String user = "User";
   static const String host = "Host";
+  static const String retry = "Retry";
+  static const String noInternetText = 'No Internet Connection';
+  static const String pleaseCheckInternet = 'Please check your network settings and try again.';
   static const String allowedPeople = "Allowed People :";
   static const String logOut = "Log Out";
   static const String email = "Email";

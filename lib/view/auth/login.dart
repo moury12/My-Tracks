@@ -57,39 +57,40 @@ class LoginScreen extends StatelessWidget {
                   ),
                   space16H,
                   CustomTextField(
-                    textEditingController:
-                        AuthController.to.emailLoginController.value,
-                    title: AppStaticString.email,
-                    hintText: AppStaticString.emailEnter,
-                    fillColor: AppColors.textFieldColor,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return AppStaticString.emailRequired;
-                      }
-                      if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                        return AppStaticString.enterValidEmail;
-                      }
-                      return null;
-                    },
-                  ),
+                        textEditingController:
+                            AuthController.to.emailLoginController,
+                        title: AppStaticString.email,
+                        hintText: AppStaticString.emailEnter,
+                        fillColor: AppColors.textFieldColor,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return AppStaticString.emailRequired;
+                          }
+                          if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                            return AppStaticString.enterValidEmail;
+                          }
+                          return null;
+                        },
+                      ),
                   space16H,
-                  CustomTextField(
-                    textEditingController:
-                        AuthController.to.passLoginController.value,
-                    title: AppStaticString.password,
-                    hintText: AppStaticString.passwordEnter,
-                    fillColor: AppColors.textFieldColor,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return AppStaticString.passRequired;
-                      }
-                      if (value.length < 6) {
-                        return AppStaticString.passAtLeast6Character;
-                      }
-                      return null;
-                    },
-                    isPassword: true,
-                  ),
+
+                       CustomTextField(
+                        textEditingController:
+                            AuthController.to.passLoginController,
+                        title: AppStaticString.password,
+                        hintText: AppStaticString.passwordEnter,
+                        fillColor: AppColors.textFieldColor,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return AppStaticString.passRequired;
+                          }
+                          if (value.length < 6) {
+                            return AppStaticString.passAtLeast6Character;
+                          }
+                          return null;
+                        },
+                        isPassword: true,
+                      ),
                   Align(
                     alignment: Alignment.centerRight,
                     child: CustomTextButton(

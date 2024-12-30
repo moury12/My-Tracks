@@ -54,7 +54,7 @@ class NewPasswordScreen extends StatelessWidget {
                           isPassword: true,
 
                           textEditingController:
-                          AuthController.to.passNewController.value,
+                          AuthController.to.passNewController,
                           focusNode: newPasswordFocus,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -68,7 +68,7 @@ class NewPasswordScreen extends StatelessWidget {
                         ),
                         CustomTextField(
                           textEditingController:
-                          AuthController.to.confirmPassNewController.value,
+                          AuthController.to.confirmPassNewController,
                           title: AppStaticString.confirmPassword,
                           hintText: AppStaticString.passwordEnter,
                           fillColor: AppColors.textFieldColor,

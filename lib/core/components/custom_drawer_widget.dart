@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:track_trek/controller/common_controller.dart';
+import 'package:track_trek/controller/profile_controller.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
@@ -109,6 +110,8 @@ class CustomDrawerWidget extends StatelessWidget {
               onTap: () {
                 Boxes.getUserData().delete(tokenKey);
                 Boxes.getUserData().delete(roleKey);
+                Boxes.getUserData().clear();
+                Get.delete<ProfileController>();
                 Get.offAllNamed(LoginScreen.routeName);
               },
               borderColor: Colors.transparent,

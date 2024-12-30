@@ -11,11 +11,11 @@ class AuthBinding extends Bindings{
     )/*<AuthController>(AuthController())*/;
   }
 
-}class ProfileBinding extends Bindings{
+}/*class ProfileBinding extends Bindings{
   @override
   void dependencies() {
-    Get.put<ProfileController>( ProfileController(), permanent: true);
+    Get.lazyPut( ()=>ProfileController(), fenix: true);
 
   }
 
-}
+}*/

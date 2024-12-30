@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:track_trek/controller/common_controller.dart';
 import 'package:track_trek/controller/network_controller.dart';
+import 'package:track_trek/controller/splash_controller.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/init/hive_boxes.dart';
 import 'package:track_trek/core/service/auth_service.dart';
@@ -12,6 +13,7 @@ import 'package:track_trek/view/auth/login.dart';
 import 'package:track_trek/view/auth/new_password_page.dart';
 import 'package:track_trek/view/auth/otp_page.dart';
 import 'package:track_trek/view/initial/bottom_navigation_screen.dart';
+import 'package:track_trek/view/initial/splash.dart';
 
 import '../core/global/string_variable.dart';
 
@@ -23,25 +25,8 @@ class AuthController extends GetxController {
     super.onInit();
   }
 ///=------------------user yolice5132@nongnue.com ======================///
-///=------------------user mepoc17213@myweblaw.com ======================///
-  reinitializeSignUpControllers() {
-    emailSignUpController.value =
-        TextEditingController(text: kDebugMode ? 'mepoc17213@myweblaw.com' : '');
-    nameSignUpController.value =
-        TextEditingController(text: kDebugMode ? 'mouri' : '');
-    passSignUpController.value =
-        TextEditingController(text: kDebugMode ? '123456' : '');
-    confirmPassSignUpController.value =
-        TextEditingController(text: kDebugMode ? '123456' : '');
-    passNewController.value =
-        TextEditingController(text: kDebugMode ? '123456' : '');
-    confirmPassNewController.value =
-        TextEditingController(text: kDebugMode ? '123456' : '');
-    passLoginController.value =
-        TextEditingController(text: kDebugMode ? '123456' : '');
-    emailLoginController.value =
-        TextEditingController(text: kDebugMode ? 'mepoc17213@myweblaw.com' : '');
-  }
+///=------------------host mepoc17213@myweblaw.com ======================///
+
 
   Rx<bool> isLoadingSignUp = false.obs;
   Rx<bool> isLoadingLogin = false.obs;
@@ -49,39 +34,55 @@ class AuthController extends GetxController {
   Rx<bool> isLoadingForgetPass = false.obs;
   Rx<bool> isLoadingResetPass = false.obs;
   Rx<bool> isLoadingForgetPassVerifyOtp = false.obs;
-  Rx<TextEditingController> emailSignUpController =
-      TextEditingController(text: kDebugMode ? 'mepoc17213@myweblaw.com' : '')
-          .obs;
-  Rx<TextEditingController> emailForgetController =
-      TextEditingController(text: kDebugMode ? 'mepoc17213@myweblaw.com' : '')
-          .obs;
+
+  TextEditingController emailSignUpController =
+      TextEditingController()
+          ;
+
+  TextEditingController emailForgetController =
+      TextEditingController()
+          ;
   //tanzibamouri28@gmail.com
 
-  Rx<TextEditingController> nameSignUpController =
-      TextEditingController(text: kDebugMode ? 'mouri' : '').obs;
-  Rx<TextEditingController> passSignUpController =
-      TextEditingController(text: kDebugMode ? '123456' : '').obs;
-  Rx<TextEditingController> confirmPassSignUpController =
-      TextEditingController(text: kDebugMode ? '123456' : '').obs;
-  Rx<TextEditingController> emailLoginController =
-      TextEditingController(text: kDebugMode ? 'mepoc17213@myweblaw.com' : '')
-          .obs;
-  Rx<TextEditingController> passLoginController =
-      TextEditingController(text: kDebugMode ? '123456' : '').obs;
-  Rx<TextEditingController> passNewController =
-      TextEditingController(text: kDebugMode ? '123456' : '').obs;
-  Rx<TextEditingController> confirmPassNewController =
-      TextEditingController(text: kDebugMode ? '123456' : '').obs;
+
+    TextEditingController nameSignUpController =
+      TextEditingController();
+
+    TextEditingController passSignUpController =
+      TextEditingController();
+
+    TextEditingController confirmPassSignUpController =
+      TextEditingController();
+TextEditingController emailLoginController =
+      TextEditingController();
+TextEditingController passLoginController =
+      TextEditingController();
+
+TextEditingController passNewController =
+      TextEditingController();
+
+TextEditingController confirmPassNewController =
+      TextEditingController();
 
   Rx<String> otpScreen = ''.obs;
 
   var focusedFieldIndex = -1.obs;
-
+  reinitializeSignUpControllers() {
+    if (kDebugMode) {
+      // emailSignUpController.text = 'mepoc17213@myweblaw.com';
+      // nameSignUpController.text = 'mouri';
+      // passSignUpController.text = '123456';
+      // confirmPassSignUpController.text = '123456';
+      // emailLoginController.text = 'mepoc17213@myweblaw.com';
+      // passLoginController.text = '123456';
+      // passNewController.text = '123456';
+      // confirmPassNewController.text = '123456';
+    }}
   activeAccountRequest({required String otpPinController}) async {
     if (NetworkController.to.isConnected.value) {
       isLoadingActiveAcc.value = true;
       bool isActivate = await AuthService.activeUser(
-          email: emailSignUpController.value.text, code: otpPinController);
+          email: emailSignUpController.text, code: otpPinController);
       if (isActivate) {
         isLoadingActiveAcc.value = false;
         otpPinController = '';
@@ -145,16 +146,17 @@ class AuthController extends GetxController {
     if (NetworkController.to.isConnected.value) {
       isLoadingLogin.value = true;
       bool isActivate = await AuthService.loginRequest(
-          email: emailForgetController.value.text,
+          email: emailLoginController.value.text,
           password: passLoginController.value.text);
       if (isActivate) {
         isLoadingLogin.value = false;
         // emailForgetController.value.clear();
         CommonController.to.selectedRoleOption.value =
             Boxes.getUserData().get(roleKey) == 'USER' ? 0 : 1;
-        emailLoginController.value.dispose();
-        passLoginController.value.dispose();
-        Get.offAllNamed(BottomNavigationScreen.routeName);
+
+        Get.offAllNamed(SplashScreen.routeName);
+        emailLoginController.clear();
+        passLoginController.clear();
       } else {
         isLoadingLogin.value = false;
       }
@@ -177,9 +179,9 @@ class AuthController extends GetxController {
       );
       if (isActivate) {
         isLoadingResetPass.value = false;
-        emailForgetController.value.clear();
-        passNewController.value.clear();
-        confirmPassNewController.value.clear();
+        emailForgetController.clear();
+        passNewController.clear();
+        confirmPassNewController.clear();
         Get.offAllNamed(LoginScreen.routeName);
       } else {
         isLoadingResetPass.value = false;
@@ -199,7 +201,7 @@ class AuthController extends GetxController {
       Map<String, dynamic> response =
           await AuthService.registrationRequest(bodyMap: {
         "name": nameSignUpController.value.text,
-        "email": emailSignUpController.value.text,
+        "email": emailSignUpController.text,
         "password": passSignUpController.value.text,
         "confirmPassword": confirmPassSignUpController.value.text,
         "role": CommonController.to.selectedRoleOption.value == 0 ? 'USER' : 'HOST'
@@ -246,23 +248,23 @@ class AuthController extends GetxController {
     // nameSignUpController.value.dispose();
     // passSignUpController.value.dispose();
     // confirmPassSignUpController.value.dispose();
-    emailSignUpController.value.clear();
-    nameSignUpController.value.clear();
-    passSignUpController.value.clear();
-    confirmPassSignUpController.value.clear();
+    emailSignUpController.clear();
+    nameSignUpController.clear();
+    passSignUpController.clear();
+    confirmPassSignUpController.clear();
   }
 
   @override
   void onClose() {
     // emailLoginController.value.dispose();
     // passLoginController.value.dispose();
-    emailForgetController.value.dispose();
-    emailSignUpController.value.dispose();
-    nameSignUpController.value.dispose();
-    passSignUpController.value.dispose();
-    confirmPassSignUpController.value.dispose();
-    passNewController.value.dispose();
-    confirmPassNewController.value.dispose();
+    emailForgetController.dispose();
+    emailSignUpController.dispose();
+    nameSignUpController.dispose();
+    passSignUpController.dispose();
+    confirmPassSignUpController.dispose();
+    passNewController.dispose();
+    confirmPassNewController.dispose();
     super.onClose();
   }
 }

@@ -8,6 +8,7 @@ String horizontalDividerUrl  ='assets/horizontal_divider.png';
 String dummyBannerUrl  ='assets/dummy_banner.png';
 String iconCircleWithBorderUrl  ='assets/icons/black_circle_with_border.png';
 String dummyBanner2Url  ='assets/dummy_banner2.png';
+String noInternetImgUrl  ='assets/no-internet.png';
 
 
 ///---------------------Icons------------------------------///

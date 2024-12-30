@@ -96,7 +96,7 @@ class SignUpScreen extends StatelessWidget {
                   space16H,
                   CustomTextField(
                     textEditingController:
-                        AuthController.to.emailSignUpController.value,
+                        AuthController.to.emailSignUpController,
                     title: AppStaticString.email,
                     hintText: AppStaticString.emailEnter,
                     fillColor: AppColors.textFieldColor,
@@ -113,7 +113,7 @@ class SignUpScreen extends StatelessWidget {
                   space16H,
                   CustomTextField(
                     textEditingController:
-                        AuthController.to.nameSignUpController.value,
+                        AuthController.to.nameSignUpController,
                     title: AppStaticString.userName,
                     hintText: AppStaticString.userNameEnter,
                     fillColor: AppColors.textFieldColor,
@@ -127,7 +127,7 @@ class SignUpScreen extends StatelessWidget {
                   space16H,
                   CustomTextField(
                     textEditingController:
-                        AuthController.to.passSignUpController.value,
+                        AuthController.to.passSignUpController,
                     title: AppStaticString.password,
                     hintText: AppStaticString.passwordEnter,
                     fillColor: AppColors.textFieldColor,
@@ -145,7 +145,7 @@ class SignUpScreen extends StatelessWidget {
                   space16H,
                   CustomTextField(
                     textEditingController:
-                        AuthController.to.confirmPassSignUpController.value,
+                        AuthController.to.confirmPassSignUpController,
                     title: AppStaticString.confirmPassword,
                     hintText: AppStaticString.passwordEnter,
                     fillColor: AppColors.textFieldColor,
