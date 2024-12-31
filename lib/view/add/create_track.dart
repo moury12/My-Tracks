@@ -97,13 +97,13 @@ class CreateTrackScreen extends StatelessWidget {
                       pickImages(
                           allowMultiple: true,
                           uploadImages:
-                              CreateEventController.to.trackPhotosList);
+                              CreateTrackController.to.trackPhotosList);
                     },
-                    images: CreateEventController.to.trackPhotosList.isNotEmpty
+                    images: CreateTrackController.to.trackPhotosList.isNotEmpty
                         ? Wrap(
                             children: [
                               ...List.generate(
-                                CreateEventController.to.trackPhotosList.length,
+                                CreateTrackController.to.trackPhotosList.length,
                                 (index) => Stack(
                                   children: [
                                     Padding(
@@ -112,7 +112,7 @@ class CreateTrackScreen extends StatelessWidget {
                                         borderRadius:
                                             BorderRadius.circular(12.r),
                                         child: Image.file(
-                                          File(CreateEventController
+                                          File(CreateTrackController
                                               .to.trackPhotosList[index]),
                                           height: 70.w,
                                           width: 70.w,
@@ -127,9 +127,9 @@ class CreateTrackScreen extends StatelessWidget {
                                           onPressed: () {
                                             removeImage(
                                                 uploadImages:
-                                                    CreateEventController
+                                                    CreateTrackController
                                                         .to.trackPhotosList,
-                                                imagePath: CreateEventController
+                                                imagePath: CreateTrackController
                                                     .to.trackPhotosList[index]);
                                           },
                                           icon: const Icon(
@@ -140,7 +140,7 @@ class CreateTrackScreen extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              CreateEventController.to.trackPhotosList.length <
+                              CreateTrackController.to.trackPhotosList.length <
                                       5
                                   ? Padding(
                                       padding: padding8,
@@ -149,8 +149,10 @@ class CreateTrackScreen extends StatelessWidget {
                                           pickImages(
                                               allowMultiple: true,
                                               uploadImages:
-                                                  CreateEventController
+                                                  CreateTrackController
                                                       .to.trackPhotosList);
+
+
                                         },
                                       ),
                                     )
@@ -238,11 +240,20 @@ class CreateTrackScreen extends StatelessWidget {
                       );
                     })
                   : const SizedBox.shrink(),
-              CustomButton(
-                onTap: () {
-                  Get.toNamed(UploadTrackScreen.routeName, arguments: argument);
-                },
-                title: AppStaticString.next,
+              Obx(
+                () {
+                  return CustomButton(
+                    isLoading:CreateTrackController.to.isLoadingPostTrack.value,
+                    onTap: () {
+                      if( argument != null && argument == 'event'){
+
+                      }else{
+                        CreateTrackController.to.postTrackRequest();
+                      }
+                    },
+                    title: AppStaticString.next,
+                  );
+                }
               )
             ],
           ),

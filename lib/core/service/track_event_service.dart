@@ -23,7 +23,8 @@ class TrackEventService {
       required String longitude,
       required String latitude,
       required String description,
-      required List<File>? files}) async {
+      required List<File>? files})
+  async {
     try {
       final request = http.MultipartRequest(
         'POST',
@@ -64,7 +65,9 @@ class TrackEventService {
       final response = await request.send();
       final responseData = await http.Response.fromStream(response);
 
-      log('-----------------update profile call--------------------');
+      log('-----------------post track call--------------------');
+      log(request.files.toString());
+      log(request.fields.toString());
       log(responseData.body);
 
       // Decode the response body
@@ -122,5 +125,50 @@ class TrackEventService {
       debugPrint(e.toString());
     }
     return category;
+  }
+  static Future<bool> updateTrackRequest({
+    required String trackId,
+    required List<String> trackDays,
+
+  })
+  async {
+    try {
+      final url = Uri.parse(ApiClient.updateTrackUrl);
+      final headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
+
+      };
+      final body = jsonEncode({
+        "trackId": trackId,
+        "trackDays":trackDays
+      });
+      final response = await http.patch(url, headers: headers, body: body);
+      final responseData = json.decode(response.body);
+      log('-----------------update track call--------------------');
+      log(body.toString());
+      log(responseData.toString());
+      if (responseData['success'] != null && responseData['success'] == true) {
+        showCustomSnackbar(
+            title: AppStaticString.success,
+            message: responseData['message'],
+            type: SnackBarType.success);
+        return true;
+      } else {
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
+        return false;
+      }
+    } catch (e) {
+      showCustomSnackbar(
+          title: AppStaticString.failed,
+          message: e.toString(),
+          type: SnackBarType.failed);
+      debugPrint(e.toString());
+      return false;
+    }
   }
 }

@@ -134,7 +134,8 @@ class AuthService {
     required String email,
     required String newPassword,
     required String confirmPassword,
-  }) async {
+  })
+  async {
     try {
       final url = Uri.parse(ApiClient.resetPassUrl);
       final headers = {
