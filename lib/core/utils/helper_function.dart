@@ -17,8 +17,7 @@ void showCustomSnackbar({
   SnackPosition position = SnackPosition.BOTTOM, // Default position
 }) {
   Color backgroundColor = AppColors.primaryColor;
-  IconData icon = Icons
-      .sentiment_dissatisfied_outlined;
+  IconData icon = Icons.sentiment_dissatisfied_outlined;
   Color textColor = Colors.white;
   switch (type) {
     case SnackBarType.success:
@@ -40,8 +39,8 @@ void showCustomSnackbar({
     title,
     message,
     backgroundColor: backgroundColor,
-    padding: EdgeInsets.all(12),
-    margin: EdgeInsets.all(12),
+    padding: const EdgeInsets.all(12),
+    margin: const EdgeInsets.all(12),
     colorText: textColor,
     dismissDirection: DismissDirection.horizontal,
     icon:
@@ -52,12 +51,16 @@ void showCustomSnackbar({
       size: 30,
     ),
     snackPosition: position,
-    duration: Duration(
+    duration: const Duration(
         seconds: 3), // Duration for how long the snackbar will be displayed
   );
 }
 
-Future<void> pickImages({bool allowMultiple =false, RxList<String>? uploadImages, RxString? singleImagePath}) async {
+Future<void> pickImages({
+  bool allowMultiple = false,
+  RxList<String>? uploadImages,
+  RxString? singleImagePath,
+}) async {
   try {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.image, // Restrict to image files
@@ -67,22 +70,34 @@ Future<void> pickImages({bool allowMultiple =false, RxList<String>? uploadImages
     if (result != null) {
       final selectedPaths = result.paths.whereType<String>().toList();
 
-      if(allowMultiple=true&&uploadImages!=null&&uploadImages.isNotEmpty){
-        if (uploadImages!.length + selectedPaths.length <= 5) {
+      if (allowMultiple && uploadImages != null) {
+        if (uploadImages.length + selectedPaths.length <= 5) {
           uploadImages.addAll(selectedPaths); // Add selected images to the list
+        } else {
+          showCustomSnackbar(
+            title: "Limit Reached",
+            message: "You can only add up to 5 images.",
+            type: SnackBarType.alert,
+          );
         }
-     else {
-        Get.snackbar(
-          "Limit Reached",
-          "You can only add up to 5 images.",
-          snackPosition: SnackPosition.BOTTOM,
-        );
-      }}else{
-        singleImagePath!.value =result.files.single.path!;
+      } else if (!allowMultiple && singleImagePath != null) {
+        singleImagePath.value = result.files.single.path ?? '';
+      } else {
+        debugPrint("No files selected or improper usage of the method.");
       }
+    } else {
+      debugPrint("No files selected.");
     }
   } catch (e) {
     debugPrint("File picker error: $e");
+  }
+}
+void removeImage({required RxList<String> uploadImages, required String imagePath}) {
+  if (uploadImages.contains(imagePath)) {
+    uploadImages.remove(imagePath);
+
+  } else {
+    debugPrint("Image not found in the list.");
   }
 }
 void noInternetShowCustomSnackbar() {
@@ -92,8 +107,8 @@ void noInternetShowCustomSnackbar() {
     type: SnackBarType.failed,
   );
 }
-void logOutCall(){
 
+void logOutCall() {
   Boxes.getUserData().delete(tokenKey);
   Boxes.getUserData().delete(roleKey);
   Boxes.getUserData().clear();

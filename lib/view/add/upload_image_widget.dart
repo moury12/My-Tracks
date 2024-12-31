@@ -14,21 +14,23 @@ import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 
 class UploadImageWidget extends StatelessWidget {
-  const UploadImageWidget({super.key});
+  final Function()? function;
+  final Widget? images;
+  const UploadImageWidget({super.key, this.function, this.images});
 
   @override
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 16.h,
       children: [
-        Text(
+     Text(
           AppStaticString.uploadPhoto,
           style:
               poppinsRegular.copyWith(fontSize: getFontSizeSemiSmall(context)),
         ),
 
         ///========================upload image=======================///
-        const LightBlackFillWidget(),
+        images?? LightBlackFillWidget( function:function ,),
       ],
     );
   }
@@ -38,8 +40,9 @@ class LightBlackFillWidget extends StatelessWidget {
   final Widget? child;
   final double? width;
   final double? height;
+  final Function()? function;
   const LightBlackFillWidget({
-    super.key, this.child, this.width, this.height,
+    super.key, this.child, this.width, this.height, this.function,
   });
 
   @override
@@ -51,7 +54,7 @@ class LightBlackFillWidget extends StatelessWidget {
       decoration: BoxDecoration(
           color: AppColors.navigationColor,
           borderRadius: BorderRadius.circular(4.r)),
-      child: child?? const UploadImageIconTextWidget(),
+      child: child??  UploadImageIconTextWidget(function:function ,),
     );
   }
 }
@@ -68,7 +71,7 @@ class UploadImageIconTextWidget extends StatelessWidget {
        () { 
         return InkWell(
           onTap: function??() {
-            pickImages(allowMultiple: true,);
+
           },
           child:CommonController.to.image.isNotEmpty?
                Image.file(File(CommonController.to.image.value) )

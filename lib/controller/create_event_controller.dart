@@ -24,6 +24,7 @@ class CreateEventController extends GetxController {
       TextEditingController().obs;
 RxList<TextEditingController> eventControllerList =<TextEditingController>[].obs;
 RxList<String> eventNameControllerList =<String>[].obs;
+RxList<String> trackPhotosList =<String>[].obs;
   @override
   void onInit() {
     super.onInit();

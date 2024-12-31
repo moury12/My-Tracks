@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -12,6 +15,7 @@ import 'package:track_trek/core/constant/fontsize_constant.dart';
 
 import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/utils/app_color.dart';
+import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/add/upload_image_widget.dart';
 import 'package:track_trek/view/add/upload_track.dart';
@@ -70,7 +74,75 @@ class CreateTrackScreen extends StatelessWidget {
               const CustomDropdown(
                 title: AppStaticString.endTime,
               ),
-              const UploadImageWidget(),
+
+              ///===============================upload images================================///
+              Obx(() {
+                return UploadImageWidget(
+                    function: () {
+                      pickImages(
+                          allowMultiple: true,
+                          uploadImages:
+                              CreateEventController.to.trackPhotosList);
+                    },
+                    images: CreateEventController.to.trackPhotosList.isNotEmpty
+                        ? Wrap(
+                            children: [
+                              ...List.generate(
+                                CreateEventController.to.trackPhotosList.length,
+                                (index) => Stack(
+                                  children: [
+                                    Padding(
+                                      padding: padding12,
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(12.r),
+                                        child: Image.file(
+                                          File(CreateEventController
+                                              .to.trackPhotosList[index]),
+                                          height: 70.w,
+                                          width: 70.w,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      right: -5.w,
+                                      top: -5.h,
+                                      child: IconButton(
+                                          onPressed: () {
+                                            removeImage(
+                                                uploadImages:
+                                                    CreateEventController
+                                                        .to.trackPhotosList,
+                                                imagePath: CreateEventController
+                                                    .to.trackPhotosList[index]);
+                                          },
+                                          icon: const Icon(
+                                            CupertinoIcons.multiply_circle_fill,
+                                            color: AppColors.primaryColor,
+                                          )),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              CreateEventController.to.trackPhotosList.length <
+                                      5
+                                  ? Padding(
+                                    padding: padding8,
+                                    child: UploadImageIconTextWidget(
+                                        function: () {
+                                          pickImages(
+                                              allowMultiple: true,
+                                              uploadImages: CreateEventController
+                                                  .to.trackPhotosList);
+                                        },
+                                      ),
+                                  )
+                                  : const SizedBox.shrink()
+                            ],
+                          )
+                        : null);
+              }),
               CustomTextField(
                 textEditingController: argument != null && argument == 'event'
                     ? CreateEventController.to.eventLocationController.value
@@ -89,7 +161,8 @@ class CreateTrackScreen extends StatelessWidget {
                 hintText: AppStaticString.typeHere,
               ),
               argument != null && argument == 'event'
-                  ? const SizedBox(width:double.infinity,child: BlackContainerWithBroder())
+                  ? const SizedBox(
+                      width: double.infinity, child: BlackContainerWithBroder())
                   : const SizedBox.shrink(),
               argument != null && argument == 'event'
                   ? const Row(
@@ -99,20 +172,23 @@ class CreateTrackScreen extends StatelessWidget {
                       ],
                     )
                   : const SizedBox.shrink(),
-              CreateEventController.to.eventNameControllerList.isNotEmpty?
-                 Obx(
-                  () {
-                     return Column(
-                       children:  List.generate(CreateEventController.to.eventNameControllerList.length, (index) => CustomTextField(
-                         title: CreateEventController.to.eventNameControllerList[index] ,
-
-                       ),),
-                     );
-                   }
-                 ):SizedBox.shrink(),
+              CreateEventController.to.eventNameControllerList.isNotEmpty
+                  ? Obx(() {
+                      return Column(
+                        children: List.generate(
+                          CreateEventController
+                              .to.eventNameControllerList.length,
+                          (index) => CustomTextField(
+                            title: CreateEventController
+                                .to.eventNameControllerList[index],
+                          ),
+                        ),
+                      );
+                    })
+                  : const SizedBox.shrink(),
               CustomButton(
                 onTap: () {
-                  Get.toNamed(UploadTrackScreen.routeName,arguments: argument);
+                  Get.toNamed(UploadTrackScreen.routeName, arguments: argument);
                 },
                 title: AppStaticString.next,
               )
@@ -127,22 +203,20 @@ class CreateTrackScreen extends StatelessWidget {
 class BlackContainerWithBroder extends StatelessWidget {
   final String? text;
   const BlackContainerWithBroder({
-    super.key, this.text,
+    super.key,
+    this.text,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-
-
         padding: padding12V,
         alignment: Alignment.center,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(4.r),
-            border: Border.all(
-                width: 1, color: AppColors.textFieldColor)),
+            border: Border.all(width: 1, color: AppColors.textFieldColor)),
         child: Text(
-         text?? AppStaticString.customerInfo,
+          text ?? AppStaticString.customerInfo,
           style: poppinsRegular.copyWith(
               color: AppColors.normalDarkWhite,
               fontSize: getFontSizeDefault(context)),
