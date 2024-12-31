@@ -149,21 +149,27 @@ class UploadTrackScreen extends StatelessWidget {
                                           );
                                         }),
                                         space12H,
-                                        Obx(
-                                           () {
-                                            return CustomButton(
-                                              isLoading: CreateTrackController.to.isLoadingUpdateTrack.value,
-                                              onTap: () {
-                                                if(CreateTrackController.to.weekDays.isNotEmpty){
-                                                  CreateTrackController.to
-                                                      .updateTrackCall();
-                                                }else{
-                                                  showCustomSnackbar(title: AppStaticString.failed,
-                                                  message: 'Please select a day', type: SnackBarType.failed);
-                                                }
-                                              },title: AppStaticString.save,);
-                                          }
-                                        )
+                                        Obx(() {
+                                          return CustomButton(
+                                            isLoading: CreateTrackController
+                                                .to.isLoadingUpdateTrack.value,
+                                            onTap: () {
+                                              if (CreateTrackController
+                                                  .to.weekDays.isNotEmpty) {
+                                                CreateTrackController.to
+                                                    .updateTrackCall();
+                                              } else {
+                                                showCustomSnackbar(
+                                                    title:
+                                                        AppStaticString.failed,
+                                                    message:
+                                                        'Please select a day',
+                                                    type: SnackBarType.failed);
+                                              }
+                                            },
+                                            title: AppStaticString.save,
+                                          );
+                                        })
                                       ],
                                     ),
                                   ),
@@ -174,13 +180,11 @@ class UploadTrackScreen extends StatelessWidget {
                         ),
 
                         ///=============dynamic days==================///
-                         Obx(
-                           () {
-                             return PrimaryColorContainer(
-                              text: '${CreateTrackController.to.days.value} Days',
-                                                     );
-                           }
-                         ),
+                        Obx(() {
+                          return PrimaryColorContainer(
+                            text: '${CreateTrackController.to.days.value} Days',
+                          );
+                        }),
                         space16W
                       ],
                     ),
@@ -232,6 +236,12 @@ class UploadTrackScreen extends StatelessWidget {
                                             onTap: () {
                                               CreateTrackController
                                                   .to.selectedDay.value = index;
+                                              CreateTrackController
+                                                  .to
+                                                  .selectedWeekDay
+                                                  .value = day.toString();
+                                              print(CreateTrackController
+                                                  .to.selectedWeekDay.value);
                                             },
                                             text: day,
                                           );
@@ -241,35 +251,64 @@ class UploadTrackScreen extends StatelessWidget {
                             );
                     }),
 
-              ///===================dynamic available slot===================//
+              /* ///===================dynamic available slot===================//
               argument != null && argument == 'event'
                   ? const SizedBox.shrink()
                   : Text(
                       '${AppStaticString.availableSlot} 10',
                       style: poppinsMedium.copyWith(
                           fontSize: getFontSizeLarge(context)),
-                    ),
+                    ),*/
 
               Row(
                 spacing: 4.w,
                 children: [
-                  const Expanded(
+                  Expanded(
                       child: CustomTextField(
-                    title: '${AppStaticString.slotNo} 1',
-                    hintText: '1',
+                    title: AppStaticString.slotNo,
+                    textEditingController:
+                        CreateTrackController.to.slotNoController.value,
                   )),
                   argument != null && argument == 'event'
                       ? const SizedBox.shrink()
-                      : const Expanded(
-                          child: CustomDropdown(
-                          title: 'Start Time',
-                        )),
+                      : Obx(() {
+                          return Expanded(
+                              child: InkWell(
+                            onTap: () async {
+                              CreateTrackController.to.selectedStartTime.value =
+                                  await selectAndFormatTime(
+                                          context: context,
+                                          initialTime: const TimeOfDay(
+                                              hour: 10, minute: 0)) ??
+                                      '';
+                            },
+                            child: CustomDropdown(
+                              title: 'Start Time',
+                              hintText: CreateTrackController
+                                  .to.selectedStartTime.value,
+                            ),
+                          ));
+                        }),
                   argument != null && argument == 'event'
                       ? const SizedBox.shrink()
-                      : const Expanded(
-                          child: CustomDropdown(
-                          title: 'End Time',
-                        )),
+                      : Obx(() {
+                          return Expanded(
+                              child: InkWell(
+                            onTap: () async {
+                              CreateTrackController.to.selectedEndTime.value =
+                                  await selectAndFormatTime(
+                                          context: context,
+                                          initialTime: const TimeOfDay(
+                                              hour: 10, minute: 0)) ??
+                                      '';
+                            },
+                            child: CustomDropdown(
+                              hintText: CreateTrackController
+                                  .to.selectedEndTime.value,
+                              title: 'End Time',
+                            ),
+                          ));
+                        }),
                 ],
               ),
 
@@ -305,7 +344,22 @@ class UploadTrackScreen extends StatelessWidget {
               ),
 
               ///==================save button================///
-              const SaveSmallButtonWidget(),
+              Obx(() {
+                return CreateTrackController.to.isLoadingCreateSlot.value
+                    ? Align(
+                  alignment: Alignment.topRight,
+                      child: const DefaultProgressIndicator(
+                          color: AppColors.blueColor,
+                        ),
+                    )
+                    : SaveSmallButtonWidget(
+
+                        onTap: () {
+
+                          CreateTrackController.to.createSlotTrackCall();
+                        },
+                      );
+              }),
 
               ///========================create slot button=========================///
               const CreateSlotButtonSmallWidget(),

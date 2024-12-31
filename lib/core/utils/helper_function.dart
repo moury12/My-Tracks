@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:track_trek/controller/profile_controller.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/global/string_variable.dart';
@@ -106,7 +107,8 @@ void removeImage(
 }
 
 Future<void> searchLocation(String address,
-    {required Rx<String?> destinationLat,required Rx<String?> destinationLng, required RxList<LocationSuggestion> locationSuggestions  })
+    {required Rx<String?> destinationLat,required Rx<String?> destinationLng,
+      required RxList<LocationSuggestion> locationSuggestions  })
 async {
   if (address.isEmpty) {
     destinationLat.value = null;
@@ -157,7 +159,32 @@ void noInternetShowCustomSnackbar() {
     type: SnackBarType.failed,
   );
 }
+Future<String?> selectAndFormatTime({
+  required BuildContext context,
+  required TimeOfDay initialTime,
+}) async {
+  try {
+    // Show time picker dialog
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: initialTime,
+    );
 
+    if (pickedTime != null) {
+      // Format the selected time
+      final now = DateTime.now();
+      final formattedTime = DateFormat.jm().format(
+        DateTime(now.year, now.month, now.day, pickedTime.hour, pickedTime.minute),
+      );
+      return formattedTime; // Return the formatted time
+    } else {
+      return null; // No time selected
+    }
+  } catch (e) {
+    debugPrint('Error picking time: $e');
+    return null;
+  }
+}
 void logOutCall() {
   Boxes.getUserData().delete(tokenKey);
   Boxes.getUserData().delete(roleKey);

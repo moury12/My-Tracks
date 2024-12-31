@@ -23,8 +23,7 @@ class TrackEventService {
       required String longitude,
       required String latitude,
       required String description,
-      required List<File>? files})
-  async {
+      required List<File>? files}) async {
     try {
       final request = http.MultipartRequest(
         'POST',
@@ -126,27 +125,77 @@ class TrackEventService {
     }
     return category;
   }
+
   static Future<bool> updateTrackRequest({
     required String trackId,
     required List<String> trackDays,
-
-  })
-  async {
+  }) async {
     try {
       final url = Uri.parse(ApiClient.updateTrackUrl);
       final headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
-
       };
-      final body = jsonEncode({
-        "trackId": trackId,
-        "trackDays":trackDays
-      });
+      final body = jsonEncode({"trackId": trackId, "trackDays": trackDays});
       final response = await http.patch(url, headers: headers, body: body);
       final responseData = json.decode(response.body);
       log('-----------------update track call--------------------');
+      log(body.toString());
+      log(responseData.toString());
+      if (responseData['success'] != null && responseData['success'] == true) {
+        showCustomSnackbar(
+            title: AppStaticString.success,
+            message: responseData['message'],
+            type: SnackBarType.success);
+        return true;
+      } else {
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
+        return false;
+      }
+    } catch (e) {
+      showCustomSnackbar(
+          title: AppStaticString.failed,
+          message: e.toString(),
+          type: SnackBarType.failed);
+      debugPrint(e.toString());
+      return false;
+    }
+  }
+
+  static Future<bool> createTrackSlotRequest({
+    required String trackId,
+    required String day,
+    required String slotNo,
+    required String startTime,
+    required String endTime,
+    required String price,
+    required String maxPeople,
+    required String description,
+  }) async {
+    try {
+      final url = Uri.parse(ApiClient.createTrackSlotUrl);
+      final headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
+      };
+      final body = jsonEncode({
+        "trackId": trackId,
+        "day": day,
+        "slotNo": slotNo,
+        "startTime": startTime,
+        "endTime": endTime,
+        "price": price,
+        "maxPeople": maxPeople,
+        "description": description
+      });
+      final response = await http.post(url, headers: headers, body: body);
+      final responseData = json.decode(response.body);
+      log('-----------------create slot call--------------------');
       log(body.toString());
       log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {

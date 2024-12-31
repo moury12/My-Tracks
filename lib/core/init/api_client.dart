@@ -13,5 +13,6 @@ class ApiClient {
   static String get categoryUrl => '$baseUrl/dashboard/get-all-category';
   static String get addBusinessTrackUrl => '$baseUrl/business/track';
   static String get updateTrackUrl => '$baseUrl/business/update-track';
+  static String get createTrackSlotUrl => '$baseUrl/business/create-slot';
 
 }

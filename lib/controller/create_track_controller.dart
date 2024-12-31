@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:track_trek/controller/network_controller.dart';
@@ -12,17 +13,22 @@ import 'package:track_trek/view/add/upload_track.dart';
 class CreateTrackController extends GetxController {
   static CreateTrackController get to => Get.find();
   var locationSuggestions = RxList<LocationSuggestion>([]);
-  Rx<TextEditingController> trackNameController = TextEditingController().obs;
+  Rx<TextEditingController> trackNameController =
+      TextEditingController(text: kDebugMode ? 'track name' : '').obs;
   Rx<TextEditingController> trackLocationController =
-      TextEditingController().obs;
-  Rx<TextEditingController> trackDescriptionController =
-      TextEditingController().obs;
+      TextEditingController(text: kDebugMode ? 'mirpur' : '').obs;
+  Rx<TextEditingController> trackDescriptionController = TextEditingController(
+          text: kDebugMode
+              ? 'The readable content of a page when looking at its layout.'
+              : '')
+      .obs;
   Rx<TextEditingController> uploadTrackPeopleNumberController =
       TextEditingController().obs;
   Rx<TextEditingController> uploadTrackPriceController =
       TextEditingController().obs;
   Rx<TextEditingController> uploadTrackDescriptionController =
       TextEditingController().obs;
+  Rx<TextEditingController> slotNoController = TextEditingController().obs;
   RxList<Map<String, dynamic>> weekDays = <Map<String, dynamic>>[].obs;
   var selectedCategory = Rx<String?>(null);
   var destinationLat = Rx<String?>(null);
@@ -31,10 +37,14 @@ class CreateTrackController extends GetxController {
   RxList<String> trackPhotosList = <String>[].obs;
   RxString days = '0'.obs;
   RxString trackId = ''.obs;
+  RxString selectedWeekDay = ''.obs;
+  RxString selectedStartTime = ''.obs;
+  RxString selectedEndTime = ''.obs;
 
   ///=====================loading variables=====================///
   RxBool isLoadingPostTrack = false.obs;
   RxBool isLoadingUpdateTrack = false.obs;
+  RxBool isLoadingCreateSlot = false.obs;
   getWeekDays() {
     weekDays.value = generateWeekDays();
   }
@@ -96,16 +106,38 @@ class CreateTrackController extends GetxController {
             .toList(),
       );
       if (isUpdate) {
-        days.value=weekDays
+        days.value = weekDays
             .where((e) => e['selected'] == true)
-            .map((e) =>
-        e['day_name'] as String)
-            .toList().length.toString();
+            .map((e) => e['day_name'] as String)
+            .toList()
+            .length
+            .toString();
       }
 
       isLoadingUpdateTrack.value = false;
     } else {
       isLoadingUpdateTrack.value = false;
+      noInternetShowCustomSnackbar();
+    }
+  }
+
+  createSlotTrackCall() async {
+    if (NetworkController.to.isConnected.value) {
+      isLoadingCreateSlot.value = true;
+      bool isUpdate = await TrackEventService.createTrackSlotRequest(
+          trackId: trackId.value,
+          day: selectedWeekDay.value,
+          slotNo: slotNoController.value.text,
+          startTime: selectedStartTime.value,
+          endTime: selectedEndTime.value,
+          price: uploadTrackPriceController.value.text,
+          maxPeople: uploadTrackPeopleNumberController.value.text,
+          description: uploadTrackDescriptionController.value.text);
+      if (isUpdate) {}
+
+      isLoadingCreateSlot.value = false;
+    } else {
+      isLoadingCreateSlot.value = false;
       noInternetShowCustomSnackbar();
     }
   }

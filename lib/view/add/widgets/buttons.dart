@@ -66,19 +66,17 @@ class SaveSmallButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: IntrinsicWidth(
-          child: GradientContainerWidget(
-            radius: 4.r,
-            textStyle: poppinsRegular.copyWith(
-                color: AppColors.blackLightColor,
-                fontSize: getFontSizeSmall(context)),
-            text: AppStaticString.save,
-            padding: EdgeInsets.all(4.w),
-          ),
+    return Align(
+      alignment: Alignment.centerRight,
+      child: IntrinsicWidth(
+        child: GradientContainerWidget(
+          onTap: onTap,
+          radius: 4.r,
+          textStyle: poppinsRegular.copyWith(
+              color: AppColors.blackLightColor,
+              fontSize: getFontSizeSmall(context)),
+          text: AppStaticString.save,
+          padding: EdgeInsets.all(4.w),
         ),
       ),
     );
