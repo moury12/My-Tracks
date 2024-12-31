@@ -10,5 +10,7 @@ class ApiClient {
   static String get deleteProfileUrl => '$baseUrl/user/delete-account';
   static String get userProfileUrl => '$baseUrl/user/profile';
   static String get userEditProfileUrl => '$baseUrl/user/edit-profile';
+  static String get categoryUrl => '$baseUrl/dashboard/get-all-category';
+  static String get addBusinessTrackUrl => '$baseUrl/business/track';
 
 }

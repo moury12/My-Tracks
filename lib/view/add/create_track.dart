@@ -11,19 +11,21 @@ import 'package:track_trek/core/components/custom_button.dart';
 import 'package:track_trek/core/components/custom_drop_down_button.dart';
 import 'package:track_trek/core/components/custom_textfield.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
-import 'package:track_trek/core/constant/fontsize_constant.dart';
+import 'package:track_trek/core/constant/custom_space.dart';
 
 import 'package:track_trek/core/constant/padding_constant.dart';
+
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
-import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/add/upload_image_widget.dart';
 import 'package:track_trek/view/add/upload_track.dart';
+import 'package:track_trek/view/add/widgets/black_container_with_border.dart';
 import 'package:track_trek/view/add/widgets/buttons.dart';
 
 class CreateTrackScreen extends StatelessWidget {
   static const String routeName = '/create-track';
   const CreateTrackScreen({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +41,7 @@ class CreateTrackScreen extends StatelessWidget {
           padding: padding16,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            spacing: 16.h,
+            spacing: 6.h,
             children: [
               CustomTextField(
                 textEditingController: argument != null && argument == 'event'
@@ -50,6 +52,7 @@ class CreateTrackScreen extends StatelessWidget {
                     : AppStaticString.trackName,
                 hintText: AppStaticString.typeHere,
               ),
+              space6H,
               argument != null && argument == 'event'
                   ? CustomTextField(
                       textEditingController: CreateEventController
@@ -57,12 +60,22 @@ class CreateTrackScreen extends StatelessWidget {
                       title: AppStaticString.startDate,
                       hintText: AppStaticString.typeHere,
                     )
-                  : const CustomDropdown(
-                      title: AppStaticString.selectCategory,
-                    ),
-              const CustomDropdown(
-                title: AppStaticString.startTime,
-              ),
+                  :  Obx(() {
+                return CustomDropdown<String>(
+                  title: AppStaticString.selectCategory,
+                  items: CreateEventController.to.catList.isNotEmpty
+                      ? CreateEventController.to.catList.map((element) => element.name.toString(),).toList()
+                      : [],
+                  onChanged: (value) {
+                    CreateTrackController.to.selectedCategory.value=value.toString();
+                  },
+                );
+              }),
+              argument != null && argument == 'event'
+                  ? const CustomDropdown(
+                      title: AppStaticString.startTime,
+                    )
+                  : const SizedBox.shrink(),
               argument != null && argument == 'event'
                   ? CustomTextField(
                       textEditingController:
@@ -71,9 +84,11 @@ class CreateTrackScreen extends StatelessWidget {
                       hintText: AppStaticString.typeHere,
                     )
                   : const SizedBox.shrink(),
-              const CustomDropdown(
-                title: AppStaticString.endTime,
-              ),
+              argument != null && argument == 'event'
+                  ? const CustomDropdown(
+                      title: AppStaticString.endTime,
+                    )
+                  : const SizedBox.shrink(),
 
               ///===============================upload images================================///
               Obx(() {
@@ -128,28 +143,65 @@ class CreateTrackScreen extends StatelessWidget {
                               CreateEventController.to.trackPhotosList.length <
                                       5
                                   ? Padding(
-                                    padding: padding8,
-                                    child: UploadImageIconTextWidget(
+                                      padding: padding8,
+                                      child: UploadImageIconTextWidget(
                                         function: () {
                                           pickImages(
                                               allowMultiple: true,
-                                              uploadImages: CreateEventController
-                                                  .to.trackPhotosList);
+                                              uploadImages:
+                                                  CreateEventController
+                                                      .to.trackPhotosList);
                                         },
                                       ),
-                                  )
+                                    )
                                   : const SizedBox.shrink()
                             ],
                           )
                         : null);
               }),
+              space6H,
               CustomTextField(
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return '';
+                  }
+                  return null;
+                },
+                title: AppStaticString.location,
+                hintText: AppStaticString.typeHere,
                 textEditingController: argument != null && argument == 'event'
                     ? CreateEventController.to.eventLocationController.value
                     : CreateTrackController.to.trackLocationController.value,
-                title: AppStaticString.location,
-                hintText: AppStaticString.typeHere,
+                textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.text,
+                onChanged: (value) async{
+               await searchLocation(value, destinationLng:CreateTrackController.to.destinationLng,destinationLat: CreateTrackController.to.destinationLat, locationSuggestions: CreateTrackController.to.locationSuggestions );
+
+                },
+
               ),
+              Obx(() {
+                return CreateTrackController.to.locationSuggestions.isEmpty
+                    ? const SizedBox.shrink()
+                    : ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: CreateTrackController.to.locationSuggestions.length,
+                  itemBuilder: (context, index) {
+                    final suggestion = CreateTrackController.to.locationSuggestions[index];
+                    return ListTile(
+                      title: Text(suggestion.address), // Display the address
+                      onTap: () {
+                        debugPrint('------------------------lat long---------------------');
+                        // Handle the selection of a suggestion
+                        CreateTrackController.to.destinationLat.value = suggestion.lat.toString();
+                        CreateTrackController.to.destinationLng.value = suggestion.lng.toString();
+                        debugPrint('Selected Lat: ${CreateTrackController.to.destinationLat.value} Selected lng: ${CreateTrackController.to.destinationLng.value}');
+                      },
+                    );
+                  },
+                );
+              }),
+              space6H,
               CustomTextField(
                 textEditingController: argument != null && argument == 'event'
                     ? CreateEventController.to.eventDescriptionController.value
@@ -197,29 +249,5 @@ class CreateTrackScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class BlackContainerWithBroder extends StatelessWidget {
-  final String? text;
-  const BlackContainerWithBroder({
-    super.key,
-    this.text,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        padding: padding12V,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(4.r),
-            border: Border.all(width: 1, color: AppColors.textFieldColor)),
-        child: Text(
-          text ?? AppStaticString.customerInfo,
-          style: poppinsRegular.copyWith(
-              color: AppColors.normalDarkWhite,
-              fontSize: getFontSizeDefault(context)),
-        ));
   }
 }

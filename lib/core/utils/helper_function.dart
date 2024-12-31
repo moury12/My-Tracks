@@ -1,10 +1,13 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:track_trek/controller/profile_controller.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/init/hive_boxes.dart';
+import 'package:track_trek/core/model/location/place_search_model.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/view/auth/login.dart';
 
@@ -92,14 +95,61 @@ Future<void> pickImages({
     debugPrint("File picker error: $e");
   }
 }
-void removeImage({required RxList<String> uploadImages, required String imagePath}) {
+
+void removeImage(
+    {required RxList<String> uploadImages, required String imagePath}) {
   if (uploadImages.contains(imagePath)) {
     uploadImages.remove(imagePath);
-
   } else {
     debugPrint("Image not found in the list.");
   }
 }
+
+Future<void> searchLocation(String address,
+    {required Rx<String?> destinationLat,required Rx<String?> destinationLng, required RxList<LocationSuggestion> locationSuggestions  })
+async {
+  if (address.isEmpty) {
+    destinationLat.value = null;
+    destinationLng.value = null;
+    locationSuggestions.value = [];// Reset if the address is empty
+    return;
+  }
+
+  try {
+
+    List<Location> locations = await locationFromAddress(address);
+    if (locations.isNotEmpty) {
+      locationSuggestions.value = locations.map((location) {
+        // Create LocationSuggestion objects with address and LatLng
+        return LocationSuggestion(
+          address: address,
+          lat: location.latitude,
+          lng: location.longitude
+        );
+      }).toList();
+     /* destinationLatLng.value =
+          LatLng(locations.last.latitude, locations.last.longitude).toString();*/
+    } else {
+      destinationLat.value = null;
+      destinationLng.value = null;
+      locationSuggestions.value = [];
+      // No result found, reset
+      // showCustomSnackbar(
+      //     title: 'Error',
+      //     message: 'No results found for the provided address.',
+      //     type: SnackBarType.failed);
+    }
+  } catch (e) {
+    destinationLat.value = null;
+    destinationLng.value = null;
+    locationSuggestions.value = [];// Reset on error
+/*    showCustomSnackbar(
+        title: 'Error',
+        message: 'Failed to fetch location. Please try again.',
+        type: SnackBarType.failed);*/
+  }
+}
+
 void noInternetShowCustomSnackbar() {
   return showCustomSnackbar(
     title: AppStaticString.failed,

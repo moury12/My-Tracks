@@ -9,7 +9,7 @@ import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/init/api_client.dart';
 import 'package:track_trek/core/init/hive_boxes.dart';
-import 'package:track_trek/core/model/user_model.dart';
+import 'package:track_trek/core/model/user/user_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:track_trek/core/utils/helper_function.dart';
 
@@ -52,8 +52,7 @@ class UserService {
     required String phoneNumber,
     required String address,
     required File? file,
-  })
-  async {
+  }) async {
     try {
       final request = http.MultipartRequest(
         'PATCH',
@@ -108,14 +107,13 @@ class UserService {
       debugPrint('Error during profile update: $e');
       return false;
     }
-
   }
+
   static Future<bool> changePasswordRequest({
     required String oldPassword,
     required String newPassword,
     required String confirmPassword,
-  })
-  async {
+  }) async {
     try {
       final url = Uri.parse(ApiClient.changePassUrl);
       final headers = {
@@ -127,7 +125,6 @@ class UserService {
         "oldPassword": oldPassword,
         "newPassword": newPassword,
         "confirmPassword": confirmPassword,
-
       });
       final response = await http.patch(url, headers: headers, body: body);
       final responseData = json.decode(response.body);
@@ -156,12 +153,11 @@ class UserService {
       return false;
     }
   }
+
   static Future<bool> deleteAccountRequest({
     required String email,
     required String password,
-
-  })
-  async {
+  }) async {
     try {
       final url = Uri.parse(ApiClient.deleteProfileUrl);
       final headers = {
@@ -172,8 +168,6 @@ class UserService {
       final body = jsonEncode({
         "email": email,
         "password": password,
-
-
       });
       final response = await http.delete(url, headers: headers, body: body);
       final responseData = json.decode(response.body);

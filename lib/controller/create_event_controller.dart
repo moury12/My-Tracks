@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:track_trek/controller/network_controller.dart';
+import 'package:track_trek/core/model/category/category_model.dart';
+import 'package:track_trek/core/service/track_event_service.dart';
+import 'package:track_trek/core/utils/helper_function.dart';
 
 class CreateEventController extends GetxController {
   static CreateEventController get to => Get.find();
@@ -27,6 +31,7 @@ RxList<String> eventNameControllerList =<String>[].obs;
 RxList<String> trackPhotosList =<String>[].obs;
   @override
   void onInit() {
+    categoryListCall();
     super.onInit();
   }
   // void addEventName() {
@@ -38,6 +43,20 @@ RxList<String> trackPhotosList =<String>[].obs;
   //     Get.snackbar('Error', 'Event name cannot be empty');
   //   }
   // }
+  RxBool isLoadingCategory = false.obs;
+  RxList<CategoryModel> catList = <CategoryModel>[].obs;
+  var selectedCategory =Rx<String?>(null);
+  categoryListCall() async {
+    if (NetworkController.to.isConnected.value) {
+      isLoadingCategory.value = true;
+      catList.value = await TrackEventService.getCategoryListCall();
+
+      isLoadingCategory.value = false;
+    } else {
+      isLoadingCategory.value = false;
+      noInternetShowCustomSnackbar();
+    }
+  }
   @override
   void onClose() {
     eventNameController.value.dispose();

@@ -14,7 +14,7 @@ class InitialBinding extends Bindings {
 class CommonBinding extends Bindings {
   @override
   void dependencies() {
-    Get.put<CommonController>(CommonController(), permanent: true);
     Get.put<NetworkController>(NetworkController(), permanent: true);
+    Get.put<CommonController>(CommonController(), permanent: true);
   }
 }

@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:track_trek/core/model/location/place_search_model.dart';
 
 class CreateTrackController extends GetxController {
   static CreateTrackController get to => Get.find();
-
+  var locationSuggestions = RxList<LocationSuggestion>([]);
   Rx<TextEditingController> trackNameController = TextEditingController().obs;
   Rx<TextEditingController> trackLocationController =
       TextEditingController().obs;
@@ -15,7 +16,9 @@ class CreateTrackController extends GetxController {
   Rx<TextEditingController> uploadTrackDescriptionController =
       TextEditingController().obs;
   RxList<Map<String, dynamic>> weekDays = <Map<String, dynamic>>[].obs;
-
+  var selectedCategory =Rx<String?>(null);
+  var destinationLat =Rx<String?>(null);
+  var destinationLng =Rx<String?>(null);
   RxInt selectedDay = 0.obs;
   getWeekDays() {
     weekDays.value = generateWeekDays();
