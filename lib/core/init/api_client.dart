@@ -14,5 +14,8 @@ class ApiClient {
   static String get addBusinessTrackUrl => '$baseUrl/business/track';
   static String get updateTrackUrl => '$baseUrl/business/update-track';
   static String get createTrackSlotUrl => '$baseUrl/business/create-slot';
+  static String get deleteSlotUrl => '$baseUrl/business/delete-slot';
+  static String get getSingleBusinessUrl => '$baseUrl/business/get-single-business';
+
 
 }

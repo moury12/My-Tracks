@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:track_trek/controller/network_controller.dart';
 import 'package:track_trek/core/global/string_variable.dart';

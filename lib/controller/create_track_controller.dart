@@ -1,25 +1,29 @@
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:track_trek/controller/network_controller.dart';
+import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/model/location/place_search_model.dart';
+import 'package:track_trek/core/model/track-event/single_track_model.dart';
 import 'package:track_trek/core/service/track_event_service.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/view/add/upload_track.dart';
 
 class CreateTrackController extends GetxController {
   static CreateTrackController get to => Get.find();
-  var locationSuggestions = RxList<LocationSuggestion>([]);
+
+  ///=======================text editing controller =======================///
   Rx<TextEditingController> trackNameController =
       TextEditingController(text: kDebugMode ? 'track name' : '').obs;
   Rx<TextEditingController> trackLocationController =
       TextEditingController(text: kDebugMode ? 'mirpur' : '').obs;
   Rx<TextEditingController> trackDescriptionController = TextEditingController(
           text: kDebugMode
-              ? 'The readable content of a page when looking at its layout.'
+              ? 'The best description of music genre of your song should be explained in a few sentences. tools that help music anywhere new listeners let us know descriptive This is usually the first sentence or two that potential listeners will read, so it\'s important to get them excited about what they\'re going to hear. Think about word choice and how you might use certain words or phrases when describing your sound.'
+                  'rhythmic, pulsing bass lines and hypnotic dance beats. optimize time-based help you stay audio files create a professional Techno also has a strong focus on the use of sequencers to create repetitive rhythmic patterns.'
+                  'Techno is one of the most popular genres in nightclubs all over the world.'
               : '')
       .obs;
   Rx<TextEditingController> uploadTrackPeopleNumberController =
@@ -29,7 +33,13 @@ class CreateTrackController extends GetxController {
   Rx<TextEditingController> uploadTrackDescriptionController =
       TextEditingController().obs;
   Rx<TextEditingController> slotNoController = TextEditingController().obs;
+
+  ///=================dynamic lists=============================///
   RxList<Map<String, dynamic>> weekDays = <Map<String, dynamic>>[].obs;
+  var locationSuggestions = RxList<LocationSuggestion>([]);
+  Rx<SingleTrackModel> singleTrack = SingleTrackModel().obs;
+
+  ///=================dynamic Strings=============================///
   var selectedCategory = Rx<String?>(null);
   var destinationLat = Rx<String?>(null);
   var destinationLng = Rx<String?>(null);
@@ -45,6 +55,8 @@ class CreateTrackController extends GetxController {
   RxBool isLoadingPostTrack = false.obs;
   RxBool isLoadingUpdateTrack = false.obs;
   RxBool isLoadingCreateSlot = false.obs;
+  RxBool isLoadingTrack = false.obs;
+
   getWeekDays() {
     weekDays.value = generateWeekDays();
   }
@@ -106,12 +118,17 @@ class CreateTrackController extends GetxController {
             .toList(),
       );
       if (isUpdate) {
-        days.value = weekDays
-            .where((e) => e['selected'] == true)
+        final initialSelectedDays = weekDays.where((e) => e['selected'] == true).toList();
+        days.value = initialSelectedDays
             .map((e) => e['day_name'] as String)
             .toList()
             .length
             .toString();
+
+        if (initialSelectedDays.isNotEmpty) {
+          selectedDay.value = 0; // Set index to the first selected day
+          selectedWeekDay.value = initialSelectedDays[0]['day_name'].toString();
+        }
       }
 
       isLoadingUpdateTrack.value = false;
@@ -133,11 +150,35 @@ class CreateTrackController extends GetxController {
           price: uploadTrackPriceController.value.text,
           maxPeople: uploadTrackPeopleNumberController.value.text,
           description: uploadTrackDescriptionController.value.text);
-      if (isUpdate) {}
+      if (isUpdate) {
+        isLoadingCreateSlot.value = false;
+        getTrackDetailsCall(trackId: trackId.value);
+      }
 
       isLoadingCreateSlot.value = false;
     } else {
       isLoadingCreateSlot.value = false;
+      noInternetShowCustomSnackbar();
+    }
+  }
+
+  getTrackDetailsCall({required String trackId}) async {
+    if (NetworkController.to.isConnected.value) {
+      isLoadingTrack.value = true;
+      singleTrack.value = await TrackEventService.getSingleTrackData(
+        trackId:trackId,
+      );
+      if (singleTrack.value.sId != null) {
+        isLoadingTrack.value = false;
+      } else {
+        isLoadingTrack.value = false;
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: AppStaticString.failedToLoadData,
+            type: SnackBarType.failed);
+      }
+    } else {
+      isLoadingTrack.value = false;
       noInternetShowCustomSnackbar();
     }
   }

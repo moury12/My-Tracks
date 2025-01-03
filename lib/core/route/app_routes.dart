@@ -63,7 +63,7 @@ class AppRoutes {
             bindings: [CreateTrackBinding(), CreateEventBinding()]),
         GetPage(
             name: UploadTrackScreen.routeName,
-            page: () => const UploadTrackScreen(),
+            page: () =>  UploadTrackScreen(),
             binding: CreateTrackBinding()),
         GetPage(
           name: ProfileScreen.routeName,

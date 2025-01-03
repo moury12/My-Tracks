@@ -41,7 +41,7 @@ class CustomTextField extends StatefulWidget {
       this.contentPadding = const EdgeInsets.only(left: 10),
       this.title,
       this.isEnable = true,
-      this.height});
+      this.height, this.isRequired=false});
 
   final TextEditingController? textEditingController;
   final FocusNode? focusNode;
@@ -71,6 +71,7 @@ class CustomTextField extends StatefulWidget {
 
   final bool isPassword;
   final bool? isEnable;
+  final bool? isRequired;
   final EdgeInsetsGeometry contentPadding;
   final bool readOnly;
   final double? height;
@@ -93,13 +94,26 @@ class _CustomTextFieldState extends State<CustomTextField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         widget.title != null
-            ? Text(
-                widget.title ?? '',
-                style: poppinsRegular.copyWith(
-                    fontSize: getFontSizeSemiSmall(context)),
-              )
-            : SizedBox.shrink(),
-        widget.title != null ? space8H : SizedBox.shrink(),
+            ? Row(
+              children: [
+                Text(
+                    widget.title ?? '',
+                    style: poppinsRegular.copyWith(
+                        fontSize: getFontSizeSemiSmall(context)),
+                  ), widget.isRequired==true? Padding(
+                    padding: const EdgeInsets.only(left: 4),
+                    child: Text(
+                       '*',
+                      style: poppinsRegular.copyWith(
+                        color: Colors.red,
+                          fontSize: getFontSizeSemiSmall(context)),
+                    ),
+                  ):const SizedBox.shrink(),
+
+              ],
+            )
+            : const SizedBox.shrink(),
+        widget.title != null ? space8H : const SizedBox.shrink(),
         SizedBox(
           height: widget.height, // Set the desired height here
           child: TextFormField(

@@ -14,6 +14,7 @@ class CustomDropdown<T> extends StatefulWidget {
   final Color? iconColor;
   final Color? fillColor;
   final Color? hintColor;
+  final bool? isRequired;
   final double? radius;
   final T? selectedValue;
   final List<T>? items; // Dynamic list of items
@@ -30,7 +31,8 @@ class CustomDropdown<T> extends StatefulWidget {
     this.iconColor,
     this.items, // Pass dropdown items dynamically
     this.onChanged,
-    this.selectedValue, // Selected value managed externally
+    this.selectedValue,
+    this.isRequired = false, // Selected value managed externally
   });
 
   @override
@@ -55,10 +57,25 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
       mainAxisSize: MainAxisSize.min,
       children: [
         widget.title != null
-            ? Text(
-                widget.title ?? '',
-                style: poppinsRegular.copyWith(
-                    fontSize: getFontSizeSemiSmall(context)),
+            ? Row(
+                children: [
+                  Text(
+                    widget.title ?? '',
+                    style: poppinsRegular.copyWith(
+                        fontSize: getFontSizeSemiSmall(context)),
+                  ),
+                  widget.isRequired == true
+                      ? Padding(
+                          padding: const EdgeInsets.only(left: 4),
+                          child: Text(
+                            '*',
+                            style: poppinsRegular.copyWith(
+                                color: Colors.red,
+                                fontSize: getFontSizeSemiSmall(context)),
+                          ),
+                        )
+                      : const SizedBox.shrink(),
+                ],
               )
             : const SizedBox.shrink(),
         widget.title != null ? space8H : const SizedBox.shrink(),
@@ -72,7 +89,7 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
             borderRadius: BorderRadius.circular(widget.radius ?? 4.r),
           ),
           child: DropdownButton<T>(
-            padding: padding8.copyWith(top: 0,bottom: 0),
+            padding: padding8.copyWith(top: 0, bottom: 0),
             value: selectedValue, // Use local state here
             isExpanded: true,
             underline: const SizedBox(), // Removes the default underline
@@ -96,18 +113,21 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
             items: (widget.items ?? []).map((e) {
               return DropdownMenuItem<T>(
                 value: e,
-                child: Text(e.toString()),
+                child: Text(e.toString(), style: poppinsMedium.copyWith(
+                  color: AppColors.whiteLightColor,
+                    fontWeight: FontWeight.w400,
+                    fontSize: getFontSizeSmall(context))),
               );
             }).toList(),
-            onChanged:/* widget.onChanged ??*/
+            onChanged: /* widget.onChanged ??*/
                 (value) {
-                  setState(() {
-                    selectedValue = value; // Update local state
-                  });
-                  if (widget.onChanged != null) {
-                    widget.onChanged!(value); // Notify parent widget
-                  }
-                },
+              setState(() {
+                selectedValue = value; // Update local state
+              });
+              if (widget.onChanged != null) {
+                widget.onChanged!(value); // Notify parent widget
+              }
+            },
           ),
         ),
       ],

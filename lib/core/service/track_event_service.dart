@@ -13,6 +13,10 @@ import 'package:track_trek/core/model/category/category_model.dart';
 import 'package:track_trek/core/model/category/category_model.dart';
 import 'package:track_trek/core/model/category/category_model.dart';
 import 'package:track_trek/core/model/category/category_model.dart';
+import 'package:track_trek/core/model/track-event/single_track_model.dart';
+import 'package:track_trek/core/model/track-event/single_track_model.dart';
+import 'package:track_trek/core/model/track-event/single_track_model.dart';
+import 'package:track_trek/core/model/track-event/single_track_model.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 
 class TrackEventService {
@@ -220,4 +224,46 @@ class TrackEventService {
       return false;
     }
   }
+
+  static Future<SingleTrackModel> getSingleTrackData({
+    required String trackId,
+  })
+  async {
+    SingleTrackModel singleTrackDetails = SingleTrackModel();
+    try {
+      final url = Uri.parse(
+          '${ApiClient.getSingleBusinessUrl}?trackId=$trackId&getSlots=yes');
+      final headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
+      };
+
+      final response = await http.get(
+        url,
+        headers: headers,
+      );
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      log('-----------------single Track Details call--------------------');
+      log(responseData.toString());
+      if (responseData['success'] != null && responseData['success'] == true) {
+        singleTrackDetails = SingleTrackModel.fromJson(responseData['data']);
+        return singleTrackDetails;
+      } else {
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
+        return singleTrackDetails;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return singleTrackDetails;
+  }
+/*  static Future<bool> deleteSlot({
+    required String slotID
+})async{
+
+}*/
 }

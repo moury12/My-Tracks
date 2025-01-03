@@ -521,6 +521,34 @@ class ExpandableText extends StatefulWidget {
 
 class _ExpandableTextState extends State<ExpandableText> {
   bool _isExpanded = false;
+  bool _isTextOverflowing = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkTextOverflow();
+    });
+  }
+
+  void _checkTextOverflow() {
+    final textStyle = widget.textStyle ??
+        poppinsRegular.copyWith(
+          fontSize: getFontSizeSmall(context),
+        );
+    final textSpan = TextSpan(text: widget.text, style: textStyle);
+    final textPainter = TextPainter(
+      text: textSpan,
+      maxLines: widget.maxLines,
+      textDirection: TextDirection.ltr,
+    )..layout(maxWidth: MediaQuery.of(context).size.width);
+
+    if (textPainter.didExceedMaxLines) {
+      setState(() {
+        _isTextOverflowing = true;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -537,22 +565,24 @@ class _ExpandableTextState extends State<ExpandableText> {
           maxLines: _isExpanded ? null : widget.maxLines,
           overflow: _isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
         ),
-        GestureDetector(
-          onTap: () {
-            setState(() {
-              _isExpanded = !_isExpanded;
-            });
-          },
-          child: Text(
-            _isExpanded ? 'See Less' : AppStaticString.seeMore,
-            style: widget.buttonStyle ??
-                poppinsSemiBold.copyWith(
-                  fontSize: getFontSizeSmall(context),
-                  // color: AppColors.primaryColor,
-                ),
+        if (_isTextOverflowing)
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                _isExpanded = !_isExpanded;
+              });
+            },
+            child: Text(
+              _isExpanded ? 'See Less' : AppStaticString.seeMore,
+              style: widget.buttonStyle ??
+                  poppinsSemiBold.copyWith(
+                    fontSize: getFontSizeSmall(context),
+                    // color: AppColors.primaryColor,
+                  ),
+            ),
           ),
-        ),
       ],
     );
   }
 }
+

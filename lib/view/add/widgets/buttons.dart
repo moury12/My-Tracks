@@ -24,32 +24,30 @@ class CreateSlotButtonSmallWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: IntrinsicWidth(
-          child: GradientContainerWidget(
-            radius: 4.r,
-            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  AppStaticString.createSlot,
-                  style: poppinsRegular.copyWith(
-                      color: AppColors.blackLightColor,
-                      fontSize: getFontSizeSmall(context)),
-                ),
-                space8W,
-                Image.asset(
-                  plusIconUrl,
-                  height: 14.w,
-                  width: 14.w,
-                  color: AppColors.blackLightColor,
-                )
-              ],
-            ),
+    return Align(
+      alignment: Alignment.centerRight,
+      child: IntrinsicWidth(
+        child: GradientContainerWidget(
+          onTap: onTap,
+          radius: 4.r,
+          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                AppStaticString.createSlot,
+                style: poppinsRegular.copyWith(
+                    color: AppColors.blackLightColor,
+                    fontSize: getFontSizeSmall(context)),
+              ),
+              space8W,
+              Image.asset(
+                plusIconUrl,
+                height: 14.w,
+                width: 14.w,
+                color: AppColors.blackLightColor,
+              )
+            ],
           ),
         ),
       ),

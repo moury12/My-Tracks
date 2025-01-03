@@ -61,6 +61,8 @@ class AppStaticString {
   static const String signIn = "Sign In";
   static const String emailRequired = "Email is required.";
   static const String nameRequired = "Username is required.";
+  static const String slotNoRequired = "Slot no is required.";
+  static const String fieldRequired = "Field is required.";
   static const String otpFieldRequired = "Otp field is required.";
   static const String passRequired = "Password is required.";
   static const String enterValidEmail = "Enter a valid email.";
@@ -179,6 +181,7 @@ class AppStaticString {
   static const String  send= "Send";
   static const String  success= "Success";
   static const String  failed= "Failed";
+  static const String  failedToLoadData= "Failed to load data";
   static const String  alert= "Alert";
   static const String  sendCode= "Send Code";
   static const String  connectToInternet= "Connect to the Internet";
