@@ -107,30 +107,26 @@ void removeImage(
 }
 
 Future<void> searchLocation(String address,
-    {required Rx<String?> destinationLat,required Rx<String?> destinationLng,
-      required RxList<LocationSuggestion> locationSuggestions  })
-async {
+    {required Rx<String?> destinationLat,
+    required Rx<String?> destinationLng,
+    required RxList<LocationSuggestion> locationSuggestions}) async {
   if (address.isEmpty) {
     destinationLat.value = null;
     destinationLng.value = null;
-    locationSuggestions.value = [];// Reset if the address is empty
+    locationSuggestions.value = []; // Reset if the address is empty
     return;
   }
 
   try {
-
     List<Location> locations = await locationFromAddress(address);
     if (locations.isNotEmpty) {
       locationSuggestions.value = locations.map((location) {
         // Create LocationSuggestion objects with address and LatLng
         return LocationSuggestion(
-          address: address,
-          lat: location.latitude,
-          lng: location.longitude
-        );
+            address: address, lat: location.latitude, lng: location.longitude);
       }).toList();
-     /* destinationLatLng.value =
-          LatLng(locations.last.latitude, locations.last.longitude).toString();*/
+      destinationLat.value = locations.last.latitude.toString();
+      destinationLng.value = locations.last.longitude.toString();
     } else {
       destinationLat.value = null;
       destinationLng.value = null;
@@ -144,7 +140,7 @@ async {
   } catch (e) {
     destinationLat.value = null;
     destinationLng.value = null;
-    locationSuggestions.value = [];// Reset on error
+    locationSuggestions.value = []; // Reset on error
 /*    showCustomSnackbar(
         title: 'Error',
         message: 'Failed to fetch location. Please try again.',
@@ -159,6 +155,7 @@ void noInternetShowCustomSnackbar() {
     type: SnackBarType.failed,
   );
 }
+
 Future<String?> selectAndFormatTime({
   required BuildContext context,
   required TimeOfDay initialTime,
@@ -174,7 +171,8 @@ Future<String?> selectAndFormatTime({
       // Format the selected time
       final now = DateTime.now();
       final formattedTime = DateFormat.jm().format(
-        DateTime(now.year, now.month, now.day, pickedTime.hour, pickedTime.minute),
+        DateTime(
+            now.year, now.month, now.day, pickedTime.hour, pickedTime.minute),
       );
       return formattedTime; // Return the formatted time
     } else {
@@ -185,10 +183,29 @@ Future<String?> selectAndFormatTime({
     return null;
   }
 }
+
 void logOutCall() {
   Boxes.getUserData().delete(tokenKey);
   Boxes.getUserData().delete(roleKey);
   Boxes.getUserData().clear();
   Get.delete<ProfileController>();
   Get.offAllNamed(LoginScreen.routeName);
+}
+
+Future<String> selectDate(
+  BuildContext context,
+) async {
+  final DateTime? pickedDate = await showDatePicker(
+    context: context,
+    initialDate: DateTime.now(),
+    firstDate: DateTime(2000),
+    lastDate: DateTime(2100),
+  );
+  if (pickedDate != null) {
+    // Format the date
+    String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+    // Update the observable
+    return formattedDate;
+  }
+  return ''; // Return null if no date is selected
 }

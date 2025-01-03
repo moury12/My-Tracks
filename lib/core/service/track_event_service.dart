@@ -10,16 +10,12 @@ import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/init/api_client.dart';
 import 'package:track_trek/core/init/hive_boxes.dart';
 import 'package:track_trek/core/model/category/category_model.dart';
-import 'package:track_trek/core/model/category/category_model.dart';
-import 'package:track_trek/core/model/category/category_model.dart';
-import 'package:track_trek/core/model/category/category_model.dart';
-import 'package:track_trek/core/model/track-event/single_track_model.dart';
-import 'package:track_trek/core/model/track-event/single_track_model.dart';
-import 'package:track_trek/core/model/track-event/single_track_model.dart';
 import 'package:track_trek/core/model/track-event/single_track_model.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 
 class TrackEventService {
+  ///==========================Track Functionality==============================///
+
   static Future<String> addTrackCall(
       {required String trackName,
       required String category,
@@ -90,7 +86,7 @@ class TrackEventService {
         return data['data']['_id'] ?? '';
       }
     } catch (e) {
-      debugPrint('Error during profile update: $e');
+      debugPrint('Error during add track: $e');
       return '';
     }
   }
@@ -297,6 +293,74 @@ class TrackEventService {
           type: SnackBarType.failed);
       debugPrint(e.toString());
       return false;
+    }
+  }
+
+  ///===============================Event Functionality==============================///
+
+  static Future<String> addEventCall(
+      {required Map<String, dynamic> bodyData,
+      required List<File>? files})
+  async {
+    try {
+      final request = http.MultipartRequest(
+        'POST',
+        Uri.parse(ApiClient.createEventUrl),
+      );
+
+      request.headers['Authorization'] =
+          'Bearer ${Boxes.getUserData().get(tokenKey)}';
+
+      request.fields['data'] = jsonEncode(bodyData);
+
+      if (files != null && files.isNotEmpty) {
+        for (File file in files) {
+          if (await file.exists()) {
+            final mimeType =
+                lookupMimeType(file.path) ?? 'application/octet-stream';
+            final mimeSplit = mimeType.split('/');
+            request.files.add(
+              await http.MultipartFile.fromPath(
+                'event_image', // Key for multiple files
+                file.path,
+                contentType: MediaType(mimeSplit[0], mimeSplit[1]),
+              ),
+            );
+          } else {
+            debugPrint('File does not exist: ${file.path}');
+          }
+        }
+      } else {
+        debugPrint('No files selected or file list is empty.');
+      }
+
+      final response = await request.send();
+      final responseData = await http.Response.fromStream(response);
+
+      log('-----------------post event call--------------------');
+      log(request.files.toString());
+      log(request.fields.toString());
+      log(responseData.body);
+
+      // Decode the response body
+      final Map<String, dynamic> data = json.decode(responseData.body);
+
+      if (data['success'] != null && data['success'] == true) {
+        showCustomSnackbar(
+            title: AppStaticString.success,
+            message: data['message'],
+            type: SnackBarType.success);
+        return data['data']['_id'];
+      } else {
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: data['message'],
+            type: SnackBarType.failed);
+        return data['data']['_id'] ?? '';
+      }
+    } catch (e) {
+      debugPrint('Error during add event: $e');
+      return '';
     }
   }
 }

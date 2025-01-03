@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:track_trek/controller/create_event_controller.dart';
+
+import 'package:track_trek/controller/create_track_event_controller.dart';
+
 import 'package:track_trek/core/components/custom_button.dart';
 import 'package:track_trek/core/components/custom_textfield.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
@@ -174,7 +175,7 @@ class DefaultDialogWithButton extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsets.only(bottom: 8.h),
                         child: CustomTextField(
-                          textEditingController: CreateEventController.to.fieldNameController.value,
+                          textEditingController: CreateTrackEventController.to.fieldNameController.value,
                           title: AppStaticString.fieldName,
                           fillColor: AppColors.blackBackgroundColor,
                           focusedBorder: OutlineInputBorder(
@@ -199,9 +200,10 @@ class DefaultDialogWithButton extends StatelessWidget {
                     borderColor: borderColor,
                     save: () {
                       Navigator.pop(context);
-                      CreateEventController.to.eventNameControllerList.add(CreateEventController.to.eventNameController.value.text);
-                      CreateEventController.to.eventControllerList.add(CreateEventController.to.eventNameController.value);
-                      print(CreateEventController.to.eventNameControllerList);
+                      CreateTrackEventController.to.eventNameControllerList.add(CreateTrackEventController.to.fieldNameController.value.text);
+                      CreateTrackEventController.to.fieldNameController.value.clear();
+                      // CreateTrackEventController.to.eventControllerList.add(CreateTrackEventController.to.eventNameController.value);
+                      print(CreateTrackEventController.to.eventNameControllerList);
                     },
                     radius: radius,
                     firstButtonText: firstButtonText,

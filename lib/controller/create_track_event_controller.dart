@@ -5,18 +5,21 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:track_trek/controller/network_controller.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
+import 'package:track_trek/core/model/category/category_model.dart';
 import 'package:track_trek/core/model/location/place_search_model.dart';
 import 'package:track_trek/core/model/track-event/single_track_model.dart';
 import 'package:track_trek/core/service/track_event_service.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/view/add/upload_track.dart';
 
-class CreateTrackController extends GetxController {
-  static CreateTrackController get to => Get.find();
+class CreateTrackEventController extends GetxController {
+  static CreateTrackEventController get to => Get.find();
 
-  ///=======================text editing controller =======================///
+  ///=======================text editing controller for track =======================///
+
   Rx<TextEditingController> trackNameController =
       TextEditingController(text: kDebugMode ? 'track name' : '').obs;
+
   Rx<TextEditingController> trackLocationController =
       TextEditingController(text: kDebugMode ? 'mirpur' : '').obs;
   Rx<TextEditingController> trackDescriptionController = TextEditingController(
@@ -34,28 +37,72 @@ class CreateTrackController extends GetxController {
       TextEditingController().obs;
   Rx<TextEditingController> slotNoController = TextEditingController().obs;
 
+  ///=======================text editing controller for Event =======================///
+
+  Rx<TextEditingController> eventNameController = TextEditingController().obs;
+  Rx<TextEditingController> eventLocationController =
+      TextEditingController().obs;
+  Rx<TextEditingController> eventStartDateController =
+      TextEditingController().obs;
+  Rx<TextEditingController> eventEndDateController =
+      TextEditingController().obs;
+  Rx<TextEditingController> eventDescriptionController =
+      TextEditingController().obs;
+  Rx<TextEditingController> uploadEventTotalSeatController =
+      TextEditingController().obs;
+  Rx<TextEditingController> uploadEventPriceController =
+      TextEditingController().obs;
+  Rx<TextEditingController> uploadEventDescriptionController =
+      TextEditingController().obs;
+  Rx<TextEditingController> fieldNameController = TextEditingController().obs;
+  RxList<TextEditingController> eventControllerList =
+      <TextEditingController>[].obs;
+
   ///=================dynamic lists=============================///
+  RxList<String> eventNameControllerList = <String>[].obs;
   RxList<Map<String, dynamic>> weekDays = <Map<String, dynamic>>[].obs;
   var locationSuggestions = RxList<LocationSuggestion>([]);
   Rx<SingleTrackModel> singleTrack = SingleTrackModel().obs;
+  RxList<CategoryModel> catList = <CategoryModel>[].obs;
 
-  ///=================dynamic Strings=============================///
+  ///=====================dynamic Strings=============================///
+
   var selectedCategory = Rx<String?>(null);
   var destinationLat = Rx<String?>(null);
   var destinationLng = Rx<String?>(null);
   RxInt selectedDay = 0.obs;
   RxList<String> trackPhotosList = <String>[].obs;
+  RxList<String> eventPhotosList = <String>[].obs;
   RxString days = '0'.obs;
   RxString trackId = ''.obs;
   RxString selectedWeekDay = ''.obs;
   RxString selectedStartTime = ''.obs;
   RxString selectedEndTime = ''.obs;
+  RxString selectedEventStartTime = ''.obs;
+  RxString selectedEventEndTime = ''.obs;
+  RxString eventId = ''.obs;
 
-  ///=====================loading variables=====================///
+  ///=======================loading variables=====================///
+
   RxBool isLoadingPostTrack = false.obs;
   RxBool isLoadingUpdateTrack = false.obs;
   RxBool isLoadingCreateSlot = false.obs;
   RxBool isLoadingTrack = false.obs;
+  RxBool isLoadingCategory = false.obs;
+  RxBool isLoadingPostEvent = false.obs;
+  categoryListCall() async {
+    if (NetworkController.to.isConnected.value) {
+      isLoadingCategory.value = true;
+      catList.value = await TrackEventService.getCategoryListCall();
+
+      isLoadingCategory.value = false;
+    } else {
+      isLoadingCategory.value = false;
+      noInternetShowCustomSnackbar();
+    }
+  }
+
+  ///===========================================Track Functionality==============================///
 
   getWeekDays() {
     weekDays.value = generateWeekDays();
@@ -95,6 +142,7 @@ class CreateTrackController extends GetxController {
       if (value.isNotEmpty) {
         isLoadingPostTrack.value = false;
         trackId.value = value;
+        trackPhotosList.clear();
         Get.toNamed(UploadTrackScreen.routeName, arguments: 'track');
         // navigator!.pop();
       } else {
@@ -197,9 +245,48 @@ class CreateTrackController extends GetxController {
     }
   }
 
+  ///===================================Event Functionality==============================///
+
+  postEventRequest() async {
+    if (NetworkController.to.isConnected.value) {
+      isLoadingPostEvent.value = true;
+      List<File> files = trackPhotosList.map((path) => File(path)).toList();
+
+      String value = await TrackEventService.addEventCall(bodyData: {
+        "eventName": eventNameController.value.text,
+        "address": eventLocationController.value.text,
+        "longitude": destinationLng.value,
+        "latitude": destinationLat.value,
+        "description": eventDescriptionController.value.text,
+        "startDate": eventStartDateController.value.text,
+        "startTime": selectedEventStartTime.value,
+        "endDate": eventEndDateController.value.text,
+        "endTime": selectedEventStartTime.value,
+        "moreInfo": eventNameControllerList
+            .map(
+              (element) => {"label": element},
+            )
+            .toList()
+      }, files: files);
+      if (value.isNotEmpty) {
+        isLoadingPostEvent.value = false;
+        trackId.value = value;
+        Get.toNamed(UploadTrackScreen.routeName, arguments: 'event');
+        // navigator!.pop();
+      } else {
+        isLoadingPostEvent.value = false;
+      }
+    } else {
+      isLoadingPostEvent.value = false;
+      noInternetShowCustomSnackbar();
+    }
+  }
+
   @override
   void onInit() {
+    categoryListCall();
     getWeekDays();
+
     super.onInit();
   }
 
@@ -208,6 +295,14 @@ class CreateTrackController extends GetxController {
     trackNameController.value.dispose();
     trackLocationController.value.dispose();
     trackDescriptionController.value.dispose();
+    eventNameController.value.dispose();
+    eventLocationController.value.dispose();
+    eventDescriptionController.value.dispose();
+    eventStartDateController.value.dispose();
+    eventEndDateController.value.dispose();
+    uploadEventDescriptionController.value.dispose();
+    uploadEventTotalSeatController.value.dispose();
+    uploadEventPriceController.value.dispose();
     super.onClose();
   }
 }

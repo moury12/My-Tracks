@@ -60,7 +60,7 @@ class AppRoutes {
         GetPage(
             name: CreateTrackEventScreen.routeName,
             page: () =>  CreateTrackEventScreen(),
-            bindings: [CreateTrackBinding(), CreateEventBinding()]),
+            binding: CreateTrackBinding()),
         GetPage(
             name: UploadTrackScreen.routeName,
             page: () =>  UploadTrackScreen(),

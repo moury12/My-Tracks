@@ -16,18 +16,33 @@ import 'package:track_trek/core/utils/text_style.dart';
 class UploadImageWidget extends StatelessWidget {
   final Function()? function;
   final Widget? images;
-  const UploadImageWidget({super.key, this.function, this.images});
+  final bool? isRequired;
+  const UploadImageWidget({super.key, this.function, this.images, this.isRequired=false});
 
   @override
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 16.h,
       children: [
-     Text(
-          AppStaticString.uploadPhoto,
-          style:
-              poppinsRegular.copyWith(fontSize: getFontSizeSemiSmall(context)),
-        ),
+     Row(
+       children: [
+         Text(
+              AppStaticString.uploadPhoto,
+              style:
+                  poppinsRegular.copyWith(fontSize: getFontSizeSemiSmall(context)),
+            ), isRequired == true
+             ? Padding(
+           padding: const EdgeInsets.only(left: 4),
+           child: Text(
+             '*',
+             style: poppinsRegular.copyWith(
+                 color: Colors.red,
+                 fontSize: getFontSizeSemiSmall(context)),
+           ),
+         )
+             : const SizedBox.shrink(),
+       ],
+     ),
 
         ///========================upload image=======================///
         images?? LightBlackFillWidget( function:function ,),
