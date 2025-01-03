@@ -118,7 +118,8 @@ class CreateTrackController extends GetxController {
             .toList(),
       );
       if (isUpdate) {
-        final initialSelectedDays = weekDays.where((e) => e['selected'] == true).toList();
+        final initialSelectedDays =
+            weekDays.where((e) => e['selected'] == true).toList();
         days.value = initialSelectedDays
             .map((e) => e['day_name'] as String)
             .toList()
@@ -166,7 +167,7 @@ class CreateTrackController extends GetxController {
     if (NetworkController.to.isConnected.value) {
       isLoadingTrack.value = true;
       singleTrack.value = await TrackEventService.getSingleTrackData(
-        trackId:trackId,
+        trackId: trackId,
       );
       if (singleTrack.value.sId != null) {
         isLoadingTrack.value = false;
@@ -179,6 +180,19 @@ class CreateTrackController extends GetxController {
       }
     } else {
       isLoadingTrack.value = false;
+      noInternetShowCustomSnackbar();
+    }
+  }
+
+  deleteSlotCall({required String slotId}) async {
+    if (NetworkController.to.isConnected.value) {
+      bool isDeleted = await TrackEventService.deleteSlotRequest(
+        slotId: slotId,
+      );
+      if (isDeleted) {
+        getTrackDetailsCall(trackId: trackId.value);
+      }
+    } else {
       noInternetShowCustomSnackbar();
     }
   }

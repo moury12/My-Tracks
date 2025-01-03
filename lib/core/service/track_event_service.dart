@@ -227,8 +227,7 @@ class TrackEventService {
 
   static Future<SingleTrackModel> getSingleTrackData({
     required String trackId,
-  })
-  async {
+  }) async {
     SingleTrackModel singleTrackDetails = SingleTrackModel();
     try {
       final url = Uri.parse(
@@ -261,9 +260,43 @@ class TrackEventService {
     }
     return singleTrackDetails;
   }
-/*  static Future<bool> deleteSlot({
-    required String slotID
-})async{
 
-}*/
+  static Future<bool> deleteSlotRequest({required String slotId}) async {
+    try {
+      final url = Uri.parse(ApiClient.deleteSlotUrl);
+      final headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
+      };
+      final body = jsonEncode({
+        "slotId": slotId,
+      });
+      final response = await http.delete(url, headers: headers, body: body);
+      final responseData = json.decode(response.body);
+      log('-----------------delete slot call--------------------');
+      log(body.toString());
+      log(responseData.toString());
+      if (responseData['success'] != null && responseData['success'] == true) {
+        showCustomSnackbar(
+            title: AppStaticString.success,
+            message: responseData['message'],
+            type: SnackBarType.success);
+        return true;
+      } else {
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
+        return false;
+      }
+    } catch (e) {
+      showCustomSnackbar(
+          title: AppStaticString.failed,
+          message: e.toString(),
+          type: SnackBarType.failed);
+      debugPrint(e.toString());
+      return false;
+    }
+  }
 }

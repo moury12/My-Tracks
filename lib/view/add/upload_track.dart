@@ -442,6 +442,17 @@ class UploadTrackScreen extends StatelessWidget {
                                 child: TrackSlotWidget(
                                   slots: CreateTrackController
                                       .to.singleTrack.value.slots![index],
+                                  onDelete: () {
+                                    CreateTrackController.to.deleteSlotCall(
+                                        slotId: CreateTrackController
+                                                .to
+                                                .singleTrack
+                                                .value
+                                                .slots![index]
+                                                .sId ??
+                                            '');
+                                    Navigator.pop(context);
+                                  },
                                 ),
                               );
                             },

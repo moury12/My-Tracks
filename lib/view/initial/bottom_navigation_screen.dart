@@ -5,7 +5,7 @@ import 'package:track_trek/controller/track_management_controller.dart';
 import 'package:track_trek/core/components/custom_appbar.dart';
 import 'package:track_trek/core/components/custom_drawer_widget.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
-import 'package:track_trek/view/add/create_track_event_screen.dart';
+import 'package:track_trek/view/add/create_screen.dart';
 import 'package:track_trek/view/booking/booking_management.dart';
 import 'package:track_trek/view/home/host/home_screen.dart';
 import 'package:track_trek/view/home/user/home_user_page.dart';
@@ -50,7 +50,7 @@ class BottomNavigationScreen extends StatelessWidget {
       CommonController.to.selectedRoleOption.value == 0
           ? const BookingManagementScreen()
           : const ManagementScreen(),
-      const CreateTrackEventScreen(),
+      const CreateScreen(),
       const NotificationScreen(),
       CommonController.to.selectedRoleOption.value == 0
           ? const ProfileScreen(

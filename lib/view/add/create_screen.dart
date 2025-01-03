@@ -8,10 +8,10 @@ import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
-import 'package:track_trek/view/add/create_track.dart';
+import 'package:track_trek/view/add/create_track_event_page.dart';
 
-class CreateTrackEventScreen extends StatelessWidget {
-  const CreateTrackEventScreen({super.key});
+class CreateScreen extends StatelessWidget {
+  const CreateScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class CreateTrackEventScreen extends StatelessWidget {
               img: plusIconUrl,
 
               onTap: () {
-               Get.toNamed(CreateTrackScreen.routeName,arguments: 'track');
+               Get.toNamed(CreateTrackEventScreen.routeName,arguments: 'track');
               },
             ),
           ),
@@ -45,7 +45,7 @@ class CreateTrackEventScreen extends StatelessWidget {
               fillColor:AppColors.blueColor ,
               borderColor:AppColors.blueColor ,
               onTap: () {
-                Get.toNamed(CreateTrackScreen.routeName,arguments: 'event');
+                Get.toNamed(CreateTrackEventScreen.routeName,arguments: 'event');
                 // Button Action
               },
             ),

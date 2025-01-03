@@ -19,7 +19,16 @@ class DeleteAlertDialog extends StatelessWidget {
   final VoidCallback? yesFunction;
   final VoidCallback? cancelFunction;
   const DeleteAlertDialog({
-    super.key, this.title, this.widgets, this.text1, this.text2, this.showButton=true, this.text, this.yesFunction, this.cancelFunction, this.isLoading=false,
+    super.key,
+    this.title,
+    this.widgets,
+    this.text1,
+    this.text2,
+    this.showButton = true,
+    this.text,
+    this.yesFunction,
+    this.cancelFunction,
+    this.isLoading = false,
   });
 
   @override
@@ -30,49 +39,57 @@ class DeleteAlertDialog extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
-            children: [Spacer(),
-              IconButton(onPressed: () {
-                Navigator.pop(context);
-              }, icon: Icon(CupertinoIcons.multiply)),
+            children: [
+              Spacer(),
+              IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: Icon(CupertinoIcons.multiply)),
             ],
           ),
-          title??SizedBox.shrink(),
-          Text(textAlign: TextAlign.center,
-          text??  AppStaticString.areYouSureToDelete,
+          title ?? SizedBox.shrink(),
+          Text(
+            textAlign: TextAlign.center,
+            text ?? AppStaticString.areYouSureToDelete,
             style: poppinsRegular.copyWith(fontSize: getFontSizeLarge(context)),
           ),
           space16H,
-          widgets??SizedBox.shrink(),
-       showButton==true?   Row(
-            spacing: 16.w,
-            children: [
-              Expanded(
-                  child: CustomButton(
-                    isLoading: isLoading,
-                onTap:yesFunction?? () {
-                  Navigator.pop(context);
-                },
-                // height: 44.h,
-               width: 92.w,
-                title: text1??AppStaticString.yes,
-                textColor: AppColors.whiteLightColor,
-                borderColor: AppColors.redBrightColor,
-                fillColor: AppColors.redBrightColor,
-              )),
-              Expanded(
-                  child: CustomButton(
-                onTap:cancelFunction?? () {
-                  Navigator.pop(context);
-                },
-                // height: 44.h,
-               width: 92.w,
-                title: text2??AppStaticString.no,
-                textColor: AppColors.whiteLightColor,
-                borderColor: AppColors.greenColor,
-                fillColor: AppColors.greenColor,
-              )),
-            ],
-          ):SizedBox.shrink(),
+          widgets ?? SizedBox.shrink(),
+          showButton == true
+              ? Row(
+                  spacing: 16.w,
+                  children: [
+                    Expanded(
+                        child: CustomButton(
+                      isLoading: isLoading,
+                      onTap: yesFunction ??
+                          () {
+                            Navigator.pop(context);
+                          },
+                      // height: 44.h,
+                      width: 92.w,
+                      title: text1 ?? AppStaticString.yes,
+                      textColor: AppColors.whiteLightColor,
+                      borderColor: AppColors.redBrightColor,
+                      fillColor: AppColors.redBrightColor,
+                    )),
+                    Expanded(
+                        child: CustomButton(
+                      onTap: cancelFunction ??
+                          () {
+                            Navigator.pop(context);
+                          },
+                      // height: 44.h,
+                      width: 92.w,
+                      title: text2 ?? AppStaticString.no,
+                      textColor: AppColors.whiteLightColor,
+                      borderColor: AppColors.greenColor,
+                      fillColor: AppColors.greenColor,
+                    )),
+                  ],
+                )
+              : SizedBox.shrink(),
         ],
       ),
     );

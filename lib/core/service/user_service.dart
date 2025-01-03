@@ -157,7 +157,8 @@ class UserService {
   static Future<bool> deleteAccountRequest({
     required String email,
     required String password,
-  }) async {
+  })
+  async {
     try {
       final url = Uri.parse(ApiClient.deleteProfileUrl);
       final headers = {

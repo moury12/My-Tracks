@@ -3,7 +3,7 @@ import 'package:track_trek/core/binding/auth_binding.dart';
 import 'package:track_trek/core/binding/create_track_event_binding.dart';
 import 'package:track_trek/core/binding/home_binding.dart';
 import 'package:track_trek/core/binding/initial_binding.dart';
-import 'package:track_trek/view/add/create_track.dart';
+import 'package:track_trek/view/add/create_track_event_page.dart';
 import 'package:track_trek/view/add/upload_track.dart';
 import 'package:track_trek/view/auth/forget_password.dart';
 import 'package:track_trek/view/auth/login.dart';
@@ -58,8 +58,8 @@ class AppRoutes {
             page: () => const HomeScreen(),
             binding: HomeBinding()),
         GetPage(
-            name: CreateTrackScreen.routeName,
-            page: () => const CreateTrackScreen(),
+            name: CreateTrackEventScreen.routeName,
+            page: () =>  CreateTrackEventScreen(),
             bindings: [CreateTrackBinding(), CreateEventBinding()]),
         GetPage(
             name: UploadTrackScreen.routeName,

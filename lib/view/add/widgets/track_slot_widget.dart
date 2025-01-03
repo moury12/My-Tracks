@@ -29,12 +29,13 @@ class TrackSlotWidget extends StatelessWidget {
   final bool? needToShowSeat;
   final Slots? slots;
   final Function()? onTap;
+  final Function()? onDelete;
   const TrackSlotWidget({
     super.key,
     this.argument,
     this.needToShowSeat = false,
     this.onTap,
-    this.slots,
+    this.slots, this.onDelete,
   });
 
   @override
@@ -145,7 +146,9 @@ class TrackSlotWidget extends StatelessWidget {
                             onTap: () {
                               showDialog(
                                 context: context,
-                                builder: (context) => const DeleteAlertDialog(),
+                                builder: (context) =>  DeleteAlertDialog(
+                                  yesFunction:onDelete ,
+                                ),
                               );
                             },
                             child: Padding(
