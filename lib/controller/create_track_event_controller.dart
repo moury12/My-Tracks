@@ -7,6 +7,8 @@ import 'package:track_trek/controller/network_controller.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/model/category/category_model.dart';
 import 'package:track_trek/core/model/location/place_search_model.dart';
+import 'package:track_trek/core/model/track-event/single_event_model.dart';
+import 'package:track_trek/core/model/track-event/single_event_model.dart';
 import 'package:track_trek/core/model/track-event/single_track_model.dart';
 import 'package:track_trek/core/service/track_event_service.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
@@ -39,22 +41,34 @@ class CreateTrackEventController extends GetxController {
 
   ///=======================text editing controller for Event =======================///
 
-  Rx<TextEditingController> eventNameController = TextEditingController().obs;
+  Rx<TextEditingController> eventNameController =
+      TextEditingController(text: kDebugMode ? 'event name' : '').obs;
   Rx<TextEditingController> eventLocationController =
-      TextEditingController().obs;
+      TextEditingController(text: kDebugMode ? 'dhaka' : '').obs;
   Rx<TextEditingController> eventStartDateController =
-      TextEditingController().obs;
+      TextEditingController(text: kDebugMode ? '2025-01-10' : '').obs;
   Rx<TextEditingController> eventEndDateController =
-      TextEditingController().obs;
-  Rx<TextEditingController> eventDescriptionController =
-      TextEditingController().obs;
+      TextEditingController(text: kDebugMode ? '2025-01-22' : '').obs;
+  Rx<TextEditingController> eventDescriptionController = TextEditingController(
+          text: kDebugMode
+              ? 'A dummy is a type of doll that looks like a person. Entertainers called ventriloquists can make dummies appear to talk. The automobile industry uses dummies in cars to study how safe cars are during a crash. A dummy can also be anything that looks real but doesn\'t work: a fake.'
+              : '')
+      .obs;
   Rx<TextEditingController> uploadEventTotalSeatController =
-      TextEditingController().obs;
+      TextEditingController(text: kDebugMode ? '20' : '').obs;
   Rx<TextEditingController> uploadEventPriceController =
-      TextEditingController().obs;
+      TextEditingController(text: kDebugMode ? '200' : '').obs;
+  Rx<TextEditingController> slotNoControllerForEvent =
+      TextEditingController(text: kDebugMode ? 'zeta' : '').obs;
+
   Rx<TextEditingController> uploadEventDescriptionController =
-      TextEditingController().obs;
-  Rx<TextEditingController> fieldNameController = TextEditingController().obs;
+      TextEditingController(
+              text: kDebugMode
+                  ? 'A dummy is a type of doll that looks like a person. Entertainers called ventriloquists can make dummies appear to talk. The automobile industry uses dummies in cars to study how safe cars are during a crash. A dummy can also be anything that looks real but doesn\'t work: a fake.'
+                  : '')
+          .obs;
+  Rx<TextEditingController> fieldNameController =
+      TextEditingController(text: kDebugMode ? 'NID' : '').obs;
   RxList<TextEditingController> eventControllerList =
       <TextEditingController>[].obs;
 
@@ -63,6 +77,7 @@ class CreateTrackEventController extends GetxController {
   RxList<Map<String, dynamic>> weekDays = <Map<String, dynamic>>[].obs;
   var locationSuggestions = RxList<LocationSuggestion>([]);
   Rx<SingleTrackModel> singleTrack = SingleTrackModel().obs;
+  Rx<SingleEventModel> singleEvent = SingleEventModel().obs;
   RxList<CategoryModel> catList = <CategoryModel>[].obs;
 
   ///=====================dynamic Strings=============================///
@@ -88,6 +103,7 @@ class CreateTrackEventController extends GetxController {
   RxBool isLoadingUpdateTrack = false.obs;
   RxBool isLoadingCreateSlot = false.obs;
   RxBool isLoadingTrack = false.obs;
+  RxBool isLoadingEvent = false.obs;
   RxBool isLoadingCategory = false.obs;
   RxBool isLoadingPostEvent = false.obs;
   categoryListCall() async {
@@ -232,13 +248,16 @@ class CreateTrackEventController extends GetxController {
     }
   }
 
-  deleteSlotCall({required String slotId}) async {
+  deleteSlotCall({required String slotId, bool? isEvent}) async {
     if (NetworkController.to.isConnected.value) {
       bool isDeleted = await TrackEventService.deleteSlotRequest(
-        slotId: slotId,
-      );
+          slotId: slotId, isEvent: isEvent);
       if (isDeleted) {
-        getTrackDetailsCall(trackId: trackId.value);
+        if (isEvent == true) {
+          getEventDetailsCall(eventId: eventId.value);
+        } else {
+          getTrackDetailsCall(trackId: trackId.value);
+        }
       }
     } else {
       noInternetShowCustomSnackbar();
@@ -270,7 +289,7 @@ class CreateTrackEventController extends GetxController {
       }, files: files);
       if (value.isNotEmpty) {
         isLoadingPostEvent.value = false;
-        trackId.value = value;
+        eventId.value = value;
         Get.toNamed(UploadTrackScreen.routeName, arguments: 'event');
         // navigator!.pop();
       } else {
@@ -278,6 +297,48 @@ class CreateTrackEventController extends GetxController {
       }
     } else {
       isLoadingPostEvent.value = false;
+      noInternetShowCustomSnackbar();
+    }
+  }
+
+  createSlotEventCall() async {
+    if (NetworkController.to.isConnected.value) {
+      isLoadingCreateSlot.value = true;
+      bool isUpdate = await TrackEventService.createEventSlotRequest(
+          eventId: eventId.value,
+          slotNo: slotNoControllerForEvent.value.text,
+          maxPeople: uploadEventTotalSeatController.value.text,
+          price: uploadEventPriceController.value.text,
+          description: uploadEventDescriptionController.value.text);
+      if (isUpdate) {
+        isLoadingCreateSlot.value = false;
+        getEventDetailsCall(eventId: eventId.value);
+      }
+
+      isLoadingCreateSlot.value = false;
+    } else {
+      isLoadingCreateSlot.value = false;
+      noInternetShowCustomSnackbar();
+    }
+  }
+
+  getEventDetailsCall({required String eventId}) async {
+    if (NetworkController.to.isConnected.value) {
+      isLoadingEvent.value = true;
+      singleEvent.value = await TrackEventService.getSingleEventData(
+        eventId: eventId,
+      );
+      if (singleEvent.value.sId != null) {
+        isLoadingEvent.value = false;
+      } else {
+        isLoadingEvent.value = false;
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: AppStaticString.failedToLoadData,
+            type: SnackBarType.failed);
+      }
+    } else {
+      isLoadingEvent.value = false;
       noInternetShowCustomSnackbar();
     }
   }

@@ -10,7 +10,7 @@ class SingleTrackModel {
   String? status;
   bool? isPromoted;
   List<String>? trackDays;
-  List<String>? renters;
+  List<Renters>? renters;
   List<Slots>? slots;
   int? totalLikes;
   int? totalReview;
@@ -22,25 +22,25 @@ class SingleTrackModel {
 
   SingleTrackModel(
       {this.sId,
-        this.host,
-        this.trackName,
-        this.category,
-        this.trackImage,
-        this.address,
-        this.location,
-        this.description,
-        this.status,
-        this.isPromoted,
-        this.trackDays,
-        this.renters,
-        this.slots,
-        this.totalLikes,
-        this.totalReview,
-        this.createdAt,
-        this.updatedAt,
-        this.iV,
-        this.totalTrackDayInMonth,
-        this.rating});
+      this.host,
+      this.trackName,
+      this.category,
+      this.trackImage,
+      this.address,
+      this.location,
+      this.description,
+      this.status,
+      this.isPromoted,
+      this.trackDays,
+      this.renters,
+      this.slots,
+      this.totalLikes,
+      this.totalReview,
+      this.createdAt,
+      this.updatedAt,
+      this.iV,
+      this.totalTrackDayInMonth,
+      this.rating});
 
   SingleTrackModel.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -49,14 +49,18 @@ class SingleTrackModel {
     category = json['category'];
     trackImage = json['track_image'].cast<String>();
     address = json['address'];
-    location = json['location'] != null
-        ? Location.fromJson(json['location'])
-        : null;
+    location =
+        json['location'] != null ? Location.fromJson(json['location']) : null;
     description = json['description'];
     status = json['status'];
     isPromoted = json['isPromoted'];
     trackDays = json['trackDays'].cast<String>();
-    renters = json['renters'].cast<String>();
+    if (json['renters'] != null) {
+      renters = <Renters>[];
+      json['renters'].forEach((v) {
+        renters!.add(Renters.fromJson(v));
+      });
+    }
     if (json['slots'] != null) {
       slots = <Slots>[];
       json['slots'].forEach((v) {
@@ -87,7 +91,9 @@ class SingleTrackModel {
     data['status'] = status;
     data['isPromoted'] = isPromoted;
     data['trackDays'] = trackDays;
-    data['renters'] = renters;
+    if (renters != null) {
+      data['renters'] = renters!.map((v) => v.toJson()).toList();
+    }
     if (slots != null) {
       data['slots'] = slots!.map((v) => v.toJson()).toList();
     }
@@ -135,15 +141,15 @@ class Slots {
 
   Slots(
       {this.sId,
-        this.host,
-        this.track,
-        this.day,
-        this.slotNo,
-        this.startTime,
-        this.endTime,
-        this.price,
-        this.maxPeople,
-        this.description});
+      this.host,
+      this.track,
+      this.day,
+      this.slotNo,
+      this.startTime,
+      this.endTime,
+      this.price,
+      this.maxPeople,
+      this.description});
 
   Slots.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -170,6 +176,55 @@ class Slots {
     data['price'] = price;
     data['maxPeople'] = maxPeople;
     data['description'] = description;
+    return data;
+  }
+}
+
+class Renters {
+  String? sId;
+  String? authId;
+  String? name;
+  String? email;
+  String? createdAt;
+  String? updatedAt;
+  int? iV;
+  String? address;
+  String? profileImage;
+
+  Renters(
+      {this.sId,
+      this.authId,
+      this.name,
+      this.email,
+      this.createdAt,
+      this.updatedAt,
+      this.iV,
+      this.address,
+      this.profileImage});
+
+  Renters.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    authId = json['authId'];
+    name = json['name'];
+    email = json['email'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+    iV = json['__v'];
+    address = json['address'];
+    profileImage = json['profile_image'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = sId;
+    data['authId'] = authId;
+    data['name'] = name;
+    data['email'] = email;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['__v'] = iV;
+    data['address'] = address;
+    data['profile_image'] = profileImage;
     return data;
   }
 }

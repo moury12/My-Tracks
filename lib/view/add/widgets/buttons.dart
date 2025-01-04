@@ -71,11 +71,11 @@ class SaveSmallButtonWidget extends StatelessWidget {
         child: GradientContainerWidget(
           onTap: onTap,
           radius: 4.r,
-          textStyle: poppinsRegular.copyWith(
+          textStyle: poppinsMedium.copyWith(
               color: AppColors.blackLightColor,
-              fontSize: getFontSizeSmall(context)),
+              fontSize: getFontSizeDefault(context)),
           text: AppStaticString.save,
-          padding: EdgeInsets.all(4.w),
+          padding: EdgeInsets.all(12.sp),
         ),
       ),
     );

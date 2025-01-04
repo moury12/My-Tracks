@@ -10,6 +10,10 @@ import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/init/api_client.dart';
 import 'package:track_trek/core/init/hive_boxes.dart';
 import 'package:track_trek/core/model/category/category_model.dart';
+import 'package:track_trek/core/model/track-event/single_event_model.dart';
+import 'package:track_trek/core/model/track-event/single_event_model.dart';
+import 'package:track_trek/core/model/track-event/single_event_model.dart';
+import 'package:track_trek/core/model/track-event/single_event_model.dart';
 import 'package:track_trek/core/model/track-event/single_track_model.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 
@@ -175,7 +179,8 @@ class TrackEventService {
     required String price,
     required String maxPeople,
     required String description,
-  }) async {
+  })
+  async {
     try {
       final url = Uri.parse(ApiClient.createTrackSlotUrl);
       final headers = {
@@ -223,7 +228,8 @@ class TrackEventService {
 
   static Future<SingleTrackModel> getSingleTrackData({
     required String trackId,
-  }) async {
+  })
+  async {
     SingleTrackModel singleTrackDetails = SingleTrackModel();
     try {
       final url = Uri.parse(
@@ -257,7 +263,7 @@ class TrackEventService {
     return singleTrackDetails;
   }
 
-  static Future<bool> deleteSlotRequest({required String slotId}) async {
+  static Future<bool> deleteSlotRequest({required String slotId,bool? isEvent}) async {
     try {
       final url = Uri.parse(ApiClient.deleteSlotUrl);
       final headers = {
@@ -265,8 +271,13 @@ class TrackEventService {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
       };
-      final body = jsonEncode({
+      final body = jsonEncode(
+          isEvent==true ?{
+            "slotId": slotId,
+            "event": "yes"
+          }:{
         "slotId": slotId,
+
       });
       final response = await http.delete(url, headers: headers, body: body);
       final responseData = json.decode(response.body);
@@ -363,4 +374,90 @@ class TrackEventService {
       return '';
     }
   }
+  static Future<SingleEventModel> getSingleEventData({
+    required String eventId,
+  })
+  async {
+    SingleEventModel singleEventDetails = SingleEventModel();
+    try {
+      final url = Uri.parse(
+          '${ApiClient.getSingleBusinessUrl}?eventId=$eventId&getSlots=yes');
+      final headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
+      };
+
+      final response = await http.get(
+        url,
+        headers: headers,
+      );
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      log('-----------------single Event Details call--------------------');
+      log(responseData.toString());
+      if (responseData['success'] != null && responseData['success'] == true) {
+        singleEventDetails = SingleEventModel.fromJson(responseData['data']);
+        return singleEventDetails;
+      } else {
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
+        return singleEventDetails;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return singleEventDetails;
+  }
+  static Future<bool> createEventSlotRequest({
+    required String eventId,
+    required String slotNo,
+    required String maxPeople,
+    required String price,
+    required String description,
+  })
+  async {
+    try {
+      final url = Uri.parse(ApiClient.createTrackSlotUrl);
+      final headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
+      };
+      final body = jsonEncode({
+        "eventId":eventId,
+        "slotNo": slotNo,
+        "maxPeople":maxPeople,
+        "price": price,
+        "description": description
+      });
+      final response = await http.post(url, headers: headers, body: body);
+      final responseData = json.decode(response.body);
+      log('-----------------create slot call--------------------');
+      log(body.toString());
+      log(responseData.toString());
+      if (responseData['success'] != null && responseData['success'] == true) {
+        showCustomSnackbar(
+            title: AppStaticString.success,
+            message: responseData['message'],
+            type: SnackBarType.success);
+        return true;
+      } else {
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
+        return false;
+      }
+    } catch (e) {
+      showCustomSnackbar(
+          title: AppStaticString.failed,
+          message: e.toString(),
+          type: SnackBarType.failed);
+      debugPrint(e.toString());
+      return false;
+    }
+  }
+
 }
