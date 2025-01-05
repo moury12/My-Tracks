@@ -6,6 +6,8 @@ import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
 import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/global/string_variable.dart';
+import 'package:track_trek/core/model/participants/event_participants_model.dart';
+import 'package:track_trek/core/model/participants/track_participants_model.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/home/host/user_details_page.dart';
@@ -97,9 +99,11 @@ class TrackEventInfoContentWidget extends StatelessWidget {
 
 class UserInfoContentWidget extends StatelessWidget {
   final String? seatNo;
+  final TrackParticipantsModel? trackPartModel;
+  final EventParticipantsModel? eventPartModel;
   const UserInfoContentWidget({
     super.key,
-    this.seatNo,
+    this.seatNo, this.trackPartModel, this.eventPartModel,
   });
 
   @override
@@ -114,7 +118,7 @@ class UserInfoContentWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                AppStaticString.dummyName,
+              /* eventPartModel!=null?eventPartModel.:*/ AppStaticString.dummyName,
                 style: poppinsRegular.copyWith(
                     fontSize: getFontSizeDefault(context)),
               ),

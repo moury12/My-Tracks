@@ -10,6 +10,12 @@ import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/init/api_client.dart';
 import 'package:track_trek/core/init/hive_boxes.dart';
 import 'package:track_trek/core/model/category/category_model.dart';
+import 'package:track_trek/core/model/participants/event_participants_model.dart';
+import 'package:track_trek/core/model/participants/event_participants_model.dart';
+import 'package:track_trek/core/model/participants/event_participants_model.dart';
+import 'package:track_trek/core/model/participants/track_participants_model.dart';
+import 'package:track_trek/core/model/participants/track_participants_model.dart';
+import 'package:track_trek/core/model/participants/track_participants_model.dart';
 import 'package:track_trek/core/model/track-event/single_event_model.dart';
 import 'package:track_trek/core/model/track-event/single_event_model.dart';
 import 'package:track_trek/core/model/track-event/single_event_model.dart';
@@ -372,7 +378,8 @@ class TrackEventService {
 
   static Future<SingleEventModel> getSingleEventData({
     required String eventId,
-  }) async {
+  })
+  async {
     SingleEventModel singleEventDetails = SingleEventModel();
     try {
       final url = Uri.parse(
@@ -412,7 +419,8 @@ class TrackEventService {
     required String maxPeople,
     required String price,
     required String description,
-  }) async {
+  })
+  async {
     try {
       final url = Uri.parse(ApiClient.createTrackSlotUrl);
       final headers = {
@@ -493,7 +501,8 @@ class TrackEventService {
   }
 
   static Future<List<SingleEventModel>> getMyBusinessEvent(
-      {String booked=''}) async {
+      {String booked=''})
+  async {
     List<SingleEventModel> myEventList = [];
     try {
       final url = Uri.parse(
@@ -530,4 +539,83 @@ class TrackEventService {
     }
     return myEventList;
   }
+  static Future<List<EventParticipantsModel>> getEventParticipants(
+      {required String eventSlotId})
+  async {
+    List<EventParticipantsModel> myEventList = [];
+    try {
+      final url = Uri.parse(
+          '${ApiClient.getParticipantsUrl}?eventSlotId=$eventSlotId');
+      final headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
+      };
+
+      final response = await http.get(
+        url,
+        headers: headers,
+      );
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      log('----------------- event Participant List call--------------------');
+      log(responseData.toString());
+      if (responseData['success'] != null && responseData['success'] == true) {
+        if (responseData['data'] is List) {
+          myEventList = (responseData['data'] as List)
+              .map((e) => EventParticipantsModel.fromJson(e))
+              .toList();
+        }
+        return myEventList;
+      } else {
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
+        return myEventList;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return myEventList;
+  }
+  static Future<List<TrackParticipantsModel>> getTrackParticipants(
+      {required String trackSlotId})
+  async {
+    List<TrackParticipantsModel> myEventList = [];
+    try {
+      final url = Uri.parse(
+          '${ApiClient.getParticipantsUrl}?trackSlotId=$trackSlotId');
+      final headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
+      };
+
+      final response = await http.get(
+        url,
+        headers: headers,
+      );
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      log('-----------------  track Participant List call--------------------');
+      log(responseData.toString());
+      if (responseData['success'] != null && responseData['success'] == true) {
+        if (responseData['data'] is List) {
+          myEventList = (responseData['data'] as List)
+              .map((e) => TrackParticipantsModel.fromJson(e))
+              .toList();
+        }
+        return myEventList;
+      } else {
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
+        return myEventList;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return myEventList;
+  }
+
 }

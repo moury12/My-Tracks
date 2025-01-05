@@ -191,7 +191,8 @@ class EventCardWidget extends StatelessWidget {
                 ? CustomButton(
                     onTap: onTap ??
                         () {
-                          Get.toNamed(EventTrackSlotScreen.routeName,arguments: {'slots': eventModel!.slots, 'type': 'event'}, );
+                          Get.toNamed(EventTrackSlotScreen.routeName
+                            ,arguments: {'slots': eventModel!.slots, 'type': 'event'}, );
                         },
                     title: buttonText ?? AppStaticString.viewAllSlot,
                     img: buttonImg ?? arrowTopImgUrl,

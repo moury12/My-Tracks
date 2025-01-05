@@ -491,6 +491,7 @@ class UploadTrackScreen extends StatelessWidget {
                                   (index) {
                                     final slot = CreateTrackEventController
                                         .to.singleEvent.value.slots![index];
+
                                     return MarronGradientContainerWidget(
                                       child: TrackSlotWidget(
                                         needToShowSeat: true,

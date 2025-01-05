@@ -51,7 +51,12 @@ class SingleEventModel {
     sId = json['_id'];
     host = json['host'];
     eventName = json['eventName'];
-    eventImage = json['event_image'].cast<String>();
+
+    // Safely handle the event_image key
+    eventImage = (json['event_image'] != null && json['event_image'] is List)
+        ? List<String>.from(json['event_image'])
+        : [];
+
     address = json['address'];
     location = json['location'] != null
         ? Location.fromJson(json['location'])
@@ -63,19 +68,24 @@ class SingleEventModel {
     endDate = json['endDate'];
     endTime = json['endTime'];
     endDateTime = json['endDateTime'];
+
     if (json['moreInfo'] != null) {
       moreInfo = <MoreInfo>[];
       json['moreInfo'].forEach((v) {
         moreInfo!.add(MoreInfo.fromJson(v));
       });
     }
+
     if (json['slots'] != null) {
       slots = <EventSlots>[];
       json['slots'].forEach((v) {
         slots!.add(EventSlots.fromJson(v));
       });
     }
-    bookings = json['bookings'].cast<String>();
+
+    bookings = json['bookings'] != null
+        ? List<String>.from(json['bookings'])
+        : [];
     status = json['status'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];

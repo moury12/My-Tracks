@@ -11,4 +11,5 @@ class TrackManagementController extends GetxController {
     AppStaticString.renters
   ].obs;
   var tabContent = <Widget>[].obs;
+  Rx<String?> selectedEvent=Rx<String?>(null);
 }

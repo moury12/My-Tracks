@@ -2,6 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:track_trek/controller/network_controller.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
+import 'package:track_trek/core/model/participants/event_participants_model.dart';
+import 'package:track_trek/core/model/participants/event_participants_model.dart';
+import 'package:track_trek/core/model/participants/track_participants_model.dart';
+import 'package:track_trek/core/model/participants/track_participants_model.dart';
 import 'package:track_trek/core/model/track-event/single_event_model.dart';
 import 'package:track_trek/core/model/track-event/single_track_model.dart';
 import 'package:track_trek/core/service/track_event_service.dart';
@@ -21,11 +25,17 @@ class HomeController extends GetxController {
   var tabContent = <Widget>[].obs;
   RxList<SingleTrackModel> trackList = <SingleTrackModel>[].obs;
   RxList<SingleEventModel> eventList = <SingleEventModel>[].obs;
+  RxList<TrackParticipantsModel> trackParticipantList =
+      <TrackParticipantsModel>[].obs;
+  RxList<EventParticipantsModel> eventParticipantList =
+      <EventParticipantsModel>[].obs;
 
   ///========================Loading variables=====================///
 
   RxBool isLoadingTrackList = false.obs;
   RxBool isLoadingEventList = false.obs;
+  RxBool isLoadingTrackParticipantList = false.obs;
+  RxBool isLoadingEventParticipantList = false.obs;
 
   getTrackListCall() async {
     if (NetworkController.to.isConnected.value) {
@@ -62,6 +72,46 @@ class HomeController extends GetxController {
       }
     } else {
       isLoadingEventList.value = false;
+      // noInternetShowCustomSnackbar();
+    }
+  }
+
+  getEventParticipantListCall({required String eventSlotID}) async {
+    if (NetworkController.to.isConnected.value) {
+      isLoadingEventParticipantList.value = true;
+      eventParticipantList.value = await TrackEventService.getEventParticipants(
+          eventSlotId: eventSlotID);
+      if (eventParticipantList.isNotEmpty) {
+        isLoadingEventParticipantList.value = false;
+      } else {
+        isLoadingEventParticipantList.value = false;
+        // showCustomSnackbar(
+        //     title: AppStaticString.failed,
+        //     message: AppStaticString.failedToLoadData,
+        //     type: SnackBarType.failed);
+      }
+    } else {
+      isLoadingEventParticipantList.value = false;
+      // noInternetShowCustomSnackbar();
+    }
+  }
+
+  getTrackParticipantListCall({required String trackSlotId}) async {
+    if (NetworkController.to.isConnected.value) {
+      isLoadingTrackParticipantList.value = true;
+      trackParticipantList.value = await TrackEventService.getTrackParticipants(
+          trackSlotId: trackSlotId);
+      if (trackParticipantList.isNotEmpty) {
+        isLoadingTrackParticipantList.value = false;
+      } else {
+        isLoadingTrackParticipantList.value = false;
+        // showCustomSnackbar(
+        //     title: AppStaticString.failed,
+        //     message: AppStaticString.failedToLoadData,
+        //     type: SnackBarType.failed);
+      }
+    } else {
+      isLoadingTrackParticipantList.value = false;
       // noInternetShowCustomSnackbar();
     }
   }

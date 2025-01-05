@@ -332,10 +332,7 @@ class CreateTrackEventController extends GetxController {
         isLoadingEvent.value = false;
       } else {
         isLoadingEvent.value = false;
-        showCustomSnackbar(
-            title: AppStaticString.failed,
-            message: AppStaticString.failedToLoadData,
-            type: SnackBarType.failed);
+print(singleEvent.value.toString());
       }
     } else {
       isLoadingEvent.value = false;

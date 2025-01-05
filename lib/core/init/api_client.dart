@@ -18,6 +18,7 @@ class ApiClient {
   static String get getSingleBusinessUrl => '$baseUrl/business/get-single-business';
   static String get createEventUrl => '$baseUrl/business/event';
   static String get myBusinessUrl => '$baseUrl/business/my-business';
+  static String get getParticipantsUrl => '$baseUrl/business/view-all-participants';
 
 
 }

@@ -45,6 +45,7 @@ class AppStaticString {
   static const String pleaseCheckInternet = 'Please check your network settings and try again.';
   static const String allowedPeople = "Allowed People :";
   static const String slotListIsEmpty = "Slot List is Empty";
+  static const String userListIsEmpty = "User List is Empty";
   static const String logOut = "Log Out";
   static const String email = "Email";
   static const String nameWithClone = "Name: ";

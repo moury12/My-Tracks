@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:track_trek/controller/home_controller.dart';
 import 'package:track_trek/controller/track_management_controller.dart';
 import 'package:track_trek/core/components/custom_drop_down_button.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
@@ -30,10 +31,10 @@ class ManagementScreen extends StatelessWidget {
       child: Column(
         ///============================track part=============================///
         children: List.generate(
-            5,
+            HomeController.to.trackList.length,
             (i) =>  TrackCardWidget(
                   fromManage: true, react: false.obs,
-              
+              trackModel:HomeController.to.trackList[i] ,
                 )),
       ),
     ));
@@ -43,12 +44,21 @@ class ManagementScreen extends StatelessWidget {
     TrackManagementController.to.tabContent.add(Padding(
       padding: padding12V,
       child: Column(children: [
-        CustomDropdown(
-          radius: 8.r,
-          borderColor: AppColors.blackLightColor,
-          fillColor: AppColors.blackBackgroundColor,
-          hintColor: AppColors.whiteLightColor,
-          hintText: "Select Event",
+        Obx(
+         () {
+            return CustomDropdown(
+              selectedValue: TrackManagementController.to.selectedEvent.value,
+              radius: 8.r,
+              borderColor: AppColors.blackLightColor,
+              fillColor: AppColors.blackBackgroundColor,
+              hintColor: AppColors.whiteLightColor,
+              hintText: "Select Event",
+              items: HomeController.to.eventList.map((element) => element.eventName,).toList(),
+          onChanged: (value) {
+            TrackManagementController.to.selectedEvent.value=value;
+          },
+            );
+          }
         ),
         ...List.generate(
             5,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:track_trek/controller/home_controller.dart';
 import 'package:track_trek/core/components/custom_appbar.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
@@ -25,34 +26,50 @@ class EventTrackSlotScreen extends StatelessWidget {
     final String type = arguments['type'] as String;
 
     // Determine the title dynamically
-    final String title = type == 'event'
-        ? AppStaticString.eventSlot
-        : AppStaticString.trackSlot;
-
-
+    final String title =
+        type == 'event' ? AppStaticString.eventSlot : AppStaticString.trackSlot;
 
     return Scaffold(
-      appBar:  CustomAppbar(
+      appBar: CustomAppbar(
         tile: title,
       ),
       body: slotList.isEmpty
-          ? const EmptyTextWidget(text: AppStaticString.slotListIsEmpty,)
+          ? const EmptyTextWidget(
+              text: AppStaticString.slotListIsEmpty,
+            )
           : ListView.builder(
               padding: padding16,
               itemBuilder: (context, index) {
                 final slot = slotList[index];
+
+                // Determine the ID dynamically
+                final String? slotId = type == 'track'
+                    ? (slot as TrackSlots).sId
+                    : (slot as EventSlots).sId;
+
                 return Padding(
                   padding: padding6V,
                   child: MarronGradientContainerWidget(
                     child: TrackSlotWidget(
+                      needToShowSeat: type == 'event',
                       eventSlots: type == 'event' ? slot as EventSlots : null,
                       slots: type == 'track' ? slot as TrackSlots : null,
-
                       onTap: () {
-                        Get.toNamed(EventUserScreen.routeName);
+                        if (type == 'track') {
+                          HomeController.to.getTrackParticipantListCall(
+                            trackSlotId: slotId!,
+                          );
+                        } else {
+                          HomeController.to.getEventParticipantListCall(
+                            eventSlotID: slotId!,
+                          );
+                        }
+                        Get.toNamed(
+                          EventUserScreen.routeName,
+                          arguments: type,
+                        );
                       },
                       argument: userPanel,
-                      needToShowSeat: false,
                     ),
                   ),
                 );
@@ -66,17 +83,17 @@ class EventTrackSlotScreen extends StatelessWidget {
 class EmptyTextWidget extends StatelessWidget {
   final String text;
   const EmptyTextWidget({
-    super.key, required this.text,
+    super.key,
+    required this.text,
   });
 
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: Text(
-          text,
-          style: poppinsMedium.copyWith(
-              fontSize: getFontSizeDefault(context)),
-        ),
-      );
+      child: Text(
+        text,
+        style: poppinsMedium.copyWith(fontSize: getFontSizeDefault(context)),
+      ),
+    );
   }
 }

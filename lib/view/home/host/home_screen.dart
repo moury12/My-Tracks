@@ -57,9 +57,12 @@ class HomeScreen extends StatelessWidget {
                                       // Update tabs and content dynamically
                                       if (HomeController.to.labelTabs[index] ==
                                           AppStaticString.booked) {
+
                                         HomeController.to.tabs.value = [
                                           AppStaticString.event
                                         ];
+                                        HomeController.to.isBooked.value='yes';
+                                        HomeController.to.getEventListCall();
                                         HomeController.to.tabContent.value = [
                                           const EventListWidget(),
                                         ];
@@ -82,10 +85,10 @@ class HomeScreen extends StatelessWidget {
                   ],
                 );
               }),
-          DynamicTabWidget(
-                  tabs: HomeController.to.tabs,
-                  tabContent: HomeController.to.tabContent,
-                )
+              DynamicTabWidget(
+                tabs: HomeController.to.tabs,
+                tabContent: HomeController.to.tabContent,
+              )
             ],
           ),
         ),
@@ -103,14 +106,15 @@ class EventListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: padding12V,
-      child: Obx(
-
-              () {
-          return Column(
-            children: List.generate(HomeController.to.eventList.length, (i) =>  EventCardWidget(eventModel: HomeController.to.eventList[i],)),
-          );
-        }
-      ),
+      child: Obx(() {
+        return Column(
+          children: List.generate(
+              HomeController.to.eventList.length,
+              (i) => EventCardWidget(
+                    eventModel: HomeController.to.eventList[i],
+                  )),
+        );
+      }),
     );
   }
 }
@@ -124,14 +128,16 @@ class TrackListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: padding12V,
-      child: Obx(
-         () {
-          return Column(
-            children: List.generate(
-               HomeController.to.trackList.length, (i) => TrackCardWidget(react: HomeController.to.react,trackModel: HomeController.to.trackList[i],)),
-          );
-        }
-      ),
+      child: Obx(() {
+        return Column(
+          children: List.generate(
+              HomeController.to.trackList.length,
+              (i) => TrackCardWidget(
+                    react: HomeController.to.react,
+                    trackModel: HomeController.to.trackList[i],
+                  )),
+        );
+      }),
     );
   }
 }
