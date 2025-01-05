@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:get/get.dart';
 import 'package:track_trek/controller/common_controller.dart';
+import 'package:track_trek/controller/home_controller.dart';
 import 'package:track_trek/controller/profile_controller.dart';
 import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/init/hive_boxes.dart';
@@ -22,6 +23,7 @@ CommonController.to.selectedRoleOption =Boxes.getUserData().get(roleKey)!=null?
 
     Get.offAllNamed(BottomNavigationScreen.routeName);
 Get.put(ProfileController()/*,permanent: true*/);
+Get.put(HomeController()/*,permanent: true*/);
   }
   else{
     Get.offAllNamed(LoginScreen.routeName);

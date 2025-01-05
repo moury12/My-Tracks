@@ -1,5 +1,5 @@
 class ApiClient {
-  static const String baseUrl = 'http://192.168.10.22:8001';
+  static const String baseUrl = 'http://192.168.12.75:8001';
   static String get loginUrl => '$baseUrl/auth/login';
   static String get registrationUrl => '$baseUrl/auth/register';
   static String get activeAccUrl => '$baseUrl/auth/activate-account';
@@ -17,6 +17,7 @@ class ApiClient {
   static String get deleteSlotUrl => '$baseUrl/business/delete-slot';
   static String get getSingleBusinessUrl => '$baseUrl/business/get-single-business';
   static String get createEventUrl => '$baseUrl/business/event';
+  static String get myBusinessUrl => '$baseUrl/business/my-business';
 
 
 }

@@ -19,53 +19,57 @@ class DynamicTabWidget extends StatelessWidget {
   Widget build(BuildContext context) {
 
 
-    return DefaultTabController(
+    return Obx(
+      () {
+        return DefaultTabController(
 
-      length: tabs.length,
-      // Dynamically set the number of tabs
-      child: Column(
-        children: [
-          space16H,
-          Obx(() => TabBar(
-            // padding: EdgeInsets.zero,
-overlayColor: const WidgetStatePropertyAll<Color>(AppColors.blackBorderColor),
-             // isScrollable: true,
-            dividerHeight: 4.h,
-            indicatorSize: TabBarIndicatorSize.tab,
-            indicator: UnderlineTabIndicator(
-              borderRadius:
-              BorderRadius.vertical(top: Radius.circular(20.r)),
-              borderSide: BorderSide(
-                color: AppColors.blueColor,
-                width: 10.w,
-              ),
-            ),
-            labelColor: AppColors.whiteLightColor,
-            unselectedLabelColor: AppColors.whiteLightColor,
-            labelStyle: poppinsRegular.copyWith(
-                fontSize: getFontSizeDefault(context)),
-            unselectedLabelStyle: poppinsMedium.copyWith(
-                fontSize: getFontSizeDefault(context)),
-            dividerColor: AppColors.blackLightColor,
-            onTap:function?? (value) {
-
-            },
-            tabs: tabs
-                .map((tabName) => Padding(
-              padding: padding16b24,
-              child: FittedBox(
-                child: Text(
-                  tabName,
+          length: tabs.length,
+          // Dynamically set the number of tabs
+          child: Column(
+            children: [
+              space16H,
+              TabBar(
+                // padding: EdgeInsets.zero,
+        overlayColor: const WidgetStatePropertyAll<Color>(AppColors.blackBorderColor),
+                 // isScrollable: true,
+                dividerHeight: 4.h,
+                indicatorSize: TabBarIndicatorSize.tab,
+                indicator: UnderlineTabIndicator(
+                  borderRadius:
+                  BorderRadius.vertical(top: Radius.circular(20.r)),
+                  borderSide: BorderSide(
+                    color: AppColors.blueColor,
+                    width: 10.w,
+                  ),
                 ),
+                labelColor: AppColors.whiteLightColor,
+                unselectedLabelColor: AppColors.whiteLightColor,
+                labelStyle: poppinsRegular.copyWith(
+                    fontSize: getFontSizeDefault(context)),
+                unselectedLabelStyle: poppinsMedium.copyWith(
+                    fontSize: getFontSizeDefault(context)),
+                dividerColor: AppColors.blackLightColor,
+                onTap:function?? (value) {
+
+                },
+                tabs: tabs
+                    .map((tabName) => Padding(
+                  padding: padding16b24,
+                  child: FittedBox(
+                    child: Text(
+                      tabName,
+                    ),
+                  ),
+                ))
+                    .toList(),
               ),
-            ))
-                .toList(),
-          )),
-        Obx(() => TabContentView(
-          children: tabContent.toList(),
-        )),
-        ],
-      ),
+            TabContentView(
+              children: tabContent.toList(),
+            )
+            ],
+          ),
+        );
+      }
     );
   }
 }

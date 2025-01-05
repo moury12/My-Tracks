@@ -179,8 +179,7 @@ class TrackEventService {
     required String price,
     required String maxPeople,
     required String description,
-  })
-  async {
+  }) async {
     try {
       final url = Uri.parse(ApiClient.createTrackSlotUrl);
       final headers = {
@@ -228,8 +227,7 @@ class TrackEventService {
 
   static Future<SingleTrackModel> getSingleTrackData({
     required String trackId,
-  })
-  async {
+  }) async {
     SingleTrackModel singleTrackDetails = SingleTrackModel();
     try {
       final url = Uri.parse(
@@ -263,7 +261,8 @@ class TrackEventService {
     return singleTrackDetails;
   }
 
-  static Future<bool> deleteSlotRequest({required String slotId,bool? isEvent}) async {
+  static Future<bool> deleteSlotRequest(
+      {required String slotId, bool? isEvent}) async {
     try {
       final url = Uri.parse(ApiClient.deleteSlotUrl);
       final headers = {
@@ -271,14 +270,11 @@ class TrackEventService {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
       };
-      final body = jsonEncode(
-          isEvent==true ?{
-            "slotId": slotId,
-            "event": "yes"
-          }:{
-        "slotId": slotId,
-
-      });
+      final body = jsonEncode(isEvent == true
+          ? {"slotId": slotId, "event": "yes"}
+          : {
+              "slotId": slotId,
+            });
       final response = await http.delete(url, headers: headers, body: body);
       final responseData = json.decode(response.body);
       log('-----------------delete slot call--------------------');
@@ -311,8 +307,7 @@ class TrackEventService {
 
   static Future<String> addEventCall(
       {required Map<String, dynamic> bodyData,
-      required List<File>? files})
-  async {
+      required List<File>? files}) async {
     try {
       final request = http.MultipartRequest(
         'POST',
@@ -374,10 +369,10 @@ class TrackEventService {
       return '';
     }
   }
+
   static Future<SingleEventModel> getSingleEventData({
     required String eventId,
-  })
-  async {
+  }) async {
     SingleEventModel singleEventDetails = SingleEventModel();
     try {
       final url = Uri.parse(
@@ -410,14 +405,14 @@ class TrackEventService {
     }
     return singleEventDetails;
   }
+
   static Future<bool> createEventSlotRequest({
     required String eventId,
     required String slotNo,
     required String maxPeople,
     required String price,
     required String description,
-  })
-  async {
+  }) async {
     try {
       final url = Uri.parse(ApiClient.createTrackSlotUrl);
       final headers = {
@@ -426,9 +421,9 @@ class TrackEventService {
         'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
       };
       final body = jsonEncode({
-        "eventId":eventId,
+        "eventId": eventId,
         "slotNo": slotNo,
-        "maxPeople":maxPeople,
+        "maxPeople": maxPeople,
         "price": price,
         "description": description
       });
@@ -460,4 +455,41 @@ class TrackEventService {
     }
   }
 
+  static Future<List<SingleTrackModel>> getMyBusinessTrack() async {
+    List<SingleTrackModel> myTrackList = [];
+    try {
+      final url = Uri.parse(
+          ApiClient.myBusinessUrl);
+      final headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
+      };
+
+      final response = await http.get(
+        url,
+        headers: headers,
+      );
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      log('----------------- my Track List call--------------------');
+      log(responseData.toString());
+      if (responseData['success'] != null && responseData['success'] == true) {
+        if (responseData['data']["tracks"] is List) {
+          myTrackList = (responseData['data']["tracks"] as List)
+              .map((e) => SingleTrackModel.fromJson(e))
+              .toList();
+        }
+        return myTrackList;
+      } else {
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
+        return myTrackList;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return myTrackList;
+  }
 }

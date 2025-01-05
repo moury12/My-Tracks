@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:track_trek/core/constant/image_constants.dart';
 
 class CustomNetworkImage extends StatelessWidget {
   final String imageUrl;
@@ -11,12 +13,14 @@ class CustomNetworkImage extends StatelessWidget {
   final Color? backgroundColor;
   final Widget? child;
   final ColorFilter? colorFilter;
+  final String? imageErrorUrl;
 
   const CustomNetworkImage({
     super.key,
     this.child,
     this.colorFilter,
     required this.imageUrl,
+    this.imageErrorUrl,
     this.backgroundColor,
     required this.height,
     required this.width,
@@ -27,28 +31,31 @@ class CustomNetworkImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _loadImage(imageUrl,context),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          // Placeholder while loading
-          return Shimmer.fromColors(
-            baseColor: Colors.grey.withOpacity(0.6),
-            highlightColor: Colors.grey.withOpacity(0.3),
-            child: Container(
-              height: height,
-              width: width,
-              decoration: BoxDecoration(
-                border: border,
-                color: Colors.grey.withOpacity(0.6),
-                borderRadius: borderRadius,
-                shape: boxShape,
-              ),
+    return CachedNetworkImage(
+      imageUrl: imageUrl,
+      imageBuilder: (context, imageProvider) {
+        return Container(
+          height: height,
+          width: width,
+          decoration: BoxDecoration(
+            border: border,
+            borderRadius: borderRadius,
+            shape: boxShape,
+            color: backgroundColor,
+            image: DecorationImage(
+              image: imageProvider,
+              fit: BoxFit.cover,
+              colorFilter: colorFilter,
             ),
-          );
-        } else if (snapshot.hasError || snapshot.data == null) {
-          // Error widget
-          return Container(
+          ),
+          child: child,
+        );
+      },
+      placeholder: (context, url) {
+        return Shimmer.fromColors(
+          baseColor: Colors.grey.withOpacity(0.6),
+          highlightColor: Colors.grey.withOpacity(0.3),
+          child: Container(
             height: height,
             width: width,
             decoration: BoxDecoration(
@@ -57,38 +64,25 @@ class CustomNetworkImage extends StatelessWidget {
               borderRadius: borderRadius,
               shape: boxShape,
             ),
-            child: const Icon(Icons.error),
-          );
-        } else {
-          // Successfully loaded image
-          return Container(
-            height: height,
-            width: width,
-            decoration: BoxDecoration(
-              border: border,
-              borderRadius: borderRadius,
-              shape: boxShape,
-              color: backgroundColor,
-              image: DecorationImage(
-                image: snapshot.data as ImageProvider,
-                fit: BoxFit.cover,
-                colorFilter: colorFilter,
-              ),
+          ),
+        );
+      },
+      errorWidget: (context, url, error) {
+        return Container(
+          height: height,
+          width: width,
+          decoration: BoxDecoration(
+            border: border,
+            borderRadius: borderRadius,
+            shape: boxShape,
+            color: Colors.grey.withOpacity(0.6),
+            image: DecorationImage(
+              image: AssetImage(imageErrorUrl ?? dummyEventImgUrl),
+              fit: BoxFit.cover,
             ),
-            child: child,
-          );
-        }
+          ),
+        );
       },
     );
-  }
-
-  Future<ImageProvider?> _loadImage(String url,BuildContext context) async {
-    try {
-      final image = NetworkImage(url);
-      await precacheImage(image,context);
-      return image;
-    } catch (e) {
-      return null;
-    }
   }
 }

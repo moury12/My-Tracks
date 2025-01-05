@@ -1,14 +1,19 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:track_trek/core/components/custom_button.dart';
+import 'package:track_trek/core/components/custom_network_image.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
 import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
+import 'package:track_trek/core/init/api_client.dart';
+import 'package:track_trek/core/model/track-event/single_track_model.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/add/widgets/buttons.dart';
@@ -22,11 +27,13 @@ class TrackCardWidget extends StatelessWidget {
   final bool? fromManage;
   final bool? fromUser;
   final RxBool react;
+  final SingleTrackModel? trackModel;
   const TrackCardWidget({
     super.key,
     this.fromManage = false,
     this.fromUser = false,
     required this.react,
+    this.trackModel,
   });
 
   @override
@@ -39,14 +46,22 @@ class TrackCardWidget extends StatelessWidget {
           children: [
             ClipRRect(
                 borderRadius: BorderRadius.circular(8.r),
-                child: Image.asset(dummyEventImgUrl)),
+                child: trackModel != null
+                    ? CustomNetworkImage(
+                        imageUrl:
+                            '${ApiClient.baseUrl}/${trackModel!.trackImage!.first}',
+                        height: 150.h,
+                        width: double.infinity)
+                    : Image.asset(dummyEventImgUrl)),
             space12H,
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                     child: Text(
-                  AppStaticString.dummyEvent,
+                  trackModel != null
+                      ? trackModel!.trackName ?? '-'
+                      : AppStaticString.dummyEvent,
                   style: poppinsMedium.copyWith(
                       fontSize: getFontSizeLarge(context)),
                 )),
@@ -65,7 +80,9 @@ class TrackCardWidget extends StatelessWidget {
 
                       Expanded(
                           child: Text(
-                        AppStaticString.dummyAddress,
+                        trackModel != null
+                            ? trackModel!.address ?? '-'
+                            : AppStaticString.dummyAddress,
                         style: poppinsMedium.copyWith(
                             fontSize: getFontSizeSmall(context)),
                       ))
@@ -77,9 +94,10 @@ class TrackCardWidget extends StatelessWidget {
             space12H,
 
             ///====================dynamic description =====================///
-            const ExpandableText(
-              text:
-                  "${AppStaticString.dummyDesc}${AppStaticString.dummyDesc}${AppStaticString.dummyDesc}",
+            ExpandableText(
+              text: trackModel != null
+                  ? trackModel!.description ?? '-'
+                  : AppStaticString.dummyDesc,
               maxLines: 3, // Number of lines to show before truncating
             ),
 
@@ -145,7 +163,7 @@ class TrackCardWidget extends StatelessWidget {
                 ///======================dynamic total slot=======================///
 
                 : Text(
-                    '${AppStaticString.totalSlot}10',
+                    '${AppStaticString.totalSlot}${trackModel != null ? trackModel!.slots != null ? trackModel!.slots!.length : '0' : '0'}',
                     style: poppinsSemiBold.copyWith(
                         fontSize: getFontSizeLarge(context)),
                   ),
@@ -160,10 +178,24 @@ class TrackCardWidget extends StatelessWidget {
                           height: 45.w,
                           child: Stack(
                             children: List.generate(
-                                5,
+                                trackModel != null
+                                    ? trackModel!.renters != null
+                                        ? trackModel!.renters!.length
+                                        : 2
+                                    : 5,
                                 (index) => Positioned(
                                     left: (30.w * index).toDouble(),
-                                    child: const ProfileCircleImageWidget())),
+                                    child: trackModel != null &&
+                                            trackModel!.renters != null
+                                        ? CustomNetworkImage(
+                                            imageUrl:
+                                                '${ApiClient.baseUrl}/${trackModel!.renters![index].profileImage}',
+                                            height: 45.w,
+                                            width: 45.w,
+                                            boxShape: BoxShape.circle,
+                                            imageErrorUrl: dummyProfileImgUrl,
+                                          )
+                                        : const ProfileCircleImageWidget())),
                           ),
                         ),
                       ),
@@ -305,7 +337,9 @@ class TrackCardWidget extends StatelessWidget {
                       ),
                     );
                   },
-                  text: '120',
+                  text: trackModel != null
+                      ? trackModel!.totalReview.toString()
+                      : '120',
                 ),
 
                 ///================react==============///
@@ -316,7 +350,9 @@ class TrackCardWidget extends StatelessWidget {
                       react.value = !react.value;
                     },
                     icon: react.value == true ? reactFillIconUrl : reactIconUrl,
-                    text: '120',
+                    text: trackModel != null
+                        ? trackModel!.totalLikes.toString()
+                        : '120',
                   );
                 }),
 
@@ -326,7 +362,15 @@ class TrackCardWidget extends StatelessWidget {
                   icon: mapIconUrl,
                   text: AppStaticString.map,
                   function: () {
-                    _showMapBottomSheet(context);
+                    _showMapBottomSheet(
+                      context,
+                      trackModel != null
+                          ? trackModel!.location!.coordinates!.last
+                          : 90.321111,
+                      trackModel != null
+                          ? trackModel!.location!.coordinates!.first
+                          : 90.321111,
+                    );
                   },
                 ),
                 fromManage == true
@@ -417,31 +461,47 @@ class TrackCardWidget extends StatelessWidget {
     );
   }
 
-  void _showMapBottomSheet(BuildContext context) {
+  void _showMapBottomSheet(
+      BuildContext context, double latitude, double longitude) {
     showModalBottomSheet(
       constraints: BoxConstraints.tightForFinite(
         height: MediaQuery.of(context).size.height / 2,
         width: MediaQuery.of(context).size.width,
       ),
       context: context,
-      showDragHandle: false,
-
       isScrollControlled: true, // Allows full-screen height if needed
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (context) {
-        return SizedBox(
-          height: MediaQuery.of(context).size.height / 2,
-          child: const GoogleMap(
-            initialCameraPosition: CameraPosition(
-              target: LatLng(
-                  37.7749, -122.4194), // Replace with desired coordinates
-              zoom: 10,
+        return Stack(
+          children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 2,
+              child: GoogleMap(
+                zoomGesturesEnabled: true,
+                scrollGesturesEnabled: true,
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(latitude, longitude),
+                  zoom: 14, // Set a more focused zoom level
+                ),
+                myLocationEnabled: true,
+                myLocationButtonEnabled: false, // Custom button added
+                zoomControlsEnabled: false, // Custom zoom controls added
+                markers: {
+                  Marker(
+                    markerId: const MarkerId("selected_location"),
+                    position: LatLng(latitude, longitude),
+                    infoWindow: const InfoWindow(
+                      title: "Selected Location",
+                      snippet: "This is the chosen spot.",
+                    ),
+                  ),
+                },
+              ),
             ),
-            myLocationEnabled: true,
-            myLocationButtonEnabled: true,
-          ),
+            // Custom zoom controls
+          ],
         );
       },
     );
@@ -585,4 +645,3 @@ class _ExpandableTextState extends State<ExpandableText> {
     );
   }
 }
-

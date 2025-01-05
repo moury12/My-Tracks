@@ -16,6 +16,7 @@ class SingleEventModel {
   String? endDateTime;
   List<MoreInfo>? moreInfo;
   List<EventSlots>? slots;
+  List<String>? bookings;
   String? status;
   String? createdAt;
   String? updatedAt;
@@ -74,6 +75,7 @@ class SingleEventModel {
         slots!.add(EventSlots.fromJson(v));
       });
     }
+    bookings = json['bookings'].cast<String>();
     status = json['status'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
@@ -105,6 +107,7 @@ class SingleEventModel {
     if (slots != null) {
       data['slots'] = slots!.map((v) => v.toJson()).toList();
     }
+    data['bookings'] = this.bookings;
     data['status'] = status;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
