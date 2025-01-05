@@ -103,8 +103,13 @@ class EventListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: padding12V,
-      child: Column(
-        children: List.generate(5, (i) => const EventCardWidget()),
+      child: Obx(
+
+              () {
+          return Column(
+            children: List.generate(HomeController.to.eventList.length, (i) =>  EventCardWidget(eventModel: HomeController.to.eventList[i],)),
+          );
+        }
       ),
     );
   }

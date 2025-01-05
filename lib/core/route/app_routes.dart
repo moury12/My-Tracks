@@ -50,8 +50,8 @@ class AppRoutes {
             page: () => ForgetPasswordScreen(),
             binding: AuthBinding()),
         GetPage(
-            name: EventSlotScreen.routeName,
-            page: () => const EventSlotScreen(),
+            name: EventTrackSlotScreen.routeName,
+            page: () => const EventTrackSlotScreen(),
             binding: HomeBinding()),
         GetPage(
             name: HomeScreen.routeName,

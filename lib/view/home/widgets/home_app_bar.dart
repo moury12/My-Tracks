@@ -29,7 +29,8 @@ class HomeAppBar extends StatelessWidget {
                     ProfileController
                         .to.userModel.value.profileImage!.isNotEmpty
                 ? CustomNetworkImage(
-              boxShape: BoxShape.circle,
+                    imageErrorUrl: dummyProfileImgUrl,
+                    boxShape: BoxShape.circle,
                     imageUrl:
                         '${ApiClient.baseUrl}/${ProfileController.to.userModel.value.profileImage}',
                     height: 52.w,

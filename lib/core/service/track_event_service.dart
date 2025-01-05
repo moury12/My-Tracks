@@ -458,8 +458,7 @@ class TrackEventService {
   static Future<List<SingleTrackModel>> getMyBusinessTrack() async {
     List<SingleTrackModel> myTrackList = [];
     try {
-      final url = Uri.parse(
-          ApiClient.myBusinessUrl);
+      final url = Uri.parse(ApiClient.myBusinessUrl);
       final headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -491,5 +490,44 @@ class TrackEventService {
       debugPrint(e.toString());
     }
     return myTrackList;
+  }
+
+  static Future<List<SingleEventModel>> getMyBusinessEvent(
+      {String booked=''}) async {
+    List<SingleEventModel> myEventList = [];
+    try {
+      final url = Uri.parse(
+          '${ApiClient.myBusinessUrl}?data=event${booked.isNotEmpty ? '&booked=yes' : ''}');
+      final headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
+      };
+
+      final response = await http.get(
+        url,
+        headers: headers,
+      );
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      log('----------------- my event List call--------------------');
+      log(responseData.toString());
+      if (responseData['success'] != null && responseData['success'] == true) {
+        if (responseData['data']["events"] is List) {
+          myEventList = (responseData['data']["events"] as List)
+              .map((e) => SingleEventModel.fromJson(e))
+              .toList();
+        }
+        return myEventList;
+      } else {
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
+        return myEventList;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return myEventList;
   }
 }

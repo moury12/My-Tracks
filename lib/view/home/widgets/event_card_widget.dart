@@ -1,15 +1,17 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:track_trek/controller/home_controller.dart';
 import 'package:track_trek/core/components/custom_button.dart';
+import 'package:track_trek/core/components/custom_network_image.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
 import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
+import 'package:track_trek/core/init/api_client.dart';
+import 'package:track_trek/core/model/track-event/single_event_model.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/home/host/event_slot_page.dart';
@@ -22,6 +24,7 @@ class EventCardWidget extends StatelessWidget {
   final bool? fromUser;
   final String? buttonText;
   final String? buttonImg;
+  final SingleEventModel? eventModel;
   final Function()? onTap;
   const EventCardWidget({
     super.key,
@@ -30,6 +33,7 @@ class EventCardWidget extends StatelessWidget {
     this.buttonText,
     this.buttonImg,
     this.onTap,
+    this.eventModel,
   });
 
   @override
@@ -46,7 +50,13 @@ class EventCardWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8.r),
 
                 ///==============dynamic event image==============///
-                child: Image.asset(dummyEventImgUrl)),
+                child: eventModel != null
+                    ? CustomNetworkImage(
+                        imageUrl:
+                            '${ApiClient.baseUrl}/${eventModel!.eventImage!.first}',
+                        height: 150.h,
+                        width: double.infinity)
+                    : Image.asset(dummyEventImgUrl)),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -58,16 +68,18 @@ class EventCardWidget extends StatelessWidget {
                     ///==============dynamic event name==============///
 
                     Text(
-                      AppStaticString.dummyEvent,
+                      eventModel != null
+                          ? eventModel!.eventName??'':    AppStaticString.dummyEvent,
                       style: poppinsMedium.copyWith(
                           fontSize: getFontSizeSmall(context)),
                     ),
 
                     ///==============dynamic event location==============///
 
-                    Text('${AppStaticString.locationWithClone}Rock hill boston',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                    Text('${AppStaticString.locationWithClone}${ eventModel != null
+                        ? eventModel!.address??'':AppStaticString.dummyAddress}',
+                        // maxLines: 1,
+                        // overflow: TextOverflow.ellipsis,
                         style: poppinsRegular.copyWith(
                             fontSize: getFontSizeSmall(context)))
                   ],
@@ -79,7 +91,8 @@ class EventCardWidget extends StatelessWidget {
                   children: [
                     ///==============dynamic event date==============///
 
-                    Text('${AppStaticString.dateWithClone} 05 january ',
+                    Text('${AppStaticString.dateWithClone} ${ eventModel != null
+                        ? eventModel!.startDate??'':AppStaticString.dummyDate} ',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: poppinsRegular.copyWith(
@@ -87,7 +100,9 @@ class EventCardWidget extends StatelessWidget {
 
                     ///==============dynamic event time==============///
 
-                    Text(AppStaticString.dummyTime,
+                    Text(
+                     eventModel != null
+                          ? '${eventModel!.startTime} - ${eventModel!.endTime}':AppStaticString.dummyTime,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: poppinsRegular.copyWith(
@@ -101,16 +116,20 @@ class EventCardWidget extends StatelessWidget {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                         BlueTextWidget(
-                          text:  HomeController.to.selectedLabel.value == 2
-                              ?'${AppStaticString.totalSeatWithClone}120':null,
+                        ///================================dynamic price or seat number=========================///
+                        BlueTextWidget(
+                          text: HomeController.to.selectedLabel.value == 2
+                              ? '${AppStaticString.totalSeatWithClone}120'
+                              : '${AppStaticString.priceWithClone}\$${ eventModel == null||eventModel!.slots==null||eventModel!.slots!.isEmpty
+                        ?'120': eventModel!.slots!.first.price??''}',
                         ),
                         const DividerVertical(),
 
                         ///==============dynamic event total slot==============///
 
                         Text(
-                          '${AppStaticString.totalSlot}20',
+                          '${AppStaticString.totalSlot}${eventModel == null
+                              ?'12': eventModel!.totalSeat??''}',
                           style: poppinsRegular.copyWith(
                               fontSize: getFontSizeSmall(context)),
                         ),
@@ -122,7 +141,8 @@ class EventCardWidget extends StatelessWidget {
 
                             ///==============dynamic event unsold==============///
 
-                            : Text('${AppStaticString.unsold}10',
+                            : Text('${AppStaticString.unsold}${eventModel == null
+                            ?'12': eventModel!.unSold??''}',
                                 style: poppinsRegular.copyWith(
                                     fontSize: getFontSizeSmall(context))),
                       ],
@@ -133,13 +153,14 @@ class EventCardWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       ///=====================dynamic total slot==================///
-                      const Expanded(
+                       Expanded(
                           child: BlueTextWidget(
                         text: '${AppStaticString.totalSlot} 20',
                       )),
                       const DividerVertical(
                         color: AppColors.blueColor,
                       ),
+
                       ///=====================dynamic unsold==================///
 
                       const Expanded(
@@ -149,27 +170,30 @@ class EventCardWidget extends StatelessWidget {
                       space8W,
                       Expanded(
                           child: OptionWidget(
-                            function: () async {
-                              await Share.share('Check out this cool Flutter app!');
-                            },
-                              icon: shareIconUrl, text: AppStaticString.share))
+                              function: () async {
+                                await Share.share(
+                                    'Check out this cool Flutter app!');
+                              },
+                              icon: shareIconUrl,
+                              text: AppStaticString.share))
                     ],
                   ),
+
             ///======================dynamic user===================///
             !fromUser!
-                ? const ExpandableText(
-              text:
-              "${AppStaticString.dummyDesc}${AppStaticString.dummyDesc}${AppStaticString.dummyDesc}",
-              maxLines: 3, // Number of lines to show before truncating
-            )
+                ?  ExpandableText(
+                    text:
+                        eventModel!=null?eventModel!.description??'':'',
+                    maxLines: 3, // Number of lines to show before truncating
+                  )
                 : const SizedBox.shrink(),
             noButton == false
                 ? CustomButton(
                     onTap: onTap ??
                         () {
-                          Get.toNamed(EventSlotScreen.routeName);
+                          Get.toNamed(EventTrackSlotScreen.routeName,arguments: {'slots': eventModel!.slots, 'type': 'event'}, );
                         },
-                    title: buttonText ?? AppStaticString.viewAllParticipent,
+                    title: buttonText ?? AppStaticString.viewAllSlot,
                     img: buttonImg ?? arrowTopImgUrl,
                     /*child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -200,17 +224,18 @@ class BlueTextWidget extends StatelessWidget {
   final TextAlign? textAlign;
   const BlueTextWidget({
     super.key,
-    this.text, this.textAlign,
+    this.text,
+    this.textAlign,
   });
 
   @override
   Widget build(BuildContext context) {
     return Text(
-      maxLines: 2,textAlign:textAlign?? TextAlign.center,
+      maxLines: 2,
+      textAlign: textAlign ?? TextAlign.center,
       overflow: TextOverflow.ellipsis,
-      text ?? '${AppStaticString.priceWithClone}\$120',
-      style:
-          poppinsBlueMedium.copyWith(fontSize: getFontSizeDefault(context)),
+      text ?? '',
+      style: poppinsBlueMedium.copyWith(fontSize: getFontSizeDefault(context)),
     );
   }
 }

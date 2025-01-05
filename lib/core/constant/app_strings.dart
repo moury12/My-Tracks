@@ -5,6 +5,7 @@ class AppStaticString {
   static const String login = "Login";
   static const String create = "Create";
   static const String eventSlot = "Event Slot";
+  static const String trackSlot = "Track Slot";
   static const String trakManage = "Track Management";
   static const String notification = "Notification";
   static const String manage = "Manage";
@@ -43,6 +44,7 @@ class AppStaticString {
   static const String noInternetText = 'No Internet Connection';
   static const String pleaseCheckInternet = 'Please check your network settings and try again.';
   static const String allowedPeople = "Allowed People :";
+  static const String slotListIsEmpty = "Slot List is Empty";
   static const String logOut = "Log Out";
   static const String email = "Email";
   static const String nameWithClone = "Name: ";
@@ -97,6 +99,7 @@ class AppStaticString {
   static const String priceWithClone = "Price: ";
   static const String unsold = "Unsold: ";
   static const String viewAllParticipent = "View all participant";
+  static const String viewAllSlot = "View all Slot";
   static const String renters = "Renters";
   static const String delete = "Delete";
   static const String deactivate = "Deactivate";

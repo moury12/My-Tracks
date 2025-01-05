@@ -18,7 +18,7 @@ import 'package:track_trek/view/manage/event_user_page.dart';
 class TrackSlotWidget extends StatelessWidget {
   final String? argument;
   final bool? needToShowSeat;
-  final Slots? slots;
+  final TrackSlots? slots;
   final EventSlots? eventSlots;
   final Function()? onTap;
   final Function()? onDelete;

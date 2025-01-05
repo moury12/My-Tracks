@@ -19,6 +19,7 @@ import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/add/widgets/buttons.dart';
 import 'package:track_trek/view/add/widgets/delete_alert_dialog.dart';
 import 'package:track_trek/view/book-track-join-event/book_track_join_event_page.dart';
+import 'package:track_trek/view/home/host/event_slot_page.dart';
 import 'package:track_trek/view/home/host/user_details_page.dart';
 import 'package:track_trek/view/home/widgets/event_card_widget.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
@@ -180,8 +181,10 @@ class TrackCardWidget extends StatelessWidget {
                             children: List.generate(
                                 trackModel != null
                                     ? trackModel!.renters != null
-                                        ? trackModel!.renters!.length
-                                        : 2
+                                        ? trackModel!.renters!.length > 5
+                                            ? 5
+                                            : trackModel!.renters!.length
+                                        : 0
                                     : 5,
                                 (index) => Positioned(
                                     left: (30.w * index).toDouble(),
@@ -204,12 +207,13 @@ class TrackCardWidget extends StatelessWidget {
                           flex: 4,
                           child: CustomButton(
                             onTap: () {
-                              Get.toNamed(UserDetailsScreen.routeName);
+                              Get.toNamed(EventTrackSlotScreen.routeName, arguments: {'slots': trackModel!.slots, 'type': 'track'},);
+
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(AppStaticString.viewAll,
+                                Text(AppStaticString.viewAllSlot,
                                     style: TextStyle(
                                         fontWeight: FontWeight.w400,
                                         color: AppColors.blackLightColor,

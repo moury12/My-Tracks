@@ -11,7 +11,7 @@ class SingleTrackModel {
   bool? isPromoted;
   List<String>? trackDays;
   List<Renters>? renters;
-  List<Slots>? slots;
+  List<TrackSlots>? slots;
   int? totalLikes;
   int? totalReview;
   String? createdAt;
@@ -62,9 +62,9 @@ class SingleTrackModel {
       });
     }
     if (json['slots'] != null) {
-      slots = <Slots>[];
+      slots = <TrackSlots>[];
       json['slots'].forEach((v) {
-        slots!.add(Slots.fromJson(v));
+        slots!.add(TrackSlots.fromJson(v));
       });
     }
     totalLikes = json['totalLikes'];
@@ -127,7 +127,7 @@ class Location {
   }
 }
 
-class Slots {
+class TrackSlots {
   String? sId;
   String? host;
   String? track;
@@ -139,7 +139,7 @@ class Slots {
   int? maxPeople;
   String? description;
 
-  Slots(
+  TrackSlots(
       {this.sId,
       this.host,
       this.track,
@@ -151,7 +151,7 @@ class Slots {
       this.maxPeople,
       this.description});
 
-  Slots.fromJson(Map<String, dynamic> json) {
+  TrackSlots.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     host = json['host'];
     track = json['track'];
