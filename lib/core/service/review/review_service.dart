@@ -100,7 +100,8 @@ class ReviewService {
     required String trackId,
     String sort = '',
     required int page,
-  }) async {
+  })
+  async {
     List<ReviewModel> reviewList = [];
     try {
       final url = Uri.parse('${ApiClient.getAllReviewUrl}'

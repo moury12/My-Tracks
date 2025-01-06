@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:track_trek/core/components/custom_network_image.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
@@ -103,50 +104,80 @@ class UserInfoContentWidget extends StatelessWidget {
   final EventParticipantsModel? eventPartModel;
   const UserInfoContentWidget({
     super.key,
-    this.seatNo, this.trackPartModel, this.eventPartModel,
+    this.seatNo,
+    this.trackPartModel,
+    this.eventPartModel,
   });
 
   @override
   Widget build(BuildContext context) {
+    final String name = eventPartModel != null
+        ? eventPartModel!.user!.name ?? 'n/a'
+        : trackPartModel!.user!.name ?? AppStaticString.dummyName;
+
+    final String email = eventPartModel != null
+        ? eventPartModel!.user!.email ?? 'n/a'
+        : trackPartModel!.user!.email ?? 'Not Provided';
+
+    final String phone = eventPartModel != null
+        ? eventPartModel!.user!.phoneNumber ?? 'n/a'
+        : trackPartModel!.user!.phoneNumber ?? 'Not Provided';
+
+    final String address = eventPartModel != null
+        ? eventPartModel!.user!.email ?? 'n/a'
+        : trackPartModel!.user!.email ?? AppStaticString.dummyAddress;
+    final String imageUrl = eventPartModel != null
+        ? eventPartModel!.user!.profileImage ?? ''
+        : trackPartModel!.user!.profileImage ?? '';
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const ProfileCircleImageWidget(),
+        imageUrl.isNotEmpty
+            ? CustomNetworkImage(
+                imageUrl: imageUrl,
+                height: 45.w,
+                width: 45.w,
+                boxShape: BoxShape.circle,
+                imageErrorUrl: dummyProfileImgUrl,
+              )
+            : ProfileCircleImageWidget(),
         space16W,
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-              /* eventPartModel!=null?eventPartModel.:*/ AppStaticString.dummyName,
+                /* eventPartModel!=null?eventPartModel.:*/ name,
                 style: poppinsRegular.copyWith(
                     fontSize: getFontSizeDefault(context)),
               ),
 
               ///===================dynamic email==================///
-              const UserInfoText(
-                  text: '${AppStaticString.emailUser}mdhasan854@gmail.com'),
+              UserInfoText(text: '${AppStaticString.emailUser} $email'),
 
               ///===================dynamic phone==================///
 
-              const UserInfoText(
-                  text: '${AppStaticString.contact}+995667834543'),
-
-              ///===================dynamic date of birth==================///
-
-              const UserInfoText(
-                  text: '${AppStaticString.dateOfBirth}${AppStaticString.dummyDate}'),
+              UserInfoText(text: '${AppStaticString.contact} $phone'),
 
               ///===================dynamic address==================///
 
-              const UserInfoText(
-                text: '${AppStaticString.address}${AppStaticString.dummyAddress}',
+              UserInfoText(
+                text: '${AppStaticString.address}$address',
               ),
-              seatNo != null
-                  ? const UserInfoText(
-                      text: '${AppStaticString.seat}07',
-                    )
-                  : const SizedBox.shrink(),
+              eventPartModel != null &&
+                      eventPartModel!.moreInfo != null &&
+                      eventPartModel!.moreInfo!.isNotEmpty
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: List.generate(
+                        eventPartModel!.moreInfo!.length,
+                        (index) {
+                          final info = eventPartModel!.moreInfo![index];
+                          return UserInfoText(
+                              text: '${info.label} : ${info.value} ');
+                        },
+                      ))
+                  : SizedBox.shrink()
             ],
           ),
         ),

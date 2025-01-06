@@ -1,6 +1,6 @@
 class EventParticipantsModel {
   String? sId;
-  String? user;
+  User? user;
   String? host;
   String? event;
   String? eventSlot;
@@ -34,7 +34,7 @@ class EventParticipantsModel {
 
   EventParticipantsModel.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
-    user = json['user'];
+    user = json['user'] != null ? new User.fromJson(json['user']) : null;
     host = json['host'];
     event = json['event'];
     eventSlot = json['eventSlot'];
@@ -46,7 +46,7 @@ class EventParticipantsModel {
     if (json['moreInfo'] != null) {
       moreInfo = <MoreInfo>[];
       json['moreInfo'].forEach((v) {
-        moreInfo!.add(MoreInfo.fromJson(v));
+        moreInfo!.add(new MoreInfo.fromJson(v));
       });
     }
     status = json['status'];
@@ -58,7 +58,9 @@ class EventParticipantsModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['_id'] = sId;
-    data['user'] = user;
+    if (user != null) {
+      data['user'] = user!.toJson();
+    }
     data['host'] = host;
     data['event'] = event;
     data['eventSlot'] = eventSlot;
@@ -74,6 +76,47 @@ class EventParticipantsModel {
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     data['__v'] = iV;
+    return data;
+  }
+}
+
+class User {
+  String? sId;
+  String? authId;
+  String? name;
+  String? email;
+  String? address;
+  String? phoneNumber;
+  String? profileImage;
+
+  User(
+      {this.sId,
+        this.authId,
+        this.name,
+        this.email,
+        this.address,
+        this.phoneNumber,
+        this.profileImage});
+
+  User.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    authId = json['authId'];
+    name = json['name'];
+    email = json['email'];
+    address = json['address'];
+    address = json['phoneNumber'];
+    profileImage = json['profile_image'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = sId;
+    data['authId'] = authId;
+    data['name'] = name;
+    data['email'] = email;
+    data['address'] = address;
+    data['phoneNumber'] = phoneNumber;
+    data['profile_image'] = profileImage;
     return data;
   }
 }

@@ -1,8 +1,8 @@
-import 'event_participants_model.dart';
+import 'package:track_trek/core/model/participants/event_participants_model.dart';
 
 class TrackParticipantsModel {
   String? sId;
-  String? user;
+  User? user;
   String? host;
   String? track;
   String? trackSlot;
@@ -18,23 +18,23 @@ class TrackParticipantsModel {
 
   TrackParticipantsModel(
       {this.sId,
-      this.user,
-      this.host,
-      this.track,
-      this.trackSlot,
-      this.startDateTime,
-      this.endDateTime,
-      this.price,
-      this.numOfPeople,
-      this.status,
-      this.moreInfo,
-      this.createdAt,
-      this.updatedAt,
-      this.iV});
+        this.user,
+        this.host,
+        this.track,
+        this.trackSlot,
+        this.startDateTime,
+        this.endDateTime,
+        this.price,
+        this.numOfPeople,
+        this.status,
+        this.moreInfo,
+        this.createdAt,
+        this.updatedAt,
+        this.iV});
 
   TrackParticipantsModel.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
-    user = json['user'];
+    user = json['user'] != null ? User.fromJson(json['user']) : null;
     host = json['host'];
     track = json['track'];
     trackSlot = json['trackSlot'];
@@ -57,7 +57,9 @@ class TrackParticipantsModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['_id'] = sId;
-    data['user'] = user;
+    if (user != null) {
+      data['user'] = user!.toJson();
+    }
     data['host'] = host;
     data['track'] = track;
     data['trackSlot'] = trackSlot;
@@ -75,3 +77,5 @@ class TrackParticipantsModel {
     return data;
   }
 }
+
+

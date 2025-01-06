@@ -154,12 +154,12 @@ class HomeController extends GetxController {
 
       List<ReviewModel> reviews = await ReviewService.getReviewList(
           trackId: trackId, page: currentPageForReview.value, sort: sort);
-      if (reviewList.isNotEmpty) {
+      if (reviews.isNotEmpty) {
         isLoadingTrackReviewList.value = false;
         if(loadMoreData){
-          reviews.addAll(reviews);
+          reviewList.addAll(reviews);
         }else{
-          reviews.assignAll(reviews);
+          reviewList.assignAll(reviews);
         }
         currentPageForReview.value ++;
       }else if (!loadMoreData) {

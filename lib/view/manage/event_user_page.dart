@@ -45,15 +45,19 @@ class EventUserScreen extends StatelessWidget {
                           ? HomeController.to.eventParticipantList.length
                           : HomeController.to.trackParticipantList.length, (index) {
                     return MarronGradientContainerWidget(
-                        child: UserInfoContentWidget(
-                      eventPartModel: argument == 'event'
-                          ? HomeController.to.eventParticipantList[index]
-                          : null,
-                      trackPartModel: argument == 'track'
-                          ? HomeController.to.trackParticipantList[index]
-                          : null,
-                      seatNo: '04',
-                    ));
+                        child: Obx(
+                        () {
+                            return UserInfoContentWidget(
+                                                  eventPartModel: argument == 'event'
+                              ? HomeController.to.eventParticipantList[index]
+                              : null,
+                                                  trackPartModel: argument == 'track'
+                              ? HomeController.to.trackParticipantList[index]
+                              : null,
+                                                  seatNo: '04',
+                                                );
+                          }
+                        ));
                   })
                 ],
               );

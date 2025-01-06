@@ -14,6 +14,7 @@ import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/init/api_client.dart';
 import 'package:track_trek/core/model/track-event/single_track_model.dart';
 import 'package:track_trek/core/utils/app_color.dart';
+import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/add/widgets/buttons.dart';
 import 'package:track_trek/view/book-track-join-event/book_track_join_event_page.dart';
@@ -440,7 +441,7 @@ class ReviewListWidget extends StatelessWidget {
       child: SingleChildScrollView(
         child: Obx(() {
           return HomeController.to.reviewList.isEmpty
-              ? const EmptyTextWidget(text: 'Review List is empty!!')
+              ? const EmptyTextWidget(text: 'Review not found!!')
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
@@ -465,7 +466,16 @@ class ReviewListWidget extends StatelessWidget {
                               padding: const EdgeInsets.all(16.0),
                               child: Row(
                                 children: [
-                                  const ProfileCircleImageWidget(),
+                                  review.user!.profileImage != null
+                                      ? CustomNetworkImage(
+                                          imageUrl:
+                                              review.user!.profileImage ?? '',
+                                          height: 45.w,
+                                          width: 45.w,
+                                          imageErrorUrl: dummyProfileImgUrl,
+                                          boxShape: BoxShape.circle,
+                                        )
+                                      : const ProfileCircleImageWidget(),
                                   const SizedBox(width: 16.0),
                                   Expanded(
                                     child: Column(
@@ -477,15 +487,17 @@ class ReviewListWidget extends StatelessWidget {
                                           text: TextSpan(
                                             children: [
                                               TextSpan(
-                                                text: review.user!.name ??
-                                                    AppStaticString.dummyName,
+                                                text:
+                                                    '${review.user!.name ?? AppStaticString.dummyName} ',
                                                 style: poppinsRegular.copyWith(
-                                                  fontSize:
-                                                      getFontSizeSmall(context),
+                                                  fontSize: getFontSizeDefault(
+                                                      context),
                                                 ),
                                               ),
                                               TextSpan(
-                                                text: ' 3d',
+                                                text: formatTimestamp(
+                                                    timestamp:
+                                                        review.createdAt ?? ''),
                                                 style: poppinsRegular.copyWith(
                                                   color:
                                                       AppColors.normalDarkWhite,
@@ -497,10 +509,27 @@ class ReviewListWidget extends StatelessWidget {
                                           ),
                                         ),
                                         const SizedBox(height: 6.0),
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.star,
+                                              color: AppColors.yellowColor,
+                                              size: 15.sp,
+                                            ),
+                                            Text(
+                                              review.rating.toString(),
+                                              style: poppinsRegular.copyWith(
+                                                color: const Color(0xffD2D2D2),
+                                                fontSize:
+                                                    getFontSizeSmall(context),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
 
-                                        /// Comment text
+                                        ///===================== Comment text =================///
                                         Text(
-                                          'Nice to see, in something elseNice to see, in something elseNice to see, in something else',
+                                          review.review.toString(),
                                           style: poppinsRegular.copyWith(
                                             color: const Color(0xffD2D2D2),
                                             fontSize:
