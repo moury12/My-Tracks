@@ -12,6 +12,9 @@ import 'package:track_trek/core/init/hive_boxes.dart';
 import 'package:track_trek/core/model/category/category_model.dart';
 import 'package:track_trek/core/model/participants/event_participants_model.dart';
 import 'package:track_trek/core/model/participants/track_participants_model.dart';
+import 'package:track_trek/core/model/renter/renters_model.dart';
+import 'package:track_trek/core/model/renter/renters_model.dart';
+import 'package:track_trek/core/model/renter/renters_model.dart';
 import 'package:track_trek/core/model/track-event/single_event_model.dart';
 import 'package:track_trek/core/model/track-event/single_track_model.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
@@ -371,8 +374,7 @@ class TrackEventService {
 
   static Future<SingleEventModel> getSingleEventData({
     required String eventId,
-  })
-  async {
+  }) async {
     SingleEventModel singleEventDetails = SingleEventModel();
     try {
       final url = Uri.parse(
@@ -412,8 +414,7 @@ class TrackEventService {
     required String maxPeople,
     required String price,
     required String description,
-  })
-  async {
+  }) async {
     try {
       final url = Uri.parse(ApiClient.createTrackSlotUrl);
       final headers = {
@@ -494,8 +495,7 @@ class TrackEventService {
   }
 
   static Future<List<SingleEventModel>> getMyBusinessEvent(
-      {String booked=''})
-  async {
+      {String booked = ''}) async {
     List<SingleEventModel> myEventList = [];
     try {
       final url = Uri.parse(
@@ -532,13 +532,13 @@ class TrackEventService {
     }
     return myEventList;
   }
+
   static Future<List<EventParticipantsModel>> getEventParticipants(
-      {required String eventSlotId})
-  async {
+      {required String eventSlotId}) async {
     List<EventParticipantsModel> myEventList = [];
     try {
-      final url = Uri.parse(
-          '${ApiClient.getParticipantsUrl}?eventSlotId=$eventSlotId');
+      final url =
+          Uri.parse('${ApiClient.getParticipantsUrl}?eventSlotId=$eventSlotId');
       final headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -571,13 +571,13 @@ class TrackEventService {
     }
     return myEventList;
   }
+
   static Future<List<TrackParticipantsModel>> getTrackParticipants(
-      {required String trackSlotId})
-  async {
+      {required String trackSlotId}) async {
     List<TrackParticipantsModel> myEventList = [];
     try {
-      final url = Uri.parse(
-          '${ApiClient.getParticipantsUrl}?trackSlotId=$trackSlotId');
+      final url =
+          Uri.parse('${ApiClient.getParticipantsUrl}?trackSlotId=$trackSlotId');
       final headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -610,12 +610,50 @@ class TrackEventService {
     }
     return myEventList;
   }
+
+  static Future<List<RentersModel>> getRentersOnDate(
+      {required String date}) async {
+    List<RentersModel> renterList = [];
+    try {
+      final url = Uri.parse('${ApiClient.getAllRentersOnDateUrl}?date=$date');
+      final headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
+      };
+
+      final response = await http.get(
+        url,
+        headers: headers,
+      );
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      log('-----------------  Renters List call--------------------');
+      log(responseData.toString());
+      log(url.toString());
+      if (responseData['success'] != null && responseData['success'] == true) {
+        if (responseData['data']['renters'] is List) {
+          renterList = (responseData['data']['renters'] as List)
+              .map((e) => RentersModel.fromJson(e))
+              .toList();
+        }
+        return renterList;
+      } else {
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
+        return renterList;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return renterList;
+  }
+
   static Future<bool> trackActiveDeactivateRequest({
     required String trackId,
     required String status,
-
-  })
-  async {
+  }) async {
     try {
       final url = Uri.parse(ApiClient.activeDeactivateUrl);
       final headers = {
@@ -626,7 +664,6 @@ class TrackEventService {
       final body = jsonEncode({
         "trackId": trackId,
         "status": status,
-
       });
       final response = await http.patch(url, headers: headers, body: body);
       final responseData = json.decode(response.body);

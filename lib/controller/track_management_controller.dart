@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:track_trek/controller/network_controller.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
+import 'package:track_trek/core/model/renter/renters_model.dart';
+import 'package:track_trek/core/model/renter/renters_model.dart';
 import 'package:track_trek/core/model/track-event/single_event_model.dart';
 import 'package:track_trek/core/service/track-event/track_event_service.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
@@ -20,16 +22,18 @@ class TrackManagementController extends GetxController {
     // TODO: implement onInit
     super.onInit();
   }
+
   var tabContent = <Widget>[].obs;
-  Rx<SingleEventModel?> selectedEvent=Rx<SingleEventModel?>(null);
+  Rx<SingleEventModel?> selectedEvent = Rx<SingleEventModel?>(null);
   RxList<SingleEventModel> eventList = <SingleEventModel>[].obs;
+  RxList<RentersModel> renterList = <RentersModel>[].obs;
   RxBool isLoadingEventList = false.obs;
   RxBool isLoadingTrackActive = false.obs;
+  RxBool isLoadingRentersList = false.obs;
   getEventListCall() async {
     if (NetworkController.to.isConnected.value) {
       isLoadingEventList.value = true;
-      eventList.value =
-      await TrackEventService.getMyBusinessEvent();
+      eventList.value = await TrackEventService.getMyBusinessEvent();
       if (eventList.isNotEmpty) {
         isLoadingEventList.value = false;
       } else {
@@ -44,14 +48,33 @@ class TrackManagementController extends GetxController {
       // noInternetShowCustomSnackbar();
     }
   }
+
+  getRentersListCall({required String date}) async {
+    if (NetworkController.to.isConnected.value) {
+      isLoadingRentersList.value = true;
+      renterList.value = await TrackEventService.getRentersOnDate(date: date);
+      if (renterList.isNotEmpty) {
+        isLoadingRentersList.value = false;
+      } else {
+        isLoadingRentersList.value = false;
+print('renterList.length');
+print(renterList.length);
+      }
+    } else {
+      isLoadingRentersList.value = false;
+      // noInternetShowCustomSnackbar();
+    }
+  }
+
   trackActiveDeactivateCall({
     required String trackId,
     required String status,
-}) async {
+  }) async {
     if (NetworkController.to.isConnected.value) {
       isLoadingTrackActive.value = true;
-      final  bool apiHited=
-      await TrackEventService.trackActiveDeactivateRequest(trackId: trackId, status: status);
+      final bool apiHited =
+          await TrackEventService.trackActiveDeactivateRequest(
+              trackId: trackId, status: status);
       if (apiHited) {
         isLoadingTrackActive.value = false;
       } else {

@@ -1,4 +1,5 @@
-class EventParticipantsModel {
+class RentersModel {
+  String? status;
   String? sId;
   User? user;
   String? host;
@@ -6,17 +7,17 @@ class EventParticipantsModel {
   String? eventSlot;
   String? startDateTime;
   String? endDateTime;
-  int? price;
+  double? price;
   int? numOfPeople;
   String? bookingFor;
   List<MoreInfo>? moreInfo;
-  String? status;
   String? createdAt;
   String? updatedAt;
   int? iV;
 
-  EventParticipantsModel(
-      {this.sId,
+  RentersModel(
+      {this.status,
+        this.sId,
         this.user,
         this.host,
         this.event,
@@ -27,36 +28,41 @@ class EventParticipantsModel {
         this.numOfPeople,
         this.bookingFor,
         this.moreInfo,
-        this.status,
         this.createdAt,
         this.updatedAt,
         this.iV});
 
-  EventParticipantsModel.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
+  RentersModel.fromJson(Map<String, dynamic> json) {
+    status = json['status']?.toString(); // Convert to String if it's not already
+    sId = json['_id']?.toString();      // Convert to String if it's not already
     user = json['user'] != null ? User.fromJson(json['user']) : null;
-    host = json['host'];
-    event = json['event'];
-    eventSlot = json['eventSlot'];
-    startDateTime = json['startDateTime'];
-    endDateTime = json['endDateTime'];
-    price = json['price'];
-    numOfPeople = json['numOfPeople'];
-    bookingFor = json['bookingFor'];
+    host = json['host']?.toString();    // Convert to String if it's not already
+    event = json['event']?.toString();  // Convert to String if it's not already
+    eventSlot = json['eventSlot']?.toString(); // Convert to String if it's not already
+    startDateTime = json['startDateTime']?.toString();
+    endDateTime = json['endDateTime']?.toString();
+
+    // Handle price as double, converting int if necessary
+    price = json['price'] != null ? (json['price'] is int ? (json['price'] as int).toDouble() : json['price']) : null;
+
+    numOfPeople = json['numOfPeople']; // No conversion needed as it's already int
+    bookingFor = json['bookingFor']?.toString();
+
     if (json['moreInfo'] != null) {
       moreInfo = <MoreInfo>[];
       json['moreInfo'].forEach((v) {
         moreInfo!.add(MoreInfo.fromJson(v));
       });
     }
-    status = json['status'];
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
-    iV = json['__v'];
+
+    createdAt = json['createdAt']?.toString();
+    updatedAt = json['updatedAt']?.toString();
+    iV = json['__v']; // No conversion needed as it's already int
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
     data['_id'] = sId;
     if (user != null) {
       data['user'] = user!.toJson();
@@ -72,7 +78,6 @@ class EventParticipantsModel {
     if (moreInfo != null) {
       data['moreInfo'] = moreInfo!.map((v) => v.toJson()).toList();
     }
-    data['status'] = status;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     data['__v'] = iV;
@@ -81,42 +86,34 @@ class EventParticipantsModel {
 }
 
 class User {
-  String? sId;
-  String? authId;
   String? name;
   String? email;
   String? address;
-  String? phoneNumber;
   String? profileImage;
+  String? phoneNumber;
 
   User(
-      {this.sId,
-        this.authId,
-        this.name,
+      {this.name,
         this.email,
         this.address,
-        this.phoneNumber,
-        this.profileImage});
+        this.profileImage,
+        this.phoneNumber});
 
   User.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
-    authId = json['authId'];
     name = json['name'];
     email = json['email'];
     address = json['address'];
-    address = json['phoneNumber'];
     profileImage = json['profile_image'];
+    phoneNumber = json['phoneNumber'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['_id'] = sId;
-    data['authId'] = authId;
     data['name'] = name;
     data['email'] = email;
     data['address'] = address;
-    data['phoneNumber'] = phoneNumber;
     data['profile_image'] = profileImage;
+    data['phoneNumber'] = phoneNumber;
     return data;
   }
 }

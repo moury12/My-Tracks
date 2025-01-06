@@ -77,6 +77,7 @@ Future<dynamic> showCustomCalenderWidget(BuildContext context,
                         firstDay: DateTime.utc(2010, 10, 16),
                         lastDay: DateTime.utc(2030, 3, 14),
                         focusedDay: focusedDay,
+
                         onDaySelected: (selectedDate, focusedDay) {
                           selectedDay = selectedDate;
                           focusedDay = focusedDay;
@@ -91,6 +92,7 @@ Future<dynamic> showCustomCalenderWidget(BuildContext context,
                     goButton
                         ? InkWell(
                       onTap: () {
+                        Navigator.pop(context);
                         // Optionally, handle custom logic here
                         if (onDateSelected != null) {
                           onDateSelected(selectedDay); // Notify parent with selected date

@@ -5,23 +5,16 @@ import 'package:track_trek/controller/home_controller.dart';
 import 'package:track_trek/controller/track_management_controller.dart';
 import 'package:track_trek/core/components/custom_drop_down_button.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
-import 'package:track_trek/core/constant/custom_space.dart';
-import 'package:track_trek/core/constant/fontsize_constant.dart';
-import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/model/track-event/single_event_model.dart';
 import 'package:track_trek/core/utils/app_color.dart';
-import 'package:track_trek/core/utils/text_style.dart';
-import 'package:track_trek/view/add/widgets/show_custom_calender_widget.dart';
+import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/view/add/widgets/track_slot_widget.dart';
 import 'package:track_trek/view/home/host/event_slot_page.dart';
 import 'package:track_trek/view/home/widgets/dynamic_tab_widget.dart';
-import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 import 'package:track_trek/view/home/widgets/track_card_widget.dart';
 import 'package:track_trek/view/manage/event_user_page.dart';
 import 'package:track_trek/view/manage/widgets/event_manage_card_widget.dart';
-
-import '../home/widgets/event_card_widget.dart';
 
 class ManagementScreen extends StatelessWidget {
   const ManagementScreen({super.key});
@@ -35,17 +28,21 @@ class ManagementScreen extends StatelessWidget {
         ///============================track part=============================///
         children: List.generate(
             HomeController.to.trackList.length,
-            (i) =>  TrackCardWidget(
-              onActive:() {
-                TrackManagementController.to.trackActiveDeactivateCall(trackId: HomeController.to.trackList[i].sId.toString(), status:"active");
-                Navigator.pop(context);
-              } ,
-                  onDeactivate: () {
-                    TrackManagementController.to.trackActiveDeactivateCall(trackId: HomeController.to.trackList[i].sId.toString(), status:"deactivated");
-
+            (i) => TrackCardWidget(
+                  onActive: () {
+                    Navigator.pop(context);
+                    TrackManagementController.to.trackActiveDeactivateCall(
+                        trackId: HomeController.to.trackList[i].sId.toString(),
+                        status: "active");
                   },
-                  fromManage: true, react: false.obs,
-              trackModel:HomeController.to.trackList[i] ,
+                  onDeactivate: () {
+                    TrackManagementController.to.trackActiveDeactivateCall(
+                        trackId: HomeController.to.trackList[i].sId.toString(),
+                        status: "deactivated");
+                  },
+                  fromManage: true,
+                  react: false.obs,
+                  trackModel: HomeController.to.trackList[i],
                 )),
       ),
     ));
@@ -54,64 +51,89 @@ class ManagementScreen extends StatelessWidget {
 
     TrackManagementController.to.tabContent.add(Padding(
       padding: padding12V,
-      child: Obx(
-         () {
-
-          return Column(children: [
-             CustomDropdown<SingleEventModel>(
-                  selectedValue: TrackManagementController.to.selectedEvent.value,
-                  radius: 8.r,
-                  borderColor: AppColors.blackLightColor,
-                  fillColor: AppColors.blackBackgroundColor,
-                  hintColor: AppColors.whiteLightColor,
-                  hintText: "Select Event",
-                  items: TrackManagementController.to.eventList/*.map((element) => element.eventName).toList()*/,
-              onChanged: (value) {
-                TrackManagementController.to.selectedEvent.value=value;
-              },
-                ),
-           TrackManagementController.to.selectedEvent.value==null||TrackManagementController.to.selectedEvent.value!.slots==null||TrackManagementController.to.selectedEvent.value!.slots!.isEmpty?
-             Padding(
-               padding: padding14,
-               child: EmptyTextWidget(text: AppStaticString.slotListIsEmpty),
-             ):
-            Column(
-              children: List.generate(
-                  TrackManagementController.to.selectedEvent.value!.slots!.length,
+      child: Obx(() {
+        return Column(children: [
+          CustomDropdown<SingleEventModel>(
+            selectedValue: TrackManagementController.to.selectedEvent.value,
+            radius: 8.r,
+            borderColor: AppColors.blackLightColor,
+            fillColor: AppColors.blackBackgroundColor,
+            hintColor: AppColors.whiteLightColor,
+            hintText: "Select Event",
+            items: TrackManagementController
+                .to.eventList /*.map((element) => element.eventName).toList()*/,
+            onChanged: (value) {
+              TrackManagementController.to.selectedEvent.value = value;
+            },
+          ),
+          TrackManagementController.to.selectedEvent.value == null ||
+                  TrackManagementController.to.selectedEvent.value!.slots ==
+                      null ||
+                  TrackManagementController
+                      .to.selectedEvent.value!.slots!.isEmpty
+              ? Padding(
+                  padding: padding14,
+                  child: const EmptyTextWidget(
+                      text: AppStaticString.slotListIsEmpty),
+                )
+              : Column(
+                  children: List.generate(
+                      TrackManagementController
+                          .to.selectedEvent.value!.slots!.length,
                       (i) => Padding(
-                    padding: padding12T,
-                    child:  MarronGradientContainerWidget(
-                      child: TrackSlotWidget(
-                        onViewAllParticipant: () {
-                          Get.toNamed(EventUserScreen.routeName,arguments: 'event');
-                        },
-                        needToShowSeat: true,
-                        eventSlots:  TrackManagementController.to.selectedEvent.value!.slots![i],
-                        argument: 'track_management',
-
-                      ),
-                    ),
-                  )),
-            )
-          ]);
-        }
-      ),
+                            padding: padding12T,
+                            child: MarronGradientContainerWidget(
+                              child: TrackSlotWidget(
+                                onViewAllParticipant: () {
+                                  HomeController.to.getEventParticipantListCall(
+                                    eventSlotID: TrackManagementController
+                                            .to
+                                            .selectedEvent
+                                            .value!
+                                            .slots![i]
+                                            .sId ??
+                                        '',
+                                  );
+                                  Get.toNamed(
+                                    EventUserScreen.routeName,
+                                    arguments: 'event',
+                                  );
+                                },
+                                needToShowSeat: true,
+                                eventSlots: TrackManagementController
+                                    .to.selectedEvent.value!.slots![i],
+                                argument: 'track_management',
+                              ),
+                            ),
+                          )),
+                )
+        ]);
+      }),
     ));
 
     ///============================renters part=============================///
 
-    TrackManagementController.to.tabContent.add(Padding(
-      padding: padding12V,
-      child: Column(
-        children: List.generate(
-            5,
-            (i) => Padding(
-                  padding: padding12T,
-                  child: const MarronGradientContainerWidget(
-                    child: UserInfoContentWidget(),
-                  ),
-                )),
-      ),
+    TrackManagementController.to.tabContent.add(Obx(
+       () {
+        return Padding(
+          padding: padding12V,
+          child: TrackManagementController.to.renterList.isEmpty
+              ? const EmptyTextWidget(text: 'Renters not found')
+              : Column(
+                  children: List.generate(
+                      TrackManagementController.to.renterList.length,
+                      (i) => Padding(
+                            padding: padding12T,
+                            child: MarronGradientContainerWidget(
+                              child: UserInfoContentWidget(
+                                rentersModel:
+                                    TrackManagementController.to.renterList[i],
+                              ),
+                            ),
+                          )),
+                ),
+        );
+      }
     ));
 
     return Scaffold(
@@ -119,15 +141,18 @@ class ManagementScreen extends StatelessWidget {
       child: Padding(
         padding: padding16.copyWith(top: 0),
         child: DynamicTabWidget(
-          function: (val) {
-            TrackManagementController.to.selectedTabIndex.value = val;
+            function: (val) async {
+              TrackManagementController.to.selectedTabIndex.value = val;
 
-            if(val==2){
-              showCustomCalenderWidget(context,goButton: true,onDateSelected: (value) {
-
-              },);
-            }
-          },
+              if (val == 2) {
+                String selectedDate = await selectDate(context);
+//               showCustomCalenderWidget(context,goButton: true,onDateSelected: (value) {
+// print(value);
+//               },);
+              await  TrackManagementController.to
+                    .getRentersListCall(date: selectedDate);
+              }
+            },
             tabs: TrackManagementController.to.tabs,
             tabContent: TrackManagementController.to.tabContent),
       ),

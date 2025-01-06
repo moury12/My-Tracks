@@ -9,6 +9,7 @@ import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/model/participants/event_participants_model.dart';
 import 'package:track_trek/core/model/participants/track_participants_model.dart';
+import 'package:track_trek/core/model/renter/renters_model.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/home/host/user_details_page.dart';
@@ -102,33 +103,34 @@ class UserInfoContentWidget extends StatelessWidget {
   final String? seatNo;
   final TrackParticipantsModel? trackPartModel;
   final EventParticipantsModel? eventPartModel;
+  final RentersModel? rentersModel;
   const UserInfoContentWidget({
     super.key,
     this.seatNo,
     this.trackPartModel,
-    this.eventPartModel,
+    this.eventPartModel, this.rentersModel,
   });
 
   @override
   Widget build(BuildContext context) {
     final String name = eventPartModel != null
         ? eventPartModel!.user!.name ?? 'n/a'
-        : trackPartModel!.user!.name ?? AppStaticString.dummyName;
+        :trackPartModel!=null? trackPartModel!.user!.name ?? AppStaticString.dummyName:rentersModel!.user!.name??'';
 
     final String email = eventPartModel != null
         ? eventPartModel!.user!.email ?? 'n/a'
-        : trackPartModel!.user!.email ?? 'Not Provided';
+        :trackPartModel!=null? trackPartModel!.user!.email ?? 'Not Provided':rentersModel!.user!.email??'';
 
     final String phone = eventPartModel != null
         ? eventPartModel!.user!.phoneNumber ?? 'n/a'
-        : trackPartModel!.user!.phoneNumber ?? 'Not Provided';
+        :trackPartModel!=null? trackPartModel!.user!.phoneNumber ?? 'Not Provided':rentersModel!.user!.phoneNumber??'';
 
     final String address = eventPartModel != null
         ? eventPartModel!.user!.email ?? 'n/a'
-        : trackPartModel!.user!.email ?? AppStaticString.dummyAddress;
+        :trackPartModel!=null? trackPartModel!.user!.email ?? AppStaticString.dummyAddress:rentersModel!.user!.address??'';
     final String imageUrl = eventPartModel != null
         ? eventPartModel!.user!.profileImage ?? ''
-        : trackPartModel!.user!.profileImage ?? '';
+        :trackPartModel!=null? trackPartModel!.user!.profileImage ?? '':rentersModel!.user!.profileImage??'';
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -173,6 +175,19 @@ class UserInfoContentWidget extends StatelessWidget {
                         eventPartModel!.moreInfo!.length,
                         (index) {
                           final info = eventPartModel!.moreInfo![index];
+                          return UserInfoText(
+                              text: '${info.label} : ${info.value} ');
+                        },
+                      ))
+                  : SizedBox.shrink() , rentersModel != null &&
+                      rentersModel!.moreInfo != null &&
+                      rentersModel!.moreInfo!.isNotEmpty
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: List.generate(
+                        rentersModel!.moreInfo!.length,
+                        (index) {
+                          final info = rentersModel!.moreInfo![index];
                           return UserInfoText(
                               text: '${info.label} : ${info.value} ');
                         },

@@ -28,4 +28,5 @@ class ApiClient {
       '$baseUrl/business/get-all-notifications';
   static String get getLikeDisLikeUrl => '$baseUrl/review/like-dislike';
   static String get getAllReviewUrl => '$baseUrl/review/get-all-review';
+  static String get getAllRentersOnDateUrl => '$baseUrl/business/renters-on-date';
 }
