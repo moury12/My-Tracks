@@ -129,7 +129,7 @@ class EventCardWidget extends StatelessWidget {
 
                         Text(
                           '${AppStaticString.totalSlot}${eventModel == null
-                              ?'12': eventModel!.totalSeat??''}',
+                              ?'12': eventModel!.slots!.length??''}',
                           style: poppinsRegular.copyWith(
                               fontSize: getFontSizeSmall(context)),
                         ),
@@ -141,8 +141,8 @@ class EventCardWidget extends StatelessWidget {
 
                             ///==============dynamic event unsold==============///
 
-                            : Text('${AppStaticString.unsold}${eventModel == null
-                            ?'12': eventModel!.unSold??''}',
+                            : Text('${AppStaticString.status}: ${eventModel == null
+                            ?'12': eventModel!.status??''}',
                                 style: poppinsRegular.copyWith(
                                     fontSize: getFontSizeSmall(context))),
                       ],

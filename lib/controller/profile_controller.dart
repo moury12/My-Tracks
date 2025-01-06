@@ -6,7 +6,7 @@ import 'package:track_trek/controller/network_controller.dart';
 import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/init/hive_boxes.dart';
 import 'package:track_trek/core/model/user/user_model.dart';
-import 'package:track_trek/core/service/user_service.dart';
+import 'package:track_trek/core/service/user/user_service.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/view/auth/login.dart';
 import 'package:track_trek/view/initial/splash.dart';

@@ -124,7 +124,8 @@ class DefaultDialogWithButton extends StatelessWidget {
   final Color? borderColor;
   final Color? textColor;
   final Color? fillColor;
-  final double? radius;
+  final double? radius;  final Function()? secondButtonTap;
+  final Function()? firstButtonTap;
   const DefaultDialogWithButton({
     super.key,
     this.content,
@@ -134,7 +135,7 @@ class DefaultDialogWithButton extends StatelessWidget {
     this.textColor,
     this.fillColor,
     this.radius,
-    this.title,
+    this.title,this.secondButtonTap, this.firstButtonTap,
     this.rowButton,
   });
 
@@ -197,8 +198,9 @@ class DefaultDialogWithButton extends StatelessWidget {
                 ),
             rowButton ??
                 RowButton(
+                  firstButtonTap: firstButtonTap,
                     borderColor: borderColor,
-                    save: () {
+                    secondButtonTap:secondButtonTap?? () {
                       Navigator.pop(context);
                       CreateTrackEventController.to.eventNameControllerList.add(CreateTrackEventController.to.fieldNameController.value.text);
                       CreateTrackEventController.to.fieldNameController.value.clear();
@@ -223,15 +225,15 @@ class RowButton extends StatelessWidget {
     this.radius,
     this.firstButtonText,
     this.textColor,
-    this.secendtButtonText, this.save, this.cancel,
+    this.secendtButtonText, this.secondButtonTap, this.firstButtonTap,
   });
 
   final Color? borderColor;
   final double? radius;
   final String? firstButtonText;
   final Color? textColor;
-  final Function()? save;
-  final Function()? cancel;
+  final Function()? secondButtonTap;
+  final Function()? firstButtonTap;
   final String? secendtButtonText;
 
   @override
@@ -241,7 +243,7 @@ class RowButton extends StatelessWidget {
       children: [
         Expanded(
           child: CustomButton(
-            onTap: cancel ??
+            onTap: firstButtonTap ??
                 () {
                   Navigator.pop(context);
                 },
@@ -255,7 +257,7 @@ class RowButton extends StatelessWidget {
         Expanded(
           child: CustomButton(
             radius: radius,
-            onTap: save ??
+            onTap: secondButtonTap ??
                 () {
                   Navigator.pop(context);
                 },

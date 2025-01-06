@@ -10,7 +10,7 @@ import 'package:track_trek/core/model/location/place_search_model.dart';
 import 'package:track_trek/core/model/track-event/single_event_model.dart';
 import 'package:track_trek/core/model/track-event/single_event_model.dart';
 import 'package:track_trek/core/model/track-event/single_track_model.dart';
-import 'package:track_trek/core/service/track_event_service.dart';
+import 'package:track_trek/core/service/track-event/track_event_service.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/view/add/upload_track.dart';
 

@@ -50,6 +50,7 @@ class AppStaticString {
   static const String email = "Email";
   static const String nameWithClone = "Name: ";
   static const String name = "Name";
+  static const String status = "Status";
   static const String enterCode = "Enter the code";
   static const String enter4Digit = "Enter the 4 digit code that we just sent to";
   static const String userName = "User Name";
@@ -155,7 +156,7 @@ class AppStaticString {
   static const String  selectOneYouCreate= "Select the one you want to create";
   static const String  seat= "Seat: ";
   static const String  selectDay= "Select Day";
-  static const String  areYouSureWantToReactivate= "Are you sure you want to reactivate this truck for January?";
+  static const String  areYouSureWantToReactivate= "Are you sure you want to reactivate this truck?";
   static const String  availableSlot= "Available Slot: ";
   static const String  howManyPeopleCanTrack= "How many people can the track";
   static const String  contactNumber= "Contact Number";

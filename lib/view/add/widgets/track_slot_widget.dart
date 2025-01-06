@@ -21,6 +21,7 @@ class TrackSlotWidget extends StatelessWidget {
   final TrackSlots? slots;
   final EventSlots? eventSlots;
   final Function()? onTap;
+  final Function()? onViewAllParticipant;
   final Function()? onDelete;
   const TrackSlotWidget({
     super.key,
@@ -29,7 +30,7 @@ class TrackSlotWidget extends StatelessWidget {
     this.onTap,
     this.slots,
     this.onDelete,
-    this.eventSlots,
+    this.eventSlots, this.onViewAllParticipant,
   });
 
   @override
@@ -120,9 +121,7 @@ class TrackSlotWidget extends StatelessWidget {
           ),
           argument != null && argument == 'track_management'
               ? GestureDetector(
-                  onTap: () {
-                    Get.toNamed(EventUserScreen.routeName);
-                  },
+                  onTap: onViewAllParticipant,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [

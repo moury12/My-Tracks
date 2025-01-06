@@ -67,6 +67,8 @@ class HomeScreen extends StatelessWidget {
                                           const EventListWidget(),
                                         ];
                                       } else {
+                                        HomeController.to.isBooked.value='';
+                                        HomeController.to.getEventListCall();
                                         // Reset to default tabs and content
                                         HomeController.to.tabs.value = [
                                           AppStaticString.track,

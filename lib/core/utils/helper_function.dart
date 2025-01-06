@@ -209,3 +209,25 @@ Future<String> selectDate(
   }
   return ''; // Return null if no date is selected
 }
+String formatTimestamp({
+  required String timestamp,
+  String format = 'yyyy-MM-dd hh:mm a',
+  bool toLocal = true,
+}) {
+  try {
+    // Parse the timestamp
+    DateTime parsedDate = DateTime.parse(timestamp);
+
+    // Convert to local timezone if required
+    if (toLocal) {
+      parsedDate = parsedDate.toLocal();
+    }
+
+    // Format the date using the provided format
+    return DateFormat(format).format(parsedDate);
+  } catch (e) {
+    // Handle parsing or formatting errors
+    print('Error formatting timestamp: $e');
+    return '';
+  }
+}

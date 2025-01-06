@@ -5,7 +5,7 @@ import 'package:track_trek/controller/common_controller.dart';
 import 'package:track_trek/controller/network_controller.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/init/hive_boxes.dart';
-import 'package:track_trek/core/service/auth_service.dart';
+import 'package:track_trek/core/service/auth/auth_service.dart';
 import 'package:track_trek/core/utils/arguments.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/view/auth/login.dart';

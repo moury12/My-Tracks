@@ -9,13 +9,16 @@ import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
 import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
+import 'package:track_trek/core/model/track-event/single_event_model.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/add/widgets/show_custom_calender_widget.dart';
 import 'package:track_trek/view/add/widgets/track_slot_widget.dart';
+import 'package:track_trek/view/home/host/event_slot_page.dart';
 import 'package:track_trek/view/home/widgets/dynamic_tab_widget.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 import 'package:track_trek/view/home/widgets/track_card_widget.dart';
+import 'package:track_trek/view/manage/event_user_page.dart';
 import 'package:track_trek/view/manage/widgets/event_manage_card_widget.dart';
 
 import '../home/widgets/event_card_widget.dart';
@@ -33,6 +36,14 @@ class ManagementScreen extends StatelessWidget {
         children: List.generate(
             HomeController.to.trackList.length,
             (i) =>  TrackCardWidget(
+              onActive:() {
+                TrackManagementController.to.trackActiveDeactivateCall(trackId: HomeController.to.trackList[i].sId.toString(), status:"active");
+                Navigator.pop(context);
+              } ,
+                  onDeactivate: () {
+                    TrackManagementController.to.trackActiveDeactivateCall(trackId: HomeController.to.trackList[i].sId.toString(), status:"deactivated");
+
+                  },
                   fromManage: true, react: false.obs,
               trackModel:HomeController.to.trackList[i] ,
                 )),
@@ -43,34 +54,48 @@ class ManagementScreen extends StatelessWidget {
 
     TrackManagementController.to.tabContent.add(Padding(
       padding: padding12V,
-      child: Column(children: [
-        Obx(
+      child: Obx(
          () {
-            return CustomDropdown(
-              selectedValue: TrackManagementController.to.selectedEvent.value,
-              radius: 8.r,
-              borderColor: AppColors.blackLightColor,
-              fillColor: AppColors.blackBackgroundColor,
-              hintColor: AppColors.whiteLightColor,
-              hintText: "Select Event",
-              items: HomeController.to.eventList.map((element) => element.eventName,).toList(),
-          onChanged: (value) {
-            TrackManagementController.to.selectedEvent.value=value;
-          },
-            );
-          }
-        ),
-        ...List.generate(
-            5,
-            (i) => Padding(
-                  padding: padding12T,
-                  child: const MarronGradientContainerWidget(
-                    child: TrackSlotWidget(
-                      argument: 'track_management',
+
+          return Column(children: [
+             CustomDropdown<SingleEventModel>(
+                  selectedValue: TrackManagementController.to.selectedEvent.value,
+                  radius: 8.r,
+                  borderColor: AppColors.blackLightColor,
+                  fillColor: AppColors.blackBackgroundColor,
+                  hintColor: AppColors.whiteLightColor,
+                  hintText: "Select Event",
+                  items: TrackManagementController.to.eventList/*.map((element) => element.eventName).toList()*/,
+              onChanged: (value) {
+                TrackManagementController.to.selectedEvent.value=value;
+              },
+                ),
+           TrackManagementController.to.selectedEvent.value==null||TrackManagementController.to.selectedEvent.value!.slots==null||TrackManagementController.to.selectedEvent.value!.slots!.isEmpty?
+             Padding(
+               padding: padding14,
+               child: EmptyTextWidget(text: AppStaticString.slotListIsEmpty),
+             ):
+            Column(
+              children: List.generate(
+                  TrackManagementController.to.selectedEvent.value!.slots!.length,
+                      (i) => Padding(
+                    padding: padding12T,
+                    child:  MarronGradientContainerWidget(
+                      child: TrackSlotWidget(
+                        onViewAllParticipant: () {
+                          Get.toNamed(EventUserScreen.routeName,arguments: 'event');
+                        },
+                        needToShowSeat: true,
+                        eventSlots:  TrackManagementController.to.selectedEvent.value!.slots![i],
+                        argument: 'track_management',
+
+                      ),
                     ),
-                  ),
-                )),
-      ]),
+                  )),
+            )
+          ]);
+        }
+      ),
     ));
 
     ///============================renters part=============================///
@@ -96,6 +121,7 @@ class ManagementScreen extends StatelessWidget {
         child: DynamicTabWidget(
           function: (val) {
             TrackManagementController.to.selectedTabIndex.value = val;
+
             if(val==2){
               showCustomCalenderWidget(context,goButton: true,onDateSelected: (value) {
 

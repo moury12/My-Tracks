@@ -1,10 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:track_trek/controller/home_controller.dart';
 import 'package:track_trek/core/components/custom_button.dart';
 import 'package:track_trek/core/components/custom_network_image.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
@@ -17,10 +16,8 @@ import 'package:track_trek/core/model/track-event/single_track_model.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/add/widgets/buttons.dart';
-import 'package:track_trek/view/add/widgets/delete_alert_dialog.dart';
 import 'package:track_trek/view/book-track-join-event/book_track_join_event_page.dart';
 import 'package:track_trek/view/home/host/event_slot_page.dart';
-import 'package:track_trek/view/home/host/user_details_page.dart';
 import 'package:track_trek/view/home/widgets/event_card_widget.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 
@@ -29,12 +26,16 @@ class TrackCardWidget extends StatelessWidget {
   final bool? fromUser;
   final RxBool react;
   final SingleTrackModel? trackModel;
+  final Function()? onActive;
+  final Function()? onDeactivate;
   const TrackCardWidget({
     super.key,
     this.fromManage = false,
     this.fromUser = false,
     required this.react,
     this.trackModel,
+    this.onActive,
+    this.onDeactivate,
   });
 
   @override
@@ -207,8 +208,13 @@ class TrackCardWidget extends StatelessWidget {
                           flex: 4,
                           child: CustomButton(
                             onTap: () {
-                              Get.toNamed(EventTrackSlotScreen.routeName, arguments: {'slots': trackModel!.slots, 'type': 'track'},);
-
+                              Get.toNamed(
+                                EventTrackSlotScreen.routeName,
+                                arguments: {
+                                  'slots': trackModel!.slots,
+                                  'type': 'track'
+                                },
+                              );
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -237,6 +243,9 @@ class TrackCardWidget extends StatelessWidget {
                 OptionWidget(
                   icon: commentIconUrl,
                   function: () {
+                    HomeController.to.getTrackReviewListCall(
+                        trackId:
+                            trackModel != null ? trackModel!.sId ?? '' : '');
                     showModalBottomSheet(
                       constraints: BoxConstraints.tightForFinite(
                         height: MediaQuery.of(context).size.height / 2,
@@ -245,100 +254,7 @@ class TrackCardWidget extends StatelessWidget {
                       context: context,
                       isScrollControlled:
                           true, // Allows better control of the height and width
-                      builder: (context) => Container(
-                        // height: MediaQuery.of(context).size.height / 2,
-                        width: MediaQuery.of(context).size.width,
-                        decoration: const BoxDecoration(
-                          // color: Colors.white, // Background color for the bottom sheet
-                          borderRadius:
-                              BorderRadius.vertical(top: Radius.circular(16.0)),
-                        ),
-                        child: SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Text(
-                                  AppStaticString.comments,
-                                  style: poppinsMedium.copyWith(
-                                    fontSize: getFontSizeSmall(context),
-                                  ),
-                                ),
-                              ),
-                              Divider(color: Colors.grey[300]),
-                              ...List.generate(
-                                5,
-                                (index) => Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: Row(
-                                        children: [
-                                          const ProfileCircleImageWidget(),
-                                          const SizedBox(width: 16.0),
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                /// User name and duration
-                                                RichText(
-                                                  text: TextSpan(
-                                                    children: [
-                                                      TextSpan(
-                                                        text: AppStaticString
-                                                            .dummyName,
-                                                        style: poppinsRegular
-                                                            .copyWith(
-                                                          fontSize:
-                                                              getFontSizeSmall(
-                                                                  context),
-                                                        ),
-                                                      ),
-                                                      TextSpan(
-                                                        text: ' 3d',
-                                                        style: poppinsRegular
-                                                            .copyWith(
-                                                          color: AppColors
-                                                              .normalDarkWhite,
-                                                          fontSize:
-                                                              getFontSizeSmall(
-                                                                  context),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 6.0),
-
-                                                /// Comment text
-                                                Text(
-                                                  'Nice to see, in something elseNice to see, in something elseNice to see, in something else',
-                                                  style:
-                                                      poppinsRegular.copyWith(
-                                                    color:
-                                                        const Color(0xffD2D2D2),
-                                                    fontSize:
-                                                        getFontSizeDefault(
-                                                            context),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Divider(color: Colors.grey[300]),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                      builder: (context) => const ReviewListWidget(),
                     );
                   },
                   text: trackModel != null
@@ -397,13 +313,7 @@ class TrackCardWidget extends StatelessWidget {
                     children: [
                       Expanded(
                         child: CustomButton(
-                          onTap: () {
-                            showDialog(
-                              barrierDismissible: false,
-                              context: context,
-                              builder: (context) => const DeleteAlertDialog(),
-                            );
-                          },
+                          onTap: onDeactivate ?? () {},
                           fillColor: Colors.transparent,
                           borderColor: AppColors.redColor,
                           // height: 48.h,
@@ -423,6 +333,7 @@ class TrackCardWidget extends StatelessWidget {
                               barrierDismissible: false,
                               context: context,
                               builder: (context) => DefaultDialogWithButton(
+                                secondButtonTap: onActive,
                                 content: Padding(
                                   padding: EdgeInsets.only(bottom: 12.h),
                                   child: Text(
@@ -508,6 +419,109 @@ class TrackCardWidget extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+}
+
+class ReviewListWidget extends StatelessWidget {
+  const ReviewListWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      // height: MediaQuery.of(context).size.height / 2,
+      width: MediaQuery.of(context).size.width,
+      decoration: const BoxDecoration(
+        // color: Colors.white, // Background color for the bottom sheet
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
+      ),
+      child: SingleChildScrollView(
+        child: Obx(() {
+          return HomeController.to.reviewList.isEmpty
+              ? const EmptyTextWidget(text: 'Review List is empty!!')
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        AppStaticString.comments,
+                        style: poppinsMedium.copyWith(
+                          fontSize: getFontSizeSmall(context),
+                        ),
+                      ),
+                    ),
+                    Divider(color: Colors.grey[300]),
+                    ...List.generate(
+                      HomeController.to.reviewList.length,
+                      (index) {
+                        final review = HomeController.to.reviewList[index];
+                        return Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Row(
+                                children: [
+                                  const ProfileCircleImageWidget(),
+                                  const SizedBox(width: 16.0),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        /// User name and duration
+                                        RichText(
+                                          text: TextSpan(
+                                            children: [
+                                              TextSpan(
+                                                text: review.user!.name ??
+                                                    AppStaticString.dummyName,
+                                                style: poppinsRegular.copyWith(
+                                                  fontSize:
+                                                      getFontSizeSmall(context),
+                                                ),
+                                              ),
+                                              TextSpan(
+                                                text: ' 3d',
+                                                style: poppinsRegular.copyWith(
+                                                  color:
+                                                      AppColors.normalDarkWhite,
+                                                  fontSize:
+                                                      getFontSizeSmall(context),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        const SizedBox(height: 6.0),
+
+                                        /// Comment text
+                                        Text(
+                                          'Nice to see, in something elseNice to see, in something elseNice to see, in something else',
+                                          style: poppinsRegular.copyWith(
+                                            color: const Color(0xffD2D2D2),
+                                            fontSize:
+                                                getFontSizeDefault(context),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Divider(color: Colors.grey[300]),
+                          ],
+                        );
+                      },
+                    ),
+                  ],
+                );
+        }),
+      ),
     );
   }
 }

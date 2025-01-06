@@ -11,14 +11,7 @@ import 'package:track_trek/core/init/api_client.dart';
 import 'package:track_trek/core/init/hive_boxes.dart';
 import 'package:track_trek/core/model/category/category_model.dart';
 import 'package:track_trek/core/model/participants/event_participants_model.dart';
-import 'package:track_trek/core/model/participants/event_participants_model.dart';
-import 'package:track_trek/core/model/participants/event_participants_model.dart';
 import 'package:track_trek/core/model/participants/track_participants_model.dart';
-import 'package:track_trek/core/model/participants/track_participants_model.dart';
-import 'package:track_trek/core/model/participants/track_participants_model.dart';
-import 'package:track_trek/core/model/track-event/single_event_model.dart';
-import 'package:track_trek/core/model/track-event/single_event_model.dart';
-import 'package:track_trek/core/model/track-event/single_event_model.dart';
 import 'package:track_trek/core/model/track-event/single_event_model.dart';
 import 'package:track_trek/core/model/track-event/single_track_model.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
@@ -617,5 +610,49 @@ class TrackEventService {
     }
     return myEventList;
   }
+  static Future<bool> trackActiveDeactivateRequest({
+    required String trackId,
+    required String status,
 
+  })
+  async {
+    try {
+      final url = Uri.parse(ApiClient.activeDeactivateUrl);
+      final headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
+      };
+      final body = jsonEncode({
+        "trackId": trackId,
+        "status": status,
+
+      });
+      final response = await http.patch(url, headers: headers, body: body);
+      final responseData = json.decode(response.body);
+      log('-----------------track active deactive call--------------------');
+      log(body.toString());
+      log(responseData.toString());
+      if (responseData['success'] != null && responseData['success'] == true) {
+        showCustomSnackbar(
+            title: AppStaticString.success,
+            message: responseData['message'],
+            type: SnackBarType.success);
+        return true;
+      } else {
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
+        return false;
+      }
+    } catch (e) {
+      showCustomSnackbar(
+          title: AppStaticString.failed,
+          message: e.toString(),
+          type: SnackBarType.failed);
+      debugPrint(e.toString());
+      return false;
+    }
+  }
 }

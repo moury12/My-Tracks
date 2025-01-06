@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:track_trek/controller/notification_controller.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
-import 'package:track_trek/core/utils/app_color.dart';
+import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/core/utils/text_style.dart';
+import 'package:track_trek/view/home/host/event_slot_page.dart';
 import 'package:track_trek/view/notification/widgets/notification_title_widget.dart';
 
 class NotificationScreen extends StatelessWidget {
@@ -12,10 +15,12 @@ class NotificationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    Get.put(NotificationController());
+    return  SingleChildScrollView(
       child: Padding(
         padding: padding16,
-        child: Column(
+        child:NotificationController.to.notifyList.isEmpty?
+            const EmptyTextWidget(text: 'Notification List is Empty'): Column(
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -34,15 +39,16 @@ class NotificationScreen extends StatelessWidget {
             ),
             space16H,
             ...List.generate(
-              10,
+              NotificationController.to.notifyList.length,
               (index) =>
 
                   ///=============notification title===================///
 
-                  const NotificationTitleWidget(
-                title: 'You add a new service in your account',
+                   NotificationTitleWidget(
+                title: NotificationController.to.notifyList[index].title??'',
+                    subtitle: NotificationController.to.notifyList[index].message??'',
                     ///<====================================== date ================================>///
-                date: '05-12-2024',
+                date: formatTimestamp(timestamp: NotificationController.to.notifyList[index].createdAt??''),
               ),
             )
           ],

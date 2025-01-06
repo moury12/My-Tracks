@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
+import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
 import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
@@ -8,9 +9,10 @@ import 'package:track_trek/core/utils/text_style.dart';
 
 class NotificationTitleWidget extends StatelessWidget {
   final String title;
+  final String? subtitle;
   final String date;
   const NotificationTitleWidget({
-    super.key, required this.title, required this.date,
+    super.key, required this.title, required this.date, this.subtitle,
   });
 
   @override
@@ -36,6 +38,8 @@ class NotificationTitleWidget extends StatelessWidget {
             ],
           ),
         ),
+        Text(subtitle??'',style: poppinsRegular.copyWith(fontSize: getFontSizeSmall(context)),),
+        space12H,
         Image.asset(horizontalDividerUrl)
       ],
     );

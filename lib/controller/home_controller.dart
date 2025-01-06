@@ -3,12 +3,12 @@ import 'package:get/get.dart';
 import 'package:track_trek/controller/network_controller.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/model/participants/event_participants_model.dart';
-import 'package:track_trek/core/model/participants/event_participants_model.dart';
 import 'package:track_trek/core/model/participants/track_participants_model.dart';
-import 'package:track_trek/core/model/participants/track_participants_model.dart';
+import 'package:track_trek/core/model/review/review_model.dart';
 import 'package:track_trek/core/model/track-event/single_event_model.dart';
 import 'package:track_trek/core/model/track-event/single_track_model.dart';
-import 'package:track_trek/core/service/track_event_service.dart';
+import 'package:track_trek/core/service/review/review_service.dart';
+import 'package:track_trek/core/service/track-event/track_event_service.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 
 class HomeController extends GetxController {
@@ -29,13 +29,21 @@ class HomeController extends GetxController {
       <TrackParticipantsModel>[].obs;
   RxList<EventParticipantsModel> eventParticipantList =
       <EventParticipantsModel>[].obs;
+  RxList<ReviewModel> reviewList = <ReviewModel>[].obs;
 
   ///========================Loading variables=====================///
 
   RxBool isLoadingTrackList = false.obs;
   RxBool isLoadingEventList = false.obs;
   RxBool isLoadingTrackParticipantList = false.obs;
+  RxBool isLoadingTrackReviewList = false.obs;
   RxBool isLoadingEventParticipantList = false.obs;
+  RxBool isLoadingPostLike = false.obs;
+
+  ///=====================pagination variable====================///
+
+  RxInt currentPageForReview = 1.obs;
+  var isLoadingMoreForReview = false.obs;
 
   getTrackListCall() async {
     if (NetworkController.to.isConnected.value) {
@@ -45,10 +53,10 @@ class HomeController extends GetxController {
         isLoadingTrackList.value = false;
       } else {
         isLoadingTrackList.value = false;
-        showCustomSnackbar(
+       /* showCustomSnackbar(
             title: AppStaticString.failed,
             message: AppStaticString.failedToLoadData,
-            type: SnackBarType.failed);
+            type: SnackBarType.failed);*/
       }
     } else {
       isLoadingTrackList.value = false;
@@ -114,6 +122,61 @@ class HomeController extends GetxController {
       isLoadingTrackParticipantList.value = false;
       // noInternetShowCustomSnackbar();
     }
+  }
+ postLikeDisLikeCall({required String trackId}) async {
+    if (NetworkController.to.isConnected.value) {
+      isLoadingPostLike.value = true;
+      final bool likeHitted = await ReviewService.likeDislikeRequest(
+          trackId: trackId);
+      if (likeHitted) {
+        isLoadingPostLike.value = false;
+      } else {
+        isLoadingPostLike.value = false;
+        // showCustomSnackbar(
+        //     title: AppStaticString.failed,
+        //     message: AppStaticString.failedToLoadData,
+        //     type: SnackBarType.failed);
+      }
+    } else {
+      isLoadingPostLike.value = false;
+      // noInternetShowCustomSnackbar();
+    }
+  }
+
+  getTrackReviewListCall({required String trackId, String sort = '',bool loadMoreData = false}) async {
+    if (NetworkController.to.isConnected.value) {
+      if(loadMoreData){
+        isLoadingMoreForReview.value=true;
+      }else{
+        isLoadingTrackReviewList.value = true;
+        currentPageForReview.value=1;
+      }
+
+      List<ReviewModel> reviews = await ReviewService.getReviewList(
+          trackId: trackId, page: currentPageForReview.value, sort: sort);
+      if (reviewList.isNotEmpty) {
+        isLoadingTrackReviewList.value = false;
+        if(loadMoreData){
+          reviews.addAll(reviews);
+        }else{
+          reviews.assignAll(reviews);
+        }
+        currentPageForReview.value ++;
+      }else if (!loadMoreData) {
+        // Clear the list if it's a fresh request and no data
+        reviewList.clear();
+      } else {
+        isLoadingTrackReviewList.value = false;
+        // showCustomSnackbar(
+        //     title: AppStaticString.failed,
+        //     message: AppStaticString.failedToLoadData,
+        //     type: SnackBarType.failed);
+      }
+    } else {
+      isLoadingTrackReviewList.value = false;
+      // noInternetShowCustomSnackbar();
+    }
+    reviewList.refresh();
   }
 
   @override
