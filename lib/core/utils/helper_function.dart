@@ -206,13 +206,13 @@ Future<String> selectDate(
            borderRadius: BorderRadius.circular(10.r)
          ),
 
-         yearForegroundColor: WidgetStatePropertyAll<Color>(AppColors.blackLightColor) ,
-         dayForegroundColor: WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
-         todayForegroundColor:WidgetStatePropertyAll<Color>(AppColors.whiteLightColor),
-        confirmButtonStyle: ButtonStyle(foregroundColor: WidgetStatePropertyAll<Color>(AppColors.blackLightColor)),
-        cancelButtonStyle: ButtonStyle(foregroundColor: WidgetStatePropertyAll<Color>(AppColors.blackLightColor)),
+         yearForegroundColor: const WidgetStatePropertyAll<Color>(AppColors.blackLightColor) ,
+         dayForegroundColor: const WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
+         todayForegroundColor:const WidgetStatePropertyAll<Color>(AppColors.whiteLightColor),
+        confirmButtonStyle: const ButtonStyle(foregroundColor: WidgetStatePropertyAll<Color>(AppColors.blackLightColor)),
+        cancelButtonStyle: const ButtonStyle(foregroundColor: WidgetStatePropertyAll<Color>(AppColors.blackLightColor)),
          backgroundColor:AppColors.blueColor,
-         dividerColor: Colors.transparent,todayBackgroundColor:  WidgetStatePropertyAll<Color>(AppColors.blackLightColor)
+         dividerColor: Colors.transparent,todayBackgroundColor:  const WidgetStatePropertyAll<Color>(AppColors.blackLightColor)
 
        )),  child: child!   );
     },
