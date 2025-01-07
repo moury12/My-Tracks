@@ -11,7 +11,9 @@ import 'package:track_trek/core/constant/fontsize_constant.dart';
 import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/init/api_client.dart';
+import 'package:track_trek/core/model/track-event-for-userpanel/event_for_user_panel_model.dart';
 import 'package:track_trek/core/model/track-event/single_event_model.dart';
+import 'package:track_trek/core/model/track-event/single_track_model.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/home/host/event_slot_page.dart';
@@ -25,6 +27,8 @@ class EventCardWidget extends StatelessWidget {
   final String? buttonText;
   final String? buttonImg;
   final SingleEventModel? eventModel;
+  final EventForUserPanelModel? eventModelForUser;
+  final SingleTrackModel? trackModel;
   final Function()? onTap;
   const EventCardWidget({
     super.key,
@@ -33,11 +37,20 @@ class EventCardWidget extends StatelessWidget {
     this.buttonText,
     this.buttonImg,
     this.onTap,
-    this.eventModel,
+    this.eventModel, this.trackModel, this.eventModelForUser,
   });
 
   @override
   Widget build(BuildContext context) {
+    final String imageUrl= eventModel!=null?'${ApiClient.baseUrl}/${eventModel!.eventImage?.first}':trackModel!=null?'${ApiClient.baseUrl}/${trackModel!.trackImage?.first}':eventModelForUser!=null?'${ApiClient.baseUrl}/${eventModelForUser!.eventImage?.first}':'n/a';
+    final String name= eventModel!=null?eventModel!.eventName??'':trackModel!=null?trackModel!.trackName??'n/a':eventModelForUser!=null?eventModelForUser!.eventName??'n/a':AppStaticString.dummyEvent;
+    final String location= eventModel!=null?eventModel!.address??'':trackModel!=null?trackModel!.address??'n/a':eventModelForUser!=null?eventModelForUser!.address??'n/a':AppStaticString.dummyAddress;
+    final String startDate= eventModel!=null?eventModel!.startDate??'':trackModel!=null?trackModel!.totalTrackDayInMonth??'n/a':eventModelForUser!=null?eventModelForUser!.startDate??'n/a':AppStaticString.dummyDate;
+    final String totalSlot= eventModel!=null?eventModel!.slots!.length.toString():trackModel!=null?trackModel!.totalTrackDayInMonth??'n/a':eventModelForUser!=null?eventModelForUser!.slots!.length.toString():AppStaticString.dummyDate;
+    // final String unsold= eventModel!=null?eventModel!.??'':trackModel!=null?trackModel!.totalTrackDayInMonth??'n/a':eventModelForUser!=null?eventModelForUser!.??'n/a':AppStaticString.dummyDate;
+    final String time=    eventModel != null
+        ? '${eventModel!.startTime} - ${eventModel!.endTime}': eventModelForUser != null
+        ? '${eventModelForUser!.startTime} - ${eventModelForUser!.endTime}':AppStaticString.dummyTime;
     return Padding(
       padding: padding12T,
       child: BlackContainerWidget(
@@ -53,7 +66,7 @@ class EventCardWidget extends StatelessWidget {
                 child: eventModel != null
                     ? CustomNetworkImage(
                         imageUrl:
-                            '${ApiClient.baseUrl}/${eventModel!.eventImage!.first}',
+                            imageUrl,
                         height: 150.h,
                         width: double.infinity)
                     : Image.asset(dummyEventImgUrl)),
@@ -68,16 +81,14 @@ class EventCardWidget extends StatelessWidget {
                     ///==============dynamic event name==============///
 
                     Text(
-                      eventModel != null
-                          ? eventModel!.eventName??'':    AppStaticString.dummyEvent,
+                      name,
                       style: poppinsMedium.copyWith(
                           fontSize: getFontSizeSmall(context)),
                     ),
 
                     ///==============dynamic event location==============///
 
-                    Text('${AppStaticString.locationWithClone}${ eventModel != null
-                        ? eventModel!.address??'':AppStaticString.dummyAddress}',
+                    Text('${AppStaticString.locationWithClone}$location',
                         // maxLines: 1,
                         // overflow: TextOverflow.ellipsis,
                         style: poppinsRegular.copyWith(
@@ -91,20 +102,18 @@ class EventCardWidget extends StatelessWidget {
                   children: [
                     ///==============dynamic event date==============///
 
-                    Text('${AppStaticString.dateWithClone} ${ eventModel != null
-                        ? eventModel!.startDate??'':AppStaticString.dummyDate} ',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                    Text('${AppStaticString.dateWithClone} $startDate ',
+                      /*  maxLines: 1,
+                        overflow: TextOverflow.ellipsis,*/
                         style: poppinsRegular.copyWith(
                             fontSize: getFontSizeSmall(context))),
 
                     ///==============dynamic event time==============///
 
                     Text(
-                     eventModel != null
-                          ? '${eventModel!.startTime} - ${eventModel!.endTime}':AppStaticString.dummyTime,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                  time,
+                        /*maxLines: 1,
+                        overflow: TextOverflow.ellipsis,*/
                         style: poppinsRegular.copyWith(
                             fontSize: getFontSizeSmall(context)))
                   ],
@@ -155,7 +164,7 @@ class EventCardWidget extends StatelessWidget {
                       ///=====================dynamic total slot==================///
                        Expanded(
                           child: BlueTextWidget(
-                        text: '${AppStaticString.totalSlot} 20',
+                        text: '${AppStaticString.totalSlot} $totalSlot',
                       )),
                       const DividerVertical(
                         color: AppColors.blueColor,
@@ -163,12 +172,14 @@ class EventCardWidget extends StatelessWidget {
 
                       ///=====================dynamic unsold==================///
 
-                      const Expanded(
+                  /*     Expanded(
                           child: BlueTextWidget(
-                        text: '${AppStaticString.unsold} 20',
+                        text: '${AppStaticString.unsold} $unsold',
                       )),
+                      space8W,*/
                       space8W,
                       Expanded(
+
                           child: OptionWidget(
                               function: () async {
                                 await Share.share(

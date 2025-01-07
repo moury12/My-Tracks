@@ -12,6 +12,7 @@ import 'package:track_trek/core/constant/fontsize_constant.dart';
 import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/init/api_client.dart';
+import 'package:track_trek/core/model/track-event-for-userpanel/track_for_user_panel.dart';
 import 'package:track_trek/core/model/track-event/single_track_model.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
@@ -25,22 +26,35 @@ import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 class TrackCardWidget extends StatelessWidget {
   final bool? fromManage;
   final bool? fromUser;
-  final RxBool react;
+  final RxBool? react;
   final SingleTrackModel? trackModel;
+  final TrackForUserPanelModel? trackModelUserPanel;
   final Function()? onActive;
   final Function()? onDeactivate;
   const TrackCardWidget({
     super.key,
     this.fromManage = false,
     this.fromUser = false,
-    required this.react,
+     this.react,
     this.trackModel,
     this.onActive,
-    this.onDeactivate,
+    this.onDeactivate, this.trackModelUserPanel,
   });
 
   @override
   Widget build(BuildContext context) {
+    final String imageUrl =trackModel!=null?'${ApiClient.baseUrl}/${trackModel!.trackImage!.first}':trackModelUserPanel!=null?'${ApiClient.baseUrl}/${trackModelUserPanel!.trackImage!.first}':'';
+    final String imageHostUrl =trackModel!=null?'':trackModelUserPanel!=null?'${ApiClient.baseUrl}/${trackModelUserPanel!.host!.profileImage}':'';
+    final String name =trackModel!=null?trackModel!.trackName??'':trackModelUserPanel!=null?trackModelUserPanel!.trackName??'':AppStaticString.dummyEvent;
+    final String totalSlot =trackModel!=null?trackModel!.slots!.length.toString()??'':trackModelUserPanel!=null?trackModelUserPanel!.slots!.length.toString()??'':AppStaticString.dummyEvent;
+    final String location =trackModel!=null?trackModel!.address??'':trackModelUserPanel!=null?trackModelUserPanel!.address??'':AppStaticString.dummyAddress;
+    final String description =trackModel!=null?trackModel!.description??'':trackModelUserPanel!=null?trackModelUserPanel!.description??'':AppStaticString.dummyDesc;
+    final String totalComment =trackModel!=null?trackModel!.totalReview.toString()??'':trackModelUserPanel!=null?trackModelUserPanel!.totalReview.toString()??'':AppStaticString.dummyDesc;
+    final String totalReaction =trackModel!=null?trackModel!.totalLikes.toString()??'':trackModelUserPanel!=null?trackModelUserPanel!.totalLikes.toString()??'':AppStaticString.dummyDesc;
+    final double lat =trackModel!=null?trackModel!.location!.coordinates!.last.toDouble():trackModelUserPanel!=null?trackModelUserPanel!.location!.coordinates!.last.toDouble():0.0;
+    final double lng =trackModel!=null?trackModel!.location!.coordinates!.first.toDouble():trackModelUserPanel!=null?trackModelUserPanel!.location!.coordinates!.first.toDouble():0.0;
+    final String hostName =trackModel!=null?'n/a'??'':trackModelUserPanel!=null?trackModelUserPanel!.host!.name??'':AppStaticString.dummyDesc;
+    final String rating =trackModel!=null?'4.5'??'':trackModelUserPanel!=null?trackModelUserPanel!.rating.toString()??'':'4.5';
     return Padding(
       padding: padding12T,
       child: BlackContainerWidget(
@@ -52,7 +66,7 @@ class TrackCardWidget extends StatelessWidget {
                 child: trackModel != null
                     ? CustomNetworkImage(
                         imageUrl:
-                            '${ApiClient.baseUrl}/${trackModel!.trackImage!.first}',
+                            imageUrl,
                         height: 150.h,
                         width: double.infinity)
                     : Image.asset(dummyEventImgUrl)),
@@ -62,9 +76,7 @@ class TrackCardWidget extends StatelessWidget {
               children: [
                 Expanded(
                     child: Text(
-                  trackModel != null
-                      ? trackModel!.trackName ?? '-'
-                      : AppStaticString.dummyEvent,
+                  name,
                   style: poppinsMedium.copyWith(
                       fontSize: getFontSizeLarge(context)),
                 )),
@@ -83,9 +95,7 @@ class TrackCardWidget extends StatelessWidget {
 
                       Expanded(
                           child: Text(
-                        trackModel != null
-                            ? trackModel!.address ?? '-'
-                            : AppStaticString.dummyAddress,
+                        location,
                         style: poppinsMedium.copyWith(
                             fontSize: getFontSizeSmall(context)),
                       ))
@@ -98,9 +108,7 @@ class TrackCardWidget extends StatelessWidget {
 
             ///====================dynamic description =====================///
             ExpandableText(
-              text: trackModel != null
-                  ? trackModel!.description ?? '-'
-                  : AppStaticString.dummyDesc,
+              text: description,
               maxLines: 3, // Number of lines to show before truncating
             ),
 
@@ -111,14 +119,22 @@ class TrackCardWidget extends StatelessWidget {
                     children: [
                       ///======================dynamic user profile img=======================///
 
-                      const ProfileCircleImageWidget(),
+              imageHostUrl.isNotEmpty
+                          ? CustomNetworkImage(
+                        imageUrl: imageHostUrl,
+                        height: 45.w,
+                        width: 45.w,
+                        boxShape: BoxShape.circle,
+                        imageErrorUrl: dummyProfileImgUrl,
+                      )
+                          : ProfileCircleImageWidget(),
                       space8W,
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              AppStaticString.dummyName,
+                            hostName,
                               style: poppinsLight.copyWith(
                                   fontSize: getFontSizeSmall(context)),
                             ),
@@ -138,7 +154,7 @@ class TrackCardWidget extends StatelessWidget {
 
                                 ///======================dynamic user rating=======================///
                                 Text(
-                                  '4.5',
+                                 rating ,
                                   style: poppinsLight.copyWith(
                                       fontSize: getFontSizeSmall(context)),
                                 )
@@ -156,7 +172,7 @@ class TrackCardWidget extends StatelessWidget {
                       Expanded(
                           child: Text(
                         textAlign: TextAlign.center,
-                        '${AppStaticString.slotWithClone} 10',
+                        '${AppStaticString.slotWithClone} $totalSlot',
                         style: poppinsLight.copyWith(
                             fontSize: getFontSizeSmall(context)),
                       ))
@@ -265,17 +281,17 @@ class TrackCardWidget extends StatelessWidget {
 
                 ///================react==============///
 
-                Obx(() {
+              react!=null?  Obx(() {
                   return OptionWidget(
                     function: () {
-                      react.value = !react.value;
+                      react!.value = !react!.value;
                     },
-                    icon: react.value == true ? reactFillIconUrl : reactIconUrl,
+                    icon: react!.value == true ? reactFillIconUrl : reactIconUrl,
                     text: trackModel != null
                         ? trackModel!.totalLikes.toString()
                         : '120',
                   );
-                }),
+                }):SizedBox.shrink(),
 
                 ///================map==============///
 

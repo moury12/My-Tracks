@@ -3,8 +3,10 @@ import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:track_trek/controller/common_controller.dart';
 import 'package:track_trek/controller/home_controller.dart';
+import 'package:track_trek/controller/home_user_controller.dart';
 import 'package:track_trek/controller/notification_controller.dart';
 import 'package:track_trek/controller/profile_controller.dart';
+import 'package:track_trek/controller/track_management_controller.dart';
 import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/init/hive_boxes.dart';
 import 'package:track_trek/view/auth/login.dart';
@@ -25,10 +27,15 @@ class SplashController extends GetxController {
                     ? 0.obs
                     : 1.obs
                 : 0.obs;
-
+        if (Boxes.getUserData().get(roleKey) == 'USER') {
+          Get.put(HomeUserController());
+        } else {
+          Get.put(HomeController() /*,permanent: true*/);
+          Get.put(TrackManagementController());
+        }
         Get.offAllNamed(BottomNavigationScreen.routeName);
         Get.put(ProfileController() /*,permanent: true*/);
-        Get.put(HomeController() /*,permanent: true*/);
+
         Get.put(NotificationController() /*,permanent: true*/);
       } else {
         Get.offAllNamed(LoginScreen.routeName);

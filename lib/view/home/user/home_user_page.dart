@@ -9,8 +9,10 @@ import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/global/string_variable.dart';
+import 'package:track_trek/core/init/api_client.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/view/book-track-join-event/book_track_join_event_page.dart';
+import 'package:track_trek/view/home/user/widget/loading_widgets.dart';
 import 'package:track_trek/view/search/search_page.dart';
 import 'package:track_trek/view/home/widgets/category_circle_widget.dart';
 import 'package:track_trek/view/home/widgets/event_card_widget.dart';
@@ -34,9 +36,9 @@ class HomeUserScreen extends StatelessWidget {
           padding: padding16,
           children: [
             CustomTextField(
-              onTap:() {
+              onTap: () {
                 Get.toNamed(SearchScreen.routeName);
-              } ,
+              },
               hintText: AppStaticString.searchHerr,
               prefixIcon: Padding(
                 padding: padding8,
@@ -47,7 +49,8 @@ class HomeUserScreen extends StatelessWidget {
                 ),
               ),
             ),
-space12H,
+            space12H,
+
             ///================dynamic banner==================///
             SizedBox(
               height: 150.h,
@@ -63,7 +66,10 @@ space12H,
                       },
                       child: Padding(
                         padding: padding6H,
-                        child: Image.asset(HomeUserController.to.pages[index],fit: BoxFit.contain,),
+                        child: Image.asset(
+                          HomeUserController.to.pages[index],
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     );
                   },
@@ -87,45 +93,83 @@ space12H,
               title: AppStaticString.trackCategory,
             ),
             space16H,
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                spacing: 6.w,
-                children: List.generate(
-                  10,
-                  (index) => CategoryCircleWidget(
-                    index: index,
+            Obx(() {
+              return SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: HomeUserController.to.isLoadingCategory.value?
+                const LoadingCategoryListWidget()
+
+                    : Row(
+                  spacing: 6.w,
+                  children: List.generate(
+                    HomeUserController.to.catList.length,
+                    (index) => CategoryCircleWidget(
+                      index: index,
+                      title: HomeUserController.to.catList[index].name ?? '',
+                      imageUrl:
+                          '${ApiClient.baseUrl}${HomeUserController.to.catList[index].categoryImage}',
+                      onTap: () {
+                        HomeUserController.to.selectedIndexCategory.value =
+                            index;
+                        HomeUserController.to.categorySearch.value =
+                            HomeUserController
+                                .to
+                                .catList[HomeUserController
+                                    .to.selectedIndexCategory.value]
+                                .name
+                                .toString();
+                      },
+                    ),
                   ),
                 ),
-              ),
+              );
+            }),
+            space16H,
+            const TitleTextWidget(title: AppStaticString.event),
+            Obx(
+               () {
+                return SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child:HomeUserController.to.isLoadingEventList.value?LoadingEventListWidget(): Row(
+                    spacing: 12.w,
+                    children: List.generate(
+                      HomeUserController.to.eventList.length,
+                      (index) => SizedBox(
+                          width: MediaQuery.sizeOf(context).width / 1.3,
+                          child: EventCardWidget(
+                            eventModelForUser:HomeUserController.to.eventList[index] ,
+                            onTap: () {
+                              Get.toNamed(BookTrackJoinEventScreen.routeName,
+                                  arguments: event);
+                            },
+                            fromUser: true,
+                            buttonText: AppStaticString.joinEvent,
+                            buttonImg: doubleArrowIconUrl,
+                          )),
+                    ),
+                  ),
+                );
+              }
             ),
             space16H,
-            TitleTextWidget(title: AppStaticString.event),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                spacing: 12.w,
-                children: List.generate(
-                  4,
-                  (index) => SizedBox(
-                      width: MediaQuery.sizeOf(context).width/1.3,
-                      child: EventCardWidget(
-                        onTap: () {
-                          Get.toNamed(BookTrackJoinEventScreen.routeName,arguments: event);
-                        },
-                        fromUser: true,
-                        buttonText: AppStaticString.joinEvent,
-                        buttonImg: doubleArrowIconUrl,
-                      )),
-                ),
-              ),
-            ),
-            space16H,
-            TitleTextWidget(title: AppStaticString.track),
-            ...List.generate(5, (index) => TrackCardWidget(fromUser: true,react:HomeUserController.to.react ,),)
+            const TitleTextWidget(title: AppStaticString.track),
+         Obx(
+            () {
+             return Column(
+               children: List.generate(
+                 HomeUserController.to.trackList.length,
+                     (index) => TrackCardWidget(
+                   fromUser: true,
+                   react: HomeUserController.to.react,
+                 ),
+               ),
+             );
+           }
+         )
           ],
         ))
       ],
     );
   }
 }
+

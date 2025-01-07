@@ -34,7 +34,7 @@ class BottomNavigationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(TrackManagementController());
+
     final List<Widget> pages = [
       CommonController.to.selectedRoleOption.value == 0
           ? HomeUserScreen(

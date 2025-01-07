@@ -5,6 +5,7 @@ import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/model/track-event/single_event_model.dart';
+import 'package:track_trek/core/model/track-event/single_track_model.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 
@@ -114,10 +115,16 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
             items: (widget.items ?? []).map((e) {
               return DropdownMenuItem<T>(
                 value: e,
-                child: Text((e is SingleEventModel ? e.eventName ?? '' : e.toString()),  style: poppinsMedium.copyWith(
-                  color: AppColors.whiteLightColor,
-                    fontWeight: FontWeight.w400,
-                    fontSize: getFontSizeSmall(context))),
+                child: Text(
+                    (e is SingleEventModel
+                        ? e.eventName ?? ''
+                        : e is SingleTrackModel
+                            ? e.trackName ?? ''
+                            : e.toString()),
+                    style: poppinsMedium.copyWith(
+                        color: AppColors.whiteLightColor,
+                        fontWeight: FontWeight.w400,
+                        fontSize: getFontSizeSmall(context))),
               );
             }).toList(),
             onChanged: /* widget.onChanged ??*/

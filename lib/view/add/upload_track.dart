@@ -16,12 +16,11 @@ import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/add/widgets/buttons.dart';
-import 'package:track_trek/view/add/widgets/delete_alert_dialog.dart';
 import 'package:track_trek/view/add/widgets/track_slot_widget.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 import 'package:track_trek/view/manage/widgets/event_manage_card_widget.dart';
 
-import 'widgets/show_custom_calender_widget.dart';
+
 
 class UploadTrackScreen extends StatelessWidget {
   static String routeName = '/upload';
@@ -596,7 +595,7 @@ class SelectDateButton extends StatelessWidget {
     return GradientContainerWidget(
       onTap: onTap ??
           () {
-            showCustomCalenderWidget(context);
+           ///==========Select date
           },
       radius: 4.r,
       child: Row(

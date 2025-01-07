@@ -16,6 +16,7 @@ class HomeController extends GetxController {
   var selectedLabel = 0.obs;
   var react = false.obs;
   RxString isBooked = ''.obs;
+  Rx<SingleTrackModel?> selectedTrack = Rx<SingleTrackModel?>(null);
 
   ///========================List variables=====================///
   ///
@@ -53,7 +54,7 @@ class HomeController extends GetxController {
         isLoadingTrackList.value = false;
       } else {
         isLoadingTrackList.value = false;
-       /* showCustomSnackbar(
+        /* showCustomSnackbar(
             title: AppStaticString.failed,
             message: AppStaticString.failedToLoadData,
             type: SnackBarType.failed);*/
@@ -73,10 +74,10 @@ class HomeController extends GetxController {
         isLoadingEventList.value = false;
       } else {
         isLoadingEventList.value = false;
-        showCustomSnackbar(
+        /*  showCustomSnackbar(
             title: AppStaticString.failed,
             message: AppStaticString.failedToLoadData,
-            type: SnackBarType.failed);
+            type: SnackBarType.failed);*/
       }
     } else {
       isLoadingEventList.value = false;
@@ -123,11 +124,12 @@ class HomeController extends GetxController {
       // noInternetShowCustomSnackbar();
     }
   }
- postLikeDisLikeCall({required String trackId}) async {
+
+  postLikeDisLikeCall({required String trackId}) async {
     if (NetworkController.to.isConnected.value) {
       isLoadingPostLike.value = true;
-      final bool likeHitted = await ReviewService.likeDislikeRequest(
-          trackId: trackId);
+      final bool likeHitted =
+          await ReviewService.likeDislikeRequest(trackId: trackId);
       if (likeHitted) {
         isLoadingPostLike.value = false;
       } else {
@@ -143,26 +145,29 @@ class HomeController extends GetxController {
     }
   }
 
-  getTrackReviewListCall({required String trackId, String sort = '',bool loadMoreData = false}) async {
+  getTrackReviewListCall(
+      {required String trackId,
+      String sort = '',
+      bool loadMoreData = false}) async {
     if (NetworkController.to.isConnected.value) {
-      if(loadMoreData){
-        isLoadingMoreForReview.value=true;
-      }else{
+      if (loadMoreData) {
+        isLoadingMoreForReview.value = true;
+      } else {
         isLoadingTrackReviewList.value = true;
-        currentPageForReview.value=1;
+        currentPageForReview.value = 1;
       }
 
       List<ReviewModel> reviews = await ReviewService.getReviewList(
           trackId: trackId, page: currentPageForReview.value, sort: sort);
       if (reviews.isNotEmpty) {
         isLoadingTrackReviewList.value = false;
-        if(loadMoreData){
+        if (loadMoreData) {
           reviewList.addAll(reviews);
-        }else{
+        } else {
           reviewList.assignAll(reviews);
         }
-        currentPageForReview.value ++;
-      }else if (!loadMoreData) {
+        currentPageForReview.value++;
+      } else if (!loadMoreData) {
         // Clear the list if it's a fresh request and no data
         reviewList.clear();
       } else {

@@ -71,8 +71,10 @@ TextEditingController confirmPassNewController =
       nameSignUpController.text = 'mouri';
       passSignUpController.text = '123456';
       confirmPassSignUpController.text = '123456';
-      emailLoginController.text = 'mepoc17213@myweblaw.com';
-      passLoginController.text = '123456';
+      emailLoginController.text = 'tanzibamouri28@gmail.com';
+      passLoginController.text = '123457';
+      // emailLoginController.text = 'mepoc17213@myweblaw.com';
+      // passLoginController.text = '123456';
       passNewController.text = '123456';
       confirmPassNewController.text = '123456';
     }}
