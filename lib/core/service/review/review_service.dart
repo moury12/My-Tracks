@@ -13,7 +13,7 @@ import 'package:track_trek/core/model/review/review_model.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 
 class ReviewService {
-  static Future<bool> likeDislikeRequest({
+  static Future<String> likeDislikeRequest({
     required String trackId,
   }) async {
     try {
@@ -34,14 +34,14 @@ class ReviewService {
             message: responseData['message'],
             type: SnackBarType.success);
 
-        return true;
+        return responseData['message'];
       } else {
         showCustomSnackbar(
             title: AppStaticString.failed,
             message: responseData['message'],
             type: SnackBarType.failed);
 
-        return false;
+        return responseData['message'];
       }
     } catch (e) {
       showCustomSnackbar(
@@ -49,7 +49,7 @@ class ReviewService {
           message: e.toString(),
           type: SnackBarType.failed);
       debugPrint(e.toString());
-      return false;
+      return '';
     }
   }
 

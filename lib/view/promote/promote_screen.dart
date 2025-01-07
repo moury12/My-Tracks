@@ -43,6 +43,7 @@ class PromoteScreen extends StatelessWidget {
             Obx(
               () {
                 return HomeController.to.selectedTrack.value==null?const EmptyTextWidget(text: 'Select a track to pay'): TrackCardWidget(
+                  fromPromote: true,
                   react: RxBool(false),
                    trackModel:HomeController.to.selectedTrack.value ,
 

@@ -12,6 +12,7 @@ import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/init/api_client.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/view/book-track-join-event/book_track_join_event_page.dart';
+import 'package:track_trek/view/home/host/event_slot_page.dart';
 import 'package:track_trek/view/home/user/widget/loading_widgets.dart';
 import 'package:track_trek/view/search/search_page.dart';
 import 'package:track_trek/view/home/widgets/category_circle_widget.dart';
@@ -94,82 +95,97 @@ class HomeUserScreen extends StatelessWidget {
             ),
             space16H,
             Obx(() {
-              return SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: HomeUserController.to.isLoadingCategory.value?
-                const LoadingCategoryListWidget()
-
-                    : Row(
-                  spacing: 6.w,
-                  children: List.generate(
-                    HomeUserController.to.catList.length,
-                    (index) => CategoryCircleWidget(
-                      index: index,
-                      title: HomeUserController.to.catList[index].name ?? '',
-                      imageUrl:
-                          '${ApiClient.baseUrl}${HomeUserController.to.catList[index].categoryImage}',
-                      onTap: () {
-                        HomeUserController.to.selectedIndexCategory.value =
-                            index;
-                        HomeUserController.to.categorySearch.value =
-                            HomeUserController
-                                .to
-                                .catList[HomeUserController
-                                    .to.selectedIndexCategory.value]
-                                .name
-                                .toString();
-                      },
-                    ),
-                  ),
-                ),
-              );
+              return HomeUserController.to.catList.isEmpty &&
+                      !HomeUserController.to.isLoadingCategory.value
+                  ? const EmptyTextWidget(text: 'Category Service not found')
+                  : SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: HomeUserController.to.isLoadingCategory.value
+                          ? const LoadingCategoryListWidget()
+                          : Row(
+                              spacing: 6.w,
+                              children: List.generate(
+                                HomeUserController.to.catList.length,
+                                (index) => CategoryCircleWidget(
+                                  index: index,
+                                  title: HomeUserController
+                                          .to.catList[index].name ??
+                                      '',
+                                  imageUrl:
+                                      '${ApiClient.baseUrl}${HomeUserController.to.catList[index].categoryImage}',
+                                  onTap: () {
+                                    HomeUserController
+                                        .to.selectedIndexCategory.value = index;
+                                    HomeUserController.to.categorySearch.value =
+                                        HomeUserController
+                                            .to
+                                            .catList[HomeUserController
+                                                .to.selectedIndexCategory.value]
+                                            .name
+                                            .toString();
+                                    HomeUserController.to.getTrackListCall();
+                                  },
+                                ),
+                              ),
+                            ),
+                    );
             }),
             space16H,
             const TitleTextWidget(title: AppStaticString.event),
-            Obx(
-               () {
-                return SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child:HomeUserController.to.isLoadingEventList.value?LoadingEventListWidget(): Row(
-                    spacing: 12.w,
-                    children: List.generate(
-                      HomeUserController.to.eventList.length,
-                      (index) => SizedBox(
-                          width: MediaQuery.sizeOf(context).width / 1.3,
-                          child: EventCardWidget(
-                            eventModelForUser:HomeUserController.to.eventList[index] ,
-                            onTap: () {
-                              Get.toNamed(BookTrackJoinEventScreen.routeName,
-                                  arguments: event);
-                            },
-                            fromUser: true,
-                            buttonText: AppStaticString.joinEvent,
-                            buttonImg: doubleArrowIconUrl,
-                          )),
-                    ),
-                  ),
-                );
-              }
-            ),
+            Obx(() {
+              return HomeUserController.to.eventList.isEmpty &&
+                      !HomeUserController.to.isLoadingEventList.value
+                  ? const EmptyTextWidget(text: 'Event Service not found')
+                  : SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: HomeUserController.to.isLoadingEventList.value
+                          ? const LoadingEventListWidget()
+                          : Row(
+                              spacing: 12.w,
+                              children: List.generate(
+                                HomeUserController.to.eventList.length,
+                                (index) => SizedBox(
+                                    width:
+                                        MediaQuery.sizeOf(context).width / 1.3,
+                                    child: EventCardWidget(
+                                      eventModelForUser: HomeUserController
+                                          .to.eventList[index],
+                                      onTap: () {
+                                        Get.toNamed(
+                                            BookTrackJoinEventScreen.routeName,
+                                            arguments: event);
+                                      },
+                                      fromUser: true,
+                                      buttonText: AppStaticString.joinEvent,
+                                      buttonImg: doubleArrowIconUrl,
+                                    )),
+                              ),
+                            ),
+                    );
+            }),
             space16H,
             const TitleTextWidget(title: AppStaticString.track),
-         Obx(
-            () {
-             return Column(
-               children: List.generate(
-                 HomeUserController.to.trackList.length,
-                     (index) => TrackCardWidget(
-                   fromUser: true,
-                   react: HomeUserController.to.react,
-                 ),
-               ),
-             );
-           }
-         )
+            Obx(() {
+              return HomeUserController.to.isLoadingTrackList.value
+                  ? LoadingTrackListWidget()
+                  : HomeUserController.to.trackList.isEmpty &&
+                          !HomeUserController.to.isLoadingTrackList.value
+                      ? const EmptyTextWidget(text: 'Track Service not found')
+                      : Column(
+                          children: List.generate(
+                            HomeUserController.to.trackList.length,
+                            (index) => TrackCardWidget(
+                              fromUser: true,
+                              trackModelUserPanel:
+                                  HomeUserController.to.trackList[index],
+                              react: HomeUserController.to.react,
+                            ),
+                          ),
+                        );
+            })
           ],
         ))
       ],
     );
   }
 }
-

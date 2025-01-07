@@ -62,74 +62,113 @@ class LoadingEventListWidget extends StatelessWidget {
       child: Row(
         children: List.generate(
           5, // Number of shimmer items to display
-          (index) => Padding(
-            padding: EdgeInsets.only(right: 12.w),
-            child: Shimmer.fromColors(
-              baseColor: baseColor,
-              highlightColor: highlightColor,
-              child: SizedBox(
-                width: MediaQuery.sizeOf(context).width / 1.3,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Simulate event image
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8.r),
-                      child: Container(
-                        height: 150.h,
-                        width: double.infinity,
-                        color: baseColor,
-                      ),
-                    ),
-                    SizedBox(height: 12.h),
-                    // Simulate event name
-                    Container(
-                      width: 100.w,
-                      height: 12.h,
-                      color: baseColor,
-                    ),
-                    SizedBox(height: 8.h),
-                    // Simulate event location
-                    Container(
-                      width: 150.w,
+          (index) => ShimmerTrackEventWidget(baseColor: baseColor, highlightColor: highlightColor),
+        ),
+      ),
+    );
+  }
+}class LoadingTrackListWidget extends StatelessWidget {
+  const LoadingTrackListWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final baseColor = isDarkMode ? Colors.grey[800]! : Colors.grey[300]!;
+    final highlightColor = isDarkMode ? Colors.grey[700]! : Colors.grey[100]!;
+
+    return SingleChildScrollView(
+
+      child: Column(spacing: 12.h,
+        children: List.generate(
+          5, // Number of shimmer items to display
+          (index) => ShimmerTrackEventWidget(
+            padding:  EdgeInsets.only(top: 12.h),
+              baseColor: baseColor, highlightColor: highlightColor,width: MediaQuery.sizeOf(context).width),
+        ),
+      ),
+    );
+  }
+}
+
+class ShimmerTrackEventWidget extends StatelessWidget {
+  final double? width;
+  final EdgeInsets? padding;
+  const ShimmerTrackEventWidget({
+    super.key,
+    required this.baseColor,
+    required this.highlightColor, this.width, this.padding,
+  });
+
+  final Color baseColor;
+  final Color highlightColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding:padding?? EdgeInsets.only(right: 12.w,top: 12.h),
+      child: Shimmer.fromColors(
+        baseColor: baseColor,
+        highlightColor: highlightColor,
+        child: SizedBox(
+          width:width?? MediaQuery.sizeOf(context).width / 1.3,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Simulate event image
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8.r),
+                child: Container(
+                  height: 150.h,
+                  width: double.infinity,
+                  color: baseColor,
+                ),
+              ),
+              SizedBox(height: 12.h),
+              // Simulate event name
+              Container(
+                width: 100.w,
+                height: 12.h,
+                color: baseColor,
+              ),
+              SizedBox(height: 8.h),
+              // Simulate event location
+              Container(
+                width: 150.w,
+                height: 10.h,
+                color: baseColor,
+              ),
+              SizedBox(height: 12.h),
+              // Simulate event date and time
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      width: double.infinity,
                       height: 10.h,
                       color: baseColor,
                     ),
-                    SizedBox(height: 12.h),
-                    // Simulate event date and time
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            width: double.infinity,
-                            height: 10.h,
-                            color: baseColor,
-                          ),
-                        ),
-                        SizedBox(width: 8.w),
-                        Expanded(
-                          child: Container(
-                            width: double.infinity,
-                            height: 10.h,
-                            color: baseColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 12.h),
-                    // Simulate button
-                    Container(
+                  ),
+                  SizedBox(width: 8.w),
+                  Expanded(
+                    child: Container(
                       width: double.infinity,
-                      height: 40.h,
-                      decoration: BoxDecoration(
-                        color: baseColor,
-                        borderRadius: BorderRadius.circular(8.r),
-                      ),
+                      height: 10.h,
+                      color: baseColor,
                     ),
-                  ],
+                  ),
+                ],
+              ),
+              SizedBox(height: 12.h),
+              // Simulate button
+              Container(
+                width: double.infinity,
+                height: 40.h,
+                decoration: BoxDecoration(
+                  color: baseColor,
+                  borderRadius: BorderRadius.circular(8.r),
                 ),
               ),
-            ),
+            ],
           ),
         ),
       ),

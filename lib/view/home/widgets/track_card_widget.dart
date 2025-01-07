@@ -3,7 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:track_trek/controller/common_controller.dart';
 import 'package:track_trek/controller/home_controller.dart';
+import 'package:track_trek/controller/home_user_controller.dart';
 import 'package:track_trek/core/components/custom_button.dart';
 import 'package:track_trek/core/components/custom_network_image.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
@@ -12,6 +14,8 @@ import 'package:track_trek/core/constant/fontsize_constant.dart';
 import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/init/api_client.dart';
+import 'package:track_trek/core/init/hive_boxes.dart';
+import 'package:track_trek/core/model/review/review_model.dart';
 import 'package:track_trek/core/model/track-event-for-userpanel/track_for_user_panel.dart';
 import 'package:track_trek/core/model/track-event/single_track_model.dart';
 import 'package:track_trek/core/utils/app_color.dart';
@@ -23,9 +27,12 @@ import 'package:track_trek/view/home/host/event_slot_page.dart';
 import 'package:track_trek/view/home/widgets/event_card_widget.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 
+import '../../../core/global/string_variable.dart';
+
 class TrackCardWidget extends StatelessWidget {
   final bool? fromManage;
   final bool? fromUser;
+  final bool? fromPromote;
   final RxBool? react;
   final SingleTrackModel? trackModel;
   final TrackForUserPanelModel? trackModelUserPanel;
@@ -35,26 +42,87 @@ class TrackCardWidget extends StatelessWidget {
     super.key,
     this.fromManage = false,
     this.fromUser = false,
-     this.react,
+    this.react,
     this.trackModel,
     this.onActive,
-    this.onDeactivate, this.trackModelUserPanel,
+    this.onDeactivate,
+    this.trackModelUserPanel,
+    this.fromPromote = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    final String imageUrl =trackModel!=null?'${ApiClient.baseUrl}/${trackModel!.trackImage!.first}':trackModelUserPanel!=null?'${ApiClient.baseUrl}/${trackModelUserPanel!.trackImage!.first}':'';
-    final String imageHostUrl =trackModel!=null?'':trackModelUserPanel!=null?'${ApiClient.baseUrl}/${trackModelUserPanel!.host!.profileImage}':'';
-    final String name =trackModel!=null?trackModel!.trackName??'':trackModelUserPanel!=null?trackModelUserPanel!.trackName??'':AppStaticString.dummyEvent;
-    final String totalSlot =trackModel!=null?trackModel!.slots!.length.toString()??'':trackModelUserPanel!=null?trackModelUserPanel!.slots!.length.toString()??'':AppStaticString.dummyEvent;
-    final String location =trackModel!=null?trackModel!.address??'':trackModelUserPanel!=null?trackModelUserPanel!.address??'':AppStaticString.dummyAddress;
-    final String description =trackModel!=null?trackModel!.description??'':trackModelUserPanel!=null?trackModelUserPanel!.description??'':AppStaticString.dummyDesc;
-    final String totalComment =trackModel!=null?trackModel!.totalReview.toString()??'':trackModelUserPanel!=null?trackModelUserPanel!.totalReview.toString()??'':AppStaticString.dummyDesc;
-    final String totalReaction =trackModel!=null?trackModel!.totalLikes.toString()??'':trackModelUserPanel!=null?trackModelUserPanel!.totalLikes.toString()??'':AppStaticString.dummyDesc;
-    final double lat =trackModel!=null?trackModel!.location!.coordinates!.last.toDouble():trackModelUserPanel!=null?trackModelUserPanel!.location!.coordinates!.last.toDouble():0.0;
-    final double lng =trackModel!=null?trackModel!.location!.coordinates!.first.toDouble():trackModelUserPanel!=null?trackModelUserPanel!.location!.coordinates!.first.toDouble():0.0;
-    final String hostName =trackModel!=null?'n/a'??'':trackModelUserPanel!=null?trackModelUserPanel!.host!.name??'':AppStaticString.dummyDesc;
-    final String rating =trackModel!=null?'4.5'??'':trackModelUserPanel!=null?trackModelUserPanel!.rating.toString()??'':'4.5';
+    List<ReviewModel> reviewListVar =[];
+    final String imageUrl = trackModel != null
+        ? '${ApiClient.baseUrl}/${trackModel!.trackImage!.first}'
+        : trackModelUserPanel != null
+            ? '${ApiClient.baseUrl}/${trackModelUserPanel!.trackImage!.first}'
+            : '';
+    final String imageHostUrl = trackModel != null
+        ? ''
+        : trackModelUserPanel != null
+            ? '${ApiClient.baseUrl}/${trackModelUserPanel!.host!.profileImage}'
+            : '';
+    final String sId = trackModel != null
+        ? trackModel!.sId ?? ''
+        : trackModelUserPanel != null
+            ? trackModelUserPanel!.sId ?? ''
+            : '';
+    final String name = trackModel != null
+        ? trackModel!.trackName ?? ''
+        : trackModelUserPanel != null
+            ? trackModelUserPanel!.trackName ?? ''
+            : 'n/a';
+    final String totalSlot = trackModel != null
+        ? trackModel!.slots!.length.toString() ?? ''
+        : trackModelUserPanel != null
+            ? trackModelUserPanel!.slots!.length.toString() ?? ''
+            : 'n/a';
+    final String location = trackModel != null
+        ? trackModel!.address ?? ''
+        : trackModelUserPanel != null
+            ? trackModelUserPanel!.address ?? ''
+            : 'n/a';
+    final bool isReact = trackModel != null
+        ? false
+        : trackModelUserPanel != null
+            ? trackModelUserPanel!.isLiked??false
+            : false;
+    final String description = trackModel != null
+        ? trackModel!.description ?? ''
+        : trackModelUserPanel != null
+            ? trackModelUserPanel!.description ?? ''
+            : 'n/a';
+    final String totalComment = trackModel != null
+        ? trackModel!.totalReview.toString() ?? ''
+        : trackModelUserPanel != null
+            ? trackModelUserPanel!.totalReview.toString() ?? ''
+            : 'n/a';
+    final String totalReaction = trackModel != null
+        ? trackModel!.totalLikes.toString() ?? ''
+        : trackModelUserPanel != null
+            ? trackModelUserPanel!.totalLikes.toString() ?? ''
+            : 'n/a';
+    final double lat = trackModel != null
+        ? trackModel!.location!.coordinates!.last.toDouble()
+        : trackModelUserPanel != null
+            ? trackModelUserPanel!.location!.coordinates!.last.toDouble()
+            : 0.0;
+    final double lng = trackModel != null
+        ? trackModel!.location!.coordinates!.first.toDouble()
+        : trackModelUserPanel != null
+            ? trackModelUserPanel!.location!.coordinates!.first.toDouble()
+            : 0.0;
+    final String hostName = trackModel != null
+        ? 'n/a' ?? ''
+        : trackModelUserPanel != null
+            ? trackModelUserPanel!.host!.name ?? ''
+            : 'n/a';
+    final String rating = trackModel != null
+        ? '4.5' ?? ''
+        : trackModelUserPanel != null
+            ? (trackModelUserPanel!.rating ?? '0.0').toString()
+            : '0.0';
     return Padding(
       padding: padding12T,
       child: BlackContainerWidget(
@@ -65,8 +133,7 @@ class TrackCardWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8.r),
                 child: trackModel != null
                     ? CustomNetworkImage(
-                        imageUrl:
-                            imageUrl,
+                        imageUrl: imageUrl,
                         height: 150.h,
                         width: double.infinity)
                     : Image.asset(dummyEventImgUrl)),
@@ -119,47 +186,26 @@ class TrackCardWidget extends StatelessWidget {
                     children: [
                       ///======================dynamic user profile img=======================///
 
-              imageHostUrl.isNotEmpty
+                      imageHostUrl.isNotEmpty
                           ? CustomNetworkImage(
-                        imageUrl: imageHostUrl,
-                        height: 45.w,
-                        width: 45.w,
-                        boxShape: BoxShape.circle,
-                        imageErrorUrl: dummyProfileImgUrl,
-                      )
-                          : ProfileCircleImageWidget(),
+                              imageUrl: imageHostUrl,
+                              height: 45.w,
+                              width: 45.w,
+                              boxShape: BoxShape.circle,
+                              imageErrorUrl: dummyProfileImgUrl,
+                            )
+                          : const ProfileCircleImageWidget(),
                       space8W,
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                            hostName,
+                              hostName,
                               style: poppinsLight.copyWith(
                                   fontSize: getFontSizeSmall(context)),
                             ),
-                            Row(
-                              spacing: 4.w,
-                              children: [
-                                Text(
-                                  AppStaticString.ratingWithClone,
-                                  style: poppinsLight.copyWith(
-                                      fontSize: getFontSizeSmall(context)),
-                                ),
-                                Icon(
-                                  Icons.star_border_outlined,
-                                  color: AppColors.yellowColor,
-                                  size: 15.sp,
-                                ),
-
-                                ///======================dynamic user rating=======================///
-                                Text(
-                                 rating ,
-                                  style: poppinsLight.copyWith(
-                                      fontSize: getFontSizeSmall(context)),
-                                )
-                              ],
-                            ),
+                            RatingTextWidget(rating: rating),
                           ],
                         ),
                       ),
@@ -187,7 +233,7 @@ class TrackCardWidget extends StatelessWidget {
                         fontSize: getFontSizeLarge(context)),
                   ),
             fromUser == true ? const SizedBox.shrink() : space12H,
-            fromManage == true || fromUser == true
+            fromManage == true || fromUser == true || fromPromote == true
                 ? const SizedBox.shrink()
                 : Row(
                     children: [
@@ -253,77 +299,87 @@ class TrackCardWidget extends StatelessWidget {
                     ],
                   ),
             fromManage == true ? const SizedBox.shrink() : space12H,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ///================comments==============///
-                OptionWidget(
-                  icon: commentIconUrl,
-                  function: () {
-                    HomeController.to.getTrackReviewListCall(
-                        trackId:
-                            trackModel != null ? trackModel!.sId ?? '' : '');
-                    showModalBottomSheet(
-                      constraints: BoxConstraints.tightForFinite(
-                        height: MediaQuery.of(context).size.height / 2,
-                        width: MediaQuery.of(context).size.width,
-                      ),
-                      context: context,
-                      isScrollControlled:
-                          true, // Allows better control of the height and width
-                      builder: (context) => const ReviewListWidget(),
-                    );
-                  },
-                  text: trackModel != null
-                      ? trackModel!.totalReview.toString()
-                      : '120',
-                ),
 
-                ///================react==============///
+            fromPromote == true
+                ? const SizedBox.shrink()
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ///================comments==============///
+                      OptionWidget(
+                        icon: commentIconUrl,
+                        function: () {
 
-              react!=null?  Obx(() {
-                  return OptionWidget(
-                    function: () {
-                      react!.value = !react!.value;
-                    },
-                    icon: react!.value == true ? reactFillIconUrl : reactIconUrl,
-                    text: trackModel != null
-                        ? trackModel!.totalLikes.toString()
-                        : '120',
-                  );
-                }):SizedBox.shrink(),
-
-                ///================map==============///
-
-                OptionWidget(
-                  icon: mapIconUrl,
-                  text: AppStaticString.map,
-                  function: () {
-                    _showMapBottomSheet(
-                      context,
-                      trackModel != null
-                          ? trackModel!.location!.coordinates!.last
-                          : 90.321111,
-                      trackModel != null
-                          ? trackModel!.location!.coordinates!.first
-                          : 90.321111,
-                    );
-                  },
-                ),
-                fromManage == true
-                    ? const SizedBox.shrink()
-
-                    ///================share==============///
-
-                    : OptionWidget(
-                        function: () async {
-                          await Share.share('Check out this cool Flutter app!');
+                          if (Boxes.getUserData().get(roleKey) == 'USER') {
+                            HomeUserController.to
+                                .getTrackReviewListCall(trackId: sId);
+                            reviewListVar = HomeUserController.to.reviewList;
+                          } else {
+                            HomeController.to
+                                .getTrackReviewListCall(trackId: sId);
+                            reviewListVar = HomeUserController.to.reviewList;
+                          }
+                          showModalBottomSheet(
+                            constraints: BoxConstraints.tightForFinite(
+                              height: MediaQuery.of(context).size.height / 2,
+                              width: MediaQuery.of(context).size.width,
+                            ),
+                            context: context,
+                            isScrollControlled:
+                                true, // Allows better control of the height and width
+                            builder: (context) =>  ReviewListWidget(
+                              reviewList: reviewListVar,
+                            ),
+                          );
                         },
-                        icon: shareIconUrl,
-                        text: AppStaticString.share,
+                        text: totalComment,
                       ),
-              ],
-            ),
+
+                      ///================react==============///
+
+                      react != null
+                          ? Obx(() {
+                              return CommonController.to.isLoadingPostLike.value?DefaultProgressIndicator(color: AppColors.whiteLightColor,): OptionWidget(
+                                function: () {
+                                 CommonController.to.postLikeDisLikeCall(trackId: sId);
+
+                                },
+                                icon:/* react!.value*/ isReact== true
+                                    ? reactFillIconUrl
+                                    : reactIconUrl,
+                                text: totalReaction,
+                              );
+                            })
+                          : const SizedBox.shrink(),
+
+                      ///================map==============///
+
+                      OptionWidget(
+                        icon: mapIconUrl,
+                        text: AppStaticString.map,
+                        function: () {
+                          _showMapBottomSheet(
+                            context,
+                            lat,
+                            lng,
+                          );
+                        },
+                      ),
+                      fromManage == true
+                          ? const SizedBox.shrink()
+
+                          ///================share==============///
+
+                          : OptionWidget(
+                              function: () async {
+                                await Share.share(
+                                    'Check out this cool Flutter app!');
+                              },
+                              icon: shareIconUrl,
+                              text: AppStaticString.share,
+                            ),
+                    ],
+                  ),
             fromManage == true ? space12H : const SizedBox.shrink(),
             fromManage == true
                 ? Row(
@@ -440,9 +496,46 @@ class TrackCardWidget extends StatelessWidget {
   }
 }
 
+class RatingTextWidget extends StatelessWidget {
+  const RatingTextWidget({
+    super.key,
+    required this.rating,
+  });
+
+  final String rating;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      spacing: 4.w,
+      children: [
+        Text(
+          AppStaticString.ratingWithClone,
+          style: poppinsLight.copyWith(
+              fontSize: getFontSizeSmall(context)),
+        ),
+        Icon(
+          Icons.star_border_outlined,
+          color: AppColors.yellowColor,
+          size: 15.sp,
+        ),
+    
+        ///======================dynamic user rating=======================///
+        Text(
+          rating,
+          style: poppinsLight.copyWith(
+              fontSize: getFontSizeSmall(context)),
+        )
+      ],
+    );
+  }
+}
+
 class ReviewListWidget extends StatelessWidget {
+  final List<ReviewModel> reviewList;
   const ReviewListWidget({
     super.key,
+    required this.reviewList,
   });
 
   @override
@@ -456,7 +549,7 @@ class ReviewListWidget extends StatelessWidget {
       ),
       child: SingleChildScrollView(
         child: Obx(() {
-          return HomeController.to.reviewList.isEmpty
+          return reviewList.isEmpty
               ? const EmptyTextWidget(text: 'Review not found!!')
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -473,9 +566,9 @@ class ReviewListWidget extends StatelessWidget {
                     ),
                     Divider(color: Colors.grey[300]),
                     ...List.generate(
-                      HomeController.to.reviewList.length,
+                      reviewList.length,
                       (index) {
-                        final review = HomeController.to.reviewList[index];
+                        final review = reviewList[index];
                         return Column(
                           children: [
                             Padding(
@@ -525,23 +618,7 @@ class ReviewListWidget extends StatelessWidget {
                                           ),
                                         ),
                                         const SizedBox(height: 6.0),
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              Icons.star,
-                                              color: AppColors.yellowColor,
-                                              size: 15.sp,
-                                            ),
-                                            Text(
-                                              review.rating.toString(),
-                                              style: poppinsRegular.copyWith(
-                                                color: const Color(0xffD2D2D2),
-                                                fontSize:
-                                                    getFontSizeSmall(context),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                                        RatingTextWidget(rating: review.rating!=null?review.rating.toString():'0.0'),
 
                                         ///===================== Comment text =================///
                                         Text(

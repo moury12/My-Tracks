@@ -39,7 +39,7 @@ class HomeController extends GetxController {
   RxBool isLoadingTrackParticipantList = false.obs;
   RxBool isLoadingTrackReviewList = false.obs;
   RxBool isLoadingEventParticipantList = false.obs;
-  RxBool isLoadingPostLike = false.obs;
+
 
   ///=====================pagination variable====================///
 
@@ -125,30 +125,13 @@ class HomeController extends GetxController {
     }
   }
 
-  postLikeDisLikeCall({required String trackId}) async {
-    if (NetworkController.to.isConnected.value) {
-      isLoadingPostLike.value = true;
-      final bool likeHitted =
-          await ReviewService.likeDislikeRequest(trackId: trackId);
-      if (likeHitted) {
-        isLoadingPostLike.value = false;
-      } else {
-        isLoadingPostLike.value = false;
-        // showCustomSnackbar(
-        //     title: AppStaticString.failed,
-        //     message: AppStaticString.failedToLoadData,
-        //     type: SnackBarType.failed);
-      }
-    } else {
-      isLoadingPostLike.value = false;
-      // noInternetShowCustomSnackbar();
-    }
-  }
+
 
   getTrackReviewListCall(
       {required String trackId,
       String sort = '',
-      bool loadMoreData = false}) async {
+      bool loadMoreData = false})
+  async {
     if (NetworkController.to.isConnected.value) {
       if (loadMoreData) {
         isLoadingMoreForReview.value = true;

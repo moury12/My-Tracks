@@ -59,7 +59,7 @@ class UserHomeService {
     List<TrackForUserPanelModel> trackList = [];
     try {
       final url = Uri.parse(
-          '${ApiClient.getAllBusinessUrl}?track=yes${lat != null && long != null ? '&longitude=$long&latitude=$lat' : ''}&category=$category');
+          '${ApiClient.getAllBusinessUrl}?track=yes${lat != null && long != null ? '&longitude=$long&latitude=$lat' : ''}${category.isNotEmpty?'&category=$category':''}');
       final headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',

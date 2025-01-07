@@ -585,9 +585,10 @@ class UploadTrackScreen extends StatelessWidget {
 
 class SelectDateButton extends StatelessWidget {
   final Function()? onTap;
-  const SelectDateButton({
+  String? selectedDay;
+   SelectDateButton({
     super.key,
-    this.onTap,
+    this.onTap, this.selectedDay,
   });
 
   @override
@@ -595,6 +596,7 @@ class SelectDateButton extends StatelessWidget {
     return GradientContainerWidget(
       onTap: onTap ??
           () {
+        selectedDay =selectDate(context).toString();
            ///==========Select date
           },
       radius: 4.r,

@@ -1,4 +1,6 @@
 
+import 'package:get/get.dart';
+
 class TrackForUserPanelModel {
   String? sId;
   Host? host;
@@ -20,6 +22,7 @@ class TrackForUserPanelModel {
   int? iV;
   int? totalTrackDayInMonth;
   double? rating;
+  bool? isLiked;
 
   TrackForUserPanelModel(
       {this.sId,
@@ -41,7 +44,9 @@ class TrackForUserPanelModel {
         this.updatedAt,
         this.iV,
         this.totalTrackDayInMonth,
-        this.rating});
+        this.rating,
+        this.isLiked =false
+      });
 
   TrackForUserPanelModel.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -66,6 +71,7 @@ class TrackForUserPanelModel {
     iV = json['__v'];
     totalTrackDayInMonth = json['totalTrackDayInMonth'];
     rating = json['rating'];
+    isLiked = json['isLiked'];
   }
 
   Map<String, dynamic> toJson() {
@@ -94,6 +100,7 @@ class TrackForUserPanelModel {
     data['__v'] = iV;
     data['totalTrackDayInMonth'] = totalTrackDayInMonth;
     data['rating'] = rating;
+    data['isLiked'] = isLiked;
     return data;
   }
 }

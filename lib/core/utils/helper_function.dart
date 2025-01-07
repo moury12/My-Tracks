@@ -1,5 +1,6 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -196,6 +197,25 @@ Future<String> selectDate(
   BuildContext context,
 ) async {
   final DateTime? pickedDate = await showDatePicker(
+    builder: (context, child) {
+    return  Theme(data:  Theme.of(context).copyWith(  // override MaterialApp ThemeData
+       datePickerTheme:  DatePickerThemeData(
+         headerForegroundColor: AppColors.blackLightColor,
+         rangePickerHeaderForegroundColor: AppColors.blackLightColor,
+         shape: RoundedRectangleBorder(
+           borderRadius: BorderRadius.circular(10.r)
+         ),
+
+         yearForegroundColor: WidgetStatePropertyAll<Color>(AppColors.blackLightColor) ,
+         dayForegroundColor: WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
+         todayForegroundColor:WidgetStatePropertyAll<Color>(AppColors.whiteLightColor),
+        confirmButtonStyle: ButtonStyle(foregroundColor: WidgetStatePropertyAll<Color>(AppColors.blackLightColor)),
+        cancelButtonStyle: ButtonStyle(foregroundColor: WidgetStatePropertyAll<Color>(AppColors.blackLightColor)),
+         backgroundColor:AppColors.blueColor,
+         dividerColor: Colors.transparent,todayBackgroundColor:  WidgetStatePropertyAll<Color>(AppColors.blackLightColor)
+
+       )),  child: child!   );
+    },
     context: context,
     initialDate: DateTime.now(),
     firstDate: DateTime(2000),

@@ -5,10 +5,12 @@ import 'package:get/get.dart';
 import 'package:track_trek/controller/network_controller.dart';
 import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/model/category/category_model.dart';
+import 'package:track_trek/core/model/review/review_model.dart';
 import 'package:track_trek/core/model/track-event-for-userpanel/event_for_user_panel_model.dart';
 import 'package:track_trek/core/model/track-event-for-userpanel/event_for_user_panel_model.dart';
 import 'package:track_trek/core/model/track-event-for-userpanel/track_for_user_panel.dart';
 import 'package:track_trek/core/model/track-event/single_event_model.dart';
+import 'package:track_trek/core/service/review/review_service.dart';
 import 'package:track_trek/core/service/user-home/user_home_service.dart';
 
 class HomeUserController extends GetxController {
@@ -25,17 +27,21 @@ class HomeUserController extends GetxController {
   RxList<CategoryModel> catList = <CategoryModel>[].obs;
   RxList<TrackForUserPanelModel> trackList = <TrackForUserPanelModel>[].obs;
   RxList<EventForUserPanelModel> eventList = <EventForUserPanelModel>[].obs;
+  RxList<ReviewModel> reviewList = <ReviewModel>[].obs;
 
   ///================== loading variable =====================///
 
   RxBool isLoadingCategory = false.obs;
   RxBool isLoadingTrackList = false.obs;
   RxBool isLoadingEventList = false.obs;
+  RxBool isLoadingTrackReviewList = false.obs;
+  RxBool isLoadingMoreForReview = false.obs;
 
   ///========================= String dynamic variable =====================///
   RxString categorySearch = ''.obs;
   Rx<String?> lat = (null).obs;
   Rx<String?> lng = (null).obs;
+  RxInt currentPageForReview = 1.obs;
 
   getCategoryListCall() async {
     if (NetworkController.to.isConnected.value) {
@@ -75,7 +81,45 @@ class HomeUserController extends GetxController {
       // noInternetShowCustomSnackbar();
     }
   }
+  getTrackReviewListCall(
+      {required String trackId,
+        String sort = '',
+        bool loadMoreData = false})
+  async {
+    if (NetworkController.to.isConnected.value) {
+      if (loadMoreData) {
+        isLoadingMoreForReview.value = true;
+      } else {
+        isLoadingTrackReviewList.value = true;
+        currentPageForReview.value = 1;
+      }
 
+      List<ReviewModel> reviews = await ReviewService.getReviewList(
+          trackId: trackId, page: currentPageForReview.value, sort: sort);
+      if (reviews.isNotEmpty) {
+        isLoadingTrackReviewList.value = false;
+        if (loadMoreData) {
+          reviewList.addAll(reviews);
+        } else {
+          reviewList.assignAll(reviews);
+        }
+        currentPageForReview.value++;
+      } else if (!loadMoreData) {
+        // Clear the list if it's a fresh request and no data
+        reviewList.clear();
+      } else {
+        isLoadingTrackReviewList.value = false;
+        // showCustomSnackbar(
+        //     title: AppStaticString.failed,
+        //     message: AppStaticString.failedToLoadData,
+        //     type: SnackBarType.failed);
+      }
+    } else {
+      isLoadingTrackReviewList.value = false;
+      // noInternetShowCustomSnackbar();
+    }
+    reviewList.refresh();
+  }
   getEventListCall() async {
     if (NetworkController.to.isConnected.value) {
       isLoadingEventList.value = true;
