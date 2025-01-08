@@ -37,6 +37,7 @@ class SplashController extends GetxController {
         Get.put(ProfileController() /*,permanent: true*/);
 
         Get.put(NotificationController() /*,permanent: true*/);
+        ;
       } else {
         Get.offAllNamed(LoginScreen.routeName);
       }

@@ -63,13 +63,12 @@ class EventCardWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8.r),
 
                 ///==============dynamic event image==============///
-                child: eventModel != null
-                    ? CustomNetworkImage(
+                child: CustomNetworkImage(
                         imageUrl:
                             imageUrl,
                         height: 150.h,
                         width: double.infinity)
-                    : Image.asset(dummyEventImgUrl)),
+                   ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

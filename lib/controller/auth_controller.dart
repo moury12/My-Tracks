@@ -154,9 +154,10 @@ TextEditingController confirmPassNewController =
         CommonController.to.selectedRoleOption.value =
             Boxes.getUserData().get(roleKey) == 'USER' ? 0 : 1;
 
-        Get.offAllNamed(SplashScreen.routeName);
+
         emailLoginController.clear();
         passLoginController.clear();
+        Get.offAllNamed(SplashScreen.routeName);
       } else {
         isLoadingLogin.value = false;
       }

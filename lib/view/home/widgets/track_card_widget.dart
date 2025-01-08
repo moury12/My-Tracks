@@ -131,12 +131,11 @@ class TrackCardWidget extends StatelessWidget {
           children: [
             ClipRRect(
                 borderRadius: BorderRadius.circular(8.r),
-                child: trackModel != null
-                    ? CustomNetworkImage(
+                child: CustomNetworkImage(
                         imageUrl: imageUrl,
                         height: 150.h,
                         width: double.infinity)
-                    : Image.asset(dummyEventImgUrl)),
+                    ),
             space12H,
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -698,7 +697,6 @@ class OptionWidget extends StatelessWidget {
     );
   }
 }
-
 class ExpandableText extends StatefulWidget {
   final String text;
   final TextStyle? textStyle;
@@ -710,7 +708,7 @@ class ExpandableText extends StatefulWidget {
     required this.text,
     this.textStyle,
     this.buttonStyle,
-    this.maxLines = 2,
+    this.maxLines = 3,
   });
 
   @override
@@ -725,8 +723,22 @@ class _ExpandableTextState extends State<ExpandableText> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _checkTextOverflow();
+      if (mounted) {
+        _checkTextOverflow();
+      }
     });
+  }
+
+  @override
+  void didUpdateWidget(covariant ExpandableText oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.text != widget.text) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _checkTextOverflow();
+        }
+      });
+    }
   }
 
   void _checkTextOverflow() {
@@ -734,6 +746,7 @@ class _ExpandableTextState extends State<ExpandableText> {
         poppinsRegular.copyWith(
           fontSize: getFontSizeSmall(context),
         );
+
     final textSpan = TextSpan(text: widget.text, style: textStyle);
     final textPainter = TextPainter(
       text: textSpan,
@@ -742,9 +755,17 @@ class _ExpandableTextState extends State<ExpandableText> {
     )..layout(maxWidth: MediaQuery.of(context).size.width);
 
     if (textPainter.didExceedMaxLines) {
-      setState(() {
-        _isTextOverflowing = true;
-      });
+      if (mounted) {
+        setState(() {
+          _isTextOverflowing = true;
+        });
+      }
+    } else {
+      if (mounted) {
+        setState(() {
+          _isTextOverflowing = false;
+        });
+      }
     }
   }
 
@@ -775,7 +796,6 @@ class _ExpandableTextState extends State<ExpandableText> {
               style: widget.buttonStyle ??
                   poppinsSemiBold.copyWith(
                     fontSize: getFontSizeSmall(context),
-                    // color: AppColors.primaryColor,
                   ),
             ),
           ),
@@ -783,3 +803,4 @@ class _ExpandableTextState extends State<ExpandableText> {
     );
   }
 }
+

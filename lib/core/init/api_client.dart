@@ -1,6 +1,6 @@
 class ApiClient {
   static const String googleMapUrl ='AIzaSyCwUpKs-yq_9gvqjQEVYLXlBPV7qbw0xJQ';
-  static const String baseUrl = 'http://192.168.12.75:8001';
+  static const String baseUrl = 'http://10.0.60.26:8001';
   static String get loginUrl => '$baseUrl/auth/login';
   static String get registrationUrl => '$baseUrl/auth/register';
   static String get activeAccUrl => '$baseUrl/auth/activate-account';
