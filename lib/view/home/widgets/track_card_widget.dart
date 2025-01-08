@@ -74,9 +74,9 @@ class TrackCardWidget extends StatelessWidget {
             ? trackModelUserPanel!.trackName ?? ''
             : 'n/a';
     final String totalSlot = trackModel != null
-        ? trackModel!.slots!.length.toString() ?? ''
+        ? trackModel!.slots!.length.toString()
         : trackModelUserPanel != null
-            ? trackModelUserPanel!.slots!.length.toString() ?? ''
+            ? trackModelUserPanel!.slots!.length.toString()
             : 'n/a';
     final String location = trackModel != null
         ? trackModel!.address ?? ''
@@ -94,14 +94,14 @@ class TrackCardWidget extends StatelessWidget {
             ? trackModelUserPanel!.description ?? ''
             : 'n/a';
     final String totalComment = trackModel != null
-        ? trackModel!.totalReview.toString() ?? ''
+        ? trackModel!.totalReview.toString()
         : trackModelUserPanel != null
-            ? trackModelUserPanel!.totalReview.toString() ?? ''
+            ? trackModelUserPanel!.totalReview.toString()
             : 'n/a';
     final String totalReaction = trackModel != null
-        ? trackModel!.totalLikes.toString() ?? ''
+        ? trackModel!.totalLikes.toString()
         : trackModelUserPanel != null
-            ? trackModelUserPanel!.totalLikes.toString() ?? ''
+            ? trackModelUserPanel!.totalLikes.toString()
             : 'n/a';
     final double lat = trackModel != null
         ? trackModel!.location!.coordinates!.last.toDouble()
@@ -114,12 +114,12 @@ class TrackCardWidget extends StatelessWidget {
             ? trackModelUserPanel!.location!.coordinates!.first.toDouble()
             : 0.0;
     final String hostName = trackModel != null
-        ? 'n/a' ?? ''
+        ? 'n/a'
         : trackModelUserPanel != null
             ? trackModelUserPanel!.host!.name ?? ''
             : 'n/a';
     final String rating = trackModel != null
-        ? '4.5' ?? ''
+        ? '4.5'
         : trackModelUserPanel != null
             ? (trackModelUserPanel!.rating ?? '0.0').toString()
             : '0.0';
@@ -337,9 +337,7 @@ class TrackCardWidget extends StatelessWidget {
 
                       ///================react==============///
 
-                      react != null
-                          ? Obx(() {
-                              return CommonController.to.isLoadingPostLike.value?DefaultProgressIndicator(color: AppColors.whiteLightColor,): OptionWidget(
+                      /*CommonController.to.isLoadingPostLike.value?DefaultProgressIndicator(color: AppColors.whiteLightColor,):*/ OptionWidget(
                                 function: () {
                                  CommonController.to.postLikeDisLikeCall(trackId: sId);
 
@@ -348,9 +346,7 @@ class TrackCardWidget extends StatelessWidget {
                                     ? reactFillIconUrl
                                     : reactIconUrl,
                                 text: totalReaction,
-                              );
-                            })
-                          : const SizedBox.shrink(),
+                              ),
 
                       ///================map==============///
 
@@ -436,7 +432,9 @@ class TrackCardWidget extends StatelessWidget {
                     padding: EdgeInsets.only(top: 16.h),
                     child: CustomButton(
                       onTap: () {
-                        Get.toNamed(BookTrackJoinEventScreen.routeName);
+
+                        Get.toNamed(BookTrackJoinEventScreen.routeName,arguments: {'id':sId,
+                        'type':'track'});
                       },
                       title: AppStaticString.bookSlot,
                       img: doubleArrowIconUrl,

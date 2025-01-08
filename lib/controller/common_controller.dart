@@ -1,50 +1,131 @@
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:track_trek/controller/home_user_controller.dart';
 import 'package:track_trek/controller/network_controller.dart';
+import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/init/hive_boxes.dart';
 import 'package:track_trek/core/service/review/review_service.dart';
-
+import 'package:track_trek/core/utils/helper_function.dart';
+import 'package:http/http.dart'as http;
+import 'package:track_trek/core/init/api_client.dart';
 
 class CommonController extends GetxController {
   static CommonController get to => Get.find();
-  RxBool isLoadingPostLike = false.obs;
+  /*RxBool isLoadingPostLike = false.obs;*/
   RxBool isLiked = false.obs;
+  RxList<dynamic> addressSuggestion =[].obs;
   postLikeDisLikeCall({required String trackId}) async {
     if (NetworkController.to.isConnected.value) {
-      isLoadingPostLike.value = true;
-      final String likeHitted =
-      await ReviewService.likeDislikeRequest(trackId: trackId);
-      if (likeHitted.isNotEmpty) {
-        isLoadingPostLike.value = false;
-if(likeHitted=='Disliked'){
-  isLiked.value =false;
-}else{
-  isLiked.value =true;
-}
-        if( Boxes.getUserData().get(roleKey) == 'USER'){
-        bool? isLiked= HomeUserController.to.trackList.where((p0) => p0.sId==trackId,).first.isLiked!;
-         if(isLiked ==true){
-           isLiked =false;
-         }else{
-           isLiked =true;
-         }
-          HomeUserController.to.trackList.refresh();
-        }else{
-          /*HomeController.to.getTrackListCall();*/
+      try {
+
+
+        // Locate the specific track item
+        final trackItem = HomeUserController.to.trackList
+            .firstWhere((track) => track.sId == trackId);
+
+        // Save the previous state for rollback
+        final previousIsLiked = trackItem.isLiked;
+        final previousTotalLikes = trackItem.totalLikes ?? 0;
+
+        // Optimistically toggle the isLiked state
+        trackItem.isLiked = !(trackItem.isLiked ?? false);
+
+        // Update totalLikes optimistically
+        if (trackItem.isLiked == true) {
+          trackItem.totalLikes = previousTotalLikes + 1;
+        } else {
+          trackItem.totalLikes = previousTotalLikes - 1;
         }
-      } else {
-        isLoadingPostLike.value = false;
-        // showCustomSnackbar(
-        //     title: AppStaticString.failed,
-        //     message: AppStaticString.failedToLoadData,
-        //     type: SnackBarType.failed);
+
+        // Refresh the list to update the UI
+        HomeUserController.to.trackList.refresh();
+
+        // Make the server request
+        final likeHitted =
+            await ReviewService.likeDislikeRequest(trackId: trackId);
+
+        if (likeHitted.isNotEmpty) {
+          // Update based on server response
+          trackItem.isLiked = likeHitted == 'Liked';
+
+          // Adjust totalLikes if needed
+          if (trackItem.isLiked == true && previousIsLiked != true) {
+            trackItem.totalLikes = previousTotalLikes + 1;
+          } else if (trackItem.isLiked == false && previousIsLiked != false) {
+            trackItem.totalLikes = previousTotalLikes - 1;
+          }
+
+          HomeUserController.to.trackList.refresh();
+        } else {
+          // Rollback on failure
+          trackItem.isLiked = previousIsLiked;
+          trackItem.totalLikes = previousTotalLikes;
+
+          HomeUserController.to.trackList.refresh();
+          throw Exception("Failed to update like status.");
+        }
+      } catch (e) {
+        print(e.toString());
+      } finally {
+      /*  isLoadingPostLike.value = false;*/
       }
     } else {
-      isLoadingPostLike.value = false;
-      // noInternetShowCustomSnackbar();
+    /*  isLoadingPostLike.value = false;*/
+      noInternetShowCustomSnackbar();
     }
   }
+  Future<void> fetchSuggestedPlaces(String input) async{
+    final url =
+        'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${Uri.encodeComponent(input)}&key=${ApiClient.googleMapUrl}';
+    final response = await http.get(Uri.parse(url));
+    if(response.statusCode==200){
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      addressSuggestion.value = data['predictions'];
+    }
+
+  }
+
+
+  Future<void> getLatLngFromPlace(
+      String placeId, {
+        required RxString lat,
+        required RxString lng,
+        required RxString selectedAddress,
+      }) async {
+
+    final String url =
+        'https://maps.googleapis.com/maps/api/geocode/json?place_id=$placeId&key=${ApiClient.googleMapUrl}';
+
+    try {
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        // Parse response
+        final Map<String, dynamic> data = json.decode(response.body);
+
+        if (data['results'].isNotEmpty) {
+          final location = data['results'][0]['geometry']['location'];
+
+          // Update RxString values
+          selectedAddress.value = data['results'][0]['formatted_address'];
+          lat.value = location['lat'].toString();
+          lng.value = location['lng'].toString();
+          print(lat.value);
+          print(lng.value);
+        } else {
+          print("No results found for the provided placeId.");
+        }
+      } else {
+        print("HTTP Error: ${response.statusCode} - ${response.reasonPhrase}");
+      }
+    } catch(e){
+debugPrint(e.toString());
+    }
+  }
+
   @override
   void onInit() {
     Boxes.getUserData().get(roleKey) != null
@@ -68,5 +149,4 @@ if(likeHitted=='Disliked'){
   }
 
   RxString image = ''.obs;
-
 }

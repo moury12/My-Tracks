@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:track_trek/controller/common_controller.dart';
+import 'package:track_trek/controller/home_user_controller.dart';
 import 'package:track_trek/core/components/custom_appbar.dart';
 import 'package:track_trek/core/components/custom_textfield.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
@@ -22,30 +24,53 @@ class SearchScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: padding16,
-        child: Column(
-          children: [
-            CustomTextField(
-              onTap: () {
-                Get.toNamed(SearchScreen.routeName);
-              },
-              hintText: AppStaticString.searchHerr,
-              prefixIcon: Padding(
-                padding: padding8,
-                child: Image.asset(
-                  searchIconUrl,
-                  height: 24.w,
-                  width: 24.w,
+        child: Obx(() {
+          return Column(
+            children: [
+              CustomTextField(
+                textEditingController:
+                    HomeUserController.to.searchFieldController.value,
+                onChanged: (val) {
+                  CommonController.to.fetchSuggestedPlaces(val);
+                },
+                hintText: AppStaticString.searchHerr,
+                prefixIcon: Padding(
+                  padding: padding8,
+                  child: Image.asset(
+                    searchIconUrl,
+                    height: 24.w,
+                    width: 24.w,
+                  ),
                 ),
               ),
-            ),
-            space12H,
-           ...List.generate(5, (index) =>   SearchAddress(onTap: () {
-             Get.toNamed(SearchResultScreen.routeName);
-           },),)
-          ],
-        ),
+              space12H,
+              ...List.generate(
+                CommonController.to.addressSuggestion.length,
+                (index) {
+                  final address = CommonController.to.addressSuggestion[index];
+                  return SearchAddress(
+                    onTap: () async{
+                      final placeId = address['place_id'];
+                      await   CommonController.to.getLatLngFromPlace(placeId,
+                          lat: HomeUserController.to.lat,
+                          lng: HomeUserController.to.lng,
+                          selectedAddress:
+                              HomeUserController.to.selectedAddress);
+                       HomeUserController.to.searchFieldController.value.text =
+                          HomeUserController.to.selectedAddress.value;
+
+                      CommonController.to.addressSuggestion.clear();
+                      HomeUserController.to.getTrackListCall();
+                      Get.toNamed(SearchResultScreen.routeName);
+                    },
+                    title: address['description'],
+                  );
+                },
+              )
+            ],
+          );
+        }),
       ),
     );
   }
 }
-

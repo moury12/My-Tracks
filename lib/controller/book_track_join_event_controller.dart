@@ -34,10 +34,7 @@ class BookTrackJoinEventController extends GetxController{
         isLoadingTrack.value = false;
       } else {
         isLoadingTrack.value = false;
-        showCustomSnackbar(
-            title: AppStaticString.failed,
-            message: AppStaticString.failedToLoadData,
-            type: SnackBarType.failed);
+
       }
     } else {
       isLoadingTrack.value = false;

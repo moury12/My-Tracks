@@ -59,28 +59,28 @@ class AppRoutes {
             binding: HomeBinding()),
         GetPage(
             name: CreateTrackEventScreen.routeName,
-            page: () =>  CreateTrackEventScreen(),
+            page: () => CreateTrackEventScreen(),
             binding: CreateTrackBinding()),
         GetPage(
             name: UploadTrackScreen.routeName,
-            page: () =>  UploadTrackScreen(),
+            page: () => UploadTrackScreen(),
             binding: CreateTrackBinding()),
         GetPage(
           name: ProfileScreen.routeName,
           page: () => const ProfileScreen(), /*  binding: ProfileBinding()*/
         ),
         GetPage(
-            name: PromoteTrackScreen.routeName,
-            page: () => const PromoteTrackScreen(),
-           /* binding: ProfileBinding()*/),
+          name: PromoteTrackScreen.routeName,
+          page: () => const PromoteTrackScreen(), /* binding: ProfileBinding()*/
+        ),
         GetPage(
             name: SearchScreen.routeName,
-            page: () => const SearchScreen(),
-            binding: HomeBinding()),
+            page: () =>  SearchScreen(),
+            binding: HomeUserBinding()),
         GetPage(
             name: SearchResultScreen.routeName,
             page: () => const SearchResultScreen(),
-            binding: HomeBinding()),
+            binding: HomeUserBinding()),
         GetPage(
             name: EventUserScreen.routeName,
             page: () => const EventUserScreen()),
@@ -114,6 +114,6 @@ class AppRoutes {
             page: () => const PrivacyTermsScreen()),
         GetPage(
             name: ChangePasswordScreen.routeName,
-            page: () =>  ChangePasswordScreen()),
+            page: () => ChangePasswordScreen()),
       ];
 }

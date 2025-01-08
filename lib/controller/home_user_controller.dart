@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,7 +7,6 @@ import 'package:track_trek/controller/network_controller.dart';
 import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/model/category/category_model.dart';
 import 'package:track_trek/core/model/review/review_model.dart';
-import 'package:track_trek/core/model/track-event-for-userpanel/event_for_user_panel_model.dart';
 import 'package:track_trek/core/model/track-event-for-userpanel/event_for_user_panel_model.dart';
 import 'package:track_trek/core/model/track-event-for-userpanel/track_for_user_panel.dart';
 import 'package:track_trek/core/model/track-event/single_event_model.dart';
@@ -29,6 +29,7 @@ class HomeUserController extends GetxController {
   RxList<EventForUserPanelModel> eventList = <EventForUserPanelModel>[].obs;
   RxList<ReviewModel> reviewList = <ReviewModel>[].obs;
 
+
   ///================== loading variable =====================///
 
   RxBool isLoadingCategory = false.obs;
@@ -39,9 +40,14 @@ class HomeUserController extends GetxController {
 
   ///========================= String dynamic variable =====================///
   RxString categorySearch = ''.obs;
-  Rx<String?> lat = (null).obs;
-  Rx<String?> lng = (null).obs;
+  RxString lat = ''.obs;
+  RxString lng = ''.obs;
+  RxString selectedAddress = ''.obs;
   RxInt currentPageForReview = 1.obs;
+
+  ///==================textEditing controller variable =====================///
+
+  Rx<TextEditingController> searchFieldController =TextEditingController().obs;
 
   getCategoryListCall() async {
     if (NetworkController.to.isConnected.value) {

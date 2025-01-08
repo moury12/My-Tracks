@@ -6,8 +6,9 @@ import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 class SearchAddress extends StatelessWidget {
   final Function()? onTap;
+  final String title;
   const SearchAddress({
-    super.key, this.onTap,
+    super.key, this.onTap, required this.title,
   });
 
   @override
@@ -20,7 +21,7 @@ class SearchAddress extends StatelessWidget {
           Padding(
             padding: padding12V,
             child: Text(
-              AppStaticString.dummyAddress,
+             title ,
               style:
               poppinsRegular.copyWith(fontSize: getFontSizeSmall(context)),
             ),

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:track_trek/controller/book_track_join_event_controller.dart';
 import 'package:track_trek/core/components/custom_appbar.dart';
+import 'package:track_trek/core/components/custom_network_image.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
@@ -26,11 +27,17 @@ class BookTrackJoinEventScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? argument = Get.arguments;
+    final argument = Get.arguments;
+    String sId = argument['id'];
+    String type = argument['type'];
+    BookTrackJoinEventController.to.getTrackDetailsCall(trackId: sId);
+    List<String> imageUrl =
+        BookTrackJoinEventController.to.singleTrack.value.trackImage ?? [];
     return Scaffold(
-      appBar:  CustomAppbar(
-        tile:argument != null && argument == event
-            ?AppStaticString.joinEvent :AppStaticString.bookTRack,
+      appBar: CustomAppbar(
+        tile: argument != null && type == event
+            ? AppStaticString.joinEvent
+            : AppStaticString.bookTRack,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -47,11 +54,13 @@ class BookTrackJoinEventScreen extends StatelessWidget {
                       child: PageView.builder(
                         controller: BookTrackJoinEventController
                             .to.pageController.value,
-                        itemCount: 5,
+                        itemCount: imageUrl.length,
                         itemBuilder: (context, index) => BlackContainerWidget(
-                          padding: padding16H,
-                          child: Image.asset(dummyEventImgUrl,fit: BoxFit.cover,),
-                        ),
+                            padding: padding16H,
+                            child: CustomNetworkImage(
+                                imageUrl: imageUrl[index],
+                                height: 200.h,
+                                width: double.infinity)),
                       ),
                     ),
                   ),
@@ -158,7 +167,7 @@ class BookTrackJoinEventScreen extends StatelessWidget {
                         ),
                         Expanded(
                             flex: 2,
-                            child: argument != null && argument == event
+                            child: argument != null && type == event
                                 ? Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -184,7 +193,7 @@ class BookTrackJoinEventScreen extends StatelessWidget {
                                 : SelectDateButton()),
                       ],
                     ),
-                    argument != null && argument == event
+                    argument != null && type == event
                         ? BlueTextWidget(
                             text:
                                 '${AppStaticString.allowedPeople} 30   ${AppStaticString.unsold} 10',
@@ -192,18 +201,18 @@ class BookTrackJoinEventScreen extends StatelessWidget {
                           )
                         : SizedBox.shrink(),
                     ExpandableText(text: AppStaticString.dummyDesc),
-
                     ...List.generate(
                       6,
                       (index) => MarronGradientContainerWidget(
                         child: TrackSlotWidget(
                           onTap: () {
-                            Get.toNamed(BookTrackJoinEventPaymentScreen.routeName,arguments: argument);
+                            Get.toNamed(
+                                BookTrackJoinEventPaymentScreen.routeName,
+                                arguments: argument);
                           },
                           argument: userPanel,
-                          needToShowSeat: argument != null && argument == event
-                              ? true
-                              : false,
+                          needToShowSeat:
+                              argument != null && type == event ? true : false,
                         ),
                       ),
                     )

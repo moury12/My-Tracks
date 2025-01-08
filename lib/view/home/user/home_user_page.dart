@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -36,19 +37,22 @@ class HomeUserScreen extends StatelessWidget {
             child: ListView(
           padding: padding16,
           children: [
-            CustomTextField(
+            GestureDetector(
+              child: CustomTextField(
+                hintText: AppStaticString.searchHerr,
+                prefixIcon: Padding(
+                  padding: padding8,
+                  child: Image.asset(
+                    searchIconUrl,
+                    height: 24.w,
+                    width: 24.w,
+                  ),
+                ),
+                isEnable: false,
+              ),
               onTap: () {
                 Get.toNamed(SearchScreen.routeName);
               },
-              hintText: AppStaticString.searchHerr,
-              prefixIcon: Padding(
-                padding: padding8,
-                child: Image.asset(
-                  searchIconUrl,
-                  height: 24.w,
-                  width: 24.w,
-                ),
-              ),
             ),
             space12H,
 
@@ -153,7 +157,9 @@ class HomeUserScreen extends StatelessWidget {
                                       onTap: () {
                                         Get.toNamed(
                                             BookTrackJoinEventScreen.routeName,
-                                            arguments: event);
+                                            arguments: {'id':HomeUserController
+                                                .to.eventList[index].sId,
+                                            'type':'event'});
                                       },
                                       fromUser: true,
                                       buttonText: AppStaticString.joinEvent,
