@@ -585,10 +585,11 @@ class UploadTrackScreen extends StatelessWidget {
 
 class SelectDateButton extends StatelessWidget {
   final Function()? onTap;
+  final String? date;
   String? selectedDay;
    SelectDateButton({
     super.key,
-    this.onTap, this.selectedDay,
+    this.onTap, this.selectedDay, this.date,
   });
 
   @override
@@ -605,7 +606,7 @@ class SelectDateButton extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              AppStaticString.selectDay,
+             date?? AppStaticString.selectDay,
               style: poppinsRegular.copyWith(
                   color: AppColors.blackLightColor,
                   fontSize: getFontSizeDefault(context)),

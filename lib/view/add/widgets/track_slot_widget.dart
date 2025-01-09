@@ -67,10 +67,12 @@ class TrackSlotWidget extends StatelessWidget {
           Row(
             children: needToShowSeat == true
                 ? [
-                    BlueTextWidget(
-                      text:
-                          '${AppStaticString.allowedPeople} ${eventSlots != null ? eventSlots!.maxPeople : ''}   ${AppStaticString.unsold} ${eventSlots != null ? (eventSlots!.maxPeople ?? 0) - (eventSlots!.currentPeople ?? 0) : ''}',
-                      textAlign: TextAlign.start,
+                    Expanded(
+                      child: BlueTextWidget(
+                        text:
+                            '${AppStaticString.allowedPeople} ${eventSlots != null ? eventSlots!.maxPeople : ''}   ${AppStaticString.unsold} ${eventSlots != null ? (eventSlots!.maxPeople ?? 0) - (eventSlots!.currentPeople ?? 0) : ''}',
+                        textAlign: TextAlign.start,
+                      ),
                     )
                   ]
                 : slots != null

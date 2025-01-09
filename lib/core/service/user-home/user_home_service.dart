@@ -16,43 +16,7 @@ import 'package:track_trek/core/model/track-event/single_event_model.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 
 class UserHomeService {
-  static Future<List<CategoryModel>> getCategoryList() async {
-    List<CategoryModel> catList = [];
-    try {
-      final url = Uri.parse('${ApiClient.getCategoryUrl}'
-          '?page=1&limit=1000');
-      final headers = {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
-      };
 
-      final response = await http.get(
-        url,
-        headers: headers,
-      );
-      final Map<String, dynamic> responseData = json.decode(response.body);
-      log('----------------- category List call--------------------');
-      log(responseData.toString());
-      if (responseData['success'] != null && responseData['success'] == true) {
-        if (responseData['data']["category"] is List) {
-          catList = (responseData['data']["category"] as List)
-              .map((e) => CategoryModel.fromJson(e))
-              .toList();
-        }
-        return catList;
-      } else {
-        showCustomSnackbar(
-            title: AppStaticString.failed,
-            message: responseData['message'],
-            type: SnackBarType.failed);
-        return catList;
-      }
-    } catch (e) {
-      debugPrint(e.toString());
-    }
-    return catList;
-  }
 
   static Future<List<TrackForUserPanelModel>> getTrackListForUserPanel(
       {String category = '', String? long, String? lat}) async {

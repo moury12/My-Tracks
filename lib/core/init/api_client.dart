@@ -21,8 +21,9 @@ class ApiClient {
       '$baseUrl/business/get-single-business';
   static String get createEventUrl => '$baseUrl/business/event';
   static String get myBusinessUrl => '$baseUrl/business/my-business';
+  static String get searchForSlotUrl => '$baseUrl/business/search-for-slots';
   static String get getAllBusinessUrl => '$baseUrl/business/all-business';
-  static String get getCategoryUrl => '$baseUrl/dashboard/get-all-category';
+  static String get getBookASlotUrl => '$baseUrl/business/book-a-slot';
   static String get getParticipantsUrl =>
       '$baseUrl/business/view-all-participants';
   static String get activeDeactivateUrl =>

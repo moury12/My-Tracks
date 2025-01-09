@@ -11,6 +11,8 @@ import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/global/string_variable.dart';
+import 'package:track_trek/core/model/track-event/single_event_model.dart';
+import 'package:track_trek/core/model/track-event/single_track_model.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/home/widgets/event_card_widget.dart';
@@ -22,10 +24,24 @@ class BookTrackJoinEventPaymentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? argument = Get.arguments;
+    final Map<String, dynamic> argument = Get.arguments;
+    final String type = argument['type'];
+    final dynamic slot = argument['slot'];
+    String price = slot is TrackSlots
+        ? slot.price.toString()
+        : slot is EventSlots
+            ? slot.price.toString()
+            : '\$0.0';
+    String sId = slot is TrackSlots
+        ? slot.sId.toString()
+        : slot is EventSlots
+            ? slot.sId.toString()
+            : '-';
+
+    print(type);
     return Scaffold(
       appBar: CustomAppbar(
-        tile: argument != null && argument == event
+        tile: argument.isNotEmpty && type == event
             ? AppStaticString.joinEvent
             : AppStaticString.bookTrackSlot,
       ),
@@ -51,90 +67,106 @@ class BookTrackJoinEventPaymentScreen extends StatelessWidget {
                             ),
 
                             ///=======================dynamic price=====================///
-                            Text('\$12.00',
+                            Text('\$$price',
                                 style: poppinsMedium.copyWith(
                                     color: AppColors.blackLightColor,
-                                    fontSize: getButtonFontSizeLarge(context))),
+                                    fontSize: getButtonFontSizeLarge(context)))
                           ],
                         ),
                       ),
                     ),
-                    space8H,
-                    const BlueTextWidget(
-                      text:
-                          '${AppStaticString.allowedPeople} 30   ${AppStaticString.unsold} 10',
-                      textAlign: TextAlign.start,
-                    ),
-                    space12H,
-                    Obx(
-                     () {
-                        return CustomDropdown<int>(
-                          title: AppStaticString.selectPeople,
-                          items: BookTrackJoinEventController.to.memberList,
-                          selectedValue: BookTrackJoinEventController
-                              .to.selectedValue.value,
-                          onChanged: (value) {
-
-                            BookTrackJoinEventController
-                                .to.selectedValue.value =value;
-                            BookTrackJoinEventController.to.updateSubSelectedValue();
-                          },
-                        );
-                      }
-                    ),
-                    space16H,
-                    argument != null && argument == event
-                        ? Obx(
-                          () {
+                    argument.isNotEmpty && type == event
+                        ? Obx(() {
                             return Column(
+                              children: List.generate(
+                                BookTrackJoinEventController
+                                        .to.selectedValue.value ??
+                                    0,
+                                (index) => Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  spacing: 12.h,
+                                  children: [
+                                    space8H,
+                                    const BlueTextWidget(
+                                      text:
+                                          '${AppStaticString.allowedPeople} 30   ${AppStaticString.unsold} 10',
+                                      textAlign: TextAlign.start,
+                                    ),
+                                    space12H,
+                                    Obx(() {
+                                      return CustomDropdown<int>(
+                                        title: AppStaticString.selectPeople,
+                                        items: BookTrackJoinEventController
+                                            .to.memberList,
+                                        selectedValue:
+                                            BookTrackJoinEventController
+                                                .to.selectedValue.value,
+                                        onChanged: (value) {
+                                          BookTrackJoinEventController
+                                              .to.selectedValue.value = value;
+                                          BookTrackJoinEventController.to
+                                              .updateSubSelectedValue();
+                                        },
+                                      );
+                                    }),
+                                    space16H,
+                                    Text(
+                                      'People ${BookTrackJoinEventController.to.memberList[index]}:',
+                                      style: poppinsMedium.copyWith(
+                                          fontSize: getFontSizeLarge(context)),
+                                    ),
+                                    const CustomTextField(
+                                      title: AppStaticString.drivingLicence,
+                                    ),
+                                    CustomDropdown<String>(
+                                      title: AppStaticString.bookingFor,
+                                      items: BookTrackJoinEventController
+                                          .to.bookingForList,
+                                      selectedValue:
+                                          BookTrackJoinEventController
+                                              .to.subSelectedValue[index],
+                                      onChanged: (value) {
+                                        print('----------------------');
 
-                                                  children: List.generate(BookTrackJoinEventController
-                              .to.selectedValue.value??0, (index) => Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                            spacing: 12.h,
-                            children: [
-                              Text('People ${BookTrackJoinEventController
-                                  .to.memberList[index]}:',style: poppinsMedium.copyWith(fontSize: getFontSizeLarge(context)),),
-                              const CustomTextField(
-                                title: AppStaticString.drivingLicence,
+                                        BookTrackJoinEventController
+                                            .to.subSelectedValue[index] = value;
+                                      },
+                                    ),
+                                    const CustomTextField(
+                                      title: AppStaticString.carLicence,
+                                    ),
+                                    const CustomTextField(
+                                      title: AppStaticString.contactNumber,
+                                    ),
+                                    Row(
+                                      children: [
+                                        const Expanded(
+                                            child: SizedBox.shrink()),
+                                        Expanded(
+                                            child: CustomButton(
+                                          onTap: () {},
+                                          title: AppStaticString.save,
+                                          fillColor: AppColors.blueColor,
+                                          borderColor: AppColors.blueColor,
+                                        )),
+                                      ],
+                                    ),
+                                    space12H
+                                  ],
+                                ),
                               ),
-                              CustomDropdown<String>(
-                                title: AppStaticString.bookingFor,
-                                items: BookTrackJoinEventController.to.bookingForList,
-                                selectedValue: BookTrackJoinEventController
-                                    .to.subSelectedValue[index],
-                                onChanged: (value) {
-                                  print('----------------------');
-
+                            );
+                          })
+                        : Padding(
+                            padding: EdgeInsets.only(top: 12.h),
+                            child: CustomTextField(
+                              textEditingController:
                                   BookTrackJoinEventController
-                                      .to.subSelectedValue[index] =value;
-
-                                },
-
-                              ),
-                              const CustomTextField(
-                                title: AppStaticString.carLicence,
-                              ),
-                              const CustomTextField(
-                                title: AppStaticString.contactNumber,
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(child: SizedBox.shrink()),
-                                  Expanded(child: CustomButton(onTap: () {
-
-                                  },
-                                  title: AppStaticString.save,
-                                  fillColor: AppColors.blueColor,borderColor: AppColors.blueColor,)),
-                                ],
-                              ),
-                              space12H
-                            ],
-                                                  ),),
-                                                );
-                          }
-                        )
-                        :space12H,
+                                      .to.peopleNumberController.value,
+                              title: AppStaticString.selectPeople,
+                              keyboardType: TextInputType.number,
+                            ),
+                          ),
                   ],
                 ),
               ),
@@ -143,7 +175,11 @@ class BookTrackJoinEventPaymentScreen extends StatelessWidget {
           Padding(
             padding: padding16,
             child: CustomButton(
-              onTap: () {},
+              onTap: () {
+                if(slot is TrackSlots){
+
+                }
+              },
               title: AppStaticString.goPay,
             ),
           )

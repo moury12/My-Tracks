@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:track_trek/controller/network_controller.dart';
 import 'package:track_trek/core/model/track-event/single_event_model.dart';
 import 'package:track_trek/core/model/track-event/single_track_model.dart';
@@ -12,6 +13,7 @@ class BookTrackJoinEventController extends GetxController {
   ///===================dynamic int variable==============///
   RxInt currentIndex = 0.obs;
   Rx<int?> selectedValue = Rx<int?>(null);
+  RxString selectDate = DateFormat('yyyy-MM-dd').format(DateTime.now()).obs;
 
   ///==========================dynamic list======================///
   RxList<int> memberList = [1, 2, 3].obs;
@@ -21,19 +23,40 @@ class BookTrackJoinEventController extends GetxController {
   ///=======================single dynamic object====================///
   Rx<SingleEventModel> singleEvent = SingleEventModel().obs;
   Rx<SingleTrackModel> singleTrack = SingleTrackModel().obs;
+  RxList<TrackSlots> trackSlotList = <TrackSlots>[].obs;
 
   ///===================loading value==================///
   RxBool isLoadingTrackEvent = false.obs;
-
+  RxBool isLoadingSlotList = false.obs;
 
   ///======================dynamic controller======================///
   Rx<PageController> pageController = PageController(initialPage: 0).obs;
+  Rx<TextEditingController> peopleNumberController =
+      TextEditingController().obs;
+
+
   void updateSubSelectedValue() {
     if (selectedValue.value != null && selectedValue.value! > 0) {
       subSelectedValue.value = List.generate(selectedValue.value!,
           (index) => null); // Generate a list with the size of selectedValue
     } else {
       subSelectedValue.clear();
+    }
+  }
+
+  getTrackSlotListCall({required String trackId}) async {
+    if (NetworkController.to.isConnected.value) {
+      isLoadingSlotList.value = true;
+      trackSlotList.value = await TrackEventService.getSlotListCall(
+          trackId: trackId, date: selectDate.value);
+      if (trackSlotList.isNotEmpty) {
+        isLoadingSlotList.value = false;
+      } else {
+        isLoadingSlotList.value = false;
+      }
+    } else {
+      isLoadingSlotList.value = false;
+      noInternetShowCustomSnackbar();
     }
   }
 
@@ -53,6 +76,7 @@ class BookTrackJoinEventController extends GetxController {
       noInternetShowCustomSnackbar();
     }
   }
+
   getEventDetailsCall({required String eventId}) async {
     if (NetworkController.to.isConnected.value) {
       isLoadingTrackEvent.value = true;

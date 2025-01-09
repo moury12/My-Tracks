@@ -708,7 +708,7 @@ class ExpandableText extends StatefulWidget {
     required this.text,
     this.textStyle,
     this.buttonStyle,
-    this.maxLines = 3,
+    this.maxLines = 2,
   });
 
   @override
