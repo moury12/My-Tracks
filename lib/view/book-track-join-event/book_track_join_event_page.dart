@@ -280,6 +280,18 @@ class BookTrackJoinEventScreen extends StatelessWidget {
                                             child: SizedBox(
                                               width: 200.w,
                                               child: TrackSlotWidget(
+                                                needToBook: type==event?true:false,
+                                                onBook: () {
+                                                  Get.toNamed(
+                                                      BookTrackJoinEventPaymentScreen
+                                                          .routeName,
+                                                      arguments: {
+                                                        'type': event,
+                                                        'slot':
+                                                        slotsList[index],
+                                                        'event':controller.singleEvent
+                                                      });
+                                                },
                                                 slots: argument != null &&
                                                         type == event
                                                     ? null
@@ -370,7 +382,8 @@ class BookTrackJoinEventScreen extends StatelessWidget {
                                                        arguments: {
                                                          'type': type,
                                                          'slot':
-                                                         slotsList[index]
+                                                         slotsList[index],
+                                                         /*'event':controller.singleEvent*/
                                                        });
                                                  },
                                                  needToBook: true,

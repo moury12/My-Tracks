@@ -18,14 +18,18 @@ class BookTrackJoinEventController extends GetxController {
   RxString selectDate = DateFormat('yyyy-MM-dd').format(DateTime.now()).obs;
 
   ///==========================dynamic list======================///
-  RxList<int> memberList = [1, 2, 3].obs;
+  RxList<int> memberList = [1, 2, 3,10].obs;
   RxList<String> bookingForList = ['Self', 'Others'].obs;
   RxList<String?> subSelectedValue = <String?>[].obs;
+  RxList<dynamic> eventField= [].obs;
+  List<List<TextEditingController>> moreInfoControllers = [];
+  RxList<TrackSlots> trackSlotList = <TrackSlots>[].obs;
+
 
   ///=======================single dynamic object====================///
+  ///
   Rx<SingleEventModel> singleEvent = SingleEventModel().obs;
   Rx<SingleTrackModel> singleTrack = SingleTrackModel().obs;
-  RxList<TrackSlots> trackSlotList = <TrackSlots>[].obs;
 
   ///===================loading value==================///
   RxBool isLoadingTrackEvent = false.obs;
@@ -36,6 +40,8 @@ class BookTrackJoinEventController extends GetxController {
   Rx<PageController> pageController = PageController(initialPage: 0).obs;
   Rx<TextEditingController> peopleNumberController =
       TextEditingController().obs;
+  Rx<TextEditingController> peopleNumberForEventController =
+      TextEditingController(text: '0').obs;
 
   void updateSubSelectedValue() {
     if (selectedValue.value != null && selectedValue.value! > 0) {
@@ -83,19 +89,20 @@ class BookTrackJoinEventController extends GetxController {
     }
   }
 
-  joinEventSlotCall({required String slotId,required String eventId,required String price,}) async {
+  joinEventSlotCall({required String slotId,required String eventId,required int price,}) async {
     if (NetworkController.to.isConnected.value) {
       isLoadingBookTrack.value = true;
       bool isBooked = await TrackEventService.joinEventSlotRequest(
        slotId: slotId,
         eventId: eventId,
-        data: subSelectedValue,
+        data: eventField,
         price:price
       );
       if (isBooked) {
         isLoadingBookTrack.value = false;
-        /*peopleNumberController.value.clear();
-        Get.offAllNamed(SplashScreen.routeName);*/
+        eventField.clear();
+        selectedValue.value=null;
+        Get.offAllNamed(SplashScreen.routeName);
       } else {
         isLoadingBookTrack.value = false;
       }

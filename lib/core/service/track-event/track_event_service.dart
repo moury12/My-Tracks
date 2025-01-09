@@ -551,7 +551,7 @@ class TrackEventService {
   static Future<bool> joinEventSlotRequest({
     required String eventId,
     required String slotId,
-    required String price,
+    required int price,
     required List<dynamic> data,
 
   })
