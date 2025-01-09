@@ -174,13 +174,18 @@ class BookTrackJoinEventPaymentScreen extends StatelessWidget {
           ),
           Padding(
             padding: padding16,
-            child: CustomButton(
-              onTap: () {
-                if(slot is TrackSlots){
-
-                }
-              },
-              title: AppStaticString.goPay,
+            child: Obx(
+               () {
+                return CustomButton(
+                  isLoading: BookTrackJoinEventController.to.isLoadingBookTrack.value,
+                  onTap: () {
+                    if(slot is TrackSlots){
+                BookTrackJoinEventController.to.bookTrackSlotCall(slotId: slot.sId??'');
+                    }
+                  },
+                  title: AppStaticString.goPay,
+                );
+              }
             ),
           )
         ],

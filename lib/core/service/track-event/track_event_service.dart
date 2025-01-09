@@ -288,7 +288,7 @@ class TrackEventService {
       });
       final response = await http.post(url, headers: headers, body: body);
       final responseData = json.decode(response.body);
-      log('-----------------create slot call--------------------');
+      log('-----------------book track slot call--------------------');
       log(body.toString());
       log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {
@@ -398,7 +398,8 @@ class TrackEventService {
 
   static Future<String> addEventCall(
       {required Map<String, dynamic> bodyData,
-      required List<File>? files}) async {
+      required List<File>? files})
+  async {
     try {
       final request = http.MultipartRequest(
         'POST',
@@ -463,7 +464,8 @@ class TrackEventService {
 
   static Future<SingleEventModel> getSingleEventData({
     required String eventId,
-  }) async {
+  })
+  async {
     SingleEventModel singleEventDetails = SingleEventModel();
     try {
       final url = Uri.parse(
@@ -503,7 +505,8 @@ class TrackEventService {
     required String maxPeople,
     required String price,
     required String description,
-  }) async {
+  })
+  async {
     try {
       final url = Uri.parse(ApiClient.createTrackSlotUrl);
       final headers = {
@@ -520,7 +523,56 @@ class TrackEventService {
       });
       final response = await http.post(url, headers: headers, body: body);
       final responseData = json.decode(response.body);
-      log('-----------------create slot call--------------------');
+      log('-----------------create event slot call--------------------');
+      log(body.toString());
+      log(responseData.toString());
+      if (responseData['success'] != null && responseData['success'] == true) {
+        showCustomSnackbar(
+            title: AppStaticString.success,
+            message: responseData['message'],
+            type: SnackBarType.success);
+        return true;
+      } else {
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
+        return false;
+      }
+    } catch (e) {
+      showCustomSnackbar(
+          title: AppStaticString.failed,
+          message: e.toString(),
+          type: SnackBarType.failed);
+      debugPrint(e.toString());
+      return false;
+    }
+  }
+  static Future<bool> joinEventSlotRequest({
+    required String eventId,
+    required String slotId,
+    required String price,
+    required List<dynamic> data,
+
+  })
+  async {
+    try {
+      final url = Uri.parse(ApiClient.getJoinEventUrl);
+      final headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
+      };
+      final body = jsonEncode({
+        "eventId": eventId,
+        "slotId": slotId,
+        "data": data,
+        "price": price,
+
+      });
+      final response = await http.post(url, headers: headers, body: body);
+      final responseData = json.decode(response.body);
+      log('-----------------join event slot call--------------------');
       log(body.toString());
       log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {

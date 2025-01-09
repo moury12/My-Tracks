@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:track_trek/core/components/custom_button.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
@@ -17,11 +18,14 @@ import 'package:track_trek/view/home/widgets/track_card_widget.dart';
 class TrackSlotWidget extends StatelessWidget {
   final String? argument;
   final bool? needToShowSeat;
+  final bool? needToBook;
+  final bool? buttonLoading;
   final TrackSlots? slots;
   final EventSlots? eventSlots;
   final Function()? onTap;
   final Function()? onViewAllParticipant;
   final Function()? onDelete;
+  final Function()? onBook;
   const TrackSlotWidget({
     super.key,
     this.argument,
@@ -29,7 +33,10 @@ class TrackSlotWidget extends StatelessWidget {
     this.onTap,
     this.slots,
     this.onDelete,
-    this.eventSlots, this.onViewAllParticipant,
+    this.eventSlots,
+    this.onViewAllParticipant,
+    this.needToBook = false,
+    this.onBook, this.buttonLoading=false,
   });
 
   @override
@@ -39,29 +46,20 @@ class TrackSlotWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              ///================= slot num dynamic========================///
-              Expanded(
-                flex: 4,
-                child: Text(
-                  '${AppStaticString.slotNumber} ${slots != null ? slots!.slotNo ?? 'n/a' : ''} ${eventSlots != null ? eventSlots!.slotNo ?? 'n/a' : ''}',
-                  style: poppinsRegular.copyWith(
-                      fontSize: getFontSizeExtraLarge(context)),
-                ),
-              ),
+          Text(
+            '${slots != null ? slots!.slotNo ?? 'n/a' : ''} ${eventSlots != null ? eventSlots!.slotNo ?? 'n/a' : ''} Slot',
+            style: poppinsRegular.copyWith(
+                fontSize: getFontSizeExtraLarge(context)),
+          ),
+          space6H,
 
-              ///================= slot price dynamic========================///
-              Expanded(
-                  flex: 2,
-                  child: Text(
-                    '\$${slots != null ? slots!.price ?? 'n/a' : ''}${eventSlots != null ? eventSlots!.price ?? 'n/a' : ''}',
-                    style: poppinsSemiBold.copyWith(
-                        fontSize: getFontSizeExtraLarge(context),
-                        color: AppColors.primaryColor),
-                    textAlign: TextAlign.end,
-                  ))
-            ],
+          ///================= slot price dynamic========================///
+          Text(
+            '\$${slots != null ? slots!.price ?? 'n/a' : ''}${eventSlots != null ? eventSlots!.price ?? 'n/a' : ''}',
+            style: poppinsSemiBold.copyWith(
+                fontSize: getFontSizeExtraLarge(context),
+                color: AppColors.primaryColor),
+            textAlign: TextAlign.end,
           ),
           space6H,
           Row(
@@ -94,22 +92,22 @@ class TrackSlotWidget extends StatelessWidget {
                                       fontSize: getFontSizeSmall(context)),
                                 ),
                         ),
-
-                        ///================= slot time dynamic========================///
-                        Expanded(
-                            child: Text(
-                          slots != null
-                              ? '${slots!.startTime} - ${slots!.endTime}'
-                              : AppStaticString.dummyTime,
-                          textAlign: TextAlign.end,
-                          style: poppinsRegular.copyWith(
-                              color: AppColors.blueColor,
-                              fontSize: getFontSizeSmall(context)),
-                        ))
                       ]
                     : [],
           ),
-          space12H,
+          space6H,
+
+          ///================= slot time dynamic========================///
+          Text(
+            slots != null
+                ? '${slots!.startTime} - ${slots!.endTime}'
+                : AppStaticString.dummyTime,
+            textAlign: TextAlign.end,
+            style: poppinsRegular.copyWith(
+                color: AppColors.blueColor,
+                fontSize: getFontSizeSmall(context)),
+          ),
+          space6H,
 
           ///============================dynamic slot description===========================///
 
@@ -165,22 +163,30 @@ class TrackSlotWidget extends StatelessWidget {
                               ),
                             ),
                           ),
-
                   ],
+                ),
+          needToBook == true
+              ? CustomButton(
+            isLoading: buttonLoading,
+            marginVerticel:6.h ,
+                  onTap: onBook ?? () {},
+                  title: AppStaticString.bookSlot,
                 )
+              : const SizedBox.shrink()
         ],
       ),
     );
   }
 }
+
 class SlotLoadingWidget extends StatelessWidget {
-
-
-  const SlotLoadingWidget({super.key, });
+  const SlotLoadingWidget({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return  Shimmer.fromColors(
+    return Shimmer.fromColors(
       baseColor: Colors.grey[800]!,
       highlightColor: Colors.grey[600]!,
       child: Column(

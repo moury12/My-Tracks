@@ -72,7 +72,7 @@ class BookTrackJoinEventScreen extends StatelessWidget {
                       Padding(
                         padding: padding16H,
                         child: SizedBox(
-                          height: 200.h,
+                          height: 150.h,
                           child: controller.isLoadingTrackEvent.value
                               ? const ShimmerEffectForListOfImageList()
                               : PageView.builder(
@@ -85,7 +85,7 @@ class BookTrackJoinEventScreen extends StatelessWidget {
                                           child: CustomNetworkImage(
                                               imageUrl:
                                                   '${ApiClient.baseUrl}/${imageUrl[index]}',
-                                              height: 200.h,
+                                              height: 150.h,
                                               width: double.infinity)),
                                 ),
                         ),
@@ -252,6 +252,7 @@ class BookTrackJoinEventScreen extends StatelessWidget {
 
                               );
                       }),
+                      ///===================regular slot list======================///
                       const TitleTextWidget(title: AppStaticString.regularSlot),
                       Obx(
                         () {
@@ -277,7 +278,6 @@ class BookTrackJoinEventScreen extends StatelessWidget {
                                           (index) =>
                                               MarronGradientContainerWidget(
                                             child: SizedBox(
-                                              /*height: 150.h, */
                                               width: 200.w,
                                               child: TrackSlotWidget(
                                                 slots: argument != null &&
@@ -313,6 +313,7 @@ class BookTrackJoinEventScreen extends StatelessWidget {
                                     );
                         },
                       ),
+                      ///===================available slot list======================///
                       if (type != event)
                         const TitleTextWidget(title: AppStaticString.availableSlot),
                       if (type != event)
@@ -323,7 +324,7 @@ class BookTrackJoinEventScreen extends StatelessWidget {
                             slotsList = BookTrackJoinEventController
                                     .to.selectDate.value.isNotEmpty
                                 ? BookTrackJoinEventController.to.trackSlotList
-                                : controller.singleTrack.value.slots ?? [];
+                                : [];
 
                             return controller.isLoadingTrackEvent.value ||
                                     controller.isLoadingSlotList.value
@@ -331,7 +332,9 @@ class BookTrackJoinEventScreen extends StatelessWidget {
                                 : slotsList.isEmpty
                                     ?  EmptyTextWidget(
                                         text: '${controller.selectDate.value} this day not contain any slot kindly choose another date')
-                                    : SingleChildScrollView(
+                                    : controller.selectDate.value.isEmpty?
+                                const EmptyTextWidget(text: 'Please! choose valid date!!')
+                                : SingleChildScrollView(
                                         scrollDirection: Axis.horizontal,
                                         child: Row(
                                           spacing: 12.h,
@@ -358,22 +361,20 @@ class BookTrackJoinEventScreen extends StatelessWidget {
                                                               .singleTrack
                                                               .value
                                                               .slots![index],
-                                                  onTap: () {
-                                                    Get.toNamed(
-                                                        BookTrackJoinEventPaymentScreen
-                                                            .routeName,
-                                                        arguments: {
-                                                          'type': type,
-                                                          'slot':
-                                                              slotsList[index]
-                                                        });
-                                                  },
+
                                                   argument: userPanel,
-                                                  needToShowSeat:
-                                                      argument != null &&
-                                                              type == event
-                                                          ? true
-                                                          : false,
+                                                 onBook: () {
+                                                   Get.toNamed(
+                                                       BookTrackJoinEventPaymentScreen
+                                                           .routeName,
+                                                       arguments: {
+                                                         'type': type,
+                                                         'slot':
+                                                         slotsList[index]
+                                                       });
+                                                 },
+                                                 needToBook: true,
+
                                                 ),
                                               ),
                                             ),

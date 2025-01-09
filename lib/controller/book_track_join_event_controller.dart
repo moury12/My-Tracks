@@ -6,6 +6,8 @@ import 'package:track_trek/core/model/track-event/single_event_model.dart';
 import 'package:track_trek/core/model/track-event/single_track_model.dart';
 import 'package:track_trek/core/service/track-event/track_event_service.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
+import 'package:track_trek/view/initial/bottom_navigation_screen.dart';
+import 'package:track_trek/view/initial/splash.dart';
 
 class BookTrackJoinEventController extends GetxController {
   static BookTrackJoinEventController get to => Get.find();
@@ -28,12 +30,12 @@ class BookTrackJoinEventController extends GetxController {
   ///===================loading value==================///
   RxBool isLoadingTrackEvent = false.obs;
   RxBool isLoadingSlotList = false.obs;
+  RxBool isLoadingBookTrack = false.obs;
 
   ///======================dynamic controller======================///
   Rx<PageController> pageController = PageController(initialPage: 0).obs;
   Rx<TextEditingController> peopleNumberController =
       TextEditingController().obs;
-
 
   void updateSubSelectedValue() {
     if (selectedValue.value != null && selectedValue.value! > 0) {
@@ -56,6 +58,49 @@ class BookTrackJoinEventController extends GetxController {
       }
     } else {
       isLoadingSlotList.value = false;
+      noInternetShowCustomSnackbar();
+    }
+  }
+
+  bookTrackSlotCall({required String slotId}) async {
+    if (NetworkController.to.isConnected.value) {
+      isLoadingBookTrack.value = true;
+      bool isBooked = await TrackEventService.bookTrackSlotRequest(
+        date: selectDate.value,
+        numOfPeople: peopleNumberController.value.text,
+        slotId: slotId,
+      );
+      if (isBooked) {
+        isLoadingBookTrack.value = false;
+        peopleNumberController.value.clear();
+        Get.offAllNamed(SplashScreen.routeName);
+      } else {
+        isLoadingBookTrack.value = false;
+      }
+    } else {
+      isLoadingBookTrack.value = false;
+      noInternetShowCustomSnackbar();
+    }
+  }
+
+  joinEventSlotCall({required String slotId,required String eventId,required String price,}) async {
+    if (NetworkController.to.isConnected.value) {
+      isLoadingBookTrack.value = true;
+      bool isBooked = await TrackEventService.joinEventSlotRequest(
+       slotId: slotId,
+        eventId: eventId,
+        data: subSelectedValue,
+        price:price
+      );
+      if (isBooked) {
+        isLoadingBookTrack.value = false;
+        /*peopleNumberController.value.clear();
+        Get.offAllNamed(SplashScreen.routeName);*/
+      } else {
+        isLoadingBookTrack.value = false;
+      }
+    } else {
+      isLoadingBookTrack.value = false;
       noInternetShowCustomSnackbar();
     }
   }
@@ -87,7 +132,6 @@ class BookTrackJoinEventController extends GetxController {
         isLoadingTrackEvent.value = false;
       } else {
         isLoadingTrackEvent.value = false;
-        print(singleEvent.value.toString());
       }
     } else {
       isLoadingTrackEvent.value = false;

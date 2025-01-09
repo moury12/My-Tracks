@@ -197,30 +197,64 @@ Future<String> selectDate(
   BuildContext context,
 ) async {
   final DateTime? pickedDate = await showDatePicker(
+    barrierDismissible: false,
     builder: (context, child) {
-    return  Theme(data:  Theme.of(context).copyWith(  // override MaterialApp ThemeData
-       datePickerTheme:  DatePickerThemeData(
-         headerForegroundColor: AppColors.blackLightColor,
-         rangePickerHeaderForegroundColor: AppColors.blackLightColor,
-         shape: RoundedRectangleBorder(
-           borderRadius: BorderRadius.circular(10.r)
-         ),
+      return Theme(
+        data: Theme.of(context).copyWith(
+          datePickerTheme: DatePickerThemeData(
+            headerForegroundColor: AppColors.blackLightColor,
+            rangePickerHeaderForegroundColor: AppColors.blackLightColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.r),
+            ),
+            yearForegroundColor: const WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
+            dayForegroundColor: const WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
+            todayForegroundColor: const WidgetStatePropertyAll<Color>(AppColors.whiteLightColor),
+            confirmButtonStyle: const ButtonStyle(
+              foregroundColor: WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
+            ),
+            rangePickerHeaderHeadlineStyle: TextStyle(color: AppColors.blackLightColor),
+            rangePickerSurfaceTintColor: AppColors.blackLightColor,
+            cancelButtonStyle: const ButtonStyle(
+              foregroundColor: WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
+            ),
+            backgroundColor: AppColors.blueColor,
+            dividerColor: Colors.transparent,
+            todayBackgroundColor: const WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
+            yearStyle: TextStyle(
+              color: AppColors.blackLightColor,
+              fontSize: 16.sp,
+            ),
+            inputDecorationTheme: InputDecorationTheme(fillColor: AppColors.blackLightColor),
+            weekdayStyle: TextStyle(
+              color: AppColors.blackLightColor, // Color for week names
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w500,
+            ),
+            rangeSelectionBackgroundColor: AppColors.blackLightColor,
+            headerHeadlineStyle: TextStyle(
+              color: AppColors.blackLightColor, // Color for month/year in header
+              fontSize: 16.sp,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
 
-         yearForegroundColor: const WidgetStatePropertyAll<Color>(AppColors.blackLightColor) ,
-         dayForegroundColor: const WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
-         todayForegroundColor:const WidgetStatePropertyAll<Color>(AppColors.whiteLightColor),
-        confirmButtonStyle: const ButtonStyle(foregroundColor: WidgetStatePropertyAll<Color>(AppColors.blackLightColor)),
-        cancelButtonStyle: const ButtonStyle(foregroundColor: WidgetStatePropertyAll<Color>(AppColors.blackLightColor)),
-         backgroundColor:AppColors.blueColor,
-         dividerColor: Colors.transparent,todayBackgroundColor:  const WidgetStatePropertyAll<Color>(AppColors.blackLightColor)
-
-       )),  child: child!   );
+          dropdownMenuTheme: DropdownMenuThemeData(
+            textStyle: TextStyle(
+              color: AppColors.blackLightColor, // Dropdown text color
+              fontSize: 16.sp,
+            ),
+          ),
+        ),
+        child: child!,
+      );
     },
     context: context,
     initialDate: DateTime.now(),
     firstDate: DateTime(2000),
     lastDate: DateTime(2100),
   );
+
   if (pickedDate != null) {
     // Format the date
     String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
