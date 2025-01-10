@@ -33,6 +33,7 @@ String drawerIconUrl  ='assets/icons/drawer_icon.png';
 String mapIconUrl  ='assets/icons/map.png';
 String manageIconUrl  ='assets/icons/manage_icon.png';
 String logoutIconUrl  ='assets/icons/logout.png';
+String ratingHalfIconUrl  ='assets/icons/half_rating_icon.png';
 String locationIconUrl  ='assets/icons/location.png';
 String homeIconUrl  ='assets/icons/home_icon.png';
 String historyIconUrl  ='assets/icons/history.png';

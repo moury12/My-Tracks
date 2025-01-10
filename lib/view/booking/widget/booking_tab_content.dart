@@ -38,6 +38,7 @@ class BookingTabContent extends StatelessWidget {
                     eventModel: item as EventHistoryRunningModel,
                   )
                 : HistoryContentWidget(
+              ratingVal: BookingManagementController.to.ratingValue.value,
                     trackModel: item as TrackHistoryRunningModel,
                     addRating: index == 1 ? true : false,
                   );

@@ -2,7 +2,7 @@ class ReviewModel {
   String? sId;
   User? user;
   String? track;
-  int? rating;
+  double? rating;
   String? review;
   String? createdAt;
   String? updatedAt;

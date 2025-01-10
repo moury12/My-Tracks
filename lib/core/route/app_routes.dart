@@ -11,7 +11,9 @@ import 'package:track_trek/view/auth/new_password_page.dart';
 import 'package:track_trek/view/auth/otp_page.dart';
 import 'package:track_trek/view/auth/sign_up.dart';
 import 'package:track_trek/view/book-track-join-event/book_track_join_event_page.dart';
-import 'package:track_trek/view/book-track-join-event/book_track_join_event_payment_page.dart';
+import 'package:track_trek/view/book-track-join-event/book_track_payment_page.dart';
+import 'package:track_trek/view/book-track-join-event/book_track_payment_page.dart';
+import 'package:track_trek/view/book-track-join-event/join_event_payment_page.dart';
 import 'package:track_trek/view/feedback/feedback_page.dart';
 import 'package:track_trek/view/history/history_page.dart';
 import 'package:track_trek/view/home/host/event_slot_page.dart';
@@ -96,8 +98,11 @@ class AppRoutes {
             page: () => const BookTrackJoinEventScreen(),
             binding: BookTrackJoinEventBinding()),
         GetPage(
-            name: BookTrackJoinEventPaymentScreen.routeName,
-            page: () => const BookTrackJoinEventPaymentScreen(),
+            name: JoinEventPaymentScreen.routeName,
+            page: () => const JoinEventPaymentScreen(),
+            binding: BookTrackJoinEventBinding()),   GetPage(
+            name: BookTrackPaymentScreen.routeName,
+            page: () => const BookTrackPaymentScreen(),
             binding: BookTrackJoinEventBinding()),
         GetPage(
             name: SettingsScreen.routeName, page: () => const SettingsScreen()),

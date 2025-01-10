@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:track_trek/controller/booking_management_controller.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
@@ -23,14 +24,15 @@ class BookingListWidget<T> extends StatelessWidget {
     return Obx(
       () {
         return  dataList.isEmpty?
-        EmptyTextWidget(text: emptyText): Column(
-          children: List.generate(
-           dataList.length,
-                (index) => Padding(
-              padding: padding12V,
-              child: MarronGradientContainerWidget(
-                child: itemBuilder(dataList[index])
-              ),
+        EmptyTextWidget(text: emptyText): Padding(
+          padding: padding12V,
+          child: Column(
+            spacing: 12.h,
+            children: List.generate(
+             dataList.length,
+                  (index) => MarronGradientContainerWidget(
+                    child: itemBuilder(dataList[index])
+                  ),
             ),
           ),
         );

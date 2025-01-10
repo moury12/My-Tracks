@@ -10,17 +10,15 @@ import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
-import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/model/track-event/single_event_model.dart';
-import 'package:track_trek/core/model/track-event/single_track_model.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/home/widgets/event_card_widget.dart';
 import 'package:track_trek/view/manage/widgets/blue_container_widget.dart';
 
-class BookTrackJoinEventPaymentScreen extends StatelessWidget {
-  static const String routeName = '/track-event-payment';
-  const BookTrackJoinEventPaymentScreen({super.key});
+class JoinEventPaymentScreen extends StatelessWidget {
+  static const String routeName = '/event-payment';
+  const JoinEventPaymentScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,23 +26,15 @@ class BookTrackJoinEventPaymentScreen extends StatelessWidget {
     final String type = argument['type'];
     final dynamic slot = argument['slot'];
     final Rx<SingleEventModel?> eventData = argument['event'];
-    String price = slot is TrackSlots
-        ? slot.price.toString()
-        : slot is EventSlots
+    String price =  slot is EventSlots
             ? slot.price.toString()
             : '\$0.0';
-    String sId = slot is TrackSlots
-        ? slot.sId.toString()
-        : slot is EventSlots
-            ? slot.sId.toString()
-            : '-';
 
     print(type);
     return Scaffold(
-      appBar: CustomAppbar(
-        tile: argument.isNotEmpty && type == event
-            ? AppStaticString.joinEvent
-            : AppStaticString.bookTrackSlot,
+      appBar: const CustomAppbar(
+        tile:  AppStaticString.joinEvent
+
       ),
       body: Column(
         children: [
@@ -76,22 +66,8 @@ class BookTrackJoinEventPaymentScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    /* Padding(
-                      padding: EdgeInsets.only(top: 12.h),
-                      child: CustomTextField(
-                        textEditingController:
-                        BookTrackJoinEventController
-                            .to.peopleNumberForEventController.value,
-                        title: AppStaticString.selectPeople,
-                        keyboardType: TextInputType.number,
-                        onFieldSubmitted: (p0) {
-                          BookTrackJoinEventController
-                              .to.selectedValue.value =int.parse(p0);
-                        },
-                      ),
-                    ),*/
-                    type == event
-                        ? Column(
+
+                    Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               space8H,
@@ -237,16 +213,7 @@ class BookTrackJoinEventPaymentScreen extends StatelessWidget {
                               }),
                             ],
                           )
-                        : Padding(
-                            padding: EdgeInsets.only(top: 12.h),
-                            child: CustomTextField(
-                              textEditingController:
-                                  BookTrackJoinEventController
-                                      .to.peopleNumberController.value,
-                              title: AppStaticString.selectPeople,
-                              keyboardType: TextInputType.number,
-                            ),
-                          ),
+
                   ],
                 ),
               ),
@@ -259,10 +226,7 @@ class BookTrackJoinEventPaymentScreen extends StatelessWidget {
                 isLoading:
                     BookTrackJoinEventController.to.isLoadingBookTrack.value,
                 onTap: () {
-                  if (slot is TrackSlots) {
-                    BookTrackJoinEventController.to
-                        .bookTrackSlotCall(slotId: slot.sId ?? '');
-                  } else if (slot is EventSlots) {
+                   if (slot is EventSlots) {
                     BookTrackJoinEventController.to.joinEventSlotCall(price:slot.price??0,eventId:eventData.value!.sId??'' ,slotId: slot.sId??'');
                   }
                 },

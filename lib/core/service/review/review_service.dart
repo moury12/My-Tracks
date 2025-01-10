@@ -8,14 +8,13 @@ import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/init/api_client.dart';
 import 'package:track_trek/core/init/hive_boxes.dart';
 import 'package:track_trek/core/model/review/review_model.dart';
-import 'package:track_trek/core/model/review/review_model.dart';
-import 'package:track_trek/core/model/review/review_model.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 
 class ReviewService {
   static Future<String> likeDislikeRequest({
     required String trackId,
-  }) async {
+  })
+  async {
     try {
       final url = Uri.parse('${ApiClient.getLikeDisLikeUrl}?trackId=$trackId');
       final headers = {
@@ -55,11 +54,11 @@ class ReviewService {
 
   static Future<bool> postReviewRequest({
     required String trackId,
-    required String rating,
+    required double rating,
     required String review,
   }) async {
     try {
-      final url = Uri.parse('${ApiClient.getLikeDisLikeUrl}?trackId=$trackId');
+      final url = Uri.parse(ApiClient.postReviewUrl);
       final headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',

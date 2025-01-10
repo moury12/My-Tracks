@@ -4,6 +4,7 @@ import 'package:track_trek/controller/network_controller.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/model/booking/event_booking_model.dart';
 import 'package:track_trek/core/model/booking/track_booking_model.dart';
+import 'package:track_trek/core/service/review/review_service.dart';
 import 'package:track_trek/core/service/track-event/track_event_service.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 
@@ -17,6 +18,7 @@ class BookingManagementController extends GetxController {
   }
   var selectedLabel = 0.obs;
   var selectedTab = 0.obs;
+  RxDouble ratingValue = 2.5.obs;
 
   ///============================dynamic list variable==========================///
   RxList<String> tabs = [AppStaticString.track, AppStaticString.event].obs;
@@ -37,8 +39,11 @@ class BookingManagementController extends GetxController {
 
   RxBool isLoadingHistoryBooking= false.obs;
   RxBool isLoadingEventHistoryBooking= false.obs;
+  RxBool isLoadingRating= false.obs;
 
+  ///========================dynamic controller variable======================///
 
+  TextEditingController reviewController = TextEditingController();
   // void fetchInitialData() async {
   //   await Future.wait([
   //     getTrackBookingListCall(),
@@ -139,6 +144,22 @@ class BookingManagementController extends GetxController {
       }
     } else {
       isLoadingEventHistoryBooking.value = false;
+      noInternetShowCustomSnackbar();
+    }
+  }
+  postReviewCall({required String trackId,}) async {
+    if (NetworkController.to.isConnected.value) {
+      isLoadingRating.value = true;
+      bool isGivenRating = await ReviewService.postReviewRequest(trackId:
+      trackId, review: reviewController.text,rating: ratingValue.value);
+      if (isGivenRating) {
+        isLoadingRating.value = false;
+
+      } else {
+        isLoadingRating.value = false;
+      }
+    } else {
+      isLoadingRating.value = false;
       noInternetShowCustomSnackbar();
     }
   }
