@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
+import 'package:track_trek/controller/booking_management_controller.dart';
 import 'package:track_trek/controller/common_controller.dart';
 import 'package:track_trek/controller/home_controller.dart';
 import 'package:track_trek/controller/home_user_controller.dart';
@@ -29,6 +30,7 @@ class SplashController extends GetxController {
                 : 0.obs;
         if (Boxes.getUserData().get(roleKey) == 'USER') {
           Get.put(HomeUserController());
+          Get.put(BookingManagementController());
         } else {
           Get.put(HomeController() /*,permanent: true*/);
           Get.put(TrackManagementController());

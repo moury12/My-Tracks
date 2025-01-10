@@ -9,6 +9,12 @@ import 'package:track_trek/core/utils/helper_function.dart';
 
 class BookingManagementController extends GetxController {
   static BookingManagementController get to => Get.find();
+  @override
+  void onInit() async{
+   await getTrackBookingListCall();
+   await getEventBookingListCall();
+    super.onInit();
+  }
   var selectedLabel = 0.obs;
 
   ///============================dynamic list variable==========================///
@@ -31,20 +37,30 @@ class BookingManagementController extends GetxController {
   RxBool isLoadingHistoryBooking= false.obs;
   RxBool isLoadingEventHistoryBooking= false.obs;
 
-  void handleTabChange(int tabIndex){
+
+  // void fetchInitialData() async {
+  //   await Future.wait([
+  //     getTrackBookingListCall(),
+  //     getEventBookingListCall(),
+  //   ]);
+  // }
+
+  void handleTabChange(int tabIndex)async{
     final isTrackTab =selectedLabel.value==0;
 
       if (tabIndex == 1) {
         if (isTrackTab) {
           isLoadingHistoryBooking.value = true;
           trackHistory.value = 'yes';
-          getTrackBookingListCall();
+         await getTrackBookingListCall();
+         trackBookingList.refresh();
           isLoadingHistoryBooking.value = false;
         } else {
           isLoadingEventHistoryBooking.value = true;
 
           eventHistory.value = 'yes';
-          getEventBookingListCall();
+       await   getEventBookingListCall();
+       eventBookingList.refresh();
           isLoadingEventHistoryBooking.value = false;
 
         }
@@ -53,13 +69,15 @@ class BookingManagementController extends GetxController {
           isLoadingHistoryBooking.value = true;
 
           trackHistory.value = '';
-          getTrackBookingListCall();
+         await getTrackBookingListCall();
+         trackBookingList.refresh();
           isLoadingHistoryBooking.value = false;
         } else {
           isLoadingEventHistoryBooking.value = true;
 
           eventHistory.value = '';
-          getEventBookingListCall();
+       await   getEventBookingListCall();
+       eventBookingList.refresh();
           isLoadingEventHistoryBooking.value = false;
         }
       }
@@ -68,8 +86,9 @@ class BookingManagementController extends GetxController {
   getTrackBookingListCall() async {
     if (NetworkController.to.isConnected.value) {
       isLoadingHistoryBooking.value = true;
-      trackBookingList.value = await TrackEventService.getTrackBookingCall(
-         history: trackHistory.value );
+      var response = await TrackEventService.getTrackBookingCall(history: trackHistory.value);
+      trackBookingList.assignAll(response.isNotEmpty ? response : []);
+
       if (trackBookingList.isNotEmpty) {
         isLoadingHistoryBooking.value = false;
       } else {
@@ -95,10 +114,5 @@ class BookingManagementController extends GetxController {
       noInternetShowCustomSnackbar();
     }
   }
-  @override
-  void onInit() {
-    getTrackBookingListCall();
-    getEventBookingListCall();
-    super.onInit();
-  }
+
 }

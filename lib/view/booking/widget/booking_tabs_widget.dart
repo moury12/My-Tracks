@@ -5,13 +5,15 @@ import 'package:track_trek/controller/booking_management_controller.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 
-import '../../../core/constant/custom_space.dart';
 
 class BookingTabsWidget extends StatelessWidget {
   const BookingTabsWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+/*
+    Get.put(BookingManagementController());
+*/
     return Obx(() {
       return Row(
         spacing: 16.w,

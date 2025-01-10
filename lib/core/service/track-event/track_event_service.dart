@@ -173,7 +173,8 @@ class TrackEventService {
 
   static Future<List<TrackHistoryRunningModel>> getTrackBookingCall({
     String history = '',
-  }) async {
+  })
+  async {
     List<TrackHistoryRunningModel> trackBookingList = [];
     try {
       final url = Uri.parse(
@@ -205,7 +206,7 @@ class TrackEventService {
         return trackBookingList;
       }
     } catch (e) {
-      debugPrint(e.toString());
+      print("Error in getTrackBookingCall: $e");
     }
     return trackBookingList;
   }

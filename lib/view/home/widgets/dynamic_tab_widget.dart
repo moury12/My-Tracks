@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -13,63 +12,57 @@ class DynamicTabWidget extends StatelessWidget {
   final RxList<String> tabs;
   final RxList<Widget> tabContent;
   final Function(int)? function;
-  const DynamicTabWidget({super.key, required this.tabs, required this.tabContent, this.function});
+  const DynamicTabWidget(
+      {super.key, required this.tabs, required this.tabContent, this.function});
 
   @override
   Widget build(BuildContext context) {
-
-
-    return Obx(
-      () {
-        return DefaultTabController(
-
-          length: tabs.length,
-          // Dynamically set the number of tabs
-          child: Column(
-            children: [
-              space16H,
-              TabBar(
-                // padding: EdgeInsets.zero,
-        overlayColor: const WidgetStatePropertyAll<Color>(AppColors.blackBorderColor),
-                 // isScrollable: true,
-                dividerHeight: 4.h,
-                indicatorSize: TabBarIndicatorSize.tab,
-                indicator: UnderlineTabIndicator(
-                  borderRadius:
-                  BorderRadius.vertical(top: Radius.circular(20.r)),
-                  borderSide: BorderSide(
-                    color: AppColors.blueColor,
-                    width: 10.w,
-                  ),
+    return Obx(() {
+      return DefaultTabController(
+        length: tabs.length,
+        // Dynamically set the number of tabs
+        child: Column(
+          children: [
+            space16H,
+            TabBar(
+              // padding: EdgeInsets.zero,
+              overlayColor: const WidgetStatePropertyAll<Color>(
+                  AppColors.blackBorderColor),
+              // isScrollable: true,
+              dividerHeight: 4.h,
+              indicatorSize: TabBarIndicatorSize.tab,
+              indicator: UnderlineTabIndicator(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+                borderSide: BorderSide(
+                  color: AppColors.blueColor,
+                  width: 10.w,
                 ),
-                labelColor: AppColors.whiteLightColor,
-                unselectedLabelColor: AppColors.whiteLightColor,
-                labelStyle: poppinsRegular.copyWith(
-                    fontSize: getFontSizeDefault(context)),
-                unselectedLabelStyle: poppinsMedium.copyWith(
-                    fontSize: getFontSizeDefault(context)),
-                dividerColor: AppColors.blackLightColor,
-                onTap:function?? (value) {
-
-                },
-                tabs: tabs
-                    .map((tabName) => Padding(
-                  padding: padding16b24,
-                  child: FittedBox(
-                    child: Text(
-                      tabName,
-                    ),
-                  ),
-                ))
-                    .toList(),
               ),
+              labelColor: AppColors.whiteLightColor,
+              unselectedLabelColor: AppColors.whiteLightColor,
+              labelStyle: poppinsRegular.copyWith(
+                  fontSize: getFontSizeDefault(context)),
+              unselectedLabelStyle:
+                  poppinsMedium.copyWith(fontSize: getFontSizeDefault(context)),
+              dividerColor: AppColors.blackLightColor,
+              onTap: function ?? (value) {},
+              tabs: tabs
+                  .map((tabName) => Padding(
+                        padding: padding16b24,
+                        child: FittedBox(
+                          child: Text(
+                            tabName,
+                          ),
+                        ),
+                      ))
+                  .toList(),
+            ),
             TabContentView(
               children: tabContent.toList(),
             )
-            ],
-          ),
-        );
-      }
-    );
+          ],
+        ),
+      );
+    });
   }
 }

@@ -20,11 +20,13 @@ class BookingManagementScreen extends StatelessWidget {
           children: [
             const BookingTabsWidget(),
             DynamicTabWidget(
-                function: (p0)=>BookingManagementController.to.handleTabChange(p0) ,
+
+                function: (p0) =>
+                    BookingManagementController.to.handleTabChange(p0),
                 tabs: BookingManagementController.to.labelTabs,
                 tabContent: [
-                  const BookingTabContent(),
-                  const BookingTabContent(),
+                  const BookingTabContent(index: 0,),
+                  const BookingTabContent(index: 1,),
                 ].obs)
           ],
         ),
@@ -32,5 +34,3 @@ class BookingManagementScreen extends StatelessWidget {
     );
   }
 }
-
-

@@ -1,4 +1,3 @@
-import '../track-event/single_event_model.dart';
 
 class TrackHistoryRunningModel {
   String? sId;
@@ -11,7 +10,7 @@ class TrackHistoryRunningModel {
   int? price;
   int? numOfPeople;
   String? status;
-  List<MoreInfo>? moreInfo;
+  List<dynamic>? moreInfo;
   String? createdAt;
   String? updatedAt;
   int? iV;
@@ -47,9 +46,9 @@ class TrackHistoryRunningModel {
     status = json['status'];
     if (json['moreInfo'] != null) {
       moreInfo = [];
-      json['moreInfo'].forEach((v) {
+   /*   json['moreInfo'].forEach((v) {
         moreInfo!.add(MoreInfo.fromJson(v));
-      });
+      });*/
     } else {
       moreInfo = []; // Default to empty list
     }
