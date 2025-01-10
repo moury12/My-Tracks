@@ -22,7 +22,7 @@ class BookingListWidget<T> extends StatelessWidget {
 */
     return Obx(
       () {
-        return dataList.isEmpty?
+        return  dataList.isEmpty?
         EmptyTextWidget(text: emptyText): Column(
           children: List.generate(
            dataList.length,

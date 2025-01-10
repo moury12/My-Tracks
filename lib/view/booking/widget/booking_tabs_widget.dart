@@ -34,8 +34,8 @@ class BookingTabsWidget extends StatelessWidget {
                       padding: padding12,
                       radius: 4.r,
                       onTap: () {
-                        BookingManagementController
-                            .to.selectedLabel.value = index;
+                       BookingManagementController.to.handleLabelChange(index);
+
                         // print(BookingManagementController.to.selectedLabel.value);
                       },
                       text: BookingManagementController

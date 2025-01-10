@@ -16,6 +16,7 @@ class BookingManagementController extends GetxController {
     super.onInit();
   }
   var selectedLabel = 0.obs;
+  var selectedTab = 0.obs;
 
   ///============================dynamic list variable==========================///
   RxList<String> tabs = [AppStaticString.track, AppStaticString.event].obs;
@@ -81,6 +82,33 @@ class BookingManagementController extends GetxController {
           isLoadingEventHistoryBooking.value = false;
         }
       }
+
+  }
+  handleLabelChange(int index) async{
+    BookingManagementController
+        .to.selectedLabel.value = index;
+    if( BookingManagementController
+        .to.selectedLabel.value ==0){
+      BookingManagementController.to.isLoadingHistoryBooking.value = true;
+
+    }else{
+      BookingManagementController.to.isLoadingEventHistoryBooking.value = true;
+    }
+    if(selectedTab.value==1){
+      eventHistory.value = 'yes';
+      await   getEventBookingListCall();
+      eventBookingList.refresh();
+      trackHistory.value = 'yes';
+      await getTrackBookingListCall();
+      trackBookingList.refresh();
+    }else{
+      trackHistory.value = '';
+      await getTrackBookingListCall();
+      trackBookingList.refresh();
+      eventHistory.value = '';
+      await   getEventBookingListCall();
+      eventBookingList.refresh();
+    }
 
   }
   getTrackBookingListCall() async {
