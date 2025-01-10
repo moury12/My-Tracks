@@ -89,10 +89,13 @@ class EmptyTextWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        text,
-        style: poppinsMedium.copyWith(fontSize: getFontSizeDefault(context)),
+    return Padding(
+      padding: padding8,
+      child: Center(
+        child: Text(
+          text,
+          style: poppinsMedium.copyWith(fontSize: getFontSizeDefault(context)),
+        ),
       ),
     );
   }

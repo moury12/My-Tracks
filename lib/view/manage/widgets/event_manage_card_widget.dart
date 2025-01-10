@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:track_trek/core/components/custom_network_image.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
 import 'package:track_trek/core/constant/image_constants.dart';
-import 'package:track_trek/core/global/string_variable.dart';
+import 'package:track_trek/core/model/booking/event_booking_model.dart';
+import 'package:track_trek/core/model/booking/track_booking_model.dart';
 import 'package:track_trek/core/model/participants/event_participants_model.dart';
 import 'package:track_trek/core/model/participants/track_participants_model.dart';
 import 'package:track_trek/core/model/renter/renters_model.dart';
 import 'package:track_trek/core/utils/app_color.dart';
+import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/core/utils/text_style.dart';
-import 'package:track_trek/view/home/host/user_details_page.dart';
 import 'package:track_trek/view/home/widgets/event_card_widget.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 import 'package:track_trek/view/home/widgets/track_card_widget.dart';
@@ -38,57 +38,53 @@ class MarronGradientContainerWidget extends StatelessWidget {
 }
 
 class TrackEventInfoContentWidget extends StatelessWidget {
-  final bool noArrowButton;
+  final TrackHistoryRunningModel? trackRunningModel;
+  final EventHistoryRunningModel? eventModel;
   const TrackEventInfoContentWidget({
     super.key,
-    this.noArrowButton = false,
+     this.trackRunningModel, this.eventModel,
   });
 
   @override
   Widget build(BuildContext context) {
+    final String name = eventModel!=null?eventModel!.event!.eventName??'':'n/a';
+    final String location = eventModel!=null?eventModel!.event!.address??'':'n/a';
+    final String date = eventModel!=null?formatDateTime(eventModel!.startDateTime??''):'n/a';
+    final String totalPerson = eventModel!=null?eventModel!.numOfPeople.toString():'n/a';
+    final String price = eventModel!=null?eventModel!.price.toString():'n/a';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          AppStaticString.dummyEvent,
+          name,
           style: poppinsMedium.copyWith(fontSize: getFontSizeSmall(context)),
         ),
         space12H,
         Text(
-          '${AppStaticString.locationWithClone} Rock Hill BMX Supercross Track (USA)',
+          '${AppStaticString.locationWithClone} $location',
           style: poppinsRegular.copyWith(fontSize: getFontSizeSmall(context)),
         ),
         space12H,
         Text(
-          '${AppStaticString.dateWithClone} 5 january ${AppStaticString.dummyTime}',
+          '${AppStaticString.dateWithClone} $date',
           style: poppinsRegular.copyWith(fontSize: getFontSizeSmall(context)),
         ),
         space12H,
         Row(
           children: [
-            const BlueTextWidget(),
+             BlueTextWidget(text:'${AppStaticString.priceWithClone}\$$price',),
             const DividerVertical(),
             Expanded(
               child: Row(
                 children: [
                   Expanded(
                     child: Text(
-                      '${AppStaticString.totalAllowed}20',
+                      '${AppStaticString.totalAllowed}$totalPerson',
                       style: poppinsRegular.copyWith(
                           fontSize: getFontSizeSmall(context)),
                     ),
                   ),
-                  noArrowButton == true
-                      ? const SizedBox.shrink()
-                      : IconButton(
-                          onPressed: () {
-                            Get.toNamed(UserDetailsScreen.routeName,
-                                arguments: userPanel);
-                          },
-                          icon: Image.asset(
-                            arrowForwardIconUrl,
-                            height: 24.w,
-                          ))
+
                 ],
               ),
             )
@@ -142,7 +138,7 @@ class UserInfoContentWidget extends StatelessWidget {
                 boxShape: BoxShape.circle,
                 imageErrorUrl: dummyProfileImgUrl,
               )
-            : ProfileCircleImageWidget(),
+            : const ProfileCircleImageWidget(),
         space16W,
         Expanded(
           child: Column(
@@ -179,7 +175,7 @@ class UserInfoContentWidget extends StatelessWidget {
                               text: '${info.label} : ${info.value} ');
                         },
                       ))
-                  : SizedBox.shrink() , rentersModel != null &&
+                  : const SizedBox.shrink() , rentersModel != null &&
                       rentersModel!.moreInfo != null &&
                       rentersModel!.moreInfo!.isNotEmpty
                   ? Column(
@@ -192,7 +188,7 @@ class UserInfoContentWidget extends StatelessWidget {
                               text: '${info.label} : ${info.value} ');
                         },
                       ))
-                  : SizedBox.shrink()
+                  : const SizedBox.shrink()
             ],
           ),
         ),

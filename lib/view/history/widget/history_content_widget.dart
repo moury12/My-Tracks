@@ -8,20 +8,39 @@ import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
 import 'package:track_trek/core/constant/image_constants.dart';
+import 'package:track_trek/core/model/booking/event_booking_model.dart';
+import 'package:track_trek/core/model/booking/track_booking_model.dart';
 import 'package:track_trek/core/utils/app_color.dart';
+import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/add/widgets/buttons.dart';
 import 'package:track_trek/view/add/widgets/delete_alert_dialog.dart';
 
 class HistoryContentWidget extends StatelessWidget {
   final bool? addRating;
+  final TrackHistoryRunningModel? trackModel;
+  final EventHistoryRunningModel? eventModel;
   const HistoryContentWidget({
     super.key,
     this.addRating = false,
+    this.trackModel,
+    this.eventModel,
   });
 
   @override
   Widget build(BuildContext context) {
+    final String name =
+        trackModel != null ? trackModel!.trackSlot!.slotNo.toString() : 'n/a';
+    final String price =
+        trackModel != null ? trackModel!.price.toString() : 'n/a';
+    final String day =
+        trackModel != null ? trackModel!.trackSlot!.day.toString() : 'n/a';
+    final String startDateTime = trackModel != null
+        ? formatDateTime(trackModel!.startDateTime ?? '').toString()
+        : 'n/a';
+    final String endDateTime = trackModel != null
+        ? formatDateTime(trackModel!.endDateTime ?? '').toString()
+        : 'n/a';
     return Column(
       spacing: 6.h,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,7 +51,7 @@ class HistoryContentWidget extends StatelessWidget {
             ///===================dynamic slot no =============================///
             Expanded(
                 child: Text(
-              '${AppStaticString.slotNumber} 01',
+              '${AppStaticString.slotNumber} $name',
               style: poppinsSemiBold.copyWith(
                   fontSize: getFontSizeExtraLarge(context)),
             )),
@@ -41,7 +60,7 @@ class HistoryContentWidget extends StatelessWidget {
 
             Expanded(
                 child: Text(
-              '${AppStaticString.fee} \$120',
+              '${AppStaticString.fee} \$$price',
               textAlign: TextAlign.end,
               style: poppinsSemiBold.copyWith(
                   color: AppColors.normalDarkWhite,
@@ -55,16 +74,14 @@ class HistoryContentWidget extends StatelessWidget {
         Row(
           children: [
             Text(
-              AppStaticString.dummyDay,
+              day,
               style:
                   poppinsMedium.copyWith(fontSize: getFontSizeDefault(context)),
             ),
             const Spacer(),
 
             ///=======================rating button=================///
-            addRating == true
-                ? RattingButtonWidget()
-                : const SizedBox.shrink()
+            addRating == true ? RattingButtonWidget() : const SizedBox.shrink()
           ],
         ),
         Text(
@@ -75,7 +92,7 @@ class HistoryContentWidget extends StatelessWidget {
         ///===================dynamic start date time =============================///
 
         Text(
-          '${AppStaticString.dummyDate}${AppStaticString.dummyTime}',
+          startDateTime,
           style: poppinsMedium.copyWith(
               color: AppColors.primaryColor,
               fontSize: getFontSizeSmall(context)),
@@ -88,7 +105,7 @@ class HistoryContentWidget extends StatelessWidget {
         ///===================dynamic end date time =============================///
 
         Text(
-          '${AppStaticString.dummyDate}${AppStaticString.dummyTime}',
+          endDateTime,
           style: poppinsMedium.copyWith(
               color: AppColors.blueColor, fontSize: getFontSizeSmall(context)),
         ),
@@ -105,65 +122,70 @@ class RattingButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomTextButton(
-        fontSize: getFontSizeDefault(context),
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) => DefaultDialogWithButton(
-              title: AppStaticString.rating,
-              content: Column(
-                spacing: 16.h,
-                children: [
-                  space6H,
+      fontSize: getFontSizeDefault(context),
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (context) => DefaultDialogWithButton(
+            title: AppStaticString.rating,
+            content: Column(
+              spacing: 16.h,
+              children: [
+                space6H,
                 RatingBar(
-                initialRating: 3,
-                direction: Axis.horizontal,
-                allowHalfRating: true,
-                itemCount: 5,
-                ratingWidget: RatingWidget(
-                  full: Image.asset(starFillIconUrl),
-        half:Image.asset(starFillIconUrl),
-                  empty:Image.asset(starIconUrl),
+                  initialRating: 3,
+                  direction: Axis.horizontal,
+                  allowHalfRating: true,
+                  itemCount: 5,
+                  ratingWidget: RatingWidget(
+                    full: Image.asset(starFillIconUrl),
+                    half: Image.asset(starFillIconUrl),
+                    empty: Image.asset(starIconUrl),
+                  ),
+                  itemPadding: EdgeInsets.symmetric(horizontal: 4.sp),
+                  onRatingUpdate: (rating) {},
                 ),
-                itemPadding: EdgeInsets.symmetric(horizontal: 4.sp),
-                onRatingUpdate: (rating) {
-
-                },
-              ),
-                  CustomTextField(title: AppStaticString.feedback,
+                CustomTextField(
+                  title: AppStaticString.feedback,
                   maxLines: 3,
                   textInputAction: TextInputAction.newline,
-                  keyboardType: TextInputType.multiline,),
+                  keyboardType: TextInputType.multiline,
+                ),
                 space6H,
-                ],
-              ),
-              rowButton: Row(
-                spacing: 16.w,
-                children: [
-                  Expanded(
-                    child: CustomButton(onTap: () {
+              ],
+            ),
+            rowButton: Row(
+              spacing: 16.w,
+              children: [
+                Expanded(
+                  child: CustomButton(
+                    onTap: () {
                       Navigator.pop(context);
                     },
                     fillColor: AppColors.redBrightColor,
                     borderColor: AppColors.redBrightColor,
                     title: AppStaticString.cancel,
-                    textColor: AppColors.blackLightColor,),
-                  ),Expanded(
-                    child: CustomButton(onTap: () {
+                    textColor: AppColors.blackLightColor,
+                  ),
+                ),
+                Expanded(
+                  child: CustomButton(
+                    onTap: () {
                       Navigator.pop(context);
                     },
                     fillColor: AppColors.blueColor,
                     borderColor: AppColors.blueColor,
                     title: AppStaticString.send,
-                    textColor: AppColors.blackLightColor,),
-                  )
-                ],
-              ),
+                    textColor: AppColors.blackLightColor,
+                  ),
+                )
+              ],
             ),
-          );
-        },
-        title: AppStaticString.rating,
-        textColor: AppColors.yellowColor,
-      );
+          ),
+        );
+      },
+      title: AppStaticString.rating,
+      textColor: AppColors.yellowColor,
+    );
   }
 }

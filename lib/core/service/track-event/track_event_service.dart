@@ -9,6 +9,8 @@ import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/init/api_client.dart';
 import 'package:track_trek/core/init/hive_boxes.dart';
+import 'package:track_trek/core/model/booking/event_booking_model.dart';
+import 'package:track_trek/core/model/booking/track_booking_model.dart';
 import 'package:track_trek/core/model/category/category_model.dart';
 import 'package:track_trek/core/model/participants/event_participants_model.dart';
 import 'package:track_trek/core/model/participants/track_participants_model.dart';
@@ -27,8 +29,7 @@ class TrackEventService {
       required String longitude,
       required String latitude,
       required String description,
-      required List<File>? files})
-  async {
+      required List<File>? files}) async {
     try {
       final request = http.MultipartRequest(
         'POST',
@@ -96,8 +97,7 @@ class TrackEventService {
     }
   }
 
-  static Future<List<CategoryModel>> getCategoryListCall()
-  async {
+  static Future<List<CategoryModel>> getCategoryListCall() async {
     List<CategoryModel> category = [];
     try {
       final url = Uri.parse('${ApiClient.categoryUrl}?page=1&limit=1000');
@@ -135,8 +135,7 @@ class TrackEventService {
   static Future<List<TrackSlots>> getSlotListCall({
     required String date,
     required String trackId,
-  })
-  async {
+  }) async {
     List<TrackSlots> slotList = [];
     try {
       final url = Uri.parse(
@@ -172,11 +171,49 @@ class TrackEventService {
     return slotList;
   }
 
+  static Future<List<TrackHistoryRunningModel>> getTrackBookingCall({
+    String history = '',
+  }) async {
+    List<TrackHistoryRunningModel> trackBookingList = [];
+    try {
+      final url = Uri.parse(
+          '${ApiClient.getBookingUrl}${history.isNotEmpty ? '?history=yes' : ''}');
+      final headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
+      };
+
+      final response = await http.get(
+        url,
+        headers: headers,
+      );
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      log('-----------------booking track list call--------------------');
+      log(url.toString());
+      log(responseData.toString());
+      if (responseData['success'] != null && responseData['success'] == true) {
+        trackBookingList = responseData['data'].forEach((e) {
+          trackBookingList.add(TrackHistoryRunningModel.fromJson(e));
+        });
+        return trackBookingList;
+      } else {
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
+        return trackBookingList;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return trackBookingList;
+  }
+
   static Future<bool> updateTrackRequest({
     required String trackId,
     required List<String> trackDays,
-  })
-  async {
+  }) async {
     try {
       final url = Uri.parse(ApiClient.updateTrackUrl);
       final headers = {
@@ -222,8 +259,7 @@ class TrackEventService {
     required String price,
     required String maxPeople,
     required String description,
-  })
-  async {
+  }) async {
     try {
       final url = Uri.parse(ApiClient.createTrackSlotUrl);
       final headers = {
@@ -268,12 +304,12 @@ class TrackEventService {
       return false;
     }
   }
+
   static Future<bool> bookTrackSlotRequest({
     required String slotId,
     required String numOfPeople,
     required String date,
-  })
-  async {
+  }) async {
     try {
       final url = Uri.parse(ApiClient.getBookASlotUrl);
       final headers = {
@@ -281,11 +317,8 @@ class TrackEventService {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
       };
-      final body = jsonEncode({
-        "slotId": slotId,
-        "numOfPeople":numOfPeople,
-        "date": date
-      });
+      final body = jsonEncode(
+          {"slotId": slotId, "numOfPeople": numOfPeople, "date": date});
       final response = await http.post(url, headers: headers, body: body);
       final responseData = json.decode(response.body);
       log('-----------------book track slot call--------------------');
@@ -316,8 +349,7 @@ class TrackEventService {
 
   static Future<SingleTrackModel> getSingleTrackData({
     required String trackId,
-  })
-  async {
+  }) async {
     SingleTrackModel singleTrackDetails = SingleTrackModel();
     try {
       final url = Uri.parse(
@@ -352,8 +384,7 @@ class TrackEventService {
   }
 
   static Future<bool> deleteSlotRequest(
-      {required String slotId, bool? isEvent})
-  async {
+      {required String slotId, bool? isEvent}) async {
     try {
       final url = Uri.parse(ApiClient.deleteSlotUrl);
       final headers = {
@@ -398,8 +429,7 @@ class TrackEventService {
 
   static Future<String> addEventCall(
       {required Map<String, dynamic> bodyData,
-      required List<File>? files})
-  async {
+      required List<File>? files}) async {
     try {
       final request = http.MultipartRequest(
         'POST',
@@ -462,10 +492,47 @@ class TrackEventService {
     }
   }
 
+  static Future<List<EventHistoryRunningModel>> getEventBookingCall({
+    String history = '',
+  }) async {
+    List<EventHistoryRunningModel> eventBookingList = [];
+    try {
+      final url = Uri.parse(
+          '${ApiClient.getBookingUrl}?data=event${history.isNotEmpty ? '&history=yes' : ''}');
+      final headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
+      };
+
+      final response = await http.get(
+        url,
+        headers: headers,
+      );
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      log('-----------------booking event list call--------------------');
+      log(responseData.toString());
+      if (responseData['success'] != null && responseData['success'] == true) {
+        eventBookingList = responseData['data'].forEach((e) {
+          eventBookingList.add(EventHistoryRunningModel.fromJson(e));
+        });
+        return eventBookingList;
+      } else {
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
+        return eventBookingList;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return eventBookingList;
+  }
+
   static Future<SingleEventModel> getSingleEventData({
     required String eventId,
-  })
-  async {
+  }) async {
     SingleEventModel singleEventDetails = SingleEventModel();
     try {
       final url = Uri.parse(
@@ -505,8 +572,7 @@ class TrackEventService {
     required String maxPeople,
     required String price,
     required String description,
-  })
-  async {
+  }) async {
     try {
       final url = Uri.parse(ApiClient.createTrackSlotUrl);
       final headers = {
@@ -548,14 +614,13 @@ class TrackEventService {
       return false;
     }
   }
+
   static Future<bool> joinEventSlotRequest({
     required String eventId,
     required String slotId,
     required int price,
     required List<dynamic> data,
-
-  })
-  async {
+  }) async {
     try {
       final url = Uri.parse(ApiClient.getJoinEventUrl);
       final headers = {
@@ -568,7 +633,6 @@ class TrackEventService {
         "slotId": slotId,
         "data": data,
         "price": price,
-
       });
       final response = await http.post(url, headers: headers, body: body);
       final responseData = json.decode(response.body);

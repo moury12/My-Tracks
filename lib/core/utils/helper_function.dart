@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:track_trek/controller/profile_controller.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
@@ -213,7 +212,7 @@ Future<String> selectDate(
             confirmButtonStyle: const ButtonStyle(
               foregroundColor: WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
             ),
-            rangePickerHeaderHeadlineStyle: TextStyle(color: AppColors.blackLightColor),
+            rangePickerHeaderHeadlineStyle: const TextStyle(color: AppColors.blackLightColor),
             rangePickerSurfaceTintColor: AppColors.blackLightColor,
             cancelButtonStyle: const ButtonStyle(
               foregroundColor: WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
@@ -225,7 +224,7 @@ Future<String> selectDate(
               color: AppColors.blackLightColor,
               fontSize: 16.sp,
             ),
-            inputDecorationTheme: InputDecorationTheme(fillColor: AppColors.blackLightColor),
+            inputDecorationTheme: const InputDecorationTheme(fillColor: AppColors.blackLightColor),
             weekdayStyle: TextStyle(
               color: AppColors.blackLightColor, // Color for week names
               fontSize: 14.sp,
@@ -281,7 +280,24 @@ String formatTimestamp({
     return DateFormat(format).format(parsedDate);
   } catch (e) {
     // Handle parsing or formatting errors
-    print('Error formatting timestamp: $e');
     return '';
   }
-}
+}String formatDateTime(String isoDateTime) {
+  try {
+    // Parse the ISO date-time string
+    final DateTime dateTime = DateTime.parse(isoDateTime);
+
+    // Convert to local time if necessary
+    final DateTime localDateTime = dateTime.toLocal();
+
+    // Format date and time
+    final String formattedDate = DateFormat('MM/dd/yyyy').format(localDateTime);
+    final String startTime = DateFormat('hh:mma').format(localDateTime);
+    final String endTime = DateFormat('hh:mma')
+        .format(localDateTime.add(const Duration(hours: 2))); // 2-hour range
+
+    return "$formattedDate $startTime - $endTime";
+  } catch (e) {
+    // Handle parsing errors gracefully
+    return 'Invalid date';
+  }}
