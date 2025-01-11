@@ -8,7 +8,6 @@ import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/model/category/category_model.dart';
 import 'package:track_trek/core/model/location/place_search_model.dart';
 import 'package:track_trek/core/model/track-event/single_event_model.dart';
-import 'package:track_trek/core/model/track-event/single_event_model.dart';
 import 'package:track_trek/core/model/track-event/single_track_model.dart';
 import 'package:track_trek/core/service/track-event/track_event_service.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
@@ -67,10 +66,22 @@ class CreateTrackEventController extends GetxController {
                   ? 'A dummy is a type of doll that looks like a person. Entertainers called ventriloquists can make dummies appear to talk. The automobile industry uses dummies in cars to study how safe cars are during a crash. A dummy can also be anything that looks real but doesn\'t work: a fake.'
                   : '')
           .obs;
-  Rx<TextEditingController> fieldNameController =
-      TextEditingController(text: kDebugMode ? 'NID' : '').obs;
-  RxList<TextEditingController> eventControllerList =
-      <TextEditingController>[].obs;
+
+  ///======================upload event focusnode========================///
+  ///
+  FocusNode uploadEventTotalSeatFocusNode = FocusNode();
+  FocusNode uploadEventPriceFocusNode = FocusNode();
+  FocusNode slotNoFocusNodeForEvent = FocusNode();
+
+  FocusNode uploadEventDescriptionFocusNode = FocusNode();
+
+  ///======================upload track focusnode========================///
+
+  FocusNode uploadTrackPeopleNumberFocusNode = FocusNode();
+  FocusNode uploadTrackPriceFocusNode = FocusNode();
+  FocusNode slotNoFocusNodeForTrack = FocusNode();
+
+  FocusNode uploadTrackDescriptionFocusNode = FocusNode();
 
   ///=================dynamic lists=============================///
   RxList<String> eventNameControllerList = <String>[].obs;
@@ -79,12 +90,17 @@ class CreateTrackEventController extends GetxController {
   Rx<SingleTrackModel> singleTrack = SingleTrackModel().obs;
   Rx<SingleEventModel> singleEvent = SingleEventModel().obs;
   RxList<CategoryModel> catList = <CategoryModel>[].obs;
+  Rx<TextEditingController> fieldNameController =
+      TextEditingController(text: kDebugMode ? 'NID' : '').obs;
+  RxList<TextEditingController> eventControllerList =
+      <TextEditingController>[].obs;
 
   ///=====================dynamic Strings=============================///
 
   var selectedCategory = Rx<String?>(null);
-  var destinationLat = Rx<String?>(null);
-  var destinationLng = Rx<String?>(null);
+  RxString destinationLat = ''.obs;
+  RxString destinationLng = ''.obs;
+  RxString selectedAddress = ''.obs;
   RxInt selectedDay = 0.obs;
   RxList<String> trackPhotosList = <String>[].obs;
   RxList<String> eventPhotosList = <String>[].obs;
@@ -106,6 +122,9 @@ class CreateTrackEventController extends GetxController {
   RxBool isLoadingEvent = false.obs;
   RxBool isLoadingCategory = false.obs;
   RxBool isLoadingPostEvent = false.obs;
+
+
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
   categoryListCall() async {
     if (NetworkController.to.isConnected.value) {
       isLoadingCategory.value = true;
@@ -158,7 +177,7 @@ class CreateTrackEventController extends GetxController {
       if (value.isNotEmpty) {
         isLoadingPostTrack.value = false;
         trackId.value = value;
-        trackPhotosList.clear();
+        clearAfterPostTrack();
         Get.toNamed(UploadTrackScreen.routeName, arguments: 'track');
         // navigator!.pop();
       } else {
@@ -218,6 +237,7 @@ class CreateTrackEventController extends GetxController {
       if (isUpdate) {
         isLoadingCreateSlot.value = false;
         getTrackDetailsCall(trackId: trackId.value);
+        clearAfterCreateSlotForTrack();
       }
 
       isLoadingCreateSlot.value = false;
@@ -292,6 +312,7 @@ class CreateTrackEventController extends GetxController {
         eventId.value = value;
         Get.toNamed(UploadTrackScreen.routeName, arguments: 'event');
         // navigator!.pop();
+        clearAfterPostEvent();
       } else {
         isLoadingPostEvent.value = false;
       }
@@ -313,6 +334,7 @@ class CreateTrackEventController extends GetxController {
       if (isUpdate) {
         isLoadingCreateSlot.value = false;
         getEventDetailsCall(eventId: eventId.value);
+        clearAfterCreateSlotForEvent();
       }
 
       isLoadingCreateSlot.value = false;
@@ -332,7 +354,6 @@ class CreateTrackEventController extends GetxController {
         isLoadingEvent.value = false;
       } else {
         isLoadingEvent.value = false;
-print(singleEvent.value.toString());
       }
     } else {
       isLoadingEvent.value = false;
@@ -346,6 +367,76 @@ print(singleEvent.value.toString());
     getWeekDays();
 
     super.onInit();
+  }
+
+  clearAfterPostTrack() {
+    trackPhotosList.clear();
+    trackNameController.value.clear();
+    trackLocationController.value.clear();
+    trackDescriptionController.value.clear();
+
+    selectedCategory.value = null;
+  }
+
+  clearAfterPostEvent() {
+    eventPhotosList.clear();
+    trackPhotosList.clear();
+    eventNameControllerList.clear();
+    eventNameController.value.clear();
+    eventStartDateController.value.clear();
+    eventEndDateController.value.clear();
+    eventDescriptionController.value.clear();
+    eventLocationController.value.clear();
+    selectedEventStartTime.value = '';
+    selectedEventEndTime.value = '';
+    selectedCategory.value = null;
+  }
+
+  clearAfterCreateSlotForTrack() {
+    slotNoController.value.clear();
+    uploadTrackDescriptionController.value.clear();
+    uploadTrackPriceController.value.clear();
+    uploadTrackPeopleNumberController.value.clear();
+    selectedEndTime.value = '';
+    selectedStartTime.value = '';
+    uploadTrackPeopleNumberFocusNode.unfocus();
+    uploadTrackPriceFocusNode.unfocus();
+    slotNoFocusNodeForTrack.unfocus();
+    uploadTrackDescriptionFocusNode.unfocus();
+  }
+
+  clearAfterCreateSlotForEvent() {
+    slotNoControllerForEvent.value.clear();
+    uploadEventTotalSeatController.value.clear();
+    uploadEventPriceController.value.clear();
+    uploadEventDescriptionController.value.clear();
+    FocusScope.of(Get.context!).unfocus();
+/*
+    formKey.currentState?.reset();
+*/
+    uploadEventTotalSeatFocusNode.unfocus();
+    uploadEventPriceFocusNode.unfocus();
+    slotNoFocusNodeForEvent.unfocus();
+    uploadEventDescriptionFocusNode.unfocus();
+  }
+
+  clearAfterPop() {
+    destinationLat.value = '';
+    destinationLng.value = '';
+    selectedAddress.value = '';
+    selectedDay.value = 0;
+    trackPhotosList.clear();
+    eventPhotosList.clear();
+    days.value = '0';
+    // trackId.value = '';
+    selectedWeekDay.value = '';
+    selectedStartTime.value = '';
+    selectedEndTime.value = '';
+    selectedEventStartTime.value = '';
+    selectedEventEndTime.value = '';
+    // eventId.value = '';
+    clearAfterPostTrack();
+    clearAfterPostTrack();
   }
 
   @override

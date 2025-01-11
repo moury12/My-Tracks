@@ -20,7 +20,7 @@ class ReviewModel {
     sId = json['_id'];
     user = json['user'] != null ? User.fromJson(json['user']) : null;
     track = json['track'];
-    rating = json['rating'];
+    rating = double.parse(json['rating'].toString());
     review = json['review'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];

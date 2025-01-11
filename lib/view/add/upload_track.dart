@@ -25,7 +25,7 @@ import 'package:track_trek/view/manage/widgets/event_manage_card_widget.dart';
 class UploadTrackScreen extends StatelessWidget {
   static String routeName = '/upload';
   UploadTrackScreen({super.key});
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,7 @@ class UploadTrackScreen extends StatelessWidget {
         padding: padding16,
         child: SingleChildScrollView(
           child: Form(
-            key: formKey,
+            key: CreateTrackEventController.to.formKey,
             child: Column(
               spacing: 16.h,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -293,7 +293,9 @@ class UploadTrackScreen extends StatelessWidget {
                                   .to.slotNoControllerForEvent.value
                               : CreateTrackEventController
                                   .to.slotNoController.value,
-                      validator: (value) {
+                          focusNode:argument != null && argument == 'event'?CreateTrackEventController.to.slotNoFocusNodeForEvent: CreateTrackEventController.to.slotNoFocusNodeForTrack ,
+
+                          validator: (value) {
                         if (value == null || value.isEmpty) {
                           return AppStaticString.slotNoRequired;
                         }
@@ -354,6 +356,7 @@ class UploadTrackScreen extends StatelessWidget {
                       : AppStaticString.howManyPeopleCanTrack,
                   hintText: AppStaticString.typeHere,
                   keyboardType: TextInputType.number,
+                  focusNode:argument != null && argument == 'event'?CreateTrackEventController.to.uploadEventTotalSeatFocusNode: CreateTrackEventController.to.uploadTrackPeopleNumberFocusNode ,
                   textEditingController: argument != null && argument == 'event'
                       ? CreateTrackEventController
                           .to.uploadEventTotalSeatController.value
@@ -379,6 +382,8 @@ class UploadTrackScreen extends StatelessWidget {
                           .to.uploadEventPriceController.value
                       : CreateTrackEventController
                           .to.uploadTrackPriceController.value,
+                  focusNode:argument != null && argument == 'event'?CreateTrackEventController.to.uploadEventPriceFocusNode: CreateTrackEventController.to.uploadTrackPriceFocusNode ,
+
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return AppStaticString.fieldRequired;
@@ -397,6 +402,9 @@ class UploadTrackScreen extends StatelessWidget {
                           .to.uploadEventDescriptionController.value
                       : CreateTrackEventController
                           .to.uploadTrackDescriptionController.value,
+                  focusNode:argument != null && argument == 'event'?CreateTrackEventController.to.uploadEventDescriptionFocusNode
+                      : CreateTrackEventController.to.uploadTrackDescriptionFocusNode ,
+
                   maxLines: 5,
                   keyboardType: TextInputType.multiline,
                   textInputAction: TextInputAction.newline,
@@ -423,7 +431,7 @@ class UploadTrackScreen extends StatelessWidget {
                               CreateTrackEventController.to
                                   .createSlotEventCall();
                             } else {
-                              if (formKey.currentState!.validate() &&
+                              if (CreateTrackEventController.to.formKey.currentState!.validate() &&
                                   CreateTrackEventController
                                       .to.selectedStartTime.isNotEmpty &&
                                   CreateTrackEventController

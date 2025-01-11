@@ -7,6 +7,7 @@ import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/view/home/host/event_slot_page.dart';
 import 'package:track_trek/view/manage/widgets/event_manage_card_widget.dart';
+import 'package:track_trek/view/manage/widgets/loading_widget.dart';
 
 class EventUserScreen extends StatelessWidget {
   static const String routeName = '/event-user';
@@ -22,47 +23,45 @@ class EventUserScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Padding(
           padding: padding16,
-          child: Obx(
-            () { final isEvent = argument == 'event';
+          child: Obx(() {
+            final isEvent = argument == 'event';
             final participantList = isEvent
                 ? HomeController.to.eventParticipantList
                 : HomeController.to.trackParticipantList;
-
-            // Check if the list is empty
-            if (participantList.isEmpty) {
-              return const EmptyTextWidget(text: AppStaticString.userListIsEmpty);
-            }
-
-            return Column(
-                spacing: 8.h,
-                children: [
-                  // const BlueContainerWidget(
-                  //   child: EventDetailsInfoWidget(),
-                  // ),
-                  // space12H,
-                  ...List.generate(
-                      argument == 'event'
-                          ? HomeController.to.eventParticipantList.length
-                          : HomeController.to.trackParticipantList.length, (index) {
-                    return MarronGradientContainerWidget(
-                        child: Obx(
-                        () {
-                            return UserInfoContentWidget(
-                                                  eventPartModel: argument == 'event'
-                              ? HomeController.to.eventParticipantList[index]
-                              : null,
-                                                  trackPartModel: argument == 'track'
-                              ? HomeController.to.trackParticipantList[index]
-                              : null,
-                                                  seatNo: '04',
-                                                );
-                          }
-                        ));
-                  })
-                ],
-              );
-            }
-          ),
+            final isLoading = isEvent
+                ? HomeController.to.isLoadingEventParticipantList.value
+                : HomeController.to.isLoadingTrackParticipantList.value;
+            return isLoading?
+const UserInfoListLoading()
+                :participantList.isEmpty
+                ? const EmptyTextWidget(text: AppStaticString.userListIsEmpty)
+                : Column(
+                    spacing: 8.h,
+                    children: [
+                      // const BlueContainerWidget(
+                      //   child: EventDetailsInfoWidget(),
+                      // ),
+                      // space12H,
+                      ...List.generate(
+                          argument == 'event'
+                              ? HomeController.to.eventParticipantList.length
+                              : HomeController.to.trackParticipantList.length,
+                          (index) {
+                        return MarronGradientContainerWidget(child: Obx(() {
+                          return UserInfoContentWidget(
+                            eventPartModel: argument == 'event'
+                                ? HomeController.to.eventParticipantList[index]
+                                : null,
+                            trackPartModel: argument == 'track'
+                                ? HomeController.to.trackParticipantList[index]
+                                : null,
+                            seatNo: '04',
+                          );
+                        }));
+                      })
+                    ],
+                  );
+          }),
         ),
       ),
     );

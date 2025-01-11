@@ -53,6 +53,8 @@ class AppStaticString {
   static const String email = "Email";
   static const String nameWithClone = "Name: ";
   static const String name = "Name";
+  static const String eventNotFound = "Event not found!!!";
+  static const String trackNotFound = "Track not found!!!";
   static const String status = "Status";
   static const String enterCode = "Enter the code";
   static const String enter4Digit = "Enter the 4 digit code that we just sent to";

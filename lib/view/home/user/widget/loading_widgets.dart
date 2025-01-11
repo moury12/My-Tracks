@@ -67,7 +67,8 @@ class LoadingEventListWidget extends StatelessWidget {
       ),
     );
   }
-}class LoadingTrackListWidget extends StatelessWidget {
+}
+class LoadingTrackListWidget extends StatelessWidget {
   const LoadingTrackListWidget({super.key});
 
   @override

@@ -10,6 +10,7 @@ import 'package:track_trek/core/model/track-event/single_track_model.dart';
 import 'package:track_trek/core/service/review/review_service.dart';
 import 'package:track_trek/core/service/track-event/track_event_service.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
+import 'package:track_trek/view/home/host/home_screen.dart';
 
 class HomeController extends GetxController {
   static HomeController get to => Get.find();
@@ -39,7 +40,6 @@ class HomeController extends GetxController {
   RxBool isLoadingTrackParticipantList = false.obs;
   RxBool isLoadingTrackReviewList = false.obs;
   RxBool isLoadingEventParticipantList = false.obs;
-
 
   ///=====================pagination variable====================///
 
@@ -125,13 +125,10 @@ class HomeController extends GetxController {
     }
   }
 
-
-
   getTrackReviewListCall(
       {required String trackId,
       String sort = '',
-      bool loadMoreData = false})
-  async {
+      bool loadMoreData = false}) async {
     if (NetworkController.to.isConnected.value) {
       if (loadMoreData) {
         isLoadingMoreForReview.value = true;
@@ -165,6 +162,34 @@ class HomeController extends GetxController {
       // noInternetShowCustomSnackbar();
     }
     reviewList.refresh();
+  }
+
+  handleLabelChange({required int index}) {
+    selectedLabel.value = index;
+
+    // Update tabs and content dynamically
+    if (labelTabs[index] == AppStaticString.booked) {
+      isLoadingEventList.value = true;
+      tabs.value = [AppStaticString.event];
+      isBooked.value = 'yes';
+      getEventListCall();
+      tabContent.value = [
+        const EventListWidget(),
+      ];
+    } else {
+      isLoadingEventList.value = true;
+      isBooked.value = '';
+      getEventListCall();
+      // Reset to default tabs and content
+      tabs.value = [
+        AppStaticString.track,
+        AppStaticString.event,
+      ];
+      tabContent.value = [
+        const TrackListWidget(),
+        const EventListWidget(),
+      ];
+    }
   }
 
   @override

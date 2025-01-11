@@ -161,10 +161,39 @@ Future<String?> selectAndFormatTime({
   required TimeOfDay initialTime,
 }) async {
   try {
+    final ThemeData customTimePickerTheme = Theme.of(context).copyWith(
+      timePickerTheme: TimePickerThemeData(
+        backgroundColor:AppColors.blackLightColor, // Background color of the dialog
+        hourMinuteShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        dialHandColor: AppColors.blueColor,
+        hourMinuteTextColor: WidgetStateColor.resolveWith((states) =>
+        states.contains(WidgetState.selected)
+            ? Colors.white // Text color when selected
+            : Colors.grey[300]!),
+        hourMinuteColor: WidgetStateColor.resolveWith((states) =>
+        states.contains(WidgetState.selected)
+            ? AppColors.blueColor // Background color when selected
+            : Colors.grey[800]!),
+        dialBackgroundColor: Colors.grey[800], // Dial's background color
+        dialTextColor: WidgetStateColor.resolveWith((states) =>
+        states.contains(WidgetState.selected)
+            ? Colors.white // Dial text color when selected
+            : Colors.grey[400]!),
+        entryModeIconColor: AppColors.blueColor, // Color of the entry mode icon
+      ),
+    );
     // Show time picker dialog
     final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
       initialTime: initialTime,
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: customTimePickerTheme,
+          child: child!,
+        );
+      },
     );
 
     if (pickedTime != null) {

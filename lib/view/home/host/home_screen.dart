@@ -4,6 +4,9 @@ import 'package:track_trek/controller/home_controller.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
+import 'package:track_trek/view/home/host/event_slot_page.dart';
+import 'package:track_trek/view/home/host/widget/loading_event_card.dart';
+import 'package:track_trek/view/home/user/widget/loading_widgets.dart';
 import 'package:track_trek/view/home/widgets/dynamic_tab_widget.dart';
 import 'package:track_trek/view/home/widgets/event_card_widget.dart';
 import 'package:track_trek/view/home/widgets/home_app_bar.dart';
@@ -51,34 +54,7 @@ class HomeScreen extends StatelessWidget {
                               : Expanded(
                                   child: BlackContainerWidget(
                                     onTap: () {
-                                      HomeController.to.selectedLabel.value =
-                                          index;
-
-                                      // Update tabs and content dynamically
-                                      if (HomeController.to.labelTabs[index] ==
-                                          AppStaticString.booked) {
-
-                                        HomeController.to.tabs.value = [
-                                          AppStaticString.event
-                                        ];
-                                        HomeController.to.isBooked.value='yes';
-                                        HomeController.to.getEventListCall();
-                                        HomeController.to.tabContent.value = [
-                                          const EventListWidget(),
-                                        ];
-                                      } else {
-                                        HomeController.to.isBooked.value='';
-                                        HomeController.to.getEventListCall();
-                                        // Reset to default tabs and content
-                                        HomeController.to.tabs.value = [
-                                          AppStaticString.track,
-                                          AppStaticString.event,
-                                        ];
-                                        HomeController.to.tabContent.value = [
-                                          const TrackListWidget(),
-                                          const EventListWidget(),
-                                        ];
-                                      }
+                                      HomeController.to.handleLabelChange(index: index);
                                     },
                                     text: HomeController.to.labelTabs[index],
                                   ),
@@ -109,13 +85,17 @@ class EventListWidget extends StatelessWidget {
     return Padding(
       padding: padding12V,
       child: Obx(() {
-        return Column(
-          children: List.generate(
-              HomeController.to.eventList.length,
-              (i) => EventCardWidget(
-                    eventModel: HomeController.to.eventList[i],
-                  )),
-        );
+        return HomeController.to.isLoadingEventList.value
+            ? const ListOfEventLoadingWidget()
+            : HomeController.to.eventList.isEmpty
+                ? const EmptyTextWidget(text: AppStaticString.eventNotFound)
+                : Column(
+                    children: List.generate(
+                        HomeController.to.eventList.length,
+                        (i) => EventCardWidget(
+                              eventModel: HomeController.to.eventList[i],
+                            )),
+                  );
       }),
     );
   }
@@ -131,7 +111,11 @@ class TrackListWidget extends StatelessWidget {
     return Padding(
       padding: padding12V,
       child: Obx(() {
-        return Column(
+        return HomeController.to.isLoadingTrackList.value
+            ? const LoadingTrackListWidget()
+            : HomeController.to.eventList.isEmpty
+            ? const EmptyTextWidget(text: AppStaticString.trackNotFound)
+            : Column(
           children: List.generate(
               HomeController.to.trackList.length,
               (i) => TrackCardWidget(
