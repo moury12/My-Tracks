@@ -92,7 +92,8 @@ class AppRoutes {
             name: UserDetailsScreen.routeName,
             page: () => const UserDetailsScreen()),
         GetPage(
-            name: FeedbackScreen.routeName, page: () => const FeedbackScreen()),
+            name: FeedbackScreen.routeName, page: () =>  FeedbackScreen(),
+        binding: FeedbackBinding()),
         GetPage(
             name: BookTrackJoinEventScreen.routeName,
             page: () => const BookTrackJoinEventScreen(),
@@ -116,7 +117,7 @@ class AppRoutes {
             binding: AuthBinding()),
         GetPage(
             name: PrivacyTermsScreen.routeName,
-            page: () => const PrivacyTermsScreen()),
+            page: () => const PrivacyTermsScreen(),binding: FeedbackBinding()),
         GetPage(
             name: ChangePasswordScreen.routeName,
             page: () => ChangePasswordScreen()),

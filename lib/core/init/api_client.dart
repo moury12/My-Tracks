@@ -1,5 +1,5 @@
 class ApiClient {
-  static const String googleMapUrl ='AIzaSyCwUpKs-yq_9gvqjQEVYLXlBPV7qbw0xJQ';
+  static const String googleMapUrl = 'AIzaSyCwUpKs-yq_9gvqjQEVYLXlBPV7qbw0xJQ';
   static const String baseUrl = 'http://10.0.60.26:8001';
   static String get loginUrl => '$baseUrl/auth/login';
   static String get registrationUrl => '$baseUrl/auth/register';
@@ -32,8 +32,13 @@ class ApiClient {
       '$baseUrl/business/active-deactivate-track';
   static String get getNotificationUrl =>
       '$baseUrl/business/get-all-notifications';
+  static String get getAllRentersOnDateUrl =>
+      '$baseUrl/business/renters-on-date';
+
   static String get getLikeDisLikeUrl => '$baseUrl/review/like-dislike';
   static String get postReviewUrl => '$baseUrl/review/post-review';
   static String get getAllReviewUrl => '$baseUrl/review/get-all-review';
-  static String get getAllRentersOnDateUrl => '$baseUrl/business/renters-on-date';
+  static String get postFeedbackUrl => '$baseUrl/feedback/post-feedback';
+  static String get getTermsConditionUrl => '$baseUrl/manage/get-terms-conditions';
+  static String get getPrivacyPolicy => '$baseUrl/manage/get-privacy-policy';
 }

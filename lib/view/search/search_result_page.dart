@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:track_trek/controller/home_user_controller.dart';
+import 'package:track_trek/controller/home/user/home_user_controller.dart';
 import 'package:track_trek/core/components/custom_appbar.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/view/home/host/event_slot_page.dart';
+import 'package:track_trek/view/home/user/widget/loading_widgets.dart';
 import 'package:track_trek/view/home/widgets/track_card_widget.dart';
 
 class SearchResultScreen extends StatelessWidget {
@@ -31,6 +32,8 @@ class SearchResultScreen extends StatelessWidget {
                   HomeUserController.to.lat.value.isEmpty &&
                   HomeUserController.to.lng.value.isEmpty*/
               ? const EmptyTextWidget(text: AppStaticString.noTrackFound)
+              :HomeUserController.to.isLoadingTrackList.value?
+          const LoadingTrackListWidget()
               : ListView.builder(
                   itemCount: HomeUserController.to.trackList.length,
                   padding: padding16,

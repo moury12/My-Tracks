@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:track_trek/controller/common_controller.dart';
+import 'package:track_trek/controller/home/host/home_controller.dart';
 import 'package:track_trek/controller/track_management_controller.dart';
 import 'package:track_trek/core/components/custom_appbar.dart';
 import 'package:track_trek/core/components/custom_drawer_widget.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
+import 'package:track_trek/core/global/string_variable.dart';
+import 'package:track_trek/core/init/hive_boxes.dart';
 import 'package:track_trek/view/add/create_screen.dart';
 import 'package:track_trek/view/booking/booking_management.dart';
 import 'package:track_trek/view/home/host/home_screen.dart';
@@ -15,9 +18,15 @@ import 'package:track_trek/view/notification/notification_screen.dart';
 import 'package:track_trek/view/profile/profile_page.dart';
 import 'package:track_trek/view/promote/promote_screen.dart';
 
-class BottomNavigationScreen extends StatelessWidget {
+class BottomNavigationScreen extends StatefulWidget {
   static const String routeName = '/nav';
-  BottomNavigationScreen({super.key});
+  const BottomNavigationScreen({super.key});
+
+  @override
+  State<BottomNavigationScreen> createState() => _BottomNavigationScreenState();
+}
+
+class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   final List<String?> appbarTitle = [
@@ -31,10 +40,17 @@ class BottomNavigationScreen extends StatelessWidget {
         ? AppStaticString.profile
         : AppStaticString.promoteTrack
   ];
-
+@override
+  void initState() {
+  if(Boxes.getUserData().get(roleKey) == 'HOST'){
+      Get.put(TrackManagementController());
+      Get.put(HomeController());
+    }
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
-Get.put(TrackManagementController());
+
     final List<Widget> pages = [
       CommonController.to.selectedRoleOption.value == 0
           ? HomeUserScreen(

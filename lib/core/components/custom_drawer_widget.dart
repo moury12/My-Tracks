@@ -41,14 +41,15 @@ class CustomDrawerWidget extends StatelessWidget {
                   children: [
                     Image.asset(trackImgUrl),
                     Image.asset(horizontalDividerUrl),
-                    DrawerContentWidget(
+                    CommonController.to.selectedRoleOption.value == 0
+                        ?  DrawerContentWidget(
                       icon: historyIconUrl,
                       text: AppStaticString.history,
                       onTap: () {
                         Navigator.pop(context);
                         Get.toNamed(HistoryScreen.routeName);
                       },
-                    ),
+                    ):const SizedBox.shrink(),
                     DrawerContentWidget(
                       onTap: () {
                         Navigator.pop(context);

@@ -20,11 +20,13 @@ import 'package:track_trek/view/add/widgets/track_slot_widget.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 import 'package:track_trek/view/manage/widgets/event_manage_card_widget.dart';
 
+import 'widgets/select_date_button.dart';
+
 
 
 class UploadTrackScreen extends StatelessWidget {
   static String routeName = '/upload';
-  UploadTrackScreen({super.key});
+  const UploadTrackScreen({super.key});
 
 
   @override
@@ -260,8 +262,6 @@ class UploadTrackScreen extends StatelessWidget {
                                                     .to
                                                     .selectedWeekDay
                                                     .value = day.toString();
-                                                print(CreateTrackEventController
-                                                    .to.selectedWeekDay.value);
                                               },
                                               text: day,
                                             );
@@ -428,8 +428,10 @@ class UploadTrackScreen extends StatelessWidget {
                       : SaveSmallButtonWidget(
                           onTap: () {
                             if (argument != null && argument == 'event') {
-                              CreateTrackEventController.to
-                                  .createSlotEventCall();
+                              if(CreateTrackEventController.to.formKey.currentState!.validate()){
+                                CreateTrackEventController.to
+                                    .createSlotEventCall();
+                              }
                             } else {
                               if (CreateTrackEventController.to.formKey.currentState!.validate() &&
                                   CreateTrackEventController
@@ -558,30 +560,6 @@ class UploadTrackScreen extends StatelessWidget {
                             : const SizedBox.shrink(),
                       ),
 
-                /* : SizedBox.shrink(),*/
-                /*             argument != null && argument == 'event'
-                    ? CustomButton(
-                        onTap: () {
-                          showDialog(
-                              context: context,
-                              builder: (context) => DeleteAlertDialog(
-                                  showButton: false,
-                                  title: Padding(
-                                    padding: EdgeInsets.only(bottom: 8.h),
-                                    child: Image.asset(
-                                      successIconUrl,
-                                      height: 33.w,
-                                      width: 33.w,
-                                    ),
-                                  ),
-                                  text:
-                                      AppStaticString.eventCreatedSuccessfully),
-                              barrierDismissible: false);
-                        },
-                        title: AppStaticString.publish,
-                        fontSize: getFontSizeLarge(context),
-                      )
-                    : const SizedBox.shrink()*/
               ],
             ),
           ),
@@ -591,43 +569,3 @@ class UploadTrackScreen extends StatelessWidget {
   }
 }
 
-class SelectDateButton extends StatelessWidget {
-  final Function()? onTap;
-  final String? date;
-  String? selectedDay;
-   SelectDateButton({
-    super.key,
-    this.onTap, this.selectedDay, this.date,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GradientContainerWidget(
-      onTap: onTap ??
-          () {
-        selectedDay =selectDate(context).toString();
-           ///==========Select date
-          },
-      radius: 4.r,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(
-            child: Text(
-             date?? AppStaticString.selectDay,
-              style: poppinsRegular.copyWith(
-                  color: AppColors.blackLightColor,
-                  fontSize: getFontSizeDefault(context)),
-            ),
-          ),
-          space8W,
-          Image.asset(
-            calenderIconUrl,
-            height: 24.w,
-            width: 24.w,
-          )
-        ],
-      ),
-    );
-  }
-}

@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:track_trek/controller/common_controller.dart';
-import 'package:track_trek/controller/home_controller.dart';
-import 'package:track_trek/controller/home_user_controller.dart';
+import 'package:track_trek/controller/home/host/home_controller.dart';
+import 'package:track_trek/controller/home/user/home_user_controller.dart';
 import 'package:track_trek/core/components/custom_button.dart';
 import 'package:track_trek/core/components/custom_network_image.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
@@ -52,7 +52,7 @@ class TrackCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<ReviewModel> reviewListVar =[];
+    List<ReviewModel> reviewListVar = [];
     final String imageUrl = trackModel != null
         ? '${ApiClient.baseUrl}/${trackModel!.trackImage!.first}'
         : trackModelUserPanel != null
@@ -86,7 +86,7 @@ class TrackCardWidget extends StatelessWidget {
     final bool isReact = trackModel != null
         ? false
         : trackModelUserPanel != null
-            ? trackModelUserPanel!.isLiked??false
+            ? trackModelUserPanel!.isLiked ?? false
             : false;
     final String description = trackModel != null
         ? trackModel!.description ?? ''
@@ -132,10 +132,7 @@ class TrackCardWidget extends StatelessWidget {
             ClipRRect(
                 borderRadius: BorderRadius.circular(8.r),
                 child: CustomNetworkImage(
-                        imageUrl: imageUrl,
-                        height: 150.h,
-                        width: double.infinity)
-                    ),
+                    imageUrl: imageUrl, height: 150.h, width: double.infinity)),
             space12H,
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -308,7 +305,6 @@ class TrackCardWidget extends StatelessWidget {
                       OptionWidget(
                         icon: commentIconUrl,
                         function: () {
-
                           if (Boxes.getUserData().get(roleKey) == 'USER') {
                             HomeUserController.to
                                 .getTrackReviewListCall(trackId: sId);
@@ -316,7 +312,7 @@ class TrackCardWidget extends StatelessWidget {
                           } else {
                             HomeController.to
                                 .getTrackReviewListCall(trackId: sId);
-                            reviewListVar = HomeUserController.to.reviewList;
+                            reviewListVar = HomeController.to.reviewList;
                           }
                           showModalBottomSheet(
                             constraints: BoxConstraints.tightForFinite(
@@ -326,7 +322,7 @@ class TrackCardWidget extends StatelessWidget {
                             context: context,
                             isScrollControlled:
                                 true, // Allows better control of the height and width
-                            builder: (context) =>  ReviewListWidget(
+                            builder: (context) => ReviewListWidget(
                               reviewList: reviewListVar,
                             ),
                           );
@@ -336,16 +332,16 @@ class TrackCardWidget extends StatelessWidget {
 
                       ///================react==============///
 
-                      /*CommonController.to.isLoadingPostLike.value?DefaultProgressIndicator(color: AppColors.whiteLightColor,):*/ OptionWidget(
-                                function: () {
-                                 CommonController.to.postLikeDisLikeCall(trackId: sId);
-
-                                },
-                                icon:/* react!.value*/ isReact== true
-                                    ? reactFillIconUrl
-                                    : reactIconUrl,
-                                text: totalReaction,
-                              ),
+                      /*CommonController.to.isLoadingPostLike.value?DefaultProgressIndicator(color: AppColors.whiteLightColor,):*/
+                      fromUser == true
+                          ?    OptionWidget(
+                        function: () {
+                          CommonController.to.postLikeDisLikeCall(trackId: sId);
+                        },
+                        icon: /* react!.value*/
+                            isReact == true ? reactFillIconUrl : reactIconUrl,
+                        text: totalReaction,
+                      ):const SizedBox.shrink(),
 
                       ///================map==============///
 
@@ -431,9 +427,8 @@ class TrackCardWidget extends StatelessWidget {
                     padding: EdgeInsets.only(top: 16.h),
                     child: CustomButton(
                       onTap: () {
-
-                        Get.toNamed(BookTrackJoinEventScreen.routeName,arguments: {'id':sId,
-                        'type':'track'});
+                        Get.toNamed(BookTrackJoinEventScreen.routeName,
+                            arguments: {'id': sId, 'type': 'track'});
                       },
                       title: AppStaticString.bookSlot,
                       img: doubleArrowIconUrl,
@@ -508,20 +503,18 @@ class RatingTextWidget extends StatelessWidget {
       children: [
         Text(
           AppStaticString.ratingWithClone,
-          style: poppinsLight.copyWith(
-              fontSize: getFontSizeSmall(context)),
+          style: poppinsLight.copyWith(fontSize: getFontSizeSmall(context)),
         ),
         Icon(
           Icons.star_border_outlined,
           color: AppColors.yellowColor,
           size: 15.sp,
         ),
-    
+
         ///======================dynamic user rating=======================///
         Text(
           rating,
-          style: poppinsLight.copyWith(
-              fontSize: getFontSizeSmall(context)),
+          style: poppinsLight.copyWith(fontSize: getFontSizeSmall(context)),
         )
       ],
     );
@@ -530,6 +523,7 @@ class RatingTextWidget extends StatelessWidget {
 
 class ReviewListWidget extends StatelessWidget {
   final List<ReviewModel> reviewList;
+
   const ReviewListWidget({
     super.key,
     required this.reviewList,
@@ -546,9 +540,12 @@ class ReviewListWidget extends StatelessWidget {
       ),
       child: SingleChildScrollView(
         child: Obx(() {
-          return reviewList.isEmpty
+          final isLoading = Boxes.getUserData().get(roleKey) == 'USER'?HomeUserController.to.isLoadingTrackReviewList.value:
+              HomeController.to.isLoadingTrackReviewList.value;
+          return isLoading?
+              Center(child: const DefaultProgressIndicator(color: AppColors.primaryColor,)): reviewList.isEmpty
               ? const EmptyTextWidget(text: 'Review not found!!')
-              : Column(
+              :  Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
@@ -615,7 +612,10 @@ class ReviewListWidget extends StatelessWidget {
                                           ),
                                         ),
                                         const SizedBox(height: 6.0),
-                                        RatingTextWidget(rating: review.rating!=null?review.rating.toString():'0.0'),
+                                        RatingTextWidget(
+                                            rating: review.rating != null
+                                                ? review.rating.toString()
+                                                : '0.0'),
 
                                         ///===================== Comment text =================///
                                         Text(
@@ -697,6 +697,7 @@ class OptionWidget extends StatelessWidget {
     );
   }
 }
+
 class ExpandableText extends StatefulWidget {
   final String text;
   final TextStyle? textStyle;
@@ -803,4 +804,3 @@ class _ExpandableTextState extends State<ExpandableText> {
     );
   }
 }
-

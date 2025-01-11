@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:track_trek/controller/network_controller.dart';
+import 'package:track_trek/controller/profile_controller.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/model/participants/event_participants_model.dart';
 import 'package:track_trek/core/model/participants/track_participants_model.dart';
@@ -45,7 +46,14 @@ class HomeController extends GetxController {
 
   RxInt currentPageForReview = 1.obs;
   var isLoadingMoreForReview = false.obs;
-
+  Future<void> refreshCall()async{
+    Get.put(ProfileController());
+    await ProfileController.to.getUserProfileData();
+  await getTrackListCall();
+ await getEventListCall();
+  trackList.refresh();
+  eventList.refresh();
+}
   getTrackListCall() async {
     if (NetworkController.to.isConnected.value) {
       isLoadingTrackList.value = true;

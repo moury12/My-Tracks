@@ -225,11 +225,12 @@ class RowButton extends StatelessWidget {
     this.radius,
     this.firstButtonText,
     this.textColor,
-    this.secendtButtonText, this.secondButtonTap, this.firstButtonTap,
+    this.secendtButtonText, this.secondButtonTap, this.firstButtonTap, this.isLoading,
   });
 
   final Color? borderColor;
   final double? radius;
+  final bool? isLoading;
   final String? firstButtonText;
   final Color? textColor;
   final Function()? secondButtonTap;
@@ -256,6 +257,7 @@ class RowButton extends StatelessWidget {
         ),
         Expanded(
           child: CustomButton(
+            isLoading: isLoading,
             radius: radius,
             onTap: secondButtonTap ??
                 () {

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:track_trek/view/add/widgets/black_container_with_border.dart';
+import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 
 class LoadingCategoryListWidget extends StatelessWidget {
   const LoadingCategoryListWidget({
@@ -82,9 +84,11 @@ class LoadingTrackListWidget extends StatelessWidget {
       child: Column(spacing: 12.h,
         children: List.generate(
           5, // Number of shimmer items to display
-          (index) => ShimmerTrackEventWidget(
-            padding:  EdgeInsets.only(top: 12.h),
-              baseColor: baseColor, highlightColor: highlightColor,width: MediaQuery.sizeOf(context).width),
+          (index) => BlackContainerWidget(
+            child: ShimmerTrackEventWidget(
+              padding:  EdgeInsets.only(top: 12.h),
+                baseColor: baseColor, highlightColor: highlightColor,width: MediaQuery.sizeOf(context).width),
+          ),
         ),
       ),
     );

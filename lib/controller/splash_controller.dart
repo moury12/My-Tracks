@@ -3,8 +3,9 @@ import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:track_trek/controller/booking_management_controller.dart';
 import 'package:track_trek/controller/common_controller.dart';
-import 'package:track_trek/controller/home_controller.dart';
-import 'package:track_trek/controller/home_user_controller.dart';
+import 'package:track_trek/controller/feedback/feedback_controller.dart';
+import 'package:track_trek/controller/home/host/home_controller.dart';
+import 'package:track_trek/controller/home/user/home_user_controller.dart';
 import 'package:track_trek/controller/notification_controller.dart';
 import 'package:track_trek/controller/profile_controller.dart';
 import 'package:track_trek/controller/track_management_controller.dart';
@@ -39,7 +40,8 @@ class SplashController extends GetxController {
         Get.put(ProfileController() /*,permanent: true*/);
 
         Get.put(NotificationController() /*,permanent: true*/);
-        ;
+        Get.put(FeedBackController() /*,permanent: true*/);
+
       } else {
         Get.offAllNamed(LoginScreen.routeName);
       }

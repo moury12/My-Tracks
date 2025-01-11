@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:track_trek/core/constant/fontsize_constant.dart';
+import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 
 class EventCardLoadingWidget extends StatelessWidget {
   const EventCardLoadingWidget({super.key});
@@ -94,6 +96,7 @@ class EventCardLoadingWidget extends StatelessWidget {
     );
   }
 }
+
 class ListOfEventLoadingWidget extends StatelessWidget {
   const ListOfEventLoadingWidget({super.key});
 
@@ -101,7 +104,68 @@ class ListOfEventLoadingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       spacing: 12.h,
-      children: List.generate(4, (index) => EventCardLoadingWidget(),),
+      children: List.generate(
+        4,
+        (index) => const BlackContainerWidget(child: EventCardLoadingWidget()),
+      ),
     );
   }
+}
+
+Widget userInfoLoadingWidget(BuildContext context) {
+  return Row(
+    children: [
+      // Shimmer for profile image
+      Shimmer.fromColors(
+        baseColor: Colors.grey.shade800,
+        highlightColor: Colors.grey.shade600,
+        child: CircleAvatar(
+          radius: 26.w, // Half of 52.w
+          backgroundColor: Colors.grey.shade800,
+        ),
+      ),
+      SizedBox(width: 12.w),
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Shimmer for name
+          Shimmer.fromColors(
+            baseColor: Colors.grey.shade800,
+            highlightColor: Colors.grey.shade600,
+            child: Container(
+              height: getFontSizeLarge(context),
+              width: 120.w, // Fixed width for name placeholder
+              color: Colors.grey.shade800,
+            ),
+          ),
+          SizedBox(height: 8.w),
+          Row(
+            children: [
+              // Shimmer for location icon
+              Shimmer.fromColors(
+                baseColor: Colors.grey.shade800,
+                highlightColor: Colors.grey.shade600,
+                child: Icon(
+                  Icons.location_on,
+                  size: 21.w,
+                  color: Colors.grey.shade800,
+                ),
+              ),
+              SizedBox(width: 8.w),
+              // Shimmer for address
+              Shimmer.fromColors(
+                baseColor: Colors.grey.shade800,
+                highlightColor: Colors.grey.shade600,
+                child: Container(
+                  height: getFontSizeSemiSmall(context),
+                  width: 150.w, // Fixed width for address placeholder
+                  color: Colors.grey.shade800,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    ],
+  );
 }

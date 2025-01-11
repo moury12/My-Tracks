@@ -114,6 +114,9 @@ class CreateTrackEventScreen extends StatelessWidget {
                                         .toList()
                                     : [],
                             onChanged: (value) {
+
+                              CreateTrackEventController
+                                  .to.categoryListCall();
                               CreateTrackEventController
                                   .to.selectedCategory.value = value.toString();
                             },

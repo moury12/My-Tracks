@@ -5,6 +5,7 @@ import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
 import 'package:track_trek/core/constant/image_constants.dart';
+import 'package:track_trek/core/init/api_client.dart';
 import 'package:track_trek/core/model/booking/event_booking_model.dart';
 import 'package:track_trek/core/model/booking/track_booking_model.dart';
 import 'package:track_trek/core/model/participants/event_participants_model.dart';
@@ -132,7 +133,7 @@ class UserInfoContentWidget extends StatelessWidget {
       children: [
         imageUrl.isNotEmpty
             ? CustomNetworkImage(
-                imageUrl: imageUrl,
+                imageUrl: '${ApiClient.baseUrl}/$imageUrl',
                 height: 45.w,
                 width: 45.w,
                 boxShape: BoxShape.circle,

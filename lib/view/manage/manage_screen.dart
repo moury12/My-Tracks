@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:track_trek/controller/home_controller.dart';
+import 'package:track_trek/controller/home/host/home_controller.dart';
 import 'package:track_trek/controller/track_management_controller.dart';
 import 'package:track_trek/core/components/custom_drop_down_button.dart';
+import 'package:track_trek/core/components/custom_refresh_indicator.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/model/track-event/single_event_model.dart';
@@ -32,7 +33,7 @@ class ManagementScreen extends StatelessWidget {
        () {
           return HomeController.to.isLoadingTrackList.value
               ? const LoadingTrackListWidget()
-              : HomeController.to.eventList.isEmpty
+              : HomeController.to.trackList.isEmpty
               ? const EmptyTextWidget(text: AppStaticString.trackNotFound)
               : Column(
             ///============================track part=============================///
@@ -148,22 +149,31 @@ class ManagementScreen extends StatelessWidget {
     }));
 
     return Scaffold(
-        body: SingleChildScrollView(
-      child: Padding(
-        padding: padding16.copyWith(top: 0),
-        child: DynamicTabWidget(
-            function: (val) async {
-              TrackManagementController.to.selectedTabIndex.value = val;
+        body: CustomRefreshIndicator(
 
-              if (val == 2) {
-                String selectedDate = await selectDate(context);
-                await TrackManagementController.to
-                    .getRentersListCall(date: selectedDate);
-              }
-            },
-            tabs: TrackManagementController.to.tabs,
-            tabContent: TrackManagementController.to.tabContent),
-      ),
-    ));
+          onRefresh: () async{
+          await  HomeController.to.getTrackListCall();
+            HomeController.to.trackList.refresh();
+          },
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+
+                child: Padding(
+          padding: padding16.copyWith(top: 0),
+          child: DynamicTabWidget(
+              function: (val) async {
+                TrackManagementController.to.selectedTabIndex.value = val;
+
+                if (val == 2) {
+                  String selectedDate = await selectDate(context);
+                  await TrackManagementController.to
+                      .getRentersListCall(date: selectedDate);
+                }
+              },
+              tabs: TrackManagementController.to.tabs,
+              tabContent: TrackManagementController.to.tabContent),
+                ),
+              ),
+        ));
   }
 }

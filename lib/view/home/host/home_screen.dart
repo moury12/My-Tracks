@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:track_trek/controller/home_controller.dart';
+import 'package:track_trek/controller/home/host/home_controller.dart';
+import 'package:track_trek/core/components/custom_refresh_indicator.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
@@ -22,7 +23,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(HomeController());
+
 
     // Initial tab content setup
     HomeController.to.tabContent.addAll([
@@ -30,47 +31,50 @@ class HomeScreen extends StatelessWidget {
       const EventListWidget(),
     ]);
 
-    return Column(
-      children: [
-        HomeAppBar(openDrawer: openDrawer),
-        Expanded(
-          child: ListView(
-            padding: padding16,
-            children: [
-              // Dynamic Label Row
-              Obx(() {
-                return Row(
-                  children: [
-                    ...List.generate(
-                      HomeController.to.labelTabs.length,
-                      (index) => HomeController.to.selectedLabel.value == index
-                          ? Expanded(
-                              child: GradientContainerWidget(
-                                text: HomeController.to.labelTabs[index],
-                              ),
-                            )
-                          : HomeController.to.labelTabs[index].isEmpty
-                              ? space16W
-                              : Expanded(
-                                  child: BlackContainerWidget(
-                                    onTap: () {
-                                      HomeController.to.handleLabelChange(index: index);
-                                    },
-                                    text: HomeController.to.labelTabs[index],
-                                  ),
+    return CustomRefreshIndicator(
+      onRefresh: HomeController.to.refreshCall,
+      child: Column(
+        children: [
+          HomeAppBar(openDrawer: openDrawer),
+          Expanded(
+            child: ListView(
+              padding: padding16,
+              children: [
+                // Dynamic Label Row
+                Obx(() {
+                  return Row(
+                    children: [
+                      ...List.generate(
+                        HomeController.to.labelTabs.length,
+                        (index) => HomeController.to.selectedLabel.value == index
+                            ? Expanded(
+                                child: GradientContainerWidget(
+                                  text: HomeController.to.labelTabs[index],
                                 ),
-                    ),
-                  ],
-                );
-              }),
-              DynamicTabWidget(
-                tabs: HomeController.to.tabs,
-                tabContent: HomeController.to.tabContent,
-              )
-            ],
+                              )
+                            : HomeController.to.labelTabs[index].isEmpty
+                                ? space16W
+                                : Expanded(
+                                    child: BlackContainerWidget(
+                                      onTap: () {
+                                        HomeController.to.handleLabelChange(index: index);
+                                      },
+                                      text: HomeController.to.labelTabs[index],
+                                    ),
+                                  ),
+                      ),
+                    ],
+                  );
+                }),
+                DynamicTabWidget(
+                  tabs: HomeController.to.tabs,
+                  tabContent: HomeController.to.tabContent,
+                )
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -113,13 +117,13 @@ class TrackListWidget extends StatelessWidget {
       child: Obx(() {
         return HomeController.to.isLoadingTrackList.value
             ? const LoadingTrackListWidget()
-            : HomeController.to.eventList.isEmpty
+            : HomeController.to.trackList.isEmpty
             ? const EmptyTextWidget(text: AppStaticString.trackNotFound)
             : Column(
           children: List.generate(
               HomeController.to.trackList.length,
               (i) => TrackCardWidget(
-                    react: HomeController.to.react,
+
                     trackModel: HomeController.to.trackList[i],
                   )),
         );

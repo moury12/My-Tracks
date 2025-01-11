@@ -7,69 +7,28 @@ import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/init/api_client.dart';
 import 'package:track_trek/core/init/hive_boxes.dart';
-import 'package:track_trek/core/model/review/review_model.dart';
+import 'package:track_trek/core/model/manage/manage_model.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 
-class ReviewService {
-  static Future<String> likeDislikeRequest({
-    required String trackId,
-  })
-  async {
+class ManageService {
+  static Future<bool> postFeedbackRequest({
+    required String userName,
+    required String feedback,
+  }) async {
     try {
-      final url = Uri.parse('${ApiClient.getLikeDisLikeUrl}?trackId=$trackId');
+      final url = Uri.parse(ApiClient.postFeedbackUrl);
       final headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
       };
-
-      final response = await http.post(url, headers: headers);
-      final responseData = json.decode(response.body);
-      log('-----------------LIKE DISLIKE call--------------------');
-      log(responseData.toString());
-      if (responseData['success'] != null && responseData['success'] == true) {
-        showCustomSnackbar(
-            title: AppStaticString.success,
-            message: responseData['message'],
-            type: SnackBarType.success);
-
-        return responseData['message'];
-      } else {
-        showCustomSnackbar(
-            title: AppStaticString.failed,
-            message: responseData['message'],
-            type: SnackBarType.failed);
-
-        return responseData['message'];
-      }
-    } catch (e) {
-      showCustomSnackbar(
-          title: AppStaticString.failed,
-          message: e.toString(),
-          type: SnackBarType.failed);
-      debugPrint(e.toString());
-      return '';
-    }
-  }
-
-  static Future<bool> postReviewRequest({
-    required String trackId,
-    required double rating,
-    required String review,
-  })
-  async {
-    try {
-      final url = Uri.parse(ApiClient.postReviewUrl);
-      final headers = {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
-      };
-      final body =
-          jsonEncode({"trackId": trackId, "rating": rating, "review": review});
+      final body = jsonEncode({
+        "userName": userName,
+        "feedback": feedback,
+      });
       final response = await http.post(url, headers: headers, body: body);
       final responseData = json.decode(response.body);
-      log('-----------------post review call--------------------');
+      log('-----------------post feedback call--------------------');
       log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {
         showCustomSnackbar(
@@ -96,16 +55,10 @@ class ReviewService {
     }
   }
 
-  static Future<List<ReviewModel>> getReviewList({
-    required String trackId,
-    String sort = '',
-    required int page,
-  })
-  async {
-    List<ReviewModel> reviewList = [];
+  static Future<ManageModel> getPrivacyPolicy() async {
+    ManageModel privacyPolicy = ManageModel();
     try {
-      final url = Uri.parse('${ApiClient.getAllReviewUrl}'
-          '?trackId=$trackId${sort.isNotEmpty ? '&sort=$sort' : ''}&limit=10&page=$page');
+      final url = Uri.parse(ApiClient.getPrivacyPolicy);
       final headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -117,25 +70,56 @@ class ReviewService {
         headers: headers,
       );
       final Map<String, dynamic> responseData = json.decode(response.body);
-      log('----------------- review List call--------------------');
+      log('----------------- privacy policy call--------------------');
       log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {
-        if (responseData['data']["result"] is List) {
-          reviewList = (responseData['data']["result"] as List)
-              .map((e) => ReviewModel.fromJson(e))
-              .toList();
-        }
-        return reviewList;
+        privacyPolicy = ManageModel.fromJson(responseData['data']);
+
+        return privacyPolicy;
       } else {
         showCustomSnackbar(
             title: AppStaticString.failed,
             message: responseData['message'],
             type: SnackBarType.failed);
-        return reviewList;
+        return privacyPolicy;
       }
     } catch (e) {
       debugPrint(e.toString());
     }
-    return reviewList;
+    return privacyPolicy;
+  }
+
+  static Future<ManageModel> getTermsCondition() async {
+    ManageModel terms = ManageModel();
+    try {
+      final url = Uri.parse(ApiClient.getTermsConditionUrl);
+      final headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
+      };
+
+      final response = await http.get(
+        url,
+        headers: headers,
+      );
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      log('----------------- terms condition call--------------------');
+      log(responseData.toString());
+      if (responseData['success'] != null && responseData['success'] == true) {
+        terms = ManageModel.fromJson(responseData['data']);
+
+        return terms;
+      } else {
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
+        return terms;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return terms;
   }
 }

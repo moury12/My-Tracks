@@ -411,9 +411,8 @@ class CreateTrackEventController extends GetxController {
     uploadEventPriceController.value.clear();
     uploadEventDescriptionController.value.clear();
     FocusScope.of(Get.context!).unfocus();
-/*
-    formKey.currentState?.reset();
-*/
+// formKey.currentState?.reset();
+
     uploadEventTotalSeatFocusNode.unfocus();
     uploadEventPriceFocusNode.unfocus();
     slotNoFocusNodeForEvent.unfocus();

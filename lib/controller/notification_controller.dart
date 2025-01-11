@@ -27,9 +27,15 @@ class NotificationController extends GetxController {
       // noInternetShowCustomSnackbar();
     }
   }
+  Future<void> refreshCall()async{
+    await  getNotification();;
+
+    notifyList.refresh();
+
+  }
   @override
   void onInit() {
-    getNotification();
+   refreshCall();
     // TODO: implement onInit
     super.onInit();
   }
