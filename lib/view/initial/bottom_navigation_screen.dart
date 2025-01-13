@@ -40,14 +40,34 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
         ? AppStaticString.profile
         : AppStaticString.promoteTrack
   ];
-@override
+
+
+  @override
   void initState() {
   if(Boxes.getUserData().get(roleKey) == 'HOST'){
       Get.put(TrackManagementController());
       Get.put(HomeController());
     }
+
     super.initState();
   }
+/*  Future<void> _initAppLinks() async {
+    final Uri? initialLink = await _appLinks.getInitialLink();
+    if (initialLink != null) {
+      _handleIncomingLink(initialLink);
+    }
+  }
+  void _handleIncomingLink(Uri uri) {
+
+      Get.toNamed(HistoryScreen.routeName);
+
+    *//*if (uri.path == '/trackDetails') {
+      final String? trackId = uri.queryParameters['id'];
+      if (trackId != null) {
+        Get.toNamed('/trackDetails', arguments: {'id': trackId});
+      }
+    }*//*
+  }*/
   @override
   Widget build(BuildContext context) {
 

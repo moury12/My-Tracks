@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "2389164304",
+    "project_id": "track-trek-a43ff",
+    "storage_bucket": "track-trek-a43ff.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:2389164304:android:fd3f63e8859f1bee462595",
+        "android_client_info": {
+          "package_name": "com.example.track_trek"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmbPS2x_oHcIUdn2V8nhG_nm_PbT29cDI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

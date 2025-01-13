@@ -363,8 +363,14 @@ class TrackCardWidget extends StatelessWidget {
 
                           : OptionWidget(
                               function: () async {
-                                await Share.share(
-                                    'Check out this cool Flutter app!');
+
+                                const String deepLink = '${ApiClient.baseUrl}/';
+
+                                const String fallbackLink = 'https://play.google.com/store/apps/details?id=com.ubercab&pli=1';
+                                final String fullLink = '$deepLink?fallback=$fallbackLink';
+                                Share.share(fullLink);
+                               /* await Share.share(
+                                    'Check out this cool Flutter app!');*/
                               },
                               icon: shareIconUrl,
                               text: AppStaticString.share,
