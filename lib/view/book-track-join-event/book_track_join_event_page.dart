@@ -40,9 +40,10 @@ class BookTrackJoinEventScreen extends StatelessWidget {
     type == event
         ? controller.getEventDetailsCall(eventId: sId)
         : controller.getTrackDetailsCall(trackId: sId);
-     BookTrackJoinEventController.to
+    type == event
+        ?   BookTrackJoinEventController.to
         .getTrackSlotListCall(
-        trackId: sId);
+        trackId: sId):null;
     return Scaffold(
       appBar: CustomAppbar(
         tile: argument != null && type == event
