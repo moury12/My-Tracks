@@ -1,5 +1,4 @@
 import 'package:device_preview/device_preview.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,16 +8,13 @@ import 'package:track_trek/core/binding/initial_binding.dart';
 import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/route/app_routes.dart';
 import 'package:track_trek/core/theme/theme.dart';
-import 'package:track_trek/firebase_options.dart';
 import 'package:track_trek/view/initial/splash.dart';
 
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   await Hive.openBox(userBoxName);
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+
   runApp(DevicePreview(
     enabled: !kReleaseMode,
     builder: (context) {
@@ -42,7 +38,7 @@ class MyApp extends StatelessWidget {
          useInheritedMediaQuery: true,
          locale: DevicePreview.locale(context),
          builder: DevicePreview.appBuilder,
-         title: 'Track Trek',
+         title: 'My Tracks',
 initialBinding: CommonBinding(),
           theme: darkTheme,
         // initialRoute: BottomNavigationScreen.routeName,
