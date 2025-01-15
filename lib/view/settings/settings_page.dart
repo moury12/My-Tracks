@@ -9,6 +9,8 @@ import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
 import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
+import 'package:track_trek/core/global/string_variable.dart';
+import 'package:track_trek/core/init/hive_boxes.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/core/utils/text_style.dart';
@@ -37,52 +39,61 @@ class SettingsScreen extends StatelessWidget {
                   Get.toNamed(ChangePasswordScreen.routeName);
                 },
               ),
-              DrawerContentWidget(
-                  onTap: () {
-                    ///====================delete Account===================///
-                    showDialog(
-                      barrierDismissible: false,
-                      context: context,
-                      builder: (context) => Obx(
-                        () {
-                          return DeleteAlertDialog(
-                            isLoading: ProfileController.to.isLoadingDeleteProfile.value,
-                            yesFunction: () {
-                              if (ProfileController.to.deletePasswordController
-                                      .value.text.isNotEmpty &&
-                                  ProfileController.to.userModel.value.email !=
-                                      null) {
-                                ProfileController.to.deleteProfileRequest();
-                              }else{
-                                showCustomSnackbar(title: AppStaticString.failed, message: AppStaticString.passRequired, type: SnackBarType.failed);
-                              }
-                            },
-                            text2: AppStaticString.cancel,
-                            title: Padding(
-                              padding: EdgeInsets.only(bottom: 16.h),
-                              child: Text(
-                                AppStaticString.deleteAcc,
-                                style: poppinsMedium.copyWith(
-                                    fontSize: getFontSizeLarge(context)),
+              Boxes.getUserData().get(roleKey) == 'USER'
+                  ? DrawerContentWidget(
+                      onTap: () {
+                        ///====================delete Account===================///
+                        showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (context) => Obx(() {
+                            return DeleteAlertDialog(
+                              isLoading: ProfileController
+                                  .to.isLoadingDeleteProfile.value,
+                              yesFunction: () {
+                                if (ProfileController
+                                        .to
+                                        .deletePasswordController
+                                        .value
+                                        .text
+                                        .isNotEmpty &&
+                                    ProfileController
+                                            .to.userModel.value.email !=
+                                        null) {
+                                  ProfileController.to.deleteProfileRequest();
+                                } else {
+                                  showCustomSnackbar(
+                                      title: AppStaticString.failed,
+                                      message: AppStaticString.passRequired,
+                                      type: SnackBarType.failed);
+                                }
+                              },
+                              text2: AppStaticString.cancel,
+                              title: Padding(
+                                padding: EdgeInsets.only(bottom: 16.h),
+                                child: Text(
+                                  AppStaticString.deleteAcc,
+                                  style: poppinsMedium.copyWith(
+                                      fontSize: getFontSizeLarge(context)),
+                                ),
                               ),
-                            ),
-                            widgets: Padding(
-                              padding: EdgeInsets.only(bottom: 16.h),
-                              child: CustomTextField(
-                                title: AppStaticString.confirmPassword,
-                                fillColor: AppColors.navigationColor,
-                                textEditingController: ProfileController
-                                    .to.deletePasswordController.value,
-                                isPassword: true,
+                              widgets: Padding(
+                                padding: EdgeInsets.only(bottom: 16.h),
+                                child: CustomTextField(
+                                  title: AppStaticString.confirmPassword,
+                                  fillColor: AppColors.navigationColor,
+                                  textEditingController: ProfileController
+                                      .to.deletePasswordController.value,
+                                  isPassword: true,
+                                ),
                               ),
-                            ),
-                          );
-                        }
-                      ),
-                    );
-                  },
-                  icon: deleteIconUrl,
-                  text: AppStaticString.deleteAcc),
+                            );
+                          }),
+                        );
+                      },
+                      icon: deleteIconUrl,
+                      text: AppStaticString.deleteAcc)
+                  : SizedBox.shrink(),
             ],
           ),
         ),

@@ -55,7 +55,7 @@ const UserInfoListLoading()
                             trackPartModel: argument == 'track'
                                 ? HomeController.to.trackParticipantList[index]
                                 : null,
-                            seatNo: '04',
+
                           );
                         }));
                       })

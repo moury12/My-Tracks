@@ -18,7 +18,6 @@ import 'package:track_trek/view/feedback/feedback_page.dart';
 import 'package:track_trek/view/history/history_page.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 import 'package:track_trek/view/profile/profile_page.dart';
-import 'package:track_trek/view/promote/promote_track.dart';
 import 'package:track_trek/view/settings/privacy_terms_page.dart';
 import 'package:track_trek/view/settings/settings_page.dart';
 
@@ -86,16 +85,7 @@ class CustomDrawerWidget extends StatelessWidget {
                               Get.toNamed(ProfileScreen.routeName);
                             },
                           ),
-                    CommonController.to.selectedRoleOption.value == 0
-                        ? const SizedBox.shrink()
-                        : DrawerContentWidget(
-                            icon: promoteIconUrl,
-                            text: AppStaticString.promoteTrack,
-                            onTap: () {
-                              Navigator.pop(context);
-                              Get.toNamed(PromoteTrackScreen.routeName);
-                            },
-                          ),
+
                     DrawerContentWidget(
                       onTap: () {
                         Navigator.pop(context);

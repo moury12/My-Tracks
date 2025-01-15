@@ -448,8 +448,11 @@ class TrackCardWidget extends StatelessWidget {
   }
 
   void _showMapBottomSheet(
-      BuildContext context, double latitude, double longitude) {
+      BuildContext context, double latitude, double longitude)
+  {
     showModalBottomSheet(
+      enableDrag: false,
+      showDragHandle: true,
       constraints: BoxConstraints.tightForFinite(
         height: MediaQuery.of(context).size.height / 2,
         width: MediaQuery.of(context).size.width,
@@ -473,7 +476,7 @@ class TrackCardWidget extends StatelessWidget {
                 ),
                 myLocationEnabled: true,
                 myLocationButtonEnabled: false, // Custom button added
-                zoomControlsEnabled: false, // Custom zoom controls added
+                zoomControlsEnabled: true, // Custom zoom controls added
                 markers: {
                   Marker(
                     markerId: const MarkerId("selected_location"),
@@ -542,7 +545,7 @@ class ReviewListWidget extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       decoration: const BoxDecoration(
         // color: Colors.white, // Background color for the bottom sheet
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)), 
       ),
       child: SingleChildScrollView(
         child: Obx(() {

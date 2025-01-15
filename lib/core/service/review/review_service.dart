@@ -105,7 +105,7 @@ class ReviewService {
     List<ReviewModel> reviewList = [];
     try {
       final url = Uri.parse('${ApiClient.getAllReviewUrl}'
-          '?trackId=$trackId${sort.isNotEmpty ? '&sort=$sort' : ''}&limit=10&page=$page');
+          '?trackId=$trackId${sort.isNotEmpty ? '&sort=$sort' : ''}&limit=1000&page=$page');
       final headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',

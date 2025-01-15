@@ -12,14 +12,12 @@ import 'package:track_trek/view/auth/otp_page.dart';
 import 'package:track_trek/view/auth/sign_up.dart';
 import 'package:track_trek/view/book-track-join-event/book_track_join_event_page.dart';
 import 'package:track_trek/view/book-track-join-event/book_track_payment_page.dart';
-import 'package:track_trek/view/book-track-join-event/book_track_payment_page.dart';
 import 'package:track_trek/view/book-track-join-event/join_event_payment_page.dart';
 import 'package:track_trek/view/feedback/feedback_page.dart';
 import 'package:track_trek/view/history/history_page.dart';
 import 'package:track_trek/view/home/host/event_slot_page.dart';
 import 'package:track_trek/view/home/host/home_screen.dart';
 import 'package:track_trek/view/home/host/user_details_page.dart';
-import 'package:track_trek/view/promote/promote_track.dart';
 import 'package:track_trek/view/search/search_page.dart';
 import 'package:track_trek/view/initial/bottom_navigation_screen.dart';
 import 'package:track_trek/view/initial/splash.dart';
@@ -71,10 +69,7 @@ class AppRoutes {
           name: ProfileScreen.routeName,
           page: () => const ProfileScreen(), /*  binding: ProfileBinding()*/
         ),
-        GetPage(
-          name: PromoteTrackScreen.routeName,
-          page: () => const PromoteTrackScreen(), /* binding: ProfileBinding()*/
-        ),
+
         GetPage(
             name: SearchScreen.routeName,
             page: () =>  SearchScreen(),

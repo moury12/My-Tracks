@@ -102,6 +102,7 @@ class CreateTrackEventScreen extends StatelessWidget {
                           }),
                         )
                       : Obx(() {
+                        CreateTrackEventController.to.categoryListCall();
                           return CustomDropdown<String>(
                             title: AppStaticString.selectCategory,
                             isRequired: true,

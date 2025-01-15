@@ -81,8 +81,7 @@ class EventParticipantsModel {
 }
 
 class User {
-  String? sId;
-  String? authId;
+
   String? name;
   String? email;
   String? address;
@@ -90,8 +89,7 @@ class User {
   String? profileImage;
 
   User(
-      {this.sId,
-        this.authId,
+      {
         this.name,
         this.email,
         this.address,
@@ -99,19 +97,17 @@ class User {
         this.profileImage});
 
   User.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
-    authId = json['authId'];
+
     name = json['name'];
     email = json['email'];
     address = json['address'];
-    address = json['phoneNumber'];
+    phoneNumber = json['phoneNumber'];
     profileImage = json['profile_image'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['_id'] = sId;
-    data['authId'] = authId;
+
     data['name'] = name;
     data['email'] = email;
     data['address'] = address;

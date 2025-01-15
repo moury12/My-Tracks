@@ -170,6 +170,8 @@ class CreateTrackEventController extends GetxController {
           trackName: trackNameController.value.text,
           category: selectedCategory.value ?? '',
           address: trackLocationController.value.text,
+          // longitude:/* destinationLng.toString()*/'90.37',
+          // latitude: /*destinationLat.toString()*/'23.7464',
           longitude: destinationLng.toString(),
           latitude: destinationLat.toString(),
           description: trackDescriptionController.value.text,
@@ -294,6 +296,8 @@ class CreateTrackEventController extends GetxController {
       String value = await TrackEventService.addEventCall(bodyData: {
         "eventName": eventNameController.value.text,
         "address": eventLocationController.value.text,
+        // "longitude": /*destinationLng.value*/'90.37',
+        // "latitude": /*destinationLat.value*/'23.7464',
         "longitude": destinationLng.value,
         "latitude": destinationLat.value,
         "description": eventDescriptionController.value.text,

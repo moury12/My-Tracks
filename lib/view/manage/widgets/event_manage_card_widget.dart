@@ -123,8 +123,8 @@ class UserInfoContentWidget extends StatelessWidget {
         :trackPartModel!=null? trackPartModel!.user!.phoneNumber ?? 'Not Provided':rentersModel!.user!.phoneNumber??'';
 
     final String address = eventPartModel != null
-        ? eventPartModel!.user!.email ?? 'n/a'
-        :trackPartModel!=null? trackPartModel!.user!.email ?? AppStaticString.dummyAddress:rentersModel!.user!.address??'';
+        ? eventPartModel!.user!.address ?? 'n/a'
+        :trackPartModel!=null? trackPartModel!.user!.address ?? AppStaticString.dummyAddress:rentersModel!.user!.address??'';
     final String imageUrl = eventPartModel != null
         ? eventPartModel!.user!.profileImage ?? ''
         :trackPartModel!=null? trackPartModel!.user!.profileImage ?? '':rentersModel!.user!.profileImage??'';

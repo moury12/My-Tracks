@@ -144,6 +144,7 @@ class AppStaticString {
   static const String  next= "Next";
   static const String  typeHere= "type here...";
   static const String  uploadPhoto= "Upload photo";
+  static const String  uploadImageLimit= "Only you can upload 5 images";
   static const String  uploadImage= "Upload Image";
   static const String  slotNo= "Slot No:";
   static const String  totalSeat= "Total Seat";

@@ -42,18 +42,18 @@ void showCustomSnackbar({
   Get.snackbar(
     title,
     message,
-    backgroundColor: backgroundColor,
+    backgroundColor: AppColors.blackBackgroundColor.withOpacity(.5),
     padding: const EdgeInsets.all(12),
     margin: const EdgeInsets.all(12),
-    colorText: textColor,
+    colorText: AppColors.whiteLightColor,
     dismissDirection: DismissDirection.horizontal,
     icon:
-        /* Image.asset(splashImgUrl),*/
-        Icon(
+        Image.asset('assets/ic_launcher.png'),
+     /*   Icon(
       icon,
       color: Colors.white,
       size: 30,
-    ),
+    ),*/
     snackPosition: position,
     duration: const Duration(
         seconds: 3), // Duration for how long the snackbar will be displayed
@@ -64,11 +64,14 @@ Future<void> pickImages({
   bool allowMultiple = false,
   RxList<String>? uploadImages,
   RxString? singleImagePath,
-}) async {
+})
+async {
   try {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.image, // Restrict to image files
-      allowMultiple: allowMultiple, // Allow multiple selection
+      allowMultiple: allowMultiple,
+      allowCompression: true,
+      compressionQuality: 50// Allow multiple selection
     );
 
     if (result != null) {

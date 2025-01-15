@@ -19,7 +19,7 @@ class HomeController extends GetxController {
   var react = false.obs;
   RxString isBooked = ''.obs;
   Rx<SingleTrackModel?> selectedTrack = Rx<SingleTrackModel?>(null);
-
+RxString promotionBannerImage = ''.obs;
   ///========================List variables=====================///
   ///
   RxList<String> tabs = [AppStaticString.track, AppStaticString.event].obs;
@@ -156,6 +156,7 @@ class HomeController extends GetxController {
         }
         currentPageForReview.value++;
       } else if (!loadMoreData) {
+        isLoadingTrackReviewList.value = false;
         // Clear the list if it's a fresh request and no data
         reviewList.clear();
       } else {

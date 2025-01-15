@@ -6,6 +6,7 @@ import 'package:track_trek/controller/home/user/home_user_controller.dart';
 import 'package:track_trek/controller/network_controller.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/global/string_variable.dart';
+import 'package:track_trek/core/init/google_map_api_key.dart';
 import 'package:track_trek/core/init/hive_boxes.dart';
 import 'package:track_trek/core/service/review/review_service.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
@@ -78,9 +79,11 @@ class CommonController extends GetxController {
     }
   }
   Future<void> fetchSuggestedPlaces(String input) async{
+
     final url =
-        'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${Uri.encodeComponent(input)}&key=${ApiClient.googleMapUrl}';
+        'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${Uri.encodeComponent(input)}&key=${GoogleClient.googleMapUrl}';
     final response = await http.get(Uri.parse(url));
+    print(url);
     if(response.statusCode==200){
       final Map<String, dynamic> data = jsonDecode(response.body);
       addressSuggestion.value = data['predictions'];
@@ -97,7 +100,7 @@ class CommonController extends GetxController {
       }) async {
 
     final String url =
-        'https://maps.googleapis.com/maps/api/geocode/json?place_id=$placeId&key=${ApiClient.googleMapUrl}';
+        'https://maps.googleapis.com/maps/api/geocode/json?place_id=$placeId&key=${GoogleClient.googleMapUrl}';
 
     try {
       final response = await http.get(Uri.parse(url));
