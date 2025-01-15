@@ -40,4 +40,5 @@ class ApiClient {
   static String get postFeedbackUrl => '$baseUrl/feedback/post-feedback';
   static String get getTermsConditionUrl => '$baseUrl/manage/get-terms-conditions';
   static String get getPrivacyPolicy => '$baseUrl/manage/get-privacy-policy';
+  static String get checkoutPromotionUrl => '$baseUrl/payment/checkout-promotion';
 }

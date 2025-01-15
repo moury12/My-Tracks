@@ -64,8 +64,10 @@ class CreateTrackEventScreen extends StatelessWidget {
                   CustomTextField(
                     isRequired: true,
                     textEditingController: argument != null && argument == event
-                        ? CreateTrackEventController.to.eventNameController.value
-                        : CreateTrackEventController.to.trackNameController.value,
+                        ? CreateTrackEventController
+                            .to.eventNameController.value
+                        : CreateTrackEventController
+                            .to.trackNameController.value,
                     title: argument != null && argument == event
                         ? AppStaticString.eventName
                         : AppStaticString.trackName,
@@ -81,8 +83,11 @@ class CreateTrackEventScreen extends StatelessWidget {
                   argument != null && argument == event
                       ? GestureDetector(
                           onTap: () async {
-                            CreateTrackEventController.to.eventStartDateController
-                                .value.text = await selectDate(context);
+                            CreateTrackEventController
+                                .to
+                                .eventStartDateController
+                                .value
+                                .text = await selectDate(context);
                           },
                           child: Obx(() {
                             return CustomTextField(
@@ -102,8 +107,12 @@ class CreateTrackEventScreen extends StatelessWidget {
                           }),
                         )
                       : Obx(() {
+/*
                         CreateTrackEventController.to.categoryListCall();
+*/
                           return CustomDropdown<String>(
+                            isLoading: CreateTrackEventController
+                                .to.isLoadingCategory.value,
                             title: AppStaticString.selectCategory,
                             isRequired: true,
                             items:
@@ -115,9 +124,8 @@ class CreateTrackEventScreen extends StatelessWidget {
                                         .toList()
                                     : [],
                             onChanged: (value) {
-
-                              CreateTrackEventController
-                                  .to.categoryListCall();
+                              /*  CreateTrackEventController
+                                  .to.categoryListCall();*/
                               CreateTrackEventController
                                   .to.selectedCategory.value = value.toString();
                             },
@@ -139,8 +147,8 @@ class CreateTrackEventScreen extends StatelessWidget {
                               hintColor: AppColors.whiteLightColor,
                               /*selectedValue:CreateTrackEventController.to.selectedEventStartTime
                                   .value ,*/
-                              hintText: CreateTrackEventController
-                                      .to.selectedEventStartTime.value.isNotEmpty
+                              hintText: CreateTrackEventController.to
+                                      .selectedEventStartTime.value.isNotEmpty
                                   ? CreateTrackEventController
                                       .to.selectedEventStartTime.value
                                   : AppStaticString.typeHere,
@@ -207,8 +215,8 @@ class CreateTrackEventScreen extends StatelessWidget {
                         function: () {
                           pickImages(
                               allowMultiple: true,
-                              uploadImages:
-                                  CreateTrackEventController.to.trackPhotosList);
+                              uploadImages: CreateTrackEventController
+                                  .to.trackPhotosList);
                         },
                         images: CreateTrackEventController
                                 .to.trackPhotosList.isNotEmpty
@@ -278,68 +286,96 @@ class CreateTrackEventScreen extends StatelessWidget {
                             : null);
                   }),
                   space6H,
-                  Obx(
-                    () {
-                      return CustomTextField(
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return AppStaticString.fieldRequired;
-                          }
-                          return null;
-                        },
-                        title: AppStaticString.location,
-                        isRequired: true,
-                        onChanged: (val) {
-                          CommonController.to.fetchSuggestedPlaces(val);
-                        },
-                        hintText: AppStaticString.typeHere,
-                        textEditingController: argument != null && argument == event
-                            ? CreateTrackEventController
-                                .to.eventLocationController.value
-                            : CreateTrackEventController
-                                .to.trackLocationController.value,
-                        textInputAction: TextInputAction.next,
-                        keyboardType: TextInputType.text,
+                  Obx(() {
+                    return CommonController.to.isLoadingOnFetch.value
+                        ? Center(
+                            child: DefaultProgressIndicator(
+                              color: AppColors.primaryColor,
+                            ),
+                          )
+                        : CustomTextField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return AppStaticString.fieldRequired;
+                              }
+                              return null;
+                            },
+                            title: AppStaticString.location,
+                            isRequired: true,
+                            onChanged: (val) {
+                              CommonController.to.fetchSuggestedPlaces(val);
+                            },
+                            hintText: AppStaticString.typeHere,
+                            textEditingController:
+                                argument != null && argument == event
+                                    ? CreateTrackEventController
+                                        .to.eventLocationController.value
+                                    : CreateTrackEventController
+                                        .to.trackLocationController.value,
+                            textInputAction: TextInputAction.next,
+                            keyboardType: TextInputType.text,
+                          );
+                  }),
+                  Obx(() {
+                    return CommonController.to.isLoadingOnFetch.value
+                        ? SizedBox.shrink()
+                        : CommonController
+                                .to.isLoadingOnLocationSuggestion.value
+                            ? Center(
+                              child: DefaultProgressIndicator(
+                                  color: AppColors.primaryColor,
+                                ),
+                            )
+                            : Column(
+                                children: List.generate(
+                                  CommonController.to.addressSuggestion.length,
+                                  (index) {
+                                    final address = CommonController
+                                        .to.addressSuggestion[index];
+                                    return SearchAddress(
+                                      onTap: () async {
+                                        CommonController
+                                            .to.isLoadingOnFetch.value = true;
+                                        final placeId = address['place_id'];
+                                        await CommonController.to
+                                            .getLatLngFromPlace(placeId,
+                                                lat: CreateTrackEventController
+                                                    .to.destinationLat,
+                                                lng: CreateTrackEventController
+                                                    .to.destinationLng,
+                                                selectedAddress:
+                                                    CreateTrackEventController
+                                                        .to.selectedAddress);
+                                        if (argument != null &&
+                                            argument == event) {
+                                          CreateTrackEventController
+                                                  .to
+                                                  .eventLocationController
+                                                  .value
+                                                  .text =
+                                              CreateTrackEventController
+                                                  .to.selectedAddress.value;
+                                        } else {
+                                          CreateTrackEventController
+                                                  .to
+                                                  .trackLocationController
+                                                  .value
+                                                  .text =
+                                              CreateTrackEventController
+                                                  .to.selectedAddress.value;
+                                        }
 
-                      );
-                    }
-                  ),
-                  Obx(
-                  () {
-                      return Column(
-                        children: List.generate(
-                          CommonController.to.addressSuggestion.length,
-                              (index) {
-                            final address = CommonController.to.addressSuggestion[index];
-                            return SearchAddress(
-                              onTap: () async{
-                                final placeId = address['place_id'];
-                                await   CommonController.to.getLatLngFromPlace(placeId,
-                                    lat: CreateTrackEventController.to.destinationLat,
-                                    lng:  CreateTrackEventController.to.destinationLng,
-                                    selectedAddress:
-                                    CreateTrackEventController.to.selectedAddress);
-                                if(argument != null && argument == event){
-                                  CreateTrackEventController
-                                      .to.eventLocationController.value.text =
-                                      CreateTrackEventController.to.selectedAddress.value;
-                                }else{
-                                  CreateTrackEventController
-                                      .to.trackLocationController.value.text =
-                                      CreateTrackEventController.to.selectedAddress.value;
-                                }
-
-                                CommonController.to.addressSuggestion.clear();
-
-
-                              },
-                              title: address['description'],
-                            );
-                          },
-                        ),
-                      );
-                    }
-                  ),
+                                        CommonController.to.addressSuggestion
+                                            .clear();
+                                        CommonController
+                                            .to.isLoadingOnFetch.value = false;
+                                      },
+                                      title: address['description'],
+                                    );
+                                  },
+                                ),
+                              );
+                  }),
                   space6H,
                   CustomTextField(
                     textEditingController: argument != null && argument == event
@@ -395,7 +431,8 @@ class CreateTrackEventScreen extends StatelessWidget {
                   Obx(() {
                     return CustomButton(
                       isLoading: argument != null && argument == event
-                          ? CreateTrackEventController.to.isLoadingPostEvent.value
+                          ? CreateTrackEventController
+                              .to.isLoadingPostEvent.value
                           : CreateTrackEventController
                               .to.isLoadingPostTrack.value,
                       onTap: () {

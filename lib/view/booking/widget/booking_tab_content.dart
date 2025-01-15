@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:track_trek/controller/booking_management_controller.dart';
+import 'package:track_trek/controller/booking/booking_management_controller.dart';
 import 'package:track_trek/core/model/booking/event_booking_model.dart';
 import 'package:track_trek/core/model/booking/track_booking_model.dart';
 import 'package:track_trek/view/booking/widget/booking_list_widget.dart';

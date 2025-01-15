@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:track_trek/controller/common_controller.dart';
 import 'package:track_trek/controller/network_controller.dart';
 import 'package:track_trek/controller/profile_controller.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
@@ -12,6 +15,7 @@ import 'package:track_trek/core/service/review/review_service.dart';
 import 'package:track_trek/core/service/track-event/track_event_service.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/view/home/host/home_screen.dart';
+import 'package:track_trek/view/promote/payment_screen.dart';
 
 class HomeController extends GetxController {
   static HomeController get to => Get.find();
@@ -19,7 +23,8 @@ class HomeController extends GetxController {
   var react = false.obs;
   RxString isBooked = ''.obs;
   Rx<SingleTrackModel?> selectedTrack = Rx<SingleTrackModel?>(null);
-RxString promotionBannerImage = ''.obs;
+  RxString promotionBannerImage = ''.obs;
+
   ///========================List variables=====================///
   ///
   RxList<String> tabs = [AppStaticString.track, AppStaticString.event].obs;
@@ -41,19 +46,21 @@ RxString promotionBannerImage = ''.obs;
   RxBool isLoadingTrackParticipantList = false.obs;
   RxBool isLoadingTrackReviewList = false.obs;
   RxBool isLoadingEventParticipantList = false.obs;
+  RxBool isLoadingPromoteTrack = false.obs;
 
   ///=====================pagination variable====================///
 
   RxInt currentPageForReview = 1.obs;
   var isLoadingMoreForReview = false.obs;
-  Future<void> refreshCall()async{
+  Future<void> refreshCall() async {
     Get.put(ProfileController());
     await ProfileController.to.getUserProfileData();
-  await getTrackListCall();
- await getEventListCall();
-  trackList.refresh();
-  eventList.refresh();
-}
+    await getTrackListCall();
+    await getEventListCall();
+    trackList.refresh();
+    eventList.refresh();
+  }
+
   getTrackListCall() async {
     if (NetworkController.to.isConnected.value) {
       isLoadingTrackList.value = true;
@@ -198,6 +205,38 @@ RxString promotionBannerImage = ''.obs;
         const TrackListWidget(),
         const EventListWidget(),
       ];
+    }
+  }
+
+  ///===========================track promotion ============================///
+
+  promoteTrack() async {
+    if (NetworkController.to.isConnected.value) {
+      isLoadingPromoteTrack.value = true;
+      if (selectedTrack.value != null) {
+        String isPromoted = await TrackEventService.checkoutPromotion(
+            trackId: selectedTrack.value!.sId ?? '',
+            amount: '10',
+            file: File(promotionBannerImage.value));
+        if (isPromoted.isNotEmpty) {
+          isLoadingPromoteTrack.value = false;
+          selectedTrack.value = null;
+          promotionBannerImage.value = '';
+          CommonController.to.stripeUrl.value = isPromoted;
+          Get.toNamed(PaymentScreen.routeName);
+        } else {
+          isLoadingPromoteTrack.value = false;
+        }
+      } else {
+        isLoadingPromoteTrack.value = false;
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: AppStaticString.selectATrackFirst,
+            type: SnackBarType.failed);
+      }
+    } else {
+      isLoadingPromoteTrack.value = false;
+      noInternetShowCustomSnackbar();
     }
   }
 

@@ -10,19 +10,22 @@ import 'package:track_trek/core/init/google_map_api_key.dart';
 import 'package:track_trek/core/init/hive_boxes.dart';
 import 'package:track_trek/core/service/review/review_service.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
-import 'package:http/http.dart'as http;
+import 'package:http/http.dart' as http;
 import 'package:track_trek/core/init/api_client.dart';
 
 class CommonController extends GetxController {
   static CommonController get to => Get.find();
   /*RxBool isLoadingPostLike = false.obs;*/
   RxBool isLiked = false.obs;
-  RxList<dynamic> addressSuggestion =[].obs;
+  RxBool isLoadingOnFetch = false.obs;
+  RxBool isLoadingOnLocationSuggestion = false.obs;
+
+  // RxString stripeUrl ='https://checkout.stripe.com/c/pay/cs_test_a145Ie3jBXtvrM28zoB0JJz69cotaDOpdSxsG0nyZI0C66YofS6PoVz6Zo#fidkdWxOYHwnPyd1blpxYHZxWjA0STVuNnVHXWc3akhWcmpKdk10UVZqYzNzRF0xTER3ajJSSGpTV3V2YUh2dFdVX3dgbWxkQF9SSmd2Q01fTnNAbnBzUUJkYFJJS2RAXFZ1aEJnVU00YT1VNTVXMXxPU1dcaycpJ2N3amhWYHdzYHcnP3F3cGApJ2lkfGpwcVF8dWAnPyd2bGtiaWBabHFgaCcpJ2BrZGdpYFVpZGZgbWppYWB3dic%2FcXdwYHgl'.obs;
+  RxString stripeUrl =''.obs;
+  RxList<dynamic> addressSuggestion = [].obs;
   postLikeDisLikeCall({required String trackId}) async {
     if (NetworkController.to.isConnected.value) {
       try {
-
-
         // Locate the specific track item
         final trackItem = HomeUserController.to.trackList
             .firstWhere((track) => track.sId == trackId);
@@ -71,34 +74,35 @@ class CommonController extends GetxController {
       } catch (e) {
         print(e.toString());
       } finally {
-      /*  isLoadingPostLike.value = false;*/
+        /*  isLoadingPostLike.value = false;*/
       }
     } else {
-    /*  isLoadingPostLike.value = false;*/
+      /*  isLoadingPostLike.value = false;*/
       noInternetShowCustomSnackbar();
     }
   }
-  Future<void> fetchSuggestedPlaces(String input) async{
 
+  Future<void> fetchSuggestedPlaces(String input) async {
+    isLoadingOnLocationSuggestion.value = true;
     final url =
         'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${Uri.encodeComponent(input)}&key=${GoogleClient.googleMapUrl}';
     final response = await http.get(Uri.parse(url));
     print(url);
-    if(response.statusCode==200){
+    if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
       addressSuggestion.value = data['predictions'];
+      isLoadingOnLocationSuggestion.value = false;
+    } else {
+      isLoadingOnLocationSuggestion.value = false;
     }
-
   }
 
-
   Future<void> getLatLngFromPlace(
-      String placeId, {
-        required RxString lat,
-        required RxString lng,
-        required RxString selectedAddress,
-      }) async {
-
+    String placeId, {
+    required RxString lat,
+    required RxString lng,
+    required RxString selectedAddress,
+  }) async {
     final String url =
         'https://maps.googleapis.com/maps/api/geocode/json?place_id=$placeId&key=${GoogleClient.googleMapUrl}';
 
@@ -124,8 +128,8 @@ class CommonController extends GetxController {
       } else {
         print("HTTP Error: ${response.statusCode} - ${response.reasonPhrase}");
       }
-    } catch(e){
-debugPrint(e.toString());
+    } catch (e) {
+      debugPrint(e.toString());
     }
   }
 

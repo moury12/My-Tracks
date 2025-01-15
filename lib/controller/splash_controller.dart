@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:app_links/app_links.dart';
 import 'package:get/get.dart';
-import 'package:track_trek/controller/booking_management_controller.dart';
+import 'package:track_trek/controller/booking/booking_management_controller.dart';
 import 'package:track_trek/controller/common_controller.dart';
 import 'package:track_trek/controller/feedback/feedback_controller.dart';
 import 'package:track_trek/controller/home/host/home_controller.dart';

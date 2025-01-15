@@ -15,13 +15,13 @@ import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/view/add/widgets/upload_image_widget.dart';
 import 'package:track_trek/view/home/host/event_slot_page.dart';
 import 'package:track_trek/view/home/widgets/track_card_widget.dart';
+import 'package:track_trek/view/promote/payment_screen.dart';
 
 class PromoteScreen extends StatelessWidget {
   const PromoteScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-
     return SingleChildScrollView(
       child: Padding(
         padding: padding16,
@@ -61,11 +61,12 @@ class PromoteScreen extends StatelessWidget {
                             Image.file(File(
                                 HomeController.to.promotionBannerImage.value)),
                             Positioned(
-                              top:0,
-                              right:0,
+                              top: 0,
+                              right: 0,
                               child: IconButton(
                                   onPressed: () {
-                                    HomeController.to.promotionBannerImage.value ='';
+                                    HomeController
+                                        .to.promotionBannerImage.value = '';
                                   },
                                   icon: Icon(
                                     CupertinoIcons.multiply_circle_fill,
@@ -86,10 +87,16 @@ class PromoteScreen extends StatelessWidget {
             }),
             Align(
               alignment: AlignmentDirectional.bottomEnd,
-              child: CustomButton(
-                onTap: () {},
-                title: AppStaticString.goPay,
-              ),
+              child: Obx(() {
+                return CustomButton(
+                  isLoading: HomeController.to.isLoadingPromoteTrack.value,
+                  onTap: () {
+                    // Get.toNamed(PaymentScreen.routeName);
+                    HomeController.to.promoteTrack();
+                  },
+                  title: AppStaticString.goPay,
+                );
+              }),
             )
           ],
         ),

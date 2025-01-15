@@ -52,7 +52,8 @@ class UserService {
     required String phoneNumber,
     required String address,
     required File? file,
-  }) async {
+  })
+  async {
     try {
       final request = http.MultipartRequest(
         'PATCH',

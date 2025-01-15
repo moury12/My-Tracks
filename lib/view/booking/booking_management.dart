@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:track_trek/controller/booking_management_controller.dart';
+import 'package:track_trek/controller/booking/booking_management_controller.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/view/booking/widget/booking_tab_content.dart';
 import 'package:track_trek/view/booking/widget/booking_tabs_widget.dart';

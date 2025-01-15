@@ -193,6 +193,7 @@ class AppStaticString {
   static const String  success= "Success";
   static const String  failed= "Failed";
   static const String  failedToLoadData= "Failed to load data";
+  static const String  selectATrackFirst= "Please Select a track first";
   static const String  alert= "Alert";
   static const String  sendCode= "Send Code";
   static const String  connectToInternet= "Connect to the Internet";

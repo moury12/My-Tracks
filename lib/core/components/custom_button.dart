@@ -89,14 +89,16 @@ padding: padding12V,
 
 class DefaultProgressIndicator extends StatelessWidget {
   final Color? color;
+  final double? strokeWidth;
   const DefaultProgressIndicator({
-    super.key, this.color,
+    super.key, this.color, this.strokeWidth,
   });
 
   @override
   Widget build(BuildContext context) {
     return  CircularProgressIndicator(
       color:color?? AppColors.blackBackgroundColor,
+      strokeWidth: strokeWidth??4,
     );
   }
 }

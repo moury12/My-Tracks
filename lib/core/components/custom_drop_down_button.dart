@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:track_trek/core/components/custom_button.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
@@ -17,6 +18,7 @@ class CustomDropdown<T> extends StatefulWidget {
   final Color? fillColor;
   final Color? hintColor;
   final bool? isRequired;
+  final bool? isLoading;
   final double? radius;
   final T? selectedValue;
   final List<T>? items; // Dynamic list of items
@@ -34,7 +36,7 @@ class CustomDropdown<T> extends StatefulWidget {
     this.items, // Pass dropdown items dynamically
     this.onChanged,
     this.selectedValue,
-    this.isRequired = false, // Selected value managed externally
+    this.isRequired = false, this.isLoading=false, // Selected value managed externally
   });
 
   @override
@@ -91,6 +93,7 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
             borderRadius: BorderRadius.circular(widget.radius ?? 4.r),
           ),
           child: DropdownButton<T>(
+
             padding: padding8.copyWith(top: 0, bottom: 0),
             value: selectedValue, // Use local state here
             isExpanded: true,
@@ -107,7 +110,14 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
                   fontWeight: FontWeight.w400,
                   fontSize: getFontSizeSmall(context)),
             ),
-            icon: Icon(
+
+            icon:widget.isLoading==true?
+                SizedBox(   height: 12,
+                  width: 12,
+                  child: DefaultProgressIndicator(color: AppColors.primaryColor,
+                    strokeWidth: 2,
+                  ),
+                ): Icon(
               Icons.keyboard_arrow_down,
               color: widget.iconColor ?? AppColors.whiteLightColor,
               size: 20.sp,

@@ -18,6 +18,8 @@ import 'package:track_trek/view/history/history_page.dart';
 import 'package:track_trek/view/home/host/event_slot_page.dart';
 import 'package:track_trek/view/home/host/home_screen.dart';
 import 'package:track_trek/view/home/host/user_details_page.dart';
+import 'package:track_trek/view/promote/payment_screen.dart';
+import 'package:track_trek/view/promote/payment_screen.dart';
 import 'package:track_trek/view/search/search_page.dart';
 import 'package:track_trek/view/initial/bottom_navigation_screen.dart';
 import 'package:track_trek/view/initial/splash.dart';
@@ -50,6 +52,10 @@ class AppRoutes {
             page: () => ForgetPasswordScreen(),
             binding: AuthBinding()),
         GetPage(
+          name: PaymentScreen.routeName,
+          page: () => const PaymentScreen(),
+        ),
+        GetPage(
             name: EventTrackSlotScreen.routeName,
             page: () => const EventTrackSlotScreen(),
             binding: HomeBinding()),
@@ -69,10 +75,9 @@ class AppRoutes {
           name: ProfileScreen.routeName,
           page: () => const ProfileScreen(), /*  binding: ProfileBinding()*/
         ),
-
         GetPage(
             name: SearchScreen.routeName,
-            page: () =>  SearchScreen(),
+            page: () => SearchScreen(),
             binding: HomeUserBinding()),
         GetPage(
             name: SearchResultScreen.routeName,
@@ -87,8 +92,9 @@ class AppRoutes {
             name: UserDetailsScreen.routeName,
             page: () => const UserDetailsScreen()),
         GetPage(
-            name: FeedbackScreen.routeName, page: () =>  FeedbackScreen(),
-        binding: FeedbackBinding()),
+            name: FeedbackScreen.routeName,
+            page: () => FeedbackScreen(),
+            binding: FeedbackBinding()),
         GetPage(
             name: BookTrackJoinEventScreen.routeName,
             page: () => const BookTrackJoinEventScreen(),
@@ -96,7 +102,8 @@ class AppRoutes {
         GetPage(
             name: JoinEventPaymentScreen.routeName,
             page: () => const JoinEventPaymentScreen(),
-            binding: BookTrackJoinEventBinding()),   GetPage(
+            binding: BookTrackJoinEventBinding()),
+        GetPage(
             name: BookTrackPaymentScreen.routeName,
             page: () => const BookTrackPaymentScreen(),
             binding: BookTrackJoinEventBinding()),
@@ -112,7 +119,8 @@ class AppRoutes {
             binding: AuthBinding()),
         GetPage(
             name: PrivacyTermsScreen.routeName,
-            page: () => const PrivacyTermsScreen(),binding: FeedbackBinding()),
+            page: () => const PrivacyTermsScreen(),
+            binding: FeedbackBinding()),
         GetPage(
             name: ChangePasswordScreen.routeName,
             page: () => ChangePasswordScreen()),

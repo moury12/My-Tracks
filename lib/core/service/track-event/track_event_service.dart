@@ -97,6 +97,66 @@ class TrackEventService {
     }
   }
 
+  static Future<String> checkoutPromotion({
+    required String trackId,
+    required String amount,
+    required File? file,
+  }) async {
+    try {
+      final request = http.MultipartRequest(
+        'POST',
+        Uri.parse(ApiClient.checkoutPromotionUrl),
+      );
+
+      request.headers['Authorization'] =
+          'Bearer ${Boxes.getUserData().get(tokenKey)}';
+
+      request.fields['trackId'] = trackId;
+      request.fields['amount'] = amount;
+
+      if (file != null && await file.exists()) {
+        final mimeType =
+            lookupMimeType(file.path) ?? 'application/octet-stream';
+        final mimeSplit = mimeType.split('/');
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            'banner_image',
+            file.path,
+            contentType: MediaType(mimeSplit[0], mimeSplit[1]),
+          ),
+        );
+      } else {
+        debugPrint('No file selected or file does not exist.');
+      }
+
+      final response = await request.send();
+      final responseData = await http.Response.fromStream(response);
+
+      log('-----------------track promotion call--------------------');
+      log(responseData.body);
+
+      // Decode the response body
+      final Map<String, dynamic> data = json.decode(responseData.body);
+
+      if (data['success'] != null && data['success'] == true) {
+        showCustomSnackbar(
+            title: AppStaticString.success,
+            message: data['message'],
+            type: SnackBarType.success);
+        return data['data'];
+      } else {
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: data['message'],
+            type: SnackBarType.failed);
+        return '';
+      }
+    } catch (e) {
+      debugPrint('Error during promote: $e');
+      return '';
+    }
+  }
+
   static Future<List<CategoryModel>> getCategoryListCall() async {
     List<CategoryModel> category = [];
     try {
@@ -173,8 +233,7 @@ class TrackEventService {
 
   static Future<List<TrackHistoryRunningModel>> getTrackBookingCall({
     String history = '',
-  })
-  async {
+  }) async {
     List<TrackHistoryRunningModel> trackBookingList = [];
     try {
       final url = Uri.parse(

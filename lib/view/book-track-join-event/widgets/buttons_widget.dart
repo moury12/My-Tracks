@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:track_trek/controller/book_track_join_event_controller.dart';
+import 'package:track_trek/controller/booking/book_track_join_event_controller.dart';
 import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 

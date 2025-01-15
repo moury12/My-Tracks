@@ -123,14 +123,16 @@ class CreateTrackEventController extends GetxController {
   RxBool isLoadingCategory = false.obs;
   RxBool isLoadingPostEvent = false.obs;
 
-
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   categoryListCall() async {
     if (NetworkController.to.isConnected.value) {
       isLoadingCategory.value = true;
       catList.value = await TrackEventService.getCategoryListCall();
-
-      isLoadingCategory.value = false;
+      if (catList.isNotEmpty) {
+        isLoadingCategory.value = false;
+      } else {
+        isLoadingCategory.value = false;
+      }
     } else {
       isLoadingCategory.value = false;
       noInternetShowCustomSnackbar();
