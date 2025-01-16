@@ -4,11 +4,13 @@ import 'package:get/get.dart';
 import 'package:track_trek/controller/common_controller.dart';
 import 'package:track_trek/controller/home/user/home_user_controller.dart';
 import 'package:track_trek/core/components/custom_appbar.dart';
+import 'package:track_trek/core/components/custom_button.dart';
 import 'package:track_trek/core/components/custom_textfield.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
+import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/view/search/search_result_page.dart';
 import 'package:track_trek/view/search/widgets/search_widget.dart';
 
@@ -27,7 +29,7 @@ class SearchScreen extends StatelessWidget {
         child: Obx(() {
           return Column(
             children: [
-              CustomTextField(
+             CustomTextField(
                 textEditingController:
                     HomeUserController.to.searchFieldController.value,
                 onChanged: (val) {
@@ -50,6 +52,7 @@ class SearchScreen extends StatelessWidget {
                   final address = CommonController.to.addressSuggestion[index];
                   return SearchAddress(
                     onTap: () async{
+
                       final placeId = address['place_id'];
                       await   CommonController.to.getLatLngFromPlace(placeId,
                           lat: HomeUserController.to.lat,
@@ -61,6 +64,8 @@ class SearchScreen extends StatelessWidget {
 
                       CommonController.to.addressSuggestion.clear();
                       HomeUserController.to.getTrackListCall();
+
+
                       Get.toNamed(SearchResultScreen.routeName);
                     },
                     title: address['description'],

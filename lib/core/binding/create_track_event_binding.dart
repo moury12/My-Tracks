@@ -12,6 +12,6 @@ class CreateTrackBinding extends Bindings {
 class BookTrackJoinEventBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => CreateTrackEventController(), fenix: true);
+    Get.lazyPut(() => BookTrackJoinEventController(), fenix: true);
   }
 }

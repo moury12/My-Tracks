@@ -9,6 +9,8 @@ import 'package:track_trek/core/model/category/category_model.dart';
 import 'package:track_trek/core/model/review/review_model.dart';
 import 'package:track_trek/core/model/track-event-for-userpanel/event_for_user_panel_model.dart';
 import 'package:track_trek/core/model/track-event-for-userpanel/track_for_user_panel.dart';
+import 'package:track_trek/core/model/track-event/promote_track_model.dart';
+import 'package:track_trek/core/model/track-event/promote_track_model.dart';
 import 'package:track_trek/core/model/track-event/single_event_model.dart';
 import 'package:track_trek/core/service/review/review_service.dart';
 import 'package:track_trek/core/service/track-event/track_event_service.dart';
@@ -22,14 +24,13 @@ class HomeUserController extends GetxController {
   Timer? timer;
   Rx<PageController> controller =
       PageController(initialPage: 0, viewportFraction: 0.9, keepPage: true).obs;
-  List<String> pages = [dummyBannerUrl, dummyBanner2Url, dummyEventImgUrl];
 
   ///================== dynamic list variable =====================///
   RxList<CategoryModel> catList = <CategoryModel>[].obs;
+  RxList<PromoteTrackModel> promoteTrackList = <PromoteTrackModel>[].obs;
   RxList<TrackForUserPanelModel> trackList = <TrackForUserPanelModel>[].obs;
   RxList<EventForUserPanelModel> eventList = <EventForUserPanelModel>[].obs;
   RxList<ReviewModel> reviewList = <ReviewModel>[].obs;
-
 
   ///================== loading variable =====================///
 
@@ -38,6 +39,7 @@ class HomeUserController extends GetxController {
   RxBool isLoadingEventList = false.obs;
   RxBool isLoadingTrackReviewList = false.obs;
   RxBool isLoadingMoreForReview = false.obs;
+  RxBool isLoadingPromoteTrack = false.obs;
 
   ///========================= String dynamic variable =====================///
   RxString categorySearch = ''.obs;
@@ -48,7 +50,7 @@ class HomeUserController extends GetxController {
 
   ///==================textEditing controller variable =====================///
 
-  Rx<TextEditingController> searchFieldController =TextEditingController().obs;
+  Rx<TextEditingController> searchFieldController = TextEditingController().obs;
 
   getCategoryListCall() async {
     if (NetworkController.to.isConnected.value) {
@@ -88,11 +90,31 @@ class HomeUserController extends GetxController {
       // noInternetShowCustomSnackbar();
     }
   }
+
+  getPromoteTrackListCall() async {
+    if (NetworkController.to.isConnected.value) {
+      isLoadingPromoteTrack.value = true;
+      promoteTrackList.value =
+          await TrackEventService.getPromoteTrackListCall();
+      if (promoteTrackList.isNotEmpty) {
+        isLoadingPromoteTrack.value = false;
+      } else {
+        isLoadingPromoteTrack.value = false;
+        // showCustomSnackbar(
+        //     title: AppStaticString.failed,
+        //     message: AppStaticString.failedToLoadData,
+        //     type: SnackBarType.failed);
+      }
+    } else {
+      isLoadingPromoteTrack.value = false;
+      // noInternetShowCustomSnackbar();
+    }
+  }
+
   getTrackReviewListCall(
       {required String trackId,
-        String sort = '',
-        bool loadMoreData = false})
-  async {
+      String sort = '',
+      bool loadMoreData = false}) async {
     if (NetworkController.to.isConnected.value) {
       if (loadMoreData) {
         isLoadingMoreForReview.value = true;
@@ -127,6 +149,7 @@ class HomeUserController extends GetxController {
     }
     reviewList.refresh();
   }
+
   getEventListCall() async {
     if (NetworkController.to.isConnected.value) {
       isLoadingEventList.value = true;
@@ -146,35 +169,50 @@ class HomeUserController extends GetxController {
       // noInternetShowCustomSnackbar();
     }
   }
+
   void updateCategorySearch() {
     if (catList.isNotEmpty && selectedIndexCategory < catList.length) {
-      categorySearch.value = catList[selectedIndexCategory.value].name ?? ''; // Safely update
+      categorySearch.value =
+          catList[selectedIndexCategory.value].name ?? ''; // Safely update
     } else {
-      categorySearch.value = ''; // Fallback to empty if the list or index is invalid
-    }}
-  @override
-  void onInit() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      timer = Timer.periodic(const Duration(seconds: 2), (timer) {
-        if (currentPage.value < pages.length - 1) {
-          currentPage.value++;
-        } else {
-          currentPage.value = 0;
-        }
+      categorySearch.value =
+          ''; // Fallback to empty if the list or index is invalid
+    }
+  }
 
-        if (controller.value.hasClients) {
-          controller.value.animateToPage(
-            currentPage.value,
-            duration: const Duration(milliseconds: 400),
-            curve: Curves.linear,
-          );
-        }
-      });
-    });
+  ///=========================== Refresh method ===========================///
+  onRefreshUserPanel() {
+    selectedIndexCategory.value = 0;
+    getPromoteTrackListCall();
     getCategoryListCall();
     getEventListCall();
     getTrackListCall();
     updateCategorySearch();
+  }
+
+  @override
+  void onInit() {
+    onRefreshUserPanel();
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        timer = Timer.periodic(const Duration(seconds: 2), (timer) {
+          if (currentPage.value < promoteTrackList.length - 1) {
+            currentPage.value++;
+          } else {
+            currentPage.value = 0;
+          }
+
+          if (controller.value.hasClients) {
+            controller.value.animateToPage(
+              currentPage.value,
+              duration: const Duration(milliseconds: 400),
+              curve: Curves.linear,
+            );
+          }
+        });
+      });
+
+
     super.onInit();
   }
 }

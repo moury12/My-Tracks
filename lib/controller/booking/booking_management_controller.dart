@@ -12,9 +12,14 @@ class BookingManagementController extends GetxController {
   static BookingManagementController get to => Get.find();
   @override
   void onInit() async{
-   await getTrackBookingListCall();
-   await getEventBookingListCall();
+ await onRefreshBookingManagement();
     super.onInit();
+  }
+  onRefreshBookingManagement()async{
+    selectedLabel.value = 0;
+    selectedTab.value = 0;
+    await getTrackBookingListCall();
+    await getEventBookingListCall();
   }
   var selectedLabel = 0.obs;
   var selectedTab = 0.obs;

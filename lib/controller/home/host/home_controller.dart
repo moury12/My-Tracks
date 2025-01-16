@@ -53,12 +53,15 @@ class HomeController extends GetxController {
   RxInt currentPageForReview = 1.obs;
   var isLoadingMoreForReview = false.obs;
   Future<void> refreshCall() async {
-    Get.put(ProfileController());
-    await ProfileController.to.getUserProfileData();
+
     await getTrackListCall();
     await getEventListCall();
     trackList.refresh();
     eventList.refresh();
+    selectedLabel.value = 0;
+    Get.put(ProfileController());
+
+    await ProfileController.to.getUserProfileData();
   }
 
   getTrackListCall() async {

@@ -9,7 +9,7 @@ import 'package:track_trek/core/utils/text_style.dart';
 class CustomButton extends StatelessWidget {
   const CustomButton(
       {super.key,
-      this.height  ,
+      this.height,
       this.width = double.maxFinite,
       required this.onTap,
       this.title = '',
@@ -18,7 +18,12 @@ class CustomButton extends StatelessWidget {
       this.fillColor = AppColors.primaryColor,
       this.textColor = AppColors.blackLightColor,
       this.borderColor = AppColors.primaryColor,
-      this.child, this.img, this.icon, this.fontSize,  this.radius, this.isLoading=false});
+      this.child,
+      this.img,
+      this.icon,
+      this.fontSize,
+      this.radius,
+      this.isLoading = false});
 
   final double? height;
   final double? radius;
@@ -43,45 +48,53 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        onTap();
-      },
+      onTap: isLoading == true
+          ? () {}
+          : () {
+              onTap();
+            },
       child: Container(
         margin: EdgeInsets.symmetric(
             vertical: marginVerticel, horizontal: marginHorizontal),
         alignment: Alignment.center,
         height: height,
-padding: padding12V,
+        padding: padding12V,
         width: width,
         decoration: BoxDecoration(
             border: Border.all(color: borderColor),
-            borderRadius: BorderRadius.circular(radius??8.r),
+            borderRadius: BorderRadius.circular(radius ?? 8.r),
             color: fillColor),
-        child:
-            isLoading==true?const DefaultProgressIndicator():  child ?? Row(mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  textAlign: TextAlign.center,
-                  title,
-                  style: poppinsMedium.copyWith(color: textColor,
-                      fontSize:fontSize?? getFontSizeSemiSmall(context))
-                ),
-                icon != null || img != null ? space8W : const SizedBox.shrink(),
-                img != null
-                    ? Image.asset(
-                        img ?? '',
-                        height: 24.w,
-                        width: 24.w,
-                  color: AppColors.blackColor,
-                      )
-                    : icon != null
-                        ? Icon(
-                            icon,
-                            size: 24.sp,
-                          )
+        child: isLoading == true
+            ? const DefaultProgressIndicator()
+            : child ??
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                        textAlign: TextAlign.center,
+                        title,
+                        style: poppinsMedium.copyWith(
+                            color: textColor,
+                            fontSize:
+                                fontSize ?? getFontSizeSemiSmall(context))),
+                    icon != null || img != null
+                        ? space8W
                         : const SizedBox.shrink(),
-              ],
-            ),
+                    img != null
+                        ? Image.asset(
+                            img ?? '',
+                            height: 24.w,
+                            width: 24.w,
+                            color: AppColors.blackColor,
+                          )
+                        : icon != null
+                            ? Icon(
+                                icon,
+                                size: 24.sp,
+                              )
+                            : const SizedBox.shrink(),
+                  ],
+                ),
       ),
     );
   }
@@ -91,14 +104,16 @@ class DefaultProgressIndicator extends StatelessWidget {
   final Color? color;
   final double? strokeWidth;
   const DefaultProgressIndicator({
-    super.key, this.color, this.strokeWidth,
+    super.key,
+    this.color,
+    this.strokeWidth,
   });
 
   @override
   Widget build(BuildContext context) {
-    return  CircularProgressIndicator(
-      color:color?? AppColors.blackBackgroundColor,
-      strokeWidth: strokeWidth??4,
+    return CircularProgressIndicator(
+      color: color ?? AppColors.blackBackgroundColor,
+      strokeWidth: strokeWidth ?? 4,
     );
   }
 }

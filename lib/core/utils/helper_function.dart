@@ -47,9 +47,8 @@ void showCustomSnackbar({
     margin: const EdgeInsets.all(12),
     colorText: AppColors.whiteLightColor,
     dismissDirection: DismissDirection.horizontal,
-    icon:
-        Image.asset('assets/ic_launcher.png'),
-     /*   Icon(
+    icon: Image.asset('assets/ic_launcher.png'),
+    /*   Icon(
       icon,
       color: Colors.white,
       size: 30,
@@ -64,15 +63,14 @@ Future<void> pickImages({
   bool allowMultiple = false,
   RxList<String>? uploadImages,
   RxString? singleImagePath,
-})
-async {
+}) async {
   try {
     final result = await FilePicker.platform.pickFiles(
-      type: FileType.image, // Restrict to image files
-      allowMultiple: allowMultiple,
-      allowCompression: true,
-      compressionQuality: 50// Allow multiple selection
-    );
+        type: FileType.image, // Restrict to image files
+        allowMultiple: allowMultiple,
+        allowCompression: true,
+        compressionQuality: 50 // Allow multiple selection
+        );
 
     if (result != null) {
       final selectedPaths = result.paths.whereType<String>().toList();
@@ -166,24 +164,26 @@ Future<String?> selectAndFormatTime({
   try {
     final ThemeData customTimePickerTheme = Theme.of(context).copyWith(
       timePickerTheme: TimePickerThemeData(
-        backgroundColor:AppColors.blackLightColor, // Background color of the dialog
+
+        backgroundColor:
+            AppColors.blackLightColor, // Background color of the dialog
         hourMinuteShape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),
         dialHandColor: AppColors.blueColor,
-        hourMinuteTextColor: WidgetStateColor.resolveWith((states) =>
-        states.contains(WidgetState.selected)
-            ? Colors.white // Text color when selected
-            : Colors.grey[300]!),
-        hourMinuteColor: WidgetStateColor.resolveWith((states) =>
-        states.contains(WidgetState.selected)
-            ? AppColors.blueColor // Background color when selected
-            : Colors.grey[800]!),
+        hourMinuteTextColor: WidgetStateColor.resolveWith(
+            (states) => states.contains(WidgetState.selected)
+                ? Colors.white // Text color when selected
+                : Colors.grey[300]!),
+        hourMinuteColor: WidgetStateColor.resolveWith(
+            (states) => states.contains(WidgetState.selected)
+                ? AppColors.blueColor // Background color when selected
+                : Colors.grey[800]!),
         dialBackgroundColor: Colors.grey[800], // Dial's background color
-        dialTextColor: WidgetStateColor.resolveWith((states) =>
-        states.contains(WidgetState.selected)
-            ? Colors.white // Dial text color when selected
-            : Colors.grey[400]!),
+        dialTextColor: WidgetStateColor.resolveWith(
+            (states) => states.contains(WidgetState.selected)
+                ? Colors.white // Dial text color when selected
+                : Colors.grey[400]!),
         entryModeIconColor: AppColors.blueColor, // Color of the entry mode icon
       ),
     );
@@ -238,25 +238,33 @@ Future<String> selectDate(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.r),
             ),
-            yearForegroundColor: const WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
-            dayForegroundColor: const WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
-            todayForegroundColor: const WidgetStatePropertyAll<Color>(AppColors.whiteLightColor),
+            yearForegroundColor:
+                const WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
+            dayForegroundColor:
+                const WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
+            todayForegroundColor:
+                const WidgetStatePropertyAll<Color>(AppColors.whiteLightColor),
             confirmButtonStyle: const ButtonStyle(
-              foregroundColor: WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
+              foregroundColor:
+                  WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
             ),
-            rangePickerHeaderHeadlineStyle: const TextStyle(color: AppColors.blackLightColor),
+            rangePickerHeaderHeadlineStyle:
+                const TextStyle(color: AppColors.blackLightColor),
             rangePickerSurfaceTintColor: AppColors.blackLightColor,
             cancelButtonStyle: const ButtonStyle(
-              foregroundColor: WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
+              foregroundColor:
+                  WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
             ),
             backgroundColor: AppColors.blueColor,
             dividerColor: Colors.transparent,
-            todayBackgroundColor: const WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
+            todayBackgroundColor:
+                const WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
             yearStyle: TextStyle(
               color: AppColors.blackLightColor,
               fontSize: 16.sp,
             ),
-            inputDecorationTheme: const InputDecorationTheme(fillColor: AppColors.blackLightColor),
+            inputDecorationTheme: const InputDecorationTheme(
+                fillColor: AppColors.blackLightColor),
             weekdayStyle: TextStyle(
               color: AppColors.blackLightColor, // Color for week names
               fontSize: 14.sp,
@@ -264,12 +272,12 @@ Future<String> selectDate(
             ),
             rangeSelectionBackgroundColor: AppColors.blackLightColor,
             headerHeadlineStyle: TextStyle(
-              color: AppColors.blackLightColor, // Color for month/year in header
+              color:
+                  AppColors.blackLightColor, // Color for month/year in header
               fontSize: 16.sp,
               fontWeight: FontWeight.bold,
             ),
           ),
-
           dropdownMenuTheme: DropdownMenuThemeData(
             textStyle: TextStyle(
               color: AppColors.blackLightColor, // Dropdown text color
@@ -294,6 +302,7 @@ Future<String> selectDate(
   }
   return ''; // Return null if no date is selected
 }
+
 String formatTimestamp({
   required String timestamp,
   String format = 'yyyy-MM-dd hh:mm a',
@@ -314,7 +323,9 @@ String formatTimestamp({
     // Handle parsing or formatting errors
     return '';
   }
-}String formatDateTime(String isoDateTime) {
+}
+
+String formatDateTime(String isoDateTime) {
   try {
     // Parse the ISO date-time string
     final DateTime dateTime = DateTime.parse(isoDateTime);
@@ -332,4 +343,5 @@ String formatTimestamp({
   } catch (e) {
     // Handle parsing errors gracefully
     return 'Invalid date';
-  }}
+  }
+}

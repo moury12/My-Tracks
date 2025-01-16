@@ -25,6 +25,7 @@ class ApiClient {
   static String get getAllBusinessUrl => '$baseUrl/business/all-business';
   static String get getBookASlotUrl => '$baseUrl/business/book-a-slot';
   static String get getJoinEventUrl => '$baseUrl/business/join-event';
+  static String get promoteTrackUrl => '$baseUrl/business/get-promoted-tracks';
   static String get getParticipantsUrl =>
       '$baseUrl/business/view-all-participants';
   static String get activeDeactivateUrl =>
@@ -38,7 +39,9 @@ class ApiClient {
   static String get postReviewUrl => '$baseUrl/review/post-review';
   static String get getAllReviewUrl => '$baseUrl/review/get-all-review';
   static String get postFeedbackUrl => '$baseUrl/feedback/post-feedback';
-  static String get getTermsConditionUrl => '$baseUrl/manage/get-terms-conditions';
+  static String get getTermsConditionUrl =>
+      '$baseUrl/manage/get-terms-conditions';
   static String get getPrivacyPolicy => '$baseUrl/manage/get-privacy-policy';
-  static String get checkoutPromotionUrl => '$baseUrl/payment/checkout-promotion';
+  static String get checkoutPromotionUrl =>
+      '$baseUrl/payment/checkout-promotion';
 }

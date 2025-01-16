@@ -15,7 +15,6 @@ import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/view/add/widgets/upload_image_widget.dart';
 import 'package:track_trek/view/home/host/event_slot_page.dart';
 import 'package:track_trek/view/home/widgets/track_card_widget.dart';
-import 'package:track_trek/view/promote/payment_screen.dart';
 
 class PromoteScreen extends StatelessWidget {
   const PromoteScreen({super.key});
@@ -30,6 +29,7 @@ class PromoteScreen extends StatelessWidget {
           children: [
             Obx(() {
               return CustomDropdown<SingleTrackModel>(
+                isLoading: HomeController.to.isLoadingTrackList.value,
                 selectedValue: HomeController.to.selectedTrack.value,
                 radius: 8.r,
                 borderColor: AppColors.blackLightColor,

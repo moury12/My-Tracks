@@ -149,10 +149,12 @@ class ProfileController extends GetxController {
     ///=====================add dynmic location ====================///
     locationController.value.text = userModel.value.address ?? 'n/a';
   }
-
+onRefreshProfile()async{
+await  getUserProfileData();
+}
   @override
   void onInit() {
-    getUserProfileData();
+    onRefreshProfile();
 
     super.onInit();
   }

@@ -278,13 +278,18 @@ class TrackCardWidget extends StatelessWidget {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(AppStaticString.viewAllSlot,
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        color: AppColors.blackLightColor,
-                                        fontSize:
-                                            getFontSizeSemiSmall(context))),
-                                space8W,
+                                Expanded(
+                                  child: Padding(
+                                    padding: padding12H,
+                                    child: Text(AppStaticString.viewAllSlot,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            color: AppColors.blackLightColor,
+                                            fontSize:
+                                                getFontSizeSemiSmall(context))),
+                                  ),
+                                ),
+
                                 Image.asset(
                                   arrowTopImgUrl,
                                   height: 24.w,

@@ -67,6 +67,7 @@ class ManagementScreen extends StatelessWidget {
       child: Obx(() {
         return Column(children: [
           CustomDropdown<SingleEventModel>(
+            isLoading: TrackManagementController.to.isLoadingEventList.value,
             selectedValue: TrackManagementController.to.selectedEvent.value,
             radius: 8.r,
             borderColor: AppColors.blackLightColor,

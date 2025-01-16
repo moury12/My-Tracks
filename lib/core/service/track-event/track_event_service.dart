@@ -15,6 +15,9 @@ import 'package:track_trek/core/model/category/category_model.dart';
 import 'package:track_trek/core/model/participants/event_participants_model.dart';
 import 'package:track_trek/core/model/participants/track_participants_model.dart';
 import 'package:track_trek/core/model/renter/renters_model.dart';
+import 'package:track_trek/core/model/track-event/promote_track_model.dart';
+import 'package:track_trek/core/model/track-event/promote_track_model.dart';
+import 'package:track_trek/core/model/track-event/promote_track_model.dart';
 import 'package:track_trek/core/model/track-event/single_event_model.dart';
 import 'package:track_trek/core/model/track-event/single_track_model.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
@@ -157,7 +160,8 @@ class TrackEventService {
     }
   }
 
-  static Future<List<CategoryModel>> getCategoryListCall() async {
+  static Future<List<CategoryModel>> getCategoryListCall()
+  async {
     List<CategoryModel> category = [];
     try {
       final url = Uri.parse('${ApiClient.categoryUrl}?page=1&limit=1000');
@@ -190,6 +194,41 @@ class TrackEventService {
       debugPrint(e.toString());
     }
     return category;
+  }
+  static Future<List<PromoteTrackModel>> getPromoteTrackListCall()
+  async {
+    List<PromoteTrackModel> promoteTrackList = [];
+    try {
+      final url = Uri.parse('${ApiClient.promoteTrackUrl}');
+      final headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
+      };
+
+      final response = await http.get(
+        url,
+        headers: headers,
+      );
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      log('-----------------promote Track  call--------------------');
+      log(responseData.toString());
+      if (responseData['success'] != null && responseData['success'] == true) {
+        promoteTrackList = responseData['data'].forEach((e) {
+          promoteTrackList.add(PromoteTrackModel.fromJson(e));
+        });
+        return promoteTrackList;
+      } else {
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
+        return promoteTrackList;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return promoteTrackList;
   }
 
   static Future<List<TrackSlots>> getSlotListCall({
