@@ -43,6 +43,7 @@ class EventCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String imageUrl= eventModel!=null?'${ApiClient.baseUrl}/${eventModel!.eventImage?.first}':trackModel!=null?'${ApiClient.baseUrl}/${trackModel!.trackImage?.first}':eventModelForUser!=null?'${ApiClient.baseUrl}/${eventModelForUser!.eventImage?.first}':'n/a';
+    final String sId= eventModel!=null?eventModel!.sId??'':trackModel!=null?trackModel!.sId??'n/a':eventModelForUser!=null?eventModelForUser!.sId??'n/a':AppStaticString.dummyEvent;
     final String name= eventModel!=null?eventModel!.eventName??'':trackModel!=null?trackModel!.trackName??'n/a':eventModelForUser!=null?eventModelForUser!.eventName??'n/a':AppStaticString.dummyEvent;
     final String location= eventModel!=null?eventModel!.address??'':trackModel!=null?trackModel!.address??'n/a':eventModelForUser!=null?eventModelForUser!.address??'n/a':AppStaticString.dummyAddress;
     final String startDate= eventModel!=null?eventModel!.startDate??'':trackModel!=null?trackModel!.totalTrackDayInMonth??'n/a':eventModelForUser!=null?eventModelForUser!.startDate??'n/a':AppStaticString.dummyDate;
@@ -181,8 +182,13 @@ class EventCardWidget extends StatelessWidget {
 
                           child: OptionWidget(
                               function: () async {
-                                await Share.share(
-                                    'Check out this cool Flutter app!');
+                                const String deepLink = '${ApiClient.baseUrl}/';
+
+                                const String fallbackLink = 'https://play.google.com/store/apps/details?id=com.mytracks.track';
+                                final String trackId = sId;
+                                final String type = 'event';
+                                final String fullLink = '$deepLink?trackId=$trackId&type=$type&fallback=$fallbackLink';
+                                Share.share(fullLink);
                               },
                               icon: shareIconUrl,
                               text: AppStaticString.share))

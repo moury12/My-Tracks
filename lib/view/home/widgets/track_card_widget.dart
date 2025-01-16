@@ -239,13 +239,12 @@ class TrackCardWidget extends StatelessWidget {
                           height: 45.w,
                           child: Stack(
                             children: List.generate(
-                                trackModel != null
-                                    ? trackModel!.renters != null
-                                        ? trackModel!.renters!.length > 5
-                                            ? 5
-                                            : trackModel!.renters!.length
-                                        : 0
-                                    : 5,
+                                trackModel != null &&
+                                        trackModel!.renters != null
+                                    ? trackModel!.renters!.length > 5
+                                        ? 5
+                                        : trackModel!.renters!.length
+                                    : 0,
                                 (index) => Positioned(
                                     left: (30.w * index).toDouble(),
                                     child: trackModel != null &&
@@ -289,7 +288,6 @@ class TrackCardWidget extends StatelessWidget {
                                                 getFontSizeSemiSmall(context))),
                                   ),
                                 ),
-
                                 Image.asset(
                                   arrowTopImgUrl,
                                   height: 24.w,
@@ -339,14 +337,18 @@ class TrackCardWidget extends StatelessWidget {
 
                       /*CommonController.to.isLoadingPostLike.value?DefaultProgressIndicator(color: AppColors.whiteLightColor,):*/
                       fromUser == true
-                          ?    OptionWidget(
-                        function: () {
-                          CommonController.to.postLikeDisLikeCall(trackId: sId);
-                        },
-                        icon: /* react!.value*/
-                            isReact == true ? reactFillIconUrl : reactIconUrl,
-                        text: totalReaction,
-                      ):const SizedBox.shrink(),
+                          ? OptionWidget(
+                              function: () {
+                                CommonController.to
+                                    .postLikeDisLikeCall(trackId: sId);
+                              },
+                              icon: /* react!.value*/
+                                  isReact == true
+                                      ? reactFillIconUrl
+                                      : reactIconUrl,
+                              text: totalReaction,
+                            )
+                          : const SizedBox.shrink(),
 
                       ///================map==============///
 
@@ -368,13 +370,16 @@ class TrackCardWidget extends StatelessWidget {
 
                           : OptionWidget(
                               function: () async {
-
                                 const String deepLink = '${ApiClient.baseUrl}/';
 
-                                const String fallbackLink = 'https://play.google.com/store/apps/details?id=com.ubercab&pli=1';
-                                final String fullLink = '$deepLink?fallback=$fallbackLink';
+                                const String fallbackLink =
+                                    'https://play.google.com/store/apps/details?id=com.mytracks.track';
+                                final String trackId = sId;
+                                final String type = 'track';
+                                final String fullLink =
+                                    '$deepLink?trackId=$trackId&type=$type&fallback=$fallbackLink';
                                 Share.share(fullLink);
-                               /* await Share.share(
+                                /* await Share.share(
                                     'Check out this cool Flutter app!');*/
                               },
                               icon: shareIconUrl,
@@ -453,8 +458,7 @@ class TrackCardWidget extends StatelessWidget {
   }
 
   void _showMapBottomSheet(
-      BuildContext context, double latitude, double longitude)
-  {
+      BuildContext context, double latitude, double longitude) {
     showModalBottomSheet(
       enableDrag: false,
       showDragHandle: true,
@@ -550,109 +554,120 @@ class ReviewListWidget extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       decoration: const BoxDecoration(
         // color: Colors.white, // Background color for the bottom sheet
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)), 
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
       ),
       child: SingleChildScrollView(
         child: Obx(() {
-          final isLoading = Boxes.getUserData().get(roleKey) == 'USER'?HomeUserController.to.isLoadingTrackReviewList.value:
-              HomeController.to.isLoadingTrackReviewList.value;
-          return isLoading?
-              Center(child: const DefaultProgressIndicator(color: AppColors.primaryColor,)): reviewList.isEmpty
-              ? const EmptyTextWidget(text: 'Review not found!!')
-              :  Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text(
-                        AppStaticString.comments,
-                        style: poppinsMedium.copyWith(
-                          fontSize: getFontSizeSmall(context),
-                        ),
-                      ),
-                    ),
-                    Divider(color: Colors.grey[300]),
-                    ...List.generate(
-                      reviewList.length,
-                      (index) {
-                        final review = reviewList[index];
-                        return Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Row(
-                                children: [
-                                  review.user!.profileImage != null
-                                      ? CustomNetworkImage(
-                                          imageUrl:
-                                              review.user!.profileImage ?? '',
-                                          height: 45.w,
-                                          width: 45.w,
-                                          imageErrorUrl: dummyProfileImgUrl,
-                                          boxShape: BoxShape.circle,
-                                        )
-                                      : const ProfileCircleImageWidget(),
-                                  const SizedBox(width: 16.0),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        /// User name and duration
-                                        RichText(
-                                          text: TextSpan(
-                                            children: [
-                                              TextSpan(
-                                                text:
-                                                    '${review.user!.name ?? AppStaticString.dummyName} ',
-                                                style: poppinsRegular.copyWith(
-                                                  fontSize: getFontSizeDefault(
-                                                      context),
-                                                ),
-                                              ),
-                                              TextSpan(
-                                                text: formatTimestamp(
-                                                    timestamp:
-                                                        review.createdAt ?? ''),
-                                                style: poppinsRegular.copyWith(
-                                                  color:
-                                                      AppColors.normalDarkWhite,
-                                                  fontSize:
-                                                      getFontSizeSmall(context),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        const SizedBox(height: 6.0),
-                                        RatingTextWidget(
-                                            rating: review.rating != null
-                                                ? review.rating.toString()
-                                                : '0.0'),
-
-                                        ///===================== Comment text =================///
-                                        Text(
-                                          review.review.toString(),
-                                          style: poppinsRegular.copyWith(
-                                            color: const Color(0xffD2D2D2),
-                                            fontSize:
-                                                getFontSizeDefault(context),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
+          final isLoading = Boxes.getUserData().get(roleKey) == 'USER'
+              ? HomeUserController.to.isLoadingTrackReviewList.value
+              : HomeController.to.isLoadingTrackReviewList.value;
+          return isLoading
+              ? Center(
+                  child: const DefaultProgressIndicator(
+                  color: AppColors.primaryColor,
+                ))
+              : reviewList.isEmpty
+                  ? const EmptyTextWidget(text: 'Review not found!!')
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            AppStaticString.comments,
+                            style: poppinsMedium.copyWith(
+                              fontSize: getFontSizeSmall(context),
                             ),
-                            Divider(color: Colors.grey[300]),
-                          ],
-                        );
-                      },
-                    ),
-                  ],
-                );
+                          ),
+                        ),
+                        Divider(color: Colors.grey[300]),
+                        ...List.generate(
+                          reviewList.length,
+                          (index) {
+                            final review = reviewList[index];
+                            return Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Row(
+                                    children: [
+                                      review.user!.profileImage != null
+                                          ? CustomNetworkImage(
+                                              imageUrl:
+                                                  review.user!.profileImage ??
+                                                      '',
+                                              height: 45.w,
+                                              width: 45.w,
+                                              imageErrorUrl: dummyProfileImgUrl,
+                                              boxShape: BoxShape.circle,
+                                            )
+                                          : const ProfileCircleImageWidget(),
+                                      const SizedBox(width: 16.0),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            /// User name and duration
+                                            RichText(
+                                              text: TextSpan(
+                                                children: [
+                                                  TextSpan(
+                                                    text:
+                                                        '${review.user!.name ?? AppStaticString.dummyName} ',
+                                                    style:
+                                                        poppinsRegular.copyWith(
+                                                      fontSize:
+                                                          getFontSizeDefault(
+                                                              context),
+                                                    ),
+                                                  ),
+                                                  TextSpan(
+                                                    text: formatTimestamp(
+                                                        timestamp:
+                                                            review.createdAt ??
+                                                                ''),
+                                                    style:
+                                                        poppinsRegular.copyWith(
+                                                      color: AppColors
+                                                          .normalDarkWhite,
+                                                      fontSize:
+                                                          getFontSizeSmall(
+                                                              context),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            const SizedBox(height: 6.0),
+                                            RatingTextWidget(
+                                                rating: review.rating != null
+                                                    ? review.rating.toString()
+                                                    : '0.0'),
+
+                                            ///===================== Comment text =================///
+                                            Text(
+                                              review.review.toString(),
+                                              style: poppinsRegular.copyWith(
+                                                color: const Color(0xffD2D2D2),
+                                                fontSize:
+                                                    getFontSizeDefault(context),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Divider(color: Colors.grey[300]),
+                              ],
+                            );
+                          },
+                        ),
+                      ],
+                    );
         }),
       ),
     );
