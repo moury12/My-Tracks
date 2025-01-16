@@ -378,7 +378,8 @@ class TrackCardWidget extends StatelessWidget {
                                 final String type = 'track';
                                 final String fullLink =
                                     '$deepLink?trackId=$trackId&type=$type&fallback=$fallbackLink';
-                                Share.share(fullLink);
+                                Share.share(fullLink,
+                                );
                                 /* await Share.share(
                                     'Check out this cool Flutter app!');*/
                               },

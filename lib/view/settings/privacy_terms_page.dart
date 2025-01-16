@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:get/get.dart';
 import 'package:track_trek/controller/feedback/feedback_controller.dart';
 import 'package:track_trek/core/components/custom_appbar.dart';
@@ -26,7 +27,19 @@ class PrivacyTermsScreen extends StatelessWidget {
             child:  SingleChildScrollView(
               child: Center(
           ///===================dynamic text=========================///
-                child: Text(argument!=null&&argument=='terms'?FeedBackController.to.terms.value.description??'':FeedBackController.to.policy.value.description??'',style: poppinsRegular.copyWith(fontSize: getFontSizeDefault(context)),) ),
+                child:
+                /*Text(argument!=null&&argument=='terms'?
+                FeedBackController.to.terms.value.description??''
+                    :FeedBackController.to.policy.value.description??'',
+                  style: poppinsRegular.copyWith(fontSize:
+                  getFontSizeDefault(context)),) */
+              HtmlWidget(
+                  '''${argument!=null&&argument=='terms'?
+               FeedBackController.to.terms.value.description??''
+                   :FeedBackController.to.policy.value.description ?? ''
+           }''',textStyle: poppinsRegular.copyWith(fontSize:
+                  getFontSizeDefault(context)),
+              )),
             ),
           );
         }
