@@ -11,16 +11,22 @@ import 'package:track_trek/core/utils/helper_function.dart';
 class BookingManagementController extends GetxController {
   static BookingManagementController get to => Get.find();
   @override
-  void onInit() async{
- await onRefreshBookingManagement();
+  void onInit() async {
+    await onRefreshBookingManagement();
     super.onInit();
   }
-  onRefreshBookingManagement()async{
+
+  onRefreshBookingManagement() async {
     selectedLabel.value = 0;
     selectedTab.value = 0;
+    /*  trackHistory.value ='';*/
+
     await getTrackBookingListCall();
     await getEventBookingListCall();
+    trackBookingList.refresh();
+    eventBookingList.refresh();
   }
+
   var selectedLabel = 0.obs;
   var selectedTab = 0.obs;
   RxDouble ratingValue = 2.5.obs;
@@ -32,99 +38,90 @@ class BookingManagementController extends GetxController {
   var tabContent = <Widget>[].obs;
   RxList<TrackHistoryRunningModel> trackBookingList =
       <TrackHistoryRunningModel>[].obs;
+  RxList<TrackHistoryRunningModel> trackHistoryBookingList =
+      <TrackHistoryRunningModel>[].obs;
   RxList<EventHistoryRunningModel> eventBookingList =
+      <EventHistoryRunningModel>[].obs;
+  RxList<EventHistoryRunningModel> eventBookingHistoryList =
       <EventHistoryRunningModel>[].obs;
 
   ///========================dynamic String variable======================///
 
-  RxString trackHistory =''.obs;
-  RxString eventHistory =''.obs;
-
   ///========================dynamic Loading variable======================///
 
-  RxBool isLoadingHistoryBooking= false.obs;
-  RxBool isLoadingEventHistoryBooking= false.obs;
-  RxBool isLoadingRating= false.obs;
+  RxBool isLoadingHistoryBooking = false.obs;
+  RxBool isLoadingEventHistoryBooking = false.obs;
+  RxBool isLoadingRating = false.obs;
 
   ///========================dynamic controller variable======================///
 
   TextEditingController reviewController = TextEditingController();
-  // void fetchInitialData() async {
-  //   await Future.wait([
-  //     getTrackBookingListCall(),
-  //     getEventBookingListCall(),
-  //   ]);
-  // }
 
-  void handleTabChange(int tabIndex)async{
-    final isTrackTab =selectedLabel.value==0;
+  void handleTabChange(int tabIndex) async {
+    if (tabIndex == selectedTab.value) return;
 
-      if (tabIndex == 1) {
-        if (isTrackTab) {
-          isLoadingHistoryBooking.value = true;
-          trackHistory.value = 'yes';
-         await getTrackBookingListCall();
-         trackBookingList.refresh();
-          isLoadingHistoryBooking.value = false;
-        } else {
-          isLoadingEventHistoryBooking.value = true;
+    selectedTab.value = tabIndex;
 
-          eventHistory.value = 'yes';
-       await   getEventBookingListCall();
-       eventBookingList.refresh();
-          isLoadingEventHistoryBooking.value = false;
+    final isTrackTab = selectedLabel.value == 0;
+    if (tabIndex == 1) {
+      if (isTrackTab) {
+        isLoadingHistoryBooking.value = true;
 
-        }
+        await getTrackHistoryBookingListCall();
+        trackHistoryBookingList.refresh();
+        isLoadingHistoryBooking.value = false;
       } else {
-        if (isTrackTab) {
-          isLoadingHistoryBooking.value = true;
+        isLoadingEventHistoryBooking.value = true;
 
-          trackHistory.value = '';
-         await getTrackBookingListCall();
-         trackBookingList.refresh();
-          isLoadingHistoryBooking.value = false;
-        } else {
-          isLoadingEventHistoryBooking.value = true;
-
-          eventHistory.value = '';
-       await   getEventBookingListCall();
-       eventBookingList.refresh();
-          isLoadingEventHistoryBooking.value = false;
-        }
+        await getEventHistoryBookingListCall();
+        eventBookingHistoryList.refresh();
+        isLoadingEventHistoryBooking.value = false;
       }
+    } else {
+      if (isTrackTab) {
+        isLoadingHistoryBooking.value = true;
 
+        /*trackHistory.value = '';*/
+        await getTrackBookingListCall();
+        trackBookingList.refresh();
+        isLoadingHistoryBooking.value = false;
+      } else {
+        isLoadingEventHistoryBooking.value = true;
+
+        await getEventBookingListCall();
+        eventBookingList.refresh();
+        isLoadingEventHistoryBooking.value = false;
+      }
+    }
   }
-  handleLabelChange(int index) async{
-    BookingManagementController
-        .to.selectedLabel.value = index;
-    if( BookingManagementController
-        .to.selectedLabel.value ==0){
-      BookingManagementController.to.isLoadingHistoryBooking.value = true;
 
-    }else{
+  handleLabelChange(int index) async {
+    BookingManagementController.to.selectedLabel.value = index;
+    if (BookingManagementController.to.selectedLabel.value == 0) {
+      BookingManagementController.to.isLoadingHistoryBooking.value = true;
+    } else {
       BookingManagementController.to.isLoadingEventHistoryBooking.value = true;
     }
-    if(selectedTab.value==1){
-      eventHistory.value = 'yes';
-      await   getEventBookingListCall();
-      eventBookingList.refresh();
-      trackHistory.value = 'yes';
+    if (selectedTab.value == 1) {
+      await getEventHistoryBookingListCall();
+      eventBookingHistoryList.refresh();
+
+      await getTrackHistoryBookingListCall();
+      trackHistoryBookingList.refresh();
+    } else {
       await getTrackBookingListCall();
       trackBookingList.refresh();
-    }else{
-      trackHistory.value = '';
-      await getTrackBookingListCall();
-      trackBookingList.refresh();
-      eventHistory.value = '';
-      await   getEventBookingListCall();
+
+      await getEventBookingListCall();
       eventBookingList.refresh();
     }
-
   }
+
   getTrackBookingListCall() async {
     if (NetworkController.to.isConnected.value) {
       isLoadingHistoryBooking.value = true;
-      var response = await TrackEventService.getTrackBookingCall(history: trackHistory.value);
+      var response =
+          await TrackEventService.getTrackBookingCall(/*trackHistory.value*/);
       trackBookingList.assignAll(response.isNotEmpty ? response : []);
 
       if (trackBookingList.isNotEmpty) {
@@ -137,11 +134,29 @@ class BookingManagementController extends GetxController {
       noInternetShowCustomSnackbar();
     }
   }
+
+  getTrackHistoryBookingListCall() async {
+    if (NetworkController.to.isConnected.value) {
+      isLoadingHistoryBooking.value = true;
+      var response =
+          await TrackEventService.getTrackBookingCall(history: 'yes');
+      trackHistoryBookingList.assignAll(response.isNotEmpty ? response : []);
+
+      if (trackHistoryBookingList.isNotEmpty) {
+        isLoadingHistoryBooking.value = false;
+      } else {
+        isLoadingHistoryBooking.value = false;
+      }
+    } else {
+      isLoadingHistoryBooking.value = false;
+      noInternetShowCustomSnackbar();
+    }
+  }
+
   getEventBookingListCall() async {
     if (NetworkController.to.isConnected.value) {
       isLoadingEventHistoryBooking.value = true;
-      eventBookingList.value = await TrackEventService.getEventBookingCall(
-         history: eventHistory.value );
+      eventBookingList.value = await TrackEventService.getEventBookingCall();
       if (eventBookingList.isNotEmpty) {
         isLoadingEventHistoryBooking.value = false;
       } else {
@@ -152,14 +167,34 @@ class BookingManagementController extends GetxController {
       noInternetShowCustomSnackbar();
     }
   }
-  postReviewCall({required String trackId,}) async {
+
+  getEventHistoryBookingListCall() async {
+    if (NetworkController.to.isConnected.value) {
+      isLoadingEventHistoryBooking.value = true;
+      eventBookingHistoryList.value =
+          await TrackEventService.getEventBookingCall(history: 'yes');
+      if (eventBookingHistoryList.isNotEmpty) {
+        isLoadingEventHistoryBooking.value = false;
+      } else {
+        isLoadingEventHistoryBooking.value = false;
+      }
+    } else {
+      isLoadingEventHistoryBooking.value = false;
+      noInternetShowCustomSnackbar();
+    }
+  }
+
+  postReviewCall({
+    required String trackId,
+  }) async {
     if (NetworkController.to.isConnected.value) {
       isLoadingRating.value = true;
-      bool isGivenRating = await ReviewService.postReviewRequest(trackId:
-      trackId, review: reviewController.text,rating: ratingValue.value);
+      bool isGivenRating = await ReviewService.postReviewRequest(
+          trackId: trackId,
+          review: reviewController.text,
+          rating: ratingValue.value);
       if (isGivenRating) {
         isLoadingRating.value = false;
-
       } else {
         isLoadingRating.value = false;
       }
@@ -168,5 +203,4 @@ class BookingManagementController extends GetxController {
       noInternetShowCustomSnackbar();
     }
   }
-
 }

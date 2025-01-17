@@ -160,8 +160,7 @@ class TrackEventService {
     }
   }
 
-  static Future<List<CategoryModel>> getCategoryListCall()
-  async {
+  static Future<List<CategoryModel>> getCategoryListCall() async {
     List<CategoryModel> category = [];
     try {
       final url = Uri.parse('${ApiClient.categoryUrl}?page=1&limit=1000');
@@ -175,28 +174,44 @@ class TrackEventService {
         url,
         headers: headers,
       );
-      final Map<String, dynamic> responseData = json.decode(response.body);
-      log('-----------------category  call--------------------');
-      log(responseData.toString());
-      if (responseData['success'] != null && responseData['success'] == true) {
-        category = responseData['data']['category'].forEach((e) {
-          category.add(CategoryModel.fromJson(e));
-        });
-        return category;
-      } else {
-        showCustomSnackbar(
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        log('-----------------Category Call--------------------');
+        log(responseData.toString());
+
+        if (responseData['success'] != null && responseData['success'] == true) {
+          // Safely parse the category data
+          final data = responseData['data']['category'] as List<dynamic>?;
+          if (data != null) {
+            category = data
+                .map((e) => CategoryModel.fromJson(e as Map<String, dynamic>))
+                .toList();
+          }
+        } else {
+          // Handle API-level errors
+          showCustomSnackbar(
             title: AppStaticString.failed,
-            message: responseData['message'],
-            type: SnackBarType.failed);
-        return category;
+            message: responseData['message'] ?? 'Unknown error occurred',
+            type: SnackBarType.failed,
+          );
+        }
+      } else {
+        // Handle HTTP-level errors
+        showCustomSnackbar(
+          title: AppStaticString.failed,
+          message: 'HTTP Error: ${response.statusCode}',
+          type: SnackBarType.failed,
+        );
       }
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint('Error in getCategoryListCall: $e');
     }
+
     return category;
   }
-  static Future<List<PromoteTrackModel>> getPromoteTrackListCall()
-  async {
+
+  static Future<List<PromoteTrackModel>> getPromoteTrackListCall() async {
     List<PromoteTrackModel> promoteTrackList = [];
     try {
       final url = Uri.parse('${ApiClient.promoteTrackUrl}');
@@ -210,26 +225,43 @@ class TrackEventService {
         url,
         headers: headers,
       );
-      final Map<String, dynamic> responseData = json.decode(response.body);
-      log('-----------------promote Track  call--------------------');
-      log(responseData.toString());
-      if (responseData['success'] != null && responseData['success'] == true) {
-        promoteTrackList = responseData['data'].forEach((e) {
-          promoteTrackList.add(PromoteTrackModel.fromJson(e));
-        });
-        return promoteTrackList;
-      } else {
-        showCustomSnackbar(
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        log('-----------------Promote Track Call--------------------');
+        log(responseData.toString());
+
+        if (responseData['success'] != null && responseData['success'] == true) {
+          // Parse the response data into a list
+          final data = responseData['data'] as List<dynamic>?;
+          if (data != null) {
+            promoteTrackList = data
+                .map((e) => PromoteTrackModel.fromJson(e as Map<String, dynamic>))
+                .toList();
+          }
+        } else {
+          // Handle API failure
+          showCustomSnackbar(
             title: AppStaticString.failed,
-            message: responseData['message'],
-            type: SnackBarType.failed);
-        return promoteTrackList;
+            message: responseData['message'] ?? 'Unknown error occurred',
+            type: SnackBarType.failed,
+          );
+        }
+      } else {
+        // Handle HTTP errors
+        showCustomSnackbar(
+          title: AppStaticString.failed,
+          message: 'HTTP Error: ${response.statusCode}',
+          type: SnackBarType.failed,
+        );
       }
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint('Error in getPromoteTrackListCall: $e');
     }
+
     return promoteTrackList;
   }
+
 
   static Future<List<TrackSlots>> getSlotListCall({
     required String date,
@@ -287,27 +319,45 @@ class TrackEventService {
         url,
         headers: headers,
       );
-      final Map<String, dynamic> responseData = json.decode(response.body);
-      log('-----------------booking track list call--------------------');
-      log(url.toString());
-      log(responseData.toString());
-      if (responseData['success'] != null && responseData['success'] == true) {
-        trackBookingList = responseData['data'].forEach((e) {
-          trackBookingList.add(TrackHistoryRunningModel.fromJson(e));
-        });
-        return trackBookingList;
-      } else {
-        showCustomSnackbar(
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        log('-----------------Booking Track List Call--------------------');
+        log(url.toString());
+        log(responseData.toString());
+
+        if (responseData['success'] != null && responseData['success'] == true) {
+          // Correctly parse the data into a list of TrackHistoryRunningModel
+          final data = responseData['data'] as List<dynamic>?;
+          if (data != null) {
+            trackBookingList = data
+                .map((e) =>
+                TrackHistoryRunningModel.fromJson(e as Map<String, dynamic>))
+                .toList();
+          }
+        } else {
+          // Handle API-level errors
+          showCustomSnackbar(
             title: AppStaticString.failed,
-            message: responseData['message'],
-            type: SnackBarType.failed);
-        return trackBookingList;
+            message: responseData['message'] ?? 'Unknown error occurred',
+            type: SnackBarType.failed,
+          );
+        }
+      } else {
+        // Handle HTTP-level errors
+        showCustomSnackbar(
+          title: AppStaticString.failed,
+          message: 'HTTP Error: ${response.statusCode}',
+          type: SnackBarType.failed,
+        );
       }
     } catch (e) {
       print("Error in getTrackBookingCall: $e");
     }
+
     return trackBookingList;
   }
+
 
   static Future<bool> updateTrackRequest({
     required String trackId,
@@ -608,26 +658,42 @@ class TrackEventService {
         url,
         headers: headers,
       );
-      final Map<String, dynamic> responseData = json.decode(response.body);
-      log('-----------------booking event list call--------------------');
-      log(responseData.toString());
-      if (responseData['success'] != null && responseData['success'] == true) {
-        eventBookingList = responseData['data'].forEach((e) {
-          eventBookingList.add(EventHistoryRunningModel.fromJson(e));
-        });
-        return eventBookingList;
-      } else {
-        showCustomSnackbar(
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        log('-----------------Booking Event List Call--------------------');
+        log(responseData.toString());
+
+        if (responseData['success'] != null && responseData['success'] == true) {
+          final data = responseData['data'] as List<dynamic>?;
+          if (data != null) {
+            eventBookingList = data
+                .map((e) =>
+                EventHistoryRunningModel.fromJson(e as Map<String, dynamic>))
+                .toList();
+          }
+        } else {
+          showCustomSnackbar(
             title: AppStaticString.failed,
-            message: responseData['message'],
-            type: SnackBarType.failed);
-        return eventBookingList;
+            message: responseData['message'] ?? 'Unknown error occurred',
+            type: SnackBarType.failed,
+          );
+        }
+      } else {
+        // Handle HTTP-level errors
+        showCustomSnackbar(
+          title: AppStaticString.failed,
+          message: 'HTTP Error: ${response.statusCode}',
+          type: SnackBarType.failed,
+        );
       }
     } catch (e) {
-      debugPrint(e.toString());
+      print("Error in getEventBookingCall: $e");
     }
+
     return eventBookingList;
   }
+
 
   static Future<SingleEventModel> getSingleEventData({
     required String eventId,

@@ -24,8 +24,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
   @override
   void initState() {
     Get.put(BookingManagementController());
-    BookingManagementController.to.trackHistory.value='yes';
-    BookingManagementController.to.getTrackBookingListCall();
+   /* BookingManagementController.to.trackHistory.value='yes';*/
+    BookingManagementController.to.getTrackHistoryBookingListCall();
     super.initState();
   }
   @override
@@ -44,11 +44,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
               padding: EdgeInsets.only(bottom: 12.h),
               child:  MarronGradientContainerWidget(
                 child: HistoryContentWidget(
-                   trackModel:BookingManagementController.to.trackBookingList[index] ,
+                   trackModel:BookingManagementController.to.trackHistoryBookingList[index] ,
                   addRating: CommonController.to.selectedRoleOption.value==0,),
               ),
             ),
-            itemCount: BookingManagementController.to.trackBookingList.length,
+            itemCount: BookingManagementController.to.trackHistoryBookingList.length,
           );
         }
       ),

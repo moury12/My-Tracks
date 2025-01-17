@@ -12,10 +12,8 @@ class BookingManagementScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(BookingManagementController());
-
     return CustomRefreshIndicator(
-      onRefresh: () async{
+      onRefresh: () async {
         BookingManagementController.to.onRefreshBookingManagement();
       },
       child: SingleChildScrollView(
@@ -28,7 +26,7 @@ class BookingManagementScreen extends StatelessWidget {
               DynamicTabWidget(
                   function: (p0) {
                     BookingManagementController.to.handleTabChange(p0);
-                    BookingManagementController.to.selectedTab.value=p0 ;
+                    BookingManagementController.to.selectedTab.value = p0;
                   },
                   tabs: BookingManagementController.to.labelTabs,
                   tabContent: [

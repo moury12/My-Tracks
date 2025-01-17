@@ -38,6 +38,7 @@ class DynamicTabWidget extends StatelessWidget {
                   width: 10.w,
                 ),
               ),
+
               labelColor: AppColors.whiteLightColor,
               unselectedLabelColor: AppColors.whiteLightColor,
               labelStyle: poppinsRegular.copyWith(

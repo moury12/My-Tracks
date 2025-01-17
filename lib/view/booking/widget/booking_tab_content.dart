@@ -14,36 +14,41 @@ class BookingTabContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Obx(
       () {
         final isEventTab =
             BookingManagementController.to.selectedLabel.value == 1;
         final dataList = isEventTab
-            ? BookingManagementController.to.eventBookingList
-            : BookingManagementController.to.trackBookingList;
+            ? index == 1
+                ? BookingManagementController.to.eventBookingHistoryList
+                : BookingManagementController.to.eventBookingList
+            : index == 1
+                ? BookingManagementController.to.trackHistoryBookingList
+                : BookingManagementController.to.trackBookingList;
         final emptyText = isEventTab
             ? "Booked Event Not Found!!!"
             : "Booked Track Not Found!!!";
-        final isLoading = isEventTab?
-            BookingManagementController.to.isLoadingEventHistoryBooking.value:
-            BookingManagementController.to.isLoadingHistoryBooking.value;
-        return isLoading? const LoadingBookingList(): BookingListWidget(
-          dataList: dataList,
-          emptyText: emptyText,
-          itemBuilder: (item) {
-            return isEventTab
-                ? TrackEventInfoContentWidget(
-
-                    eventModel: item as EventHistoryRunningModel,
-                  )
-                : HistoryContentWidget(
-              ratingVal: BookingManagementController.to.ratingValue.value,
-                    trackModel: item as TrackHistoryRunningModel,
-                    addRating: index == 1 ? true : false,
-                  );
-          },
-        );
+        final isLoading = isEventTab
+            ? BookingManagementController.to.isLoadingEventHistoryBooking.value
+            : BookingManagementController.to.isLoadingHistoryBooking.value;
+        return isLoading
+            ? const LoadingBookingList()
+            : BookingListWidget(
+                dataList: dataList,
+                emptyText: emptyText,
+                itemBuilder: (item) {
+                  return isEventTab
+                      ? TrackEventInfoContentWidget(
+                          eventModel: item as EventHistoryRunningModel,
+                        )
+                      : HistoryContentWidget(
+                          ratingVal:
+                              BookingManagementController.to.ratingValue.value,
+                          trackModel: item as TrackHistoryRunningModel,
+                          addRating: index == 1 ? true : false,
+                        );
+                },
+              );
       },
     );
   }

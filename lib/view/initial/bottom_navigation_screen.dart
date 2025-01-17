@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:track_trek/controller/booking/booking_management_controller.dart';
 import 'package:track_trek/controller/common_controller.dart';
 import 'package:track_trek/controller/home/host/home_controller.dart';
+import 'package:track_trek/controller/home/user/home_user_controller.dart';
 import 'package:track_trek/controller/track_management_controller.dart';
 import 'package:track_trek/core/components/custom_appbar.dart';
 import 'package:track_trek/core/components/custom_drawer_widget.dart';
@@ -29,60 +31,48 @@ class BottomNavigationScreen extends StatefulWidget {
 class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  final List<String?> appbarTitle = [
-    null,
-    CommonController.to.selectedRoleOption.value == 0
-        ? AppStaticString.bookingManagement
-        : AppStaticString.trackManagement,
-    AppStaticString.create,
-    AppStaticString.notification,
-    CommonController.to.selectedRoleOption.value == 0
-        ? AppStaticString.profile
-        : AppStaticString.promoteTrack
-  ];
-
-
   @override
   void initState() {
-  if(Boxes.getUserData().get(roleKey) == 'HOST'){
+    super.initState();
+    if (Boxes.getUserData().get(roleKey) == 'HOST') {
       Get.put(TrackManagementController());
       Get.put(HomeController());
-    }
-
-    super.initState();
-  }
-/*  Future<void> _initAppLinks() async {
-    final Uri? initialLink = await _appLinks.getInitialLink();
-    if (initialLink != null) {
-      _handleIncomingLink(initialLink);
+    } else {
+      Get.put(HomeUserController());
+      Get.put(BookingManagementController());
     }
   }
-  void _handleIncomingLink(Uri uri) {
 
-      Get.toNamed(HistoryScreen.routeName);
+  String? getAppBarTitle(int index) {
+    if (index == 1) {
+      return CommonController.to.selectedRoleOption.value == 0
+          ? AppStaticString.bookingManagement
+          : AppStaticString.trackManagement;
+    } else if (index == 2) {
+      return AppStaticString.create;
+    } else if (index == 3) {
+      return AppStaticString.notification;
+    } else if (index == 4) {
+      return CommonController.to.selectedRoleOption.value == 0
+          ? AppStaticString.profile
+          : AppStaticString.promoteTrack;
+    }
+    return null;
+  }
 
-    *//*if (uri.path == '/trackDetails') {
-      final String? trackId = uri.queryParameters['id'];
-      if (trackId != null) {
-        Get.toNamed('/trackDetails', arguments: {'id': trackId});
-      }
-    }*//*
-  }*/
-  @override
-  Widget build(BuildContext context) {
-
-    final List<Widget> pages = [
+  List<Widget> getPages() {
+    return [
       CommonController.to.selectedRoleOption.value == 0
           ? HomeUserScreen(
-              openDrawer: () {
-                _scaffoldKey.currentState?.openDrawer();
-              },
-            )
+        openDrawer: () {
+          _scaffoldKey.currentState?.openDrawer();
+        },
+      )
           : HomeScreen(
-              openDrawer: () {
-                _scaffoldKey.currentState?.openDrawer();
-              },
-            ),
+        openDrawer: () {
+          _scaffoldKey.currentState?.openDrawer();
+        },
+      ),
       CommonController.to.selectedRoleOption.value == 0
           ? const BookingManagementScreen()
           : const ManagementScreen(),
@@ -90,41 +80,57 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
       const NotificationScreen(),
       CommonController.to.selectedRoleOption.value == 0
           ? const ProfileScreen(
-              showAppbar: false,
-            )
+        showAppbar: false,
+      )
           : const PromoteScreen(),
     ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Obx(() {
       int selectedIndex = CommonController.to.selectedIndex.value;
 
       return PopScope(
-        canPop: selectedIndex != 0 ? false : true,
+        canPop: selectedIndex == 0,
         onPopInvokedWithResult: (didPop, result) {
-          if (selectedIndex != 0) {
+          if (!didPop && selectedIndex != 0) {
             CommonController.to.updateIndex(0);
           }
         },
         child: Scaffold(
-          drawer: selectedIndex == 0 ? const CustomDrawerWidget() : null,
           key: _scaffoldKey,
-          appBar: appbarTitle[selectedIndex] == null
+          drawer: selectedIndex == 0 ? const CustomDrawerWidget() : null,
+          appBar: getAppBarTitle(selectedIndex) == null
               ? const PreferredSize(
-                  preferredSize: Size.zero, child: SizedBox.shrink())
+            preferredSize: Size.zero,
+            child: SizedBox.shrink(),
+          )
               : CustomAppbar(
-                  tile: CommonController.to.selectedRoleOption.value != 0&& selectedIndex==1?'${TrackManagementController.to.tabs[TrackManagementController.to.selectedTabIndex.value]} Management':appbarTitle[selectedIndex],
-                ),
+            tile: CommonController.to.selectedRoleOption.value != 0 &&
+                selectedIndex == 1
+                ? '${TrackManagementController.to.tabs[TrackManagementController.to.selectedTabIndex.value]} Management'
+                : getAppBarTitle(selectedIndex),
+          ),
           body: SafeArea(
-              child: Column(
-            children: [
-              selectedIndex == 0
-                  ? SizedBox(height: MediaQuery.of(context).viewPadding.top)
-                  : const SizedBox.shrink(),
-              Expanded(child: pages[selectedIndex]),
-            ],
-          )),
+            child: Column(
+              children: [
+                selectedIndex == 0
+                    ? SizedBox(height: MediaQuery.of(context).viewPadding.top)
+                    : const SizedBox.shrink(),
+                Expanded(
+                  child: IndexedStack(
+                    index: selectedIndex,
+                    children: getPages(),
+                  ),
+                ),
+              ],
+            ),
+          ),
           bottomNavigationBar: CustomBottomNavBar(),
         ),
       );
     });
   }
 }
+
