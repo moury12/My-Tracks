@@ -29,7 +29,7 @@ class SearchScreen extends StatelessWidget {
         child: Obx(() {
           return Column(
             children: [
-             CustomTextField(
+              CustomTextField(
                 textEditingController:
                     HomeUserController.to.searchFieldController.value,
                 onChanged: (val) {
@@ -46,32 +46,39 @@ class SearchScreen extends StatelessWidget {
                 ),
               ),
               space12H,
-              ...List.generate(
-                CommonController.to.addressSuggestion.length,
-                (index) {
-                  final address = CommonController.to.addressSuggestion[index];
-                  return SearchAddress(
-                    onTap: () async{
+              CommonController.to.isLoadingOnLocationSuggestion.value
+                  ? DefaultProgressIndicator(
+                      color: AppColors.primaryColor,
+                    )
+                  : Column(
+                      children: List.generate(
+                        CommonController.to.addressSuggestion.length,
+                        (index) {
+                          final address =
+                              CommonController.to.addressSuggestion[index];
+                          return SearchAddress(
+                            onTap: () async {
+                              final placeId = address['place_id'];
+                              await CommonController.to.getLatLngFromPlace(
+                                  placeId,
+                                  lat: HomeUserController.to.lat,
+                                  lng: HomeUserController.to.lng,
+                                  selectedAddress:
+                                      HomeUserController.to.selectedAddress);
+                              HomeUserController
+                                      .to.searchFieldController.value.text =
+                                  HomeUserController.to.selectedAddress.value;
 
-                      final placeId = address['place_id'];
-                      await   CommonController.to.getLatLngFromPlace(placeId,
-                          lat: HomeUserController.to.lat,
-                          lng: HomeUserController.to.lng,
-                          selectedAddress:
-                              HomeUserController.to.selectedAddress);
-                       HomeUserController.to.searchFieldController.value.text =
-                          HomeUserController.to.selectedAddress.value;
+                              CommonController.to.addressSuggestion.clear();
+                              HomeUserController.to.getTrackListCall();
 
-                      CommonController.to.addressSuggestion.clear();
-                      HomeUserController.to.getTrackListCall();
-
-
-                      Get.toNamed(SearchResultScreen.routeName);
-                    },
-                    title: address['description'],
-                  );
-                },
-              )
+                              Get.toNamed(SearchResultScreen.routeName);
+                            },
+                            title: address['description'],
+                          );
+                        },
+                      ),
+                    )
             ],
           );
         }),

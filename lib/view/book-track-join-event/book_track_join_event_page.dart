@@ -27,31 +27,65 @@ import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 import 'package:track_trek/view/home/widgets/track_card_widget.dart';
 import 'package:track_trek/view/manage/widgets/event_manage_card_widget.dart';
 
-class BookTrackJoinEventScreen extends StatelessWidget {
+class BookTrackJoinEventScreen extends StatefulWidget {
   static const String routeName = '/book-join-track-event';
   const BookTrackJoinEventScreen({super.key});
 
   @override
+  State<BookTrackJoinEventScreen> createState() => _BookTrackJoinEventScreenState();
+}
+
+class _BookTrackJoinEventScreenState extends State<BookTrackJoinEventScreen> {
+  late String sId;
+  late String type;
+  final controller = BookTrackJoinEventController.to;
+  @override
+  void initState() {
+    super.initState();
+    final argument = Get.arguments ?? {};
+
+
+    sId = argument['id'] ?? '';
+    type = argument['type'] ?? '';
+
+    if (sId.isNotEmpty && type.isNotEmpty) {
+      if (type == event) {
+        BookTrackJoinEventController.to.getEventDetailsCall(eventId: sId);
+      } else {
+        BookTrackJoinEventController.to.getTrackDetailsCall(trackId: sId);
+        BookTrackJoinEventController.to.getTrackSlotListCall(trackId: sId);
+      }
+    } else {
+      debugPrint('Error: Missing eventId or trackId.');
+    }
+  }
+  @override
   Widget build(BuildContext context) {
-    final argument = Get.arguments??{};
-    String sId = argument['id']??'';
-    String type = argument['type'];
+/*    final argument = Get.arguments ?? {};
+    String sId = argument['id'] ?? '';
+    String type = argument['type'] ?? '';
     final controller = BookTrackJoinEventController.to;
-    type == event
-        ? controller.getEventDetailsCall(eventId: sId)
-        : controller.getTrackDetailsCall(trackId: sId);
-    type == event
-        ? null
-        : BookTrackJoinEventController.to.getTrackSlotListCall(trackId: sId);
+
+    // Check if `sId` and `type` are valid
+    if (sId.isNotEmpty && type.isNotEmpty) {
+      if (type == event) {
+        BookTrackJoinEventController.to.getEventDetailsCall(eventId: sId);
+      } else {
+        BookTrackJoinEventController.to.getTrackDetailsCall(trackId: sId);
+        BookTrackJoinEventController.to.getTrackSlotListCall(trackId: sId);
+      }
+    } else {
+      debugPrint('Error: Missing eventId or trackId.');
+    }*/
     return Scaffold(
       appBar: CustomAppbar(
-        tile: argument != null && type == event
+        tile: /*argument != null &&*/ type == event
             ? AppStaticString.joinEvent
             : AppStaticString.bookTRack,
       ),
       body: CustomRefreshIndicator(
         onRefresh: () {
-          if (argument != null && type == event) {
+          if (/*argument != null &&*/ type == event) {
             /* controller.selectDate.value='';*/
             return controller.getEventDetailsCall(eventId: sId);
           } else {
@@ -68,7 +102,7 @@ class BookTrackJoinEventScreen extends StatelessWidget {
               children: [
                 Obx(() {
                   ///=======================dynamic img url===================///
-                  List<String> imageUrl = argument != null && type == event
+                  List<String> imageUrl = /*argument != null &&*/ type == event
                       ? controller.singleEvent.value.eventImage ?? []
                       : controller.singleTrack.value.trackImage ?? [];
                   return Stack(
@@ -115,7 +149,7 @@ class BookTrackJoinEventScreen extends StatelessWidget {
                             child: Obx(() {
                               ///=======================dynamic name===================///
 
-                              String name = argument != null && type == event
+                              String name = /*argument != null &&*/ type == event
                                   ? controller.singleEvent.value.eventName ??
                                       'n/a'
                                   : controller.singleTrack.value.trackName ??
@@ -123,7 +157,7 @@ class BookTrackJoinEventScreen extends StatelessWidget {
 
                               ///=======================dynamic location===================///
                               String location =
-                                  argument != null && type == event
+                                  /*argument != null &&*/ type == event
                                       ? controller.singleEvent.value.address ??
                                           'n/a'
                                       : controller.singleTrack.value.address ??
@@ -157,7 +191,7 @@ class BookTrackJoinEventScreen extends StatelessWidget {
                           ),
                           Expanded(
                               flex: 2,
-                              child: argument != null && type == event
+                              child: /*argument != null &&*/ type == event
                                   ? Obx(() {
                                       String date = (controller.singleEvent
                                                   .value.startDate ??
@@ -225,7 +259,7 @@ class BookTrackJoinEventScreen extends StatelessWidget {
                                     })),
                         ],
                       ),
-                      argument != null && type == event
+                      /*argument != null &&*/ type == event
                           ? Obx(() {
                               String totalSlot =
                                   (controller.singleEvent.value.totalSeat ??
@@ -246,7 +280,7 @@ class BookTrackJoinEventScreen extends StatelessWidget {
 
                       ///======================dynmaic Description==================///
                       Obx(() {
-                        String desc = argument != null && type == event
+                        String desc = /*argument != null &&*/ type == event
                             ? controller.singleEvent.value.description ?? 'n/a'
                             : controller.singleTrack.value.description ?? 'n/a';
 
@@ -297,15 +331,15 @@ class BookTrackJoinEventScreen extends StatelessWidget {
                                                         'slot':
                                                             slotsList[index],
                                                         'event': controller
-                                                            .singleEvent
+                                                            .singleEvent.value
                                                       });
                                                 },
-                                                slots: argument != null &&
+                                                slots: /*argument != null &&*/
                                                         type == event
                                                     ? null
                                                     : controller.singleTrack
                                                         .value.slots![index],
-                                                eventSlots: argument != null &&
+                                                eventSlots: /*argument != null &&*/
                                                         type == event
                                                     ? controller.singleEvent
                                                         .value.slots![index]
@@ -321,7 +355,7 @@ class BookTrackJoinEventScreen extends StatelessWidget {
                                                 },
                                                 argument: userPanel,
                                                 needToShowSeat:
-                                                    argument != null &&
+                                                    /*argument != null &&*/
                                                             type == event
                                                         ? true
                                                         : false,
@@ -370,7 +404,7 @@ class BookTrackJoinEventScreen extends StatelessWidget {
                                                     /*height: 150.h, */
                                                     width: 200.w,
                                                     child: TrackSlotWidget(
-                                                      slots: argument != null &&
+                                                      slots: /*argument != null &&*/
                                                               type == event
                                                           ? null
                                                           : BookTrackJoinEventController

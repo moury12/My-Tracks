@@ -38,33 +38,38 @@ class HomeUserScreen extends StatelessWidget {
             openDrawer: openDrawer,
           ),
           Expanded(
-              child: ListView(
-            padding: padding16,
-            children: [
-              GestureDetector(
-                child: CustomTextField(
-                  hintText: AppStaticString.searchHerr,
-                  prefixIcon: Padding(
-                    padding: padding8,
-                    child: Image.asset(
-                      searchIconUrl,
-                      height: 24.w,
-                      width: 24.w,
+              child: Padding(
+                padding: padding12,
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                              /* padding: padding16,*/
+                              children: [
+                  GestureDetector(
+                    child: CustomTextField(
+                      hintText: AppStaticString.searchHerr,
+                      prefixIcon: Padding(
+                        padding: padding8,
+                        child: Image.asset(
+                          searchIconUrl,
+                          height: 24.w,
+                          width: 24.w,
+                        ),
+                      ),
+                      isEnable: false,
                     ),
+                    onTap: () {
+                      Get.toNamed(SearchScreen.routeName);
+                    },
                   ),
-                  isEnable: false,
-                ),
-                onTap: () {
-                  Get.toNamed(SearchScreen.routeName);
-                },
-              ),
-              space12H,
+                  space12H,
 
-              ///================dynamic banner==================///
-              Obx(() {
-                return HomeUserController.to.promoteTrackList.isEmpty
-                    ? SizedBox.shrink()
-                    : SizedBox(
+                  ///================dynamic banner==================///
+                  Obx(() {
+                    if (HomeUserController.to.promoteTrackList.isEmpty) {
+                      return SizedBox.shrink();
+                    }
+                    return SizedBox(
                         height: 150.h,
                         child: PageView.builder(
                           itemCount:
@@ -108,125 +113,136 @@ class HomeUserScreen extends StatelessWidget {
                                   );
                           },
                         ));
-              }),
-              space12H,
-              Obx(() {
-                return Center(
-                  child: HomeUserController.to.promoteTrackList.isNotEmpty
-                      ? SmoothPageIndicator(
-                          controller: HomeUserController.to.controller.value,
-                          count: HomeUserController.to.promoteTrackList.length,
-                          effect: ExpandingDotsEffect(
-                              dotHeight: 12.w,
-                              dotWidth: 12.w,
-                              dotColor: AppColors.blackBorderColor,
-                              activeDotColor: AppColors.blackBorderColor),
-                        )
-                      : SizedBox.shrink(),
-                );
-              }),
-              space16H,
-              const TitleTextWidget(
-                title: AppStaticString.trackCategory,
-              ),
-              space16H,
-              Obx(() {
-                return HomeUserController.to.catList.isEmpty &&
-                        !HomeUserController.to.isLoadingCategory.value
-                    ? const EmptyTextWidget(text: 'Category Service not found')
-                    : SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: HomeUserController.to.isLoadingCategory.value
-                            ? const LoadingCategoryListWidget()
-                            : Row(
-                                spacing: 6.w,
-                                children: List.generate(
-                                  HomeUserController.to.catList.length,
-                                  (index) => CategoryCircleWidget(
-                                    index: index,
-                                    title: HomeUserController
-                                            .to.catList[index].name ??
-                                        '',
-                                    imageUrl:
-                                        '${ApiClient.baseUrl}${HomeUserController.to.catList[index].categoryImage}',
-                                    onTap: () {
-                                      HomeUserController.to
-                                          .selectedIndexCategory.value = index;
-                                      HomeUserController
-                                              .to.categorySearch.value =
+                  }),
+                  space12H,
+                  Obx(() {
+                    return Center(
+                      child: HomeUserController.to.promoteTrackList.isNotEmpty
+                          ? SmoothPageIndicator(
+                              controller: HomeUserController.to.controller.value,
+                              count:
+                                  HomeUserController.to.promoteTrackList.length,
+                              effect: ExpandingDotsEffect(
+                                  dotHeight: 12.w,
+                                  dotWidth: 12.w,
+                                  dotColor: AppColors.blackBorderColor,
+                                  activeDotColor: AppColors.blackBorderColor),
+                            )
+                          : SizedBox.shrink(),
+                    );
+                  }),
+                  space12H,
+                  const TitleTextWidget(
+                    title: AppStaticString.trackCategory,
+                  ),
+                  space12H,
+                  Obx(() {
+                    return HomeUserController.to.catList.isEmpty &&
+                            !HomeUserController.to.isLoadingCategory.value
+                        ? const EmptyTextWidget(
+                            text: 'Category Service not found')
+                        : SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: HomeUserController.to.isLoadingCategory.value
+                                ? const LoadingCategoryListWidget()
+                                : Row(
+                                    spacing: 6.w,
+                                    children: List.generate(
+                                      HomeUserController.to.catList.length,
+                                      (index) => CategoryCircleWidget(
+                                        index: index,
+                                        title: HomeUserController
+                                                .to.catList[index].name ??
+                                            '',
+                                        imageUrl:
+                                            '${ApiClient.baseUrl}${HomeUserController.to.catList[index].categoryImage}',
+                                        onTap: () {
                                           HomeUserController
                                               .to
-                                              .catList[HomeUserController.to
-                                                  .selectedIndexCategory.value]
-                                              .name
-                                              .toString();
-                                      HomeUserController.to.getTrackListCall();
-                                    },
+                                              .selectedIndexCategory
+                                              .value = index;
+                                          HomeUserController
+                                                  .to.categorySearch.value =
+                                              HomeUserController
+                                                  .to
+                                                  .catList[HomeUserController
+                                                      .to
+                                                      .selectedIndexCategory
+                                                      .value]
+                                                  .name
+                                                  .toString();
+                                          HomeUserController.to
+                                              .getTrackListCall();
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                          );
+                  }),
+                  space12H,
+                  const TitleTextWidget(title: AppStaticString.event),
+                  Obx(() {
+                    return HomeUserController.to.eventList.isEmpty &&
+                            !HomeUserController.to.isLoadingEventList.value
+                        ? const EmptyTextWidget(text: 'Event Service not found')
+                        : SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: HomeUserController.to.isLoadingEventList.value
+                                ? const LoadingEventListWidget()
+                                : Row(
+                                    spacing: 12.w,
+                                    children: List.generate(
+                                      HomeUserController.to.eventList.length,
+                                      (index) => SizedBox(
+                                          width:
+                                              MediaQuery.sizeOf(context).width /
+                                                  1.3,
+                                          child: EventCardWidget(
+                                            eventModelForUser: HomeUserController
+                                                .to.eventList[index],
+                                            onTap: () {
+                                              Get.toNamed(
+                                                  BookTrackJoinEventScreen
+                                                      .routeName,
+                                                  arguments: {
+                                                    'id': HomeUserController
+                                                        .to.eventList[index].sId,
+                                                    'type': 'event'
+                                                  });
+                                            },
+                                            fromUser: true,
+                                            buttonText: AppStaticString.joinEvent,
+                                            buttonImg: doubleArrowIconUrl,
+                                          )),
+                                    ),
+                                  ),
+                          );
+                  }),
+                  space12H,
+                  const TitleTextWidget(title: AppStaticString.track),
+                  Obx(() {
+                    return HomeUserController.to.isLoadingTrackList.value
+                        ? LoadingTrackListWidget()
+                        : HomeUserController.to.trackList.isEmpty &&
+                                !HomeUserController.to.isLoadingTrackList.value
+                            ? const EmptyTextWidget(
+                                text: 'Track Service not found')
+                            : Column(
+                                children: List.generate(
+                                  HomeUserController.to.trackList.length,
+                                  (index) => TrackCardWidget(
+                                    fromUser: true,
+                                    trackModelUserPanel:
+                                        HomeUserController.to.trackList[index],
+                                    react: HomeUserController.to.react,
                                   ),
                                 ),
-                              ),
-                      );
-              }),
-              space16H,
-              const TitleTextWidget(title: AppStaticString.event),
-              Obx(() {
-                return HomeUserController.to.eventList.isEmpty &&
-                        !HomeUserController.to.isLoadingEventList.value
-                    ? const EmptyTextWidget(text: 'Event Service not found')
-                    : SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: HomeUserController.to.isLoadingEventList.value
-                            ? const LoadingEventListWidget()
-                            : Row(
-                                spacing: 12.w,
-                                children: List.generate(
-                                  HomeUserController.to.eventList.length,
-                                  (index) => SizedBox(
-                                      width: MediaQuery.sizeOf(context).width /
-                                          1.3,
-                                      child: EventCardWidget(
-                                        eventModelForUser: HomeUserController
-                                            .to.eventList[index],
-                                        onTap: () {
-                                          Get.toNamed(
-                                              BookTrackJoinEventScreen
-                                                  .routeName,
-                                              arguments: {
-                                                'id': HomeUserController
-                                                    .to.eventList[index].sId,
-                                                'type': 'event'
-                                              });
-                                        },
-                                        fromUser: true,
-                                        buttonText: AppStaticString.joinEvent,
-                                        buttonImg: doubleArrowIconUrl,
-                                      )),
-                                ),
-                              ),
-                      );
-              }),
-              space16H,
-              const TitleTextWidget(title: AppStaticString.track),
-              Obx(() {
-                return HomeUserController.to.isLoadingTrackList.value
-                    ? LoadingTrackListWidget()
-                    : HomeUserController.to.trackList.isEmpty &&
-                            !HomeUserController.to.isLoadingTrackList.value
-                        ? const EmptyTextWidget(text: 'Track Service not found')
-                        : Column(
-                            children: List.generate(
-                              HomeUserController.to.trackList.length,
-                              (index) => TrackCardWidget(
-                                fromUser: true,
-                                trackModelUserPanel:
-                                    HomeUserController.to.trackList[index],
-                                react: HomeUserController.to.react,
-                              ),
+                              );
+                  })
+                              ],
                             ),
-                          );
-              })
-            ],
-          ))
+                ),
+              ))
         ],
       ),
     );

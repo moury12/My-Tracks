@@ -16,22 +16,38 @@ import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/home/widgets/event_card_widget.dart';
 import 'package:track_trek/view/manage/widgets/blue_container_widget.dart';
 
-class JoinEventPaymentScreen extends StatelessWidget {
+class JoinEventPaymentScreen extends StatefulWidget {
   static const String routeName = '/event-payment';
   const JoinEventPaymentScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final Map<String, dynamic> argument = Get.arguments;
-    final String type = argument['type'];
-    final dynamic slot = argument['slot'];
-    final Rx<SingleEventModel?> eventData = argument['event'];
-    String price = slot is EventSlots ? slot.price.toString() : '\$0.0';
-    String unsold = slot is EventSlots
+  State<JoinEventPaymentScreen> createState() => _JoinEventPaymentScreenState();
+}
+
+class _JoinEventPaymentScreenState extends State<JoinEventPaymentScreen> {
+  Map<String, dynamic> argument = {};
+  String type = '';
+  dynamic slot = '';
+
+  String price = '';
+  String unsold = '';
+  String totalSeat = '';
+  @override
+  void initState() {
+    argument = Get.arguments;
+    type = argument['type'];
+    slot = argument['slot'];
+    BookTrackJoinEventController.to.eventData.value = argument['event']??SingleEventModel();
+    price = slot is EventSlots ? slot.price.toString() : '\$0.0';
+    unsold =slot is EventSlots
         ? ((slot.maxPeople ?? 0) - (slot.currentPeople ?? 0)).toString()
         : '0';
-    String totalSeat = slot is EventSlots ? slot.maxPeople.toString() : '0';
-    print(type);
+    totalSeat=slot is EventSlots ? slot.maxPeople.toString() : '0';
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppbar(tile: AppStaticString.joinEvent),
       body: Column(
@@ -90,8 +106,8 @@ class JoinEventPaymentScreen extends StatelessWidget {
                         }),
                         space16H,
                         Obx(() {
-                          return eventData.value!.moreInfo == null ||
-                                  eventData.value!.moreInfo!.isEmpty
+                          return BookTrackJoinEventController.to.eventData.value!.moreInfo == null ||
+                                  BookTrackJoinEventController.to.eventData.value!.moreInfo!.isEmpty
                               ? const SizedBox.shrink()
                               : Column(
                                   children: List.generate(
@@ -110,7 +126,7 @@ class JoinEventPaymentScreen extends StatelessWidget {
                                             .to.moreInfoControllers
                                             .add(
                                           List.generate(
-                                            eventData.value!.moreInfo!.length,
+                                            BookTrackJoinEventController.to.eventData.value!.moreInfo!.length,
                                             (_) => TextEditingController(),
                                           ),
                                         );
@@ -132,9 +148,9 @@ class JoinEventPaymentScreen extends StatelessWidget {
                                           Column(
                                             spacing: 12.h,
                                             children: List.generate(
-                                              eventData.value!.moreInfo!.length,
+                                              BookTrackJoinEventController.to.eventData.value!.moreInfo!.length,
                                               (indexOfMoreInfo) {
-                                                final more = eventData.value!
+                                                final more = BookTrackJoinEventController.to.eventData.value!
                                                     .moreInfo![indexOfMoreInfo];
 
                                                 return CustomTextField(
@@ -161,11 +177,11 @@ class JoinEventPaymentScreen extends StatelessWidget {
                                                           ? "self"
                                                           : 'other',
                                                       'moreInfo': List.generate(
-                                                        eventData.value!
+                                                        BookTrackJoinEventController.to.eventData.value!
                                                             .moreInfo!.length,
                                                         (indexMoreData) {
                                                           final moreData =
-                                                              eventData.value!
+                                                              BookTrackJoinEventController.to.eventData.value!
                                                                       .moreInfo![
                                                                   indexMoreData];
                                                           BookTrackJoinEventController
@@ -226,7 +242,7 @@ class JoinEventPaymentScreen extends StatelessWidget {
                   if (slot is EventSlots) {
                     BookTrackJoinEventController.to.joinEventSlotCall(
                         price: slot.price ?? 0,
-                        eventId: eventData.value!.sId ?? '',
+                        eventId: BookTrackJoinEventController.to.eventData.value!.sId ?? '',
                         slotId: slot.sId ?? '');
                   }
                 },

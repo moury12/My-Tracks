@@ -18,22 +18,28 @@ import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/home/widgets/event_card_widget.dart';
 import 'package:track_trek/view/manage/widgets/blue_container_widget.dart';
 
-class BookTrackPaymentScreen extends StatelessWidget {
+class BookTrackPaymentScreen extends StatefulWidget {
   static const String routeName = '/track-payment';
   const BookTrackPaymentScreen({super.key});
 
   @override
+  State<BookTrackPaymentScreen> createState() => _BookTrackPaymentScreenState();
+}
+
+class _BookTrackPaymentScreenState extends State<BookTrackPaymentScreen> {
+  Map<String, dynamic> argument = {};
+  TrackSlots slot = TrackSlots();
+  String price = '\$0';
+  @override
+  void initState() {
+    argument = Get.arguments;
+    slot = argument['slot'];
+    price = slot.price.toString();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final Map<String, dynamic> argument = Get.arguments;
-    final String type = argument['type'];
-    final dynamic slot = argument['slot'];
-
-    String price = slot is TrackSlots
-        ? slot.price.toString()
-        :  '\$0.0';
-
-
-    print(type);
     return Scaffold(
       appBar: CustomAppbar(
         tile: AppStaticString.bookTrackSlot,
@@ -68,12 +74,10 @@ class BookTrackPaymentScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-
                     Padding(
                       padding: EdgeInsets.only(top: 12.h),
                       child: CustomTextField(
-                        textEditingController:
-                        BookTrackJoinEventController
+                        textEditingController: BookTrackJoinEventController
                             .to.peopleNumberController.value,
                         title: AppStaticString.selectPeople,
                         keyboardType: TextInputType.number,
@@ -89,7 +93,7 @@ class BookTrackPaymentScreen extends StatelessWidget {
             child: Obx(() {
               return CustomButton(
                 isLoading:
-                BookTrackJoinEventController.to.isLoadingBookTrack.value,
+                    BookTrackJoinEventController.to.isLoadingBookTrack.value,
                 onTap: () {
                   if (slot is TrackSlots) {
                     BookTrackJoinEventController.to
