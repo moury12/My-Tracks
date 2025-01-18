@@ -33,17 +33,16 @@ class BookTrackJoinEventScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final argument = Get.arguments;
-    String sId = argument['id'];
+    final argument = Get.arguments??{};
+    String sId = argument['id']??'';
     String type = argument['type'];
     final controller = BookTrackJoinEventController.to;
     type == event
         ? controller.getEventDetailsCall(eventId: sId)
         : controller.getTrackDetailsCall(trackId: sId);
     type == event
-        ?   BookTrackJoinEventController.to
-        .getTrackSlotListCall(
-        trackId: sId):null;
+        ? null
+        : BookTrackJoinEventController.to.getTrackSlotListCall(trackId: sId);
     return Scaffold(
       appBar: CustomAppbar(
         tile: argument != null && type == event

@@ -26,16 +26,14 @@ class JoinEventPaymentScreen extends StatelessWidget {
     final String type = argument['type'];
     final dynamic slot = argument['slot'];
     final Rx<SingleEventModel?> eventData = argument['event'];
-    String price =  slot is EventSlots
-            ? slot.price.toString()
-            : '\$0.0';
-
+    String price = slot is EventSlots ? slot.price.toString() : '\$0.0';
+    String unsold = slot is EventSlots
+        ? ((slot.maxPeople ?? 0) - (slot.currentPeople ?? 0)).toString()
+        : '0';
+    String totalSeat = slot is EventSlots ? slot.maxPeople.toString() : '0';
     print(type);
     return Scaffold(
-      appBar: const CustomAppbar(
-        tile:  AppStaticString.joinEvent
-
-      ),
+      appBar: const CustomAppbar(tile: AppStaticString.joinEvent),
       body: Column(
         children: [
           Expanded(
@@ -66,154 +64,153 @@ class JoinEventPaymentScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-
                     Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              space8H,
-                              Obx(() {
-                                String totalSeat = eventData.value != null
-                                    ? eventData.value!.totalSeat.toString()
-                                    : '';
-                                String unsold = eventData.value != null
-                                    ? eventData.value!.unSold.toString()
-                                    : '';
-                                return BlueTextWidget(
-                                  text:
-                                      '${AppStaticString.allowedPeople} $totalSeat   ${AppStaticString.unsold} $unsold',
-                                  textAlign: TextAlign.start,
-                                );
-                              }),
-                              space12H,
-                              Obx(() {
-                                return CustomDropdown<int>(
-                                  title: AppStaticString.selectPeople,
-                                  items: BookTrackJoinEventController
-                                      .to.memberList,
-                                  selectedValue: BookTrackJoinEventController
-                                      .to.selectedValue.value,
-                                  onChanged: (value) {
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        space8H,
+                        BlueTextWidget(
+                          text:
+                              '${AppStaticString.allowedPeople} $totalSeat   ${AppStaticString.unsold} $unsold',
+                          textAlign: TextAlign.start,
+                        ),
+                        space12H,
+                        Obx(() {
+                          return CustomDropdown<int>(
+                            title: AppStaticString.selectPeople,
+                            items: BookTrackJoinEventController.to.memberList,
+                            selectedValue: BookTrackJoinEventController
+                                .to.selectedValue.value,
+                            onChanged: (value) {
+                              BookTrackJoinEventController
+                                  .to.selectedValue.value = value;
+                              BookTrackJoinEventController.to
+                                  .updateSubSelectedValue();
+                            },
+                          );
+                        }),
+                        space16H,
+                        Obx(() {
+                          return eventData.value!.moreInfo == null ||
+                                  eventData.value!.moreInfo!.isEmpty
+                              ? const SizedBox.shrink()
+                              : Column(
+                                  children: List.generate(
                                     BookTrackJoinEventController
-                                        .to.selectedValue.value = value;
-                                    BookTrackJoinEventController.to
-                                        .updateSubSelectedValue();
-                                  },
-                                );
-                              }),
-                              space16H,
-                              Obx(() {
-                                return eventData.value!.moreInfo == null ||
-                                        eventData.value!.moreInfo!.isEmpty
-                                    ? const SizedBox.shrink()
-                                    : Column(
-                                        children: List.generate(
+                                            .to.selectedValue.value ??
+                                        0,
+                                    (index) {
+                                      bool isSaved =
                                           BookTrackJoinEventController
-                                                  .to.selectedValue.value ??
-                                              0,
-                                          (index)
-                                          {
-                                            if(BookTrackJoinEventController.to.moreInfoControllers.length<=index){
-                                              BookTrackJoinEventController.to.moreInfoControllers.add(
-                                                List.generate( eventData.value!.moreInfo!.length,
-                                                      (_) => TextEditingController(),),
-                                              );
-                                            }
-                                            final moreInfoControllersForPerson =
-                                            BookTrackJoinEventController.to.moreInfoControllers[index];
-                                           return Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              spacing: 12.h,
-                                              children: [
-                                                Text(
-                                                  'People ${index+1}:',
-                                                  style: poppinsMedium.copyWith(
-                                                      fontSize:
-                                                          getFontSizeLarge(
-                                                              context)),
-                                                ),
-                                                Column(
-                                                  spacing: 12.h,
-                                                  children: List.generate(
-                                                    eventData.value!.moreInfo!
-                                                        .length,
-                                                    (indexOfMoreInfo) {
-                                                      final more = eventData
-                                                              .value!.moreInfo![
-                                                          indexOfMoreInfo];
+                                              .to.savedIndices
+                                              .contains(index);
+                                      if (BookTrackJoinEventController
+                                              .to.moreInfoControllers.length <=
+                                          index) {
+                                        BookTrackJoinEventController
+                                            .to.moreInfoControllers
+                                            .add(
+                                          List.generate(
+                                            eventData.value!.moreInfo!.length,
+                                            (_) => TextEditingController(),
+                                          ),
+                                        );
+                                      }
+                                      final moreInfoControllersForPerson =
+                                          BookTrackJoinEventController
+                                              .to.moreInfoControllers[index];
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        spacing: 12.h,
+                                        children: [
+                                          Text(
+                                            'People ${index + 1}:',
+                                            style: poppinsMedium.copyWith(
+                                                fontSize:
+                                                    getFontSizeLarge(context)),
+                                          ),
+                                          Column(
+                                            spacing: 12.h,
+                                            children: List.generate(
+                                              eventData.value!.moreInfo!.length,
+                                              (indexOfMoreInfo) {
+                                                final more = eventData.value!
+                                                    .moreInfo![indexOfMoreInfo];
 
-
-                                                      return CustomTextField(
-                                                        title: more.label,
-                                                        textEditingController:
-                                                            moreInfoControllersForPerson[indexOfMoreInfo],
-                                                      );
-                                                    },
-                                                  ),
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    const Expanded(
-                                                        child:
-                                                            SizedBox.shrink()),
-                                                    Expanded(
-                                                        child: CustomButton(
-                                                      onTap: () {
-                                                        BookTrackJoinEventController
-                                                            .to.eventField
-                                                            .add({
-                                                          "bookingFor":
-                                                              index == 0
-                                                                  ? "self"
-                                                                  : 'other',
-                                                          'moreInfo':
-                                                              List.generate(
-                                                            eventData
-                                                                .value!
-                                                                .moreInfo!
-                                                                .length,
-                                                            (indexMoreData) {
-                                                              final moreData = eventData
-                                                                      .value!
+                                                return CustomTextField(
+                                                  title: more.label,
+                                                  textEditingController:
+                                                      moreInfoControllersForPerson[
+                                                          indexOfMoreInfo],
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                          Row(
+                                            children: [
+                                              const Expanded(
+                                                  child: SizedBox.shrink()),
+                                              Expanded(
+                                                  child: CustomButton(
+                                                onTap: () {
+                                                  if (!isSaved) {
+                                                    BookTrackJoinEventController
+                                                        .to.eventField
+                                                        .add({
+                                                      "bookingFor": index == 0
+                                                          ? "self"
+                                                          : 'other',
+                                                      'moreInfo': List.generate(
+                                                        eventData.value!
+                                                            .moreInfo!.length,
+                                                        (indexMoreData) {
+                                                          final moreData =
+                                                              eventData.value!
                                                                       .moreInfo![
                                                                   indexMoreData];
-                                                              return {
-                                                                "label":
-                                                                    moreData
-                                                                        .label,
-                                                                "value": moreInfoControllersForPerson[
+                                                          BookTrackJoinEventController
+                                                              .to.savedIndices
+                                                              .add(index);
+                                                          return {
+                                                            "label":
+                                                                moreData.label,
+                                                            "value":
+                                                                moreInfoControllersForPerson[
                                                                         indexMoreData]
                                                                     .text
-                                                              };
-                                                            },
-                                                          )
-                                                        });
-                                                        print(
-                                                            '----------------event field list----------------');
-                                                        print(
-                                                            BookTrackJoinEventController
-                                                                .to.eventField
-                                                                .toString());
-                                                      },
-                                                      title:
-                                                          AppStaticString.save,
-                                                      fillColor:
-                                                          AppColors.blueColor,
-                                                      borderColor:
-                                                          AppColors.blueColor,
-                                                    )),
-                                                  ],
-                                                ),
-                                                space12H
-                                              ],
-                                            );
-                                          },
-                                        ),
+                                                          };
+                                                        },
+                                                      )
+                                                    });
+                                                    print(
+                                                        '----------------event field list----------------');
+                                                    print(
+                                                        BookTrackJoinEventController
+                                                            .to.eventField
+                                                            .toString());
+                                                  }
+                                                },
+                                                title: isSaved
+                                                    ? AppStaticString.saved
+                                                    : AppStaticString.save,
+                                                fillColor: isSaved
+                                                    ? AppColors.greyColor
+                                                    : AppColors.blueColor,
+                                                borderColor: isSaved
+                                                    ? AppColors.greyColor
+                                                    : AppColors.blueColor,
+                                              )),
+                                            ],
+                                          ),
+                                          space12H
+                                        ],
                                       );
-                              }),
-                            ],
-                          )
-
+                                    },
+                                  ),
+                                );
+                        }),
+                      ],
+                    )
                   ],
                 ),
               ),
@@ -226,8 +223,11 @@ class JoinEventPaymentScreen extends StatelessWidget {
                 isLoading:
                     BookTrackJoinEventController.to.isLoadingBookTrack.value,
                 onTap: () {
-                   if (slot is EventSlots) {
-                    BookTrackJoinEventController.to.joinEventSlotCall(price:slot.price??0,eventId:eventData.value!.sId??'' ,slotId: slot.sId??'');
+                  if (slot is EventSlots) {
+                    BookTrackJoinEventController.to.joinEventSlotCall(
+                        price: slot.price ?? 0,
+                        eventId: eventData.value!.sId ?? '',
+                        slotId: slot.sId ?? '');
                   }
                 },
                 title: AppStaticString.goPay,

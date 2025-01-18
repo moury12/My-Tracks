@@ -16,9 +16,9 @@ class BookTrackJoinEventController extends GetxController {
   RxInt currentIndex = 0.obs;
   Rx<int?> selectedValue = Rx<int?>(null);
   RxString selectDate = DateFormat('yyyy-MM-dd').format(DateTime.now()).obs;
-
+  var savedIndices = <int>{}.obs;
   ///==========================dynamic list======================///
-  RxList<int> memberList = [1, 2, 3,10].obs;
+  RxList<int> memberList = [1, 2, 3,4,5,6,7,8,9,10].obs;
   RxList<String> bookingForList = ['Self', 'Others'].obs;
   RxList<String?> subSelectedValue = <String?>[].obs;
   RxList<dynamic> eventField= [].obs;
@@ -81,6 +81,7 @@ class BookTrackJoinEventController extends GetxController {
         peopleNumberController.value.clear();
         Get.offAllNamed(SplashScreen.routeName);
       } else {
+        peopleNumberController.value.clear();
         isLoadingBookTrack.value = false;
       }
     } else {
@@ -104,6 +105,8 @@ class BookTrackJoinEventController extends GetxController {
         selectedValue.value=null;
         Get.offAllNamed(SplashScreen.routeName);
       } else {
+        eventField.clear();
+        selectedValue.value=null;
         isLoadingBookTrack.value = false;
       }
     } else {

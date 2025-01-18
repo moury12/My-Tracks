@@ -28,7 +28,6 @@ class HomeUserScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return CustomRefreshIndicator(
       onRefresh: () async {
         await HomeUserController.to.onRefreshUserPanel();

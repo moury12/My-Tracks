@@ -14,6 +14,7 @@ import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/add/widgets/delete_alert_dialog.dart';
 import 'package:track_trek/view/home/widgets/event_card_widget.dart';
 import 'package:track_trek/view/home/widgets/track_card_widget.dart';
+import 'package:track_trek/view/manage/widgets/event_manage_card_widget.dart';
 
 class TrackSlotWidget extends StatelessWidget {
   final String? argument;
@@ -186,46 +187,48 @@ class SlotLoadingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Shimmer.fromColors(
-      baseColor: Colors.grey[800]!,
-      highlightColor: Colors.grey[600]!,
-      child: Column(
-        children: [
-          // Loading effect for Slot number and price
-          Row(
-            children: [
-              Expanded(
-                flex: 4,
-                child: Container(
-                  height: 20.h,
-                  color: Colors.grey,
+    return MarronGradientContainerWidget(
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey[800]!,
+        highlightColor: Colors.grey[600]!,
+        child: Column(
+          children: [
+            // Loading effect for Slot number and price
+            Row(
+              children: [
+                Expanded(
+                  flex: 4,
+                  child: Container(
+                    height: 20.h,
+                    color: Colors.grey,
+                  ),
                 ),
-              ),
-              space6W,
-              Expanded(
-                flex: 2,
-                child: Container(
-                  height: 20.h,
-                  color: Colors.grey,
+                space6W,
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    height: 20.h,
+                    color: Colors.grey,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          space12H,
-          // Loading effect for Slot description or time
-          Container(
-            height: 15.h,
-            width: double.infinity,
-            color: Colors.grey,
-          ),
-          space12H,
-          // Loading effect for ExpandableText
-          Container(
-            height: 60.h,
-            width: double.infinity,
-            color: Colors.grey,
-          ),
-        ],
+              ],
+            ),
+            space12H,
+            // Loading effect for Slot description or time
+            Container(
+              height: 15.h,
+              width: double.infinity,
+              color: Colors.grey,
+            ),
+            space12H,
+            // Loading effect for ExpandableText
+            Container(
+              height: 60.h,
+              width: double.infinity,
+              color: Colors.grey,
+            ),
+          ],
+        ),
       ),
     ); // Return an empty widget in light mode or when not loading.
   }

@@ -157,6 +157,7 @@ class AppStaticString {
   static const String  joinEvent= "Join Event";
   static const String  date= "Date";
   static const String  save= "Save";
+  static const String  saved= "Saved";
   static const String  home= "Home";
   static const String  createSlot= "Create Slot";
   static const String  selectOneYouCreate= "Select the one you want to create";

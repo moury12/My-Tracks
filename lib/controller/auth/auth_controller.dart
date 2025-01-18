@@ -24,6 +24,7 @@ class AuthController extends GetxController {
   }
 ///=------------------user yolice5132@nongnue.com ======================///
 ///=------------------host mepoc17213@myweblaw.com ======================///
+  ///=------------------host host1@gmailre.com ======================///
 
 
   Rx<bool> isLoadingSignUp = false.obs;
@@ -214,6 +215,7 @@ TextEditingController confirmPassNewController =
         isLoadingSignUp.value = false;
         Get.toNamed(
           OTPScreen.routeName,
+          arguments: signingArgument
         );
 
 

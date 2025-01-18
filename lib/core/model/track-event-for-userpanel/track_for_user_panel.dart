@@ -70,7 +70,7 @@ class TrackForUserPanelModel {
     updatedAt = json['updatedAt'];
     iV = json['__v'];
     totalTrackDayInMonth = json['totalTrackDayInMonth'];
-    rating = json['rating'];
+    rating = (json['rating'] as num?)?.toDouble() ?? 0.0;
     isLiked = json['isLiked'];
   }
 

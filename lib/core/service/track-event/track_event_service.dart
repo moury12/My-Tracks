@@ -281,26 +281,30 @@ class TrackEventService {
         url,
         headers: headers,
       );
+
       final Map<String, dynamic> responseData = json.decode(response.body);
-      log('-----------------slot list  call--------------------');
+      log('-----------------slot list call--------------------');
       log(responseData.toString());
+
       if (responseData['success'] != null && responseData['success'] == true) {
-        slotList = responseData['data']['availableSlots'].forEach((e) {
-          slotList.add(TrackSlots.fromJson(e));
-        });
+        // Correctly map the data to a list of TrackSlots
+        slotList = (responseData['data']['availableSlots'] as List)
+            .map((e) => TrackSlots.fromJson(e))
+            .toList();
         return slotList;
       } else {
         showCustomSnackbar(
             title: AppStaticString.failed,
             message: responseData['message'],
             type: SnackBarType.failed);
-        return slotList;
+        return slotList; // Return empty list on failure
       }
     } catch (e) {
       debugPrint(e.toString());
     }
-    return slotList;
+    return slotList; // Ensure an empty list is returned if an error occurs
   }
+
 
   static Future<List<TrackHistoryRunningModel>> getTrackBookingCall({
     String history = '',
