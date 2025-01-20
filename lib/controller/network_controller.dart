@@ -35,6 +35,6 @@ class NetworkController extends GetxController {
 
   void updateConnectionStatus(List<ConnectivityResult> result) {
     isConnected.value = result.contains(ConnectivityResult.mobile) ||
-        result.contains(ConnectivityResult.wifi);
+        result.contains(ConnectivityResult.wifi)||result.contains(ConnectivityResult.ethernet);
   }
 }
