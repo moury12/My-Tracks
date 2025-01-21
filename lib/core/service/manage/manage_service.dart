@@ -89,6 +89,37 @@ class ManageService {
     return privacyPolicy;
   }
 
+  static Future<bool> getSinglePayoutInfo() async {
+    try {
+      final url = Uri.parse(ApiClient.getSinglePayoutUrl);
+      final headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
+      };
+
+      final response = await http.get(
+        url,
+        headers: headers,
+      );
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      log('----------------- single payout call--------------------');
+      log(responseData.toString());
+      if (responseData['success'] != null && responseData['success'] == true) {
+        return true;
+      } else {
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
+        return false;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return false;
+  }
+
   static Future<ManageModel> getTermsCondition() async {
     ManageModel terms = ManageModel();
     try {

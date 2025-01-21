@@ -44,4 +44,6 @@ class ApiClient {
   static String get getPrivacyPolicy => '$baseUrl/manage/get-privacy-policy';
   static String get checkoutPromotionUrl =>
       '$baseUrl/payment/checkout-promotion';
+  static String get getSinglePayoutUrl =>
+      '$baseUrl/payment/get-single-payout-info';
 }

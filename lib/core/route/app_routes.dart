@@ -15,6 +15,8 @@ import 'package:track_trek/view/book-track-join-event/book_track_payment_page.da
 import 'package:track_trek/view/book-track-join-event/join_event_payment_page.dart';
 import 'package:track_trek/view/feedback/feedback_page.dart';
 import 'package:track_trek/view/history/history_page.dart';
+import 'package:track_trek/view/home/host/add_bank_acc_host.dart';
+import 'package:track_trek/view/home/host/add_bank_acc_host.dart';
 import 'package:track_trek/view/home/host/event_slot_page.dart';
 import 'package:track_trek/view/home/host/home_screen.dart';
 import 'package:track_trek/view/home/host/user_details_page.dart';
@@ -113,6 +115,10 @@ class AppRoutes {
             name: OTPScreen.routeName,
             page: () => OTPScreen(),
             binding: AuthBinding()),
+        GetPage(
+            name: AddBankAccHost.routeName,
+            page: () => AddBankAccHost(),
+            binding: HomeBinding()),
         GetPage(
             name: NewPasswordScreen.routeName,
             page: () => NewPasswordScreen(),

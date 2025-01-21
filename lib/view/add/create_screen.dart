@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:track_trek/controller/common_controller.dart';
 import 'package:track_trek/core/components/custom_button.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
@@ -33,7 +34,11 @@ class CreateScreen extends StatelessWidget {
               img: plusIconUrl,
 
               onTap: () {
-               Get.toNamed(CreateTrackEventScreen.routeName,arguments: 'track');
+                CommonController.to.isHostAddBankAcc();
+                if(CommonController.to.isHostVerified.value){
+                  Get.toNamed(CreateTrackEventScreen.routeName,
+                      arguments: 'track');
+                }
               },
             ),
           ),
@@ -45,7 +50,11 @@ class CreateScreen extends StatelessWidget {
               fillColor:AppColors.blueColor ,
               borderColor:AppColors.blueColor ,
               onTap: () {
-                Get.toNamed(CreateTrackEventScreen.routeName,arguments: 'event');
+                CommonController.to.isHostAddBankAcc();
+                if(CommonController.to.isHostVerified.value){
+                  Get.toNamed(CreateTrackEventScreen.routeName,arguments: 'event');
+                }
+
                 // Button Action
               },
             ),
