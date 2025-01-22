@@ -47,12 +47,9 @@ Get.put(StripeOnboardingController());    super.initState();
                   title: AppStaticString.createTrack,
                   img: plusIconUrl,
 
-                  onTap: () {
-                    StripeOnboardingController.to.isHostAddBankAcc();
-                    if(StripeOnboardingController.to.isHostVerified.value){
-                      Get.toNamed(CreateTrackEventScreen.routeName,
-                          arguments: 'track');
-                    }
+                  onTap: () async{
+                  await  StripeOnboardingController.to.isHostAddBankAcc(argument: 'track');
+
                   },
                 );
               }
@@ -68,11 +65,9 @@ Get.put(StripeOnboardingController());    super.initState();
                   img: plusIconUrl,
                   fillColor:AppColors.blueColor ,
                   borderColor:AppColors.blueColor ,
-                  onTap: () {
-                    StripeOnboardingController.to.isHostAddBankAcc();
-                    if(StripeOnboardingController.to.isHostVerified.value){
-                      Get.toNamed(CreateTrackEventScreen.routeName,arguments: 'event');
-                    }
+                  onTap: () async{
+                    await StripeOnboardingController.to.isHostAddBankAcc(argument: 'event');
+
 
                     // Button Action
                   },

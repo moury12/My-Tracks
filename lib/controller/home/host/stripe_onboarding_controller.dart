@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:track_trek/controller/network_controller.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
+import 'package:track_trek/core/init/api_client.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
+import 'package:track_trek/view/add/create_track_event_page.dart';
 import 'package:track_trek/view/home/host/add_bank_acc_host.dart';
+import 'package:track_trek/view/initial/splash.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../../core/service/manage/manage_service.dart';
@@ -15,12 +18,13 @@ class StripeOnboardingController extends GetxController {
   RxBool isWebViewLoading = false.obs;
   RxBool isHostVerified = false.obs;
   WebViewController? webController;
-  isHostAddBankAcc() async {
+  isHostAddBankAcc({required String argument}) async {
     if (NetworkController.to.isConnected.value) {
       isLoading.value = true;
       isHostVerified.value = await ManageService.getSinglePayoutInfo();
       if (isHostVerified.value) {
         isLoading.value = false;
+        Get.toNamed(CreateTrackEventScreen.routeName,arguments:argument );
       } else {
         Get.put(StripeOnboardingController());
         isLoading.value = true;
@@ -76,13 +80,18 @@ class StripeOnboardingController extends GetxController {
             /* if (request.url.startsWith("https://www.google.com/webhp?hl=en&sa=X&ved=0ahUKEwj4-qy6koSLAxVLRmwGHT7zHXIQPAgI")) {
               return NavigationDecision.prevent;
             }*/
-            /*if (request.url.contains('http://10.0.60.26:8001/payment/success')) {
+            if (request.url.contains('${ApiClient.baseUrl}/payment/return?connectedAccountId=acct_1Qjzx8BXj4HTfN2e&hostId=676fd11d678cb587734631dc')) {
               Get.offAllNamed(SplashScreen.routeName);
-            }*/
+            }
             return NavigationDecision.navigate;
           },
         ),
       )
       ..loadRequest(Uri.parse(webUrl.value));
+  }
+  @override
+  void onClose() {
+    webController = null; // Clear WebViewController
+    super.onClose();
   }
 }

@@ -6,6 +6,7 @@ import 'package:track_trek/controller/home/user/home_user_controller.dart';
 import 'package:track_trek/controller/network_controller.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/global/string_variable.dart';
+import 'package:track_trek/core/init/api_client.dart';
 import 'package:track_trek/core/init/google_map_api_key.dart';
 import 'package:track_trek/core/init/hive_boxes.dart';
 import 'package:track_trek/core/service/review/review_service.dart';
@@ -136,7 +137,7 @@ class CommonController extends GetxController {
            /* if (request.url.startsWith("https://www.google.com/webhp?hl=en&sa=X&ved=0ahUKEwj4-qy6koSLAxVLRmwGHT7zHXIQPAgI")) {
               return NavigationDecision.prevent;
             }*/
-            if (request.url.contains('http://10.0.60.26:8001/payment/success')) {
+            if (request.url.contains('${ApiClient.baseUrl}/payment/success')) {
               Get.offAllNamed(SplashScreen.routeName);
             }
             return NavigationDecision.navigate;

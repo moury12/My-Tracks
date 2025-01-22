@@ -17,53 +17,60 @@ class NotificationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(NotificationController());
-    return  CustomRefreshIndicator( 
+    return CustomRefreshIndicator(
       onRefresh: NotificationController.to.refreshCall,
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
+        child: Obx(() {
+          return Padding(
+            padding: padding16,
+            child: NotificationController.to.isLoadingNotification.value
+                ? ListOfNotificationLoading()
+                : NotificationController.to.notifyList.isEmpty
+                    ? const EmptyTextWidget(text: 'Notification List is Empty')
+                    : Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                AppStaticString.new_,
+                                style: poppinsMedium.copyWith(
+                                    fontSize: getFontSizeExtraLarge(context)),
+                              ),
+                              Text(
+                                AppStaticString.clearAll,
+                                style: poppinsLight.copyWith(
+                                    fontSize: getFontSizeLarge(context)),
+                              ),
+                            ],
+                          ),
+                          space16H,
+                          ...List.generate(
+                            NotificationController.to.notifyList.length,
+                            (index) =>
 
-        child: Obx(
-           () {
-            return Padding(
-              padding: padding16,
-              child:NotificationController.to.isLoadingNotification.value?ListOfNotificationLoading():NotificationController.to.notifyList.isEmpty?
-                  const EmptyTextWidget(text: 'Notification List is Empty'): Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        AppStaticString.new_,
-                        style: poppinsMedium.copyWith(
-                            fontSize: getFontSizeExtraLarge(context)),
+                                ///=============notification title===================///
+
+                                NotificationTitleWidget(
+                              title: NotificationController
+                                      .to.notifyList[index].title ??
+                                  '',
+                              subtitle: NotificationController
+                                      .to.notifyList[index].message ??
+                                  '',
+
+                              ///<====================================== date ================================>///
+                              date: formatTimestamp(
+                                  timestamp: NotificationController
+                                          .to.notifyList[index].createdAt ??
+                                      ''),
+                            ),
+                          )
+                        ],
                       ),
-                      Text(
-                        AppStaticString.clearAll,
-                        style:
-                            poppinsLight.copyWith(fontSize: getFontSizeLarge(context)),
-                      ),
-                    ],
-                  ),
-                  space16H,
-                  ...List.generate(
-                    NotificationController.to.notifyList.length,
-                    (index) =>
-
-                        ///=============notification title===================///
-
-                         NotificationTitleWidget(
-                      title: NotificationController.to.notifyList[index].title??'',
-                          subtitle: NotificationController.to.notifyList[index].message??'',
-                          ///<====================================== date ================================>///
-                      date: formatTimestamp(timestamp: NotificationController.to.notifyList[index].createdAt??''),
-                    ),
-                  )
-                ],
-              ),
-            );
-          }
-        ),
+          );
+        }),
       ),
     );
   }
