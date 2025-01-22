@@ -45,6 +45,7 @@ class MyApp extends StatelessWidget {
          title: 'My Tracks',
 initialBinding: CommonBinding(),
           theme: darkTheme,
+        themeMode: ThemeMode.dark,
         // initialRoute: BottomNavigationScreen.routeName,
          initialRoute: SplashScreen.routeName,
          getPages: AppRoutes.route(),

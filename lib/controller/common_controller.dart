@@ -11,7 +11,8 @@ import 'package:track_trek/core/init/hive_boxes.dart';
 import 'package:track_trek/core/service/review/review_service.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:http/http.dart' as http;
-import 'package:track_trek/core/init/api_client.dart';
+import 'package:track_trek/view/initial/splash.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class CommonController extends GetxController {
   static CommonController get to => Get.find();
@@ -23,6 +24,7 @@ class CommonController extends GetxController {
   // RxString stripeUrl ='https://checkout.stripe.com/c/pay/cs_test_a145Ie3jBXtvrM28zoB0JJz69cotaDOpdSxsG0nyZI0C66YofS6PoVz6Zo#fidkdWxOYHwnPyd1blpxYHZxWjA0STVuNnVHXWc3akhWcmpKdk10UVZqYzNzRF0xTER3ajJSSGpTV3V2YUh2dFdVX3dgbWxkQF9SSmd2Q01fTnNAbnBzUUJkYFJJS2RAXFZ1aEJnVU00YT1VNTVXMXxPU1dcaycpJ2N3amhWYHdzYHcnP3F3cGApJ2lkfGpwcVF8dWAnPyd2bGtiaWBabHFgaCcpJ2BrZGdpYFVpZGZgbWppYWB3dic%2FcXdwYHgl'.obs;
   RxString stripeUrl =''.obs;
   RxList<dynamic> addressSuggestion = [].obs;
+
   postLikeDisLikeCall({required String trackId}) async {
     if (NetworkController.to.isConnected.value) {
       try {
@@ -96,7 +98,53 @@ class CommonController extends GetxController {
       isLoadingOnLocationSuggestion.value = false;
     }
   }
+  var isLoading = true.obs;
 
+   WebViewController? webController;
+
+  void initializeWebViewController() {
+    if (webController != null) {
+      return; // Avoid re-initialization
+    }
+    webController = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setUserAgent('Mozilla/5.0 (Mobile; rv:52.0) Gecko/52.0 Firefox/52.0')
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onProgress: (int progress) {
+            debugPrint("WebView progress: $progress");
+            isLoading.value = progress < 100;
+          },
+          onPageStarted: (String url) {
+            debugPrint("Page started loading: $url");
+            isLoading.value = true;
+          },
+          onPageFinished: (String url) {
+            debugPrint("Page finished loading: $url");
+            isLoading.value = false;
+          },
+          onHttpError: (HttpResponseError error) {
+            debugPrint("HTTP Error: ${error}");
+            Get.snackbar('Error', 'HTTP Error: ', snackPosition: SnackPosition.BOTTOM);
+          },
+          onWebResourceError: (WebResourceError error) {
+            debugPrint("Web Resource Error: ${error.description}");
+            Get.snackbar('Error', error.description, snackPosition: SnackPosition.BOTTOM);
+          },
+
+          onNavigationRequest: (NavigationRequest request) {
+           /* if (request.url.startsWith("https://www.google.com/webhp?hl=en&sa=X&ved=0ahUKEwj4-qy6koSLAxVLRmwGHT7zHXIQPAgI")) {
+              return NavigationDecision.prevent;
+            }*/
+            if (request.url.contains('http://10.0.60.26:8001/payment/success')) {
+              Get.offAllNamed(SplashScreen.routeName);
+            }
+            return NavigationDecision.navigate;
+          },
+        ),
+      )
+      ..loadRequest(Uri.parse(stripeUrl.value));
+  }
   Future<void> getLatLngFromPlace(
     String placeId, {
     required RxString lat,
@@ -156,4 +204,10 @@ class CommonController extends GetxController {
   }
 
   RxString image = ''.obs;
+  @override
+  void onClose() {
+    webController = null; // Clear WebViewController
+    super.onClose();
+  }
+
 }
