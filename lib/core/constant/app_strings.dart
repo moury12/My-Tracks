@@ -30,6 +30,7 @@ class AppStaticString {
   static const String feedback = "Feedback";
   static const String privacyPolicy = "Privacy Policy";
   static const String payment = "Payment";
+  static const String stripeOnboarding = "Stripe Onboarding";
   static const String bookingManagement = "Booking Management";
   static const String bookTrackSlot = "Book a track slot";
   static const String bookTRack = "Book a track";
