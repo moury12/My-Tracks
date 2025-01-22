@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:track_trek/controller/common_controller.dart';
+import 'package:track_trek/controller/home/host/stripe_onboarding_controller.dart';
+import 'package:track_trek/controller/home/host/stripe_onboarding_controller.dart';
 import 'package:track_trek/core/components/custom_button.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
@@ -11,9 +13,18 @@ import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/add/create_track_event_page.dart';
 
-class CreateScreen extends StatelessWidget {
+class CreateScreen extends StatefulWidget {
   const CreateScreen({super.key});
 
+  @override
+  State<CreateScreen> createState() => _CreateScreenState();
+}
+
+class _CreateScreenState extends State<CreateScreen> {
+  @override
+  void initState() {
+Get.put(StripeOnboardingController());    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -29,34 +40,44 @@ class CreateScreen extends StatelessWidget {
           ),
           const Spacer(), // Pushes the button to the center
           Center(
-            child: CustomButton(
-              title: AppStaticString.createTrack,
-              img: plusIconUrl,
+            child: Obx(
+               () {
+                return CustomButton(
+                  isLoading: StripeOnboardingController.to.isLoading.value,
+                  title: AppStaticString.createTrack,
+                  img: plusIconUrl,
 
-              onTap: () {
-                CommonController.to.isHostAddBankAcc();
-                if(CommonController.to.isHostVerified.value){
-                  Get.toNamed(CreateTrackEventScreen.routeName,
-                      arguments: 'track');
-                }
-              },
+                  onTap: () {
+                    StripeOnboardingController.to.isHostAddBankAcc();
+                    if(StripeOnboardingController.to.isHostVerified.value){
+                      Get.toNamed(CreateTrackEventScreen.routeName,
+                          arguments: 'track');
+                    }
+                  },
+                );
+              }
             ),
           ),
           space20H,
           Center(
-            child: CustomButton(
-              title: AppStaticString.createEvent,
-              img: plusIconUrl,
-              fillColor:AppColors.blueColor ,
-              borderColor:AppColors.blueColor ,
-              onTap: () {
-                CommonController.to.isHostAddBankAcc();
-                if(CommonController.to.isHostVerified.value){
-                  Get.toNamed(CreateTrackEventScreen.routeName,arguments: 'event');
-                }
+            child: Obx(
+            () {
+                return CustomButton(
+                  isLoading: StripeOnboardingController.to.isLoading.value,
+                  title: AppStaticString.createEvent,
+                  img: plusIconUrl,
+                  fillColor:AppColors.blueColor ,
+                  borderColor:AppColors.blueColor ,
+                  onTap: () {
+                    StripeOnboardingController.to.isHostAddBankAcc();
+                    if(StripeOnboardingController.to.isHostVerified.value){
+                      Get.toNamed(CreateTrackEventScreen.routeName,arguments: 'event');
+                    }
 
-                // Button Action
-              },
+                    // Button Action
+                  },
+                );
+              }
             ),
           ),
           const Spacer(), // Adds remaining space below the button

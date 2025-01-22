@@ -46,4 +46,6 @@ class ApiClient {
       '$baseUrl/payment/checkout-promotion';
   static String get getSinglePayoutUrl =>
       '$baseUrl/payment/get-single-payout-info';
+  static String get paymentOnboardingUrl =>
+      '$baseUrl/payment/onboarding';
 }

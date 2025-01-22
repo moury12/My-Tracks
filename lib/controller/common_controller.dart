@@ -4,16 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:track_trek/controller/home/user/home_user_controller.dart';
 import 'package:track_trek/controller/network_controller.dart';
-import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/init/google_map_api_key.dart';
 import 'package:track_trek/core/init/hive_boxes.dart';
-import 'package:track_trek/core/service/manage/manage_service.dart';
 import 'package:track_trek/core/service/review/review_service.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:http/http.dart' as http;
-import 'package:track_trek/core/init/api_client.dart';
-import 'package:track_trek/view/home/host/add_bank_acc_host.dart';
 
 class CommonController extends GetxController {
   static CommonController get to => Get.find();
@@ -24,7 +20,6 @@ class CommonController extends GetxController {
 
   // RxString stripeUrl ='https://checkout.stripe.com/c/pay/cs_test_a145Ie3jBXtvrM28zoB0JJz69cotaDOpdSxsG0nyZI0C66YofS6PoVz6Zo#fidkdWxOYHwnPyd1blpxYHZxWjA0STVuNnVHXWc3akhWcmpKdk10UVZqYzNzRF0xTER3ajJSSGpTV3V2YUh2dFdVX3dgbWxkQF9SSmd2Q01fTnNAbnBzUUJkYFJJS2RAXFZ1aEJnVU00YT1VNTVXMXxPU1dcaycpJ2N3amhWYHdzYHcnP3F3cGApJ2lkfGpwcVF8dWAnPyd2bGtiaWBabHFgaCcpJ2BrZGdpYFVpZGZgbWppYWB3dic%2FcXdwYHgl'.obs;
   RxString stripeUrl = ''.obs;
-  RxBool isHostVerified = false.obs;
 
   RxList<dynamic> addressSuggestion = [].obs;
   postLikeDisLikeCall({required String trackId}) async {
@@ -86,18 +81,6 @@ class CommonController extends GetxController {
     }
   }
 
-  isHostAddBankAcc() async {
-    if (NetworkController.to.isConnected.value) {
-      isHostVerified.value = await ManageService.getSinglePayoutInfo();
-      if (isHostVerified.value) {
-      } else {
-        Get.toNamed(AddBankAccHost.routeName);
-      }
-    } else {
-      /*  isLoadingPostLike.value = false;*/
-      noInternetShowCustomSnackbar();
-    }
-  }
 
   Future<void> fetchSuggestedPlaces(String input) async {
     isLoadingOnLocationSuggestion.value = true;
@@ -119,7 +102,8 @@ class CommonController extends GetxController {
     required RxString lat,
     required RxString lng,
     required RxString selectedAddress,
-  }) async {
+  })
+  async {
     final String url =
         'https://maps.googleapis.com/maps/api/geocode/json?place_id=$placeId&key=${GoogleClient.googleMapUrl}';
 

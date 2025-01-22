@@ -118,7 +118,7 @@ class AppRoutes {
         GetPage(
             name: AddBankAccHost.routeName,
             page: () => AddBankAccHost(),
-            binding: HomeBinding()),
+            binding: HostStripeBinding()),
         GetPage(
             name: NewPasswordScreen.routeName,
             page: () => NewPasswordScreen(),

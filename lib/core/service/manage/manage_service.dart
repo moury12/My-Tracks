@@ -119,6 +119,36 @@ class ManageService {
     }
     return false;
   }
+  static Future<String> redirectToStripeInfo() async {
+    try {
+      final url = Uri.parse(ApiClient.paymentOnboardingUrl);
+      final headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
+      };
+
+      final response = await http.post(
+        url,
+        headers: headers,
+      );
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      log('----------------- stripe Onboarding call--------------------');
+      log(responseData.toString());
+      if (responseData['success'] != null && responseData['success'] == true) {
+        return responseData['data']['accountLink']['url'];
+      } else {
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
+        return '';
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return '';
+  }
 
   static Future<ManageModel> getTermsCondition() async {
     ManageModel terms = ManageModel();
