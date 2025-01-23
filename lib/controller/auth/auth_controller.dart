@@ -25,6 +25,7 @@ class AuthController extends GetxController {
 ///=------------------user yolice5132@nongnue.com ======================///
 ///=------------------host mepoc17213@myweblaw.com ======================///
   ///=------------------host host1@gmailre.com ======================///
+  ///=------------------host cacakos833@downlor.com ======================///
 
 
   Rx<bool> isLoadingSignUp = false.obs;
@@ -68,14 +69,18 @@ TextEditingController confirmPassNewController =
   var focusedFieldIndex = -1.obs;
   reinitializeSignUpControllers() {
     if (kDebugMode) {
-      emailSignUpController.value.text = 'variw21228@nongnue.com';
-      nameSignUpController.text = 'mouri';
+      emailSignUpController.value.text = 'cocaja1869@citdaca.com';
+      nameSignUpController.text = 'voyemip';
       passSignUpController.text = '123456';
       confirmPassSignUpController.text = '123456';
-      // emailLoginController.text = 'tanzibamouri28@gmail.com';
-      // passLoginController.text = '123457';
-      emailLoginController.text = 'mepoc17213@myweblaw.com';
-      passLoginController.text = '123456';
+      emailLoginController.text = 'tanzibamouri28@gmail.com';
+      passLoginController.text = '123457';
+      // emailLoginController.text = 'mepoc17213@myweblaw.com';
+      // passLoginController.text = '123456';
+      // emailLoginController.text = 'cacakos833@downlor.com';
+      // passLoginController.text = '123456';
+      // emailLoginController.text = 'cocaja1869@citdaca.com';
+      // passLoginController.text = '123456';
       passNewController.text = '123456';
       confirmPassNewController.text = '123456';
     }}

@@ -19,6 +19,7 @@
             android:taskAffinity=""
             android:hardwareAccelerated="true"
             android:theme="@style/LaunchTheme"
+            android:networkSecurityConfig="@xml/network_security_config"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:windowSoftInputMode="adjustResize">
             <intent-filter android:autoVerify="false">

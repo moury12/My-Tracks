@@ -10,7 +10,7 @@ import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/route/app_routes.dart';
 import 'package:track_trek/core/theme/theme.dart';
 import 'package:track_trek/view/initial/splash.dart';
-
+import 'package:webview_flutter/webview_flutter.dart';
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
@@ -19,6 +19,9 @@ void main()async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+/*  if (defaultTargetPlatform == TargetPlatform.android) {
+    WebViewPlatform.instance = SurfaceAndroidViewController as WebViewPlatform?;
+  }*/
   runApp(DevicePreview(
     enabled: !kReleaseMode,
     builder: (context) {

@@ -8,7 +8,6 @@ import 'package:track_trek/view/add/create_track_event_page.dart';
 import 'package:track_trek/view/home/host/add_bank_acc_host.dart';
 import 'package:track_trek/view/initial/splash.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-
 import '../../../core/service/manage/manage_service.dart';
 
 class StripeOnboardingController extends GetxController {
@@ -24,7 +23,7 @@ class StripeOnboardingController extends GetxController {
       isHostVerified.value = await ManageService.getSinglePayoutInfo();
       if (isHostVerified.value) {
         isLoading.value = false;
-        Get.toNamed(CreateTrackEventScreen.routeName,arguments:argument );
+        Get.toNamed(CreateTrackEventScreen.routeName, arguments: argument);
       } else {
         Get.put(StripeOnboardingController());
         isLoading.value = true;
@@ -46,6 +45,7 @@ class StripeOnboardingController extends GetxController {
       noInternetShowCustomSnackbar();
     }
   }
+
   void initializeWebViewController() {
     if (webController != null) {
       return; // Avoid re-initialization
@@ -69,26 +69,28 @@ class StripeOnboardingController extends GetxController {
           },
           onHttpError: (HttpResponseError error) {
             debugPrint("HTTP Error: ${error}");
-            Get.snackbar('Error', 'HTTP Error: ', snackPosition: SnackPosition.BOTTOM);
+            Get.snackbar('Error', 'HTTP Error: ',
+                snackPosition: SnackPosition.BOTTOM);
           },
           onWebResourceError: (WebResourceError error) {
             debugPrint("Web Resource Error: ${error.description}");
-            Get.snackbar('Error', error.description, snackPosition: SnackPosition.BOTTOM);
+            Get.snackbar('Error', error.description,
+                snackPosition: SnackPosition.BOTTOM);
           },
-
-          onNavigationRequest: (NavigationRequest request) {
-            /* if (request.url.startsWith("https://www.google.com/webhp?hl=en&sa=X&ved=0ahUKEwj4-qy6koSLAxVLRmwGHT7zHXIQPAgI")) {
+  /*        onNavigationRequest: (NavigationRequest request) {
+            *//* if (request.url.startsWith("https://www.google.com/webhp?hl=en&sa=X&ved=0ahUKEwj4-qy6koSLAxVLRmwGHT7zHXIQPAgI")) {
               return NavigationDecision.prevent;
-            }*/
-            if (request.url.contains('${ApiClient.baseUrl}/payment/return?connectedAccountId=acct_1Qjzx8BXj4HTfN2e&hostId=676fd11d678cb587734631dc')) {
+            }*//*
+             if (request.url.contains('${ApiClient.baseUrl}/payment/return')) {
               Get.offAllNamed(SplashScreen.routeName);
             }
             return NavigationDecision.navigate;
-          },
+          },*/
         ),
       )
       ..loadRequest(Uri.parse(webUrl.value));
   }
+
   @override
   void onClose() {
     webController = null; // Clear WebViewController

@@ -47,7 +47,7 @@ void showCustomSnackbar({
     margin: const EdgeInsets.all(12),
     colorText: AppColors.whiteLightColor,
     dismissDirection: DismissDirection.horizontal,
-    icon: Image.asset('assets/ic_launcher.png'),
+    icon: Image.asset('assets/logo.png'),
     /*   Icon(
       icon,
       color: Colors.white,
