@@ -77,15 +77,16 @@ class StripeOnboardingController extends GetxController {
             Get.snackbar('Error', error.description,
                 snackPosition: SnackPosition.BOTTOM);
           },
-  /*        onNavigationRequest: (NavigationRequest request) {
-            *//* if (request.url.startsWith("https://www.google.com/webhp?hl=en&sa=X&ved=0ahUKEwj4-qy6koSLAxVLRmwGHT7zHXIQPAgI")) {
-              return NavigationDecision.prevent;
-            }*//*
-             if (request.url.contains('${ApiClient.baseUrl}/payment/return')) {
-              Get.offAllNamed(SplashScreen.routeName);
-            }
+         onNavigationRequest: (NavigationRequest request) {
+           if (request.url.startsWith(ApiClient.baseUrlWithoutPort)) {
+             // Allow navigation to your local development server
+             return NavigationDecision.navigate;
+           }
+            //  if (request.url.contains('${ApiClient.baseUrl}/payment/return')) {
+            //   Get.offAllNamed(SplashScreen.routeName);
+            // }
             return NavigationDecision.navigate;
-          },*/
+          },
         ),
       )
       ..loadRequest(Uri.parse(webUrl.value));

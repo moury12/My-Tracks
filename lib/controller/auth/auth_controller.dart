@@ -69,8 +69,8 @@ TextEditingController confirmPassNewController =
   var focusedFieldIndex = -1.obs;
   reinitializeSignUpControllers() {
     if (kDebugMode) {
-      emailSignUpController.value.text = 'cocaja1869@citdaca.com';
-      nameSignUpController.text = 'voyemip';
+      emailSignUpController.value.text = 'vegov38491@dfesc.com';
+      nameSignUpController.text = 'vegov';
       passSignUpController.text = '123456';
       confirmPassSignUpController.text = '123456';
       emailLoginController.text = 'tanzibamouri28@gmail.com';
