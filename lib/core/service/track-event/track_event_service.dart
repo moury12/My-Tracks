@@ -415,6 +415,7 @@ class TrackEventService {
     required String startTime,
     required String endTime,
     required String price,
+    required String currency,
     required String maxPeople,
     required String description,
   }) async {
@@ -432,6 +433,7 @@ class TrackEventService {
         "startTime": startTime,
         "endTime": endTime,
         "price": price,
+        "currency": currency,
         "maxPeople": maxPeople,
         "description": description
       });
@@ -745,6 +747,7 @@ class TrackEventService {
     required String slotNo,
     required String maxPeople,
     required String price,
+    required String currency,
     required String description,
   }) async {
     try {
@@ -759,6 +762,7 @@ class TrackEventService {
         "slotNo": slotNo,
         "maxPeople": maxPeople,
         "price": price,
+        "currency": currency,
         "description": description
       });
       final response = await http.post(url, headers: headers, body: body);
@@ -798,9 +802,10 @@ class TrackEventService {
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-      if (data['result'] == 'success') {
+      if (data['result'] == 'success' && data['supported_codes'] != null) {
+        // Map supported_codes to a key-value pair (code, name)
         currencyList = Map.fromIterable(
-          data['symbols'],
+          data['supported_codes'],
           key: (item) => item[0], // Currency code
           value: (item) => item[1], // Currency name
         );

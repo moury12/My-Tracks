@@ -243,7 +243,7 @@ class CreateTrackEventController extends GetxController {
           endTime: selectedEndTime.value,
           price: uploadTrackPriceController.value.text,
           maxPeople: uploadTrackPeopleNumberController.value.text,
-          description: uploadTrackDescriptionController.value.text);
+          description: uploadTrackDescriptionController.value.text, currency: selectedCurrencyFrom.value.toString());
       if (isUpdate) {
         isLoadingCreateSlot.value = false;
         getTrackDetailsCall(trackId: trackId.value);
@@ -342,7 +342,7 @@ class CreateTrackEventController extends GetxController {
           slotNo: slotNoControllerForEvent.value.text,
           maxPeople: uploadEventTotalSeatController.value.text,
           price: uploadEventPriceController.value.text,
-          description: uploadEventDescriptionController.value.text);
+          description: uploadEventDescriptionController.value.text, currency:selectedCurrencyFrom.value.toString());
       if (isUpdate) {
         isLoadingCreateSlot.value = false;
         getEventDetailsCall(eventId: eventId.value);

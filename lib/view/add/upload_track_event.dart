@@ -373,17 +373,25 @@ class CreateTrackEventSlotScreen extends StatelessWidget {
                     return null;
                   },
                 ),
-                CustomDropdown<dynamic>(
-                  selectedValue:
-                      CreateTrackEventController.to.selectedCurrencyFrom.value,
-                  items: CreateTrackEventController.to.currencyList.keys
-                      .map(
-                        (e) =>
-                            '$e - ${CreateTrackEventController.to.currencyList[key]}',
-                      )
-                      .toList(),
-                  isLoading:
-                      CreateTrackEventController.to.isLoadingCurrencies.value,
+                Obx(
+                   () {
+                    return CustomDropdown<dynamic>(
+                      isRequired: true,
+                      title: 'Currency',
+                      selectedValue:
+                          CreateTrackEventController.to.selectedCurrencyFrom.value,
+                      items: CreateTrackEventController.to.currencyList.keys
+                          .map(
+                            (e) => '$e',
+                          )
+                          .toList(),
+                      isLoading:
+                          CreateTrackEventController.to.isLoadingCurrencies.value,
+                      onChanged: (value) {
+                        CreateTrackEventController.to.selectedCurrencyFrom.value =value;
+                      },
+                    );
+                  }
                 ),
 
                 ///=====================input price=========================///
@@ -460,10 +468,15 @@ class CreateTrackEventSlotScreen extends StatelessWidget {
                                   CreateTrackEventController
                                       .to.selectedStartTime.isNotEmpty &&
                                   CreateTrackEventController
+                                          .to.selectedCurrencyFrom.value !=
+                                      null &&
+                                  CreateTrackEventController
                                       .to.selectedEndTime.isNotEmpty) {
                                 CreateTrackEventController.to
                                     .createSlotTrackCall();
                               } else {
+                                print(CreateTrackEventController
+                                    .to.selectedCurrencyFrom.value);
                                 showCustomSnackbar(
                                     title: AppStaticString.failed,
                                     message: AppStaticString.fieldRequired,
@@ -473,41 +486,6 @@ class CreateTrackEventSlotScreen extends StatelessWidget {
                           },
                         );
                 }),
-
-                ///========================create slot button=========================///
-                /* CreateSlotButtonSmallWidget(
-                  onTap: () {
-                    if (argument != null && argument == 'event') {
-                      CreateTrackEventController
-                          .to.slotNoControllerForEvent.value
-                          .clear();
-                      CreateTrackEventController
-                          .to.uploadEventTotalSeatController.value
-                          .clear();
-                      CreateTrackEventController
-                          .to.uploadEventPriceController.value
-                          .clear();
-                      CreateTrackEventController
-                          .to.uploadEventDescriptionController.value
-                          .clear();
-                    } else {
-                      CreateTrackEventController
-                          .to.uploadTrackDescriptionController.value
-                          .clear();
-                      CreateTrackEventController.to.slotNoController.value
-                          .clear();
-                      CreateTrackEventController
-                          .to.uploadTrackPriceController.value
-                          .clear();
-                      CreateTrackEventController
-                          .to.uploadTrackPeopleNumberController.value
-                          .clear();
-                      CreateTrackEventController.to.selectedStartTime.value =
-                          '';
-                      CreateTrackEventController.to.selectedEndTime.value = '';
-                    }
-                  },
-                ),*/
 
                 ///============================dynamic slot list ===========================///
                 argument != null && argument == 'event'
