@@ -8,6 +8,7 @@ import 'package:mime/mime.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/init/api_client.dart';
+import 'package:track_trek/core/init/google_map_api_key.dart';
 import 'package:track_trek/core/init/hive_boxes.dart';
 import 'package:track_trek/core/model/booking/event_booking_model.dart';
 import 'package:track_trek/core/model/booking/track_booking_model.dart';
@@ -104,7 +105,8 @@ class TrackEventService {
     required String trackId,
     required String amount,
     required File? file,
-  }) async {
+  })
+  async {
     try {
       final request = http.MultipartRequest(
         'POST',
@@ -180,7 +182,8 @@ class TrackEventService {
         log('-----------------Category Call--------------------');
         log(responseData.toString());
 
-        if (responseData['success'] != null && responseData['success'] == true) {
+        if (responseData['success'] != null &&
+            responseData['success'] == true) {
           // Safely parse the category data
           final data = responseData['data']['category'] as List<dynamic>?;
           if (data != null) {
@@ -231,12 +234,14 @@ class TrackEventService {
         log('-----------------Promote Track Call--------------------');
         log(responseData.toString());
 
-        if (responseData['success'] != null && responseData['success'] == true) {
+        if (responseData['success'] != null &&
+            responseData['success'] == true) {
           // Parse the response data into a list
           final data = responseData['data'] as List<dynamic>?;
           if (data != null) {
             promoteTrackList = data
-                .map((e) => PromoteTrackModel.fromJson(e as Map<String, dynamic>))
+                .map((e) =>
+                    PromoteTrackModel.fromJson(e as Map<String, dynamic>))
                 .toList();
           }
         } else {
@@ -261,7 +266,6 @@ class TrackEventService {
 
     return promoteTrackList;
   }
-
 
   static Future<List<TrackSlots>> getSlotListCall({
     required String date,
@@ -305,7 +309,6 @@ class TrackEventService {
     return slotList; // Ensure an empty list is returned if an error occurs
   }
 
-
   static Future<List<TrackHistoryRunningModel>> getTrackBookingCall({
     String history = '',
   }) async {
@@ -330,13 +333,14 @@ class TrackEventService {
         log(url.toString());
         log(responseData.toString());
 
-        if (responseData['success'] != null && responseData['success'] == true) {
+        if (responseData['success'] != null &&
+            responseData['success'] == true) {
           // Correctly parse the data into a list of TrackHistoryRunningModel
           final data = responseData['data'] as List<dynamic>?;
           if (data != null) {
             trackBookingList = data
-                .map((e) =>
-                TrackHistoryRunningModel.fromJson(e as Map<String, dynamic>))
+                .map((e) => TrackHistoryRunningModel.fromJson(
+                    e as Map<String, dynamic>))
                 .toList();
           }
         } else {
@@ -362,9 +366,9 @@ class TrackEventService {
     return trackBookingList;
   }
 
-
-  static Future<bool> updateTrackRequest({
+  static Future<String> updateTrackRequest({
     required String trackId,
+    required String totalTrackDayInMonth,
     required List<String> trackDays,
   }) async {
     try {
@@ -381,17 +385,18 @@ class TrackEventService {
       log(body.toString());
       log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {
+        totalTrackDayInMonth=responseData['data']['totalTrackDayInMonth'].toString();
         showCustomSnackbar(
             title: AppStaticString.success,
             message: responseData['message'],
             type: SnackBarType.success);
-        return true;
+        return responseData['data']['totalTrackDayInMonth'].toString();
       } else {
         showCustomSnackbar(
             title: AppStaticString.failed,
             message: responseData['message'],
             type: SnackBarType.failed);
-        return false;
+        return '';
       }
     } catch (e) {
       showCustomSnackbar(
@@ -399,7 +404,7 @@ class TrackEventService {
           message: e.toString(),
           type: SnackBarType.failed);
       debugPrint(e.toString());
-      return false;
+      return '';
     }
   }
 
@@ -668,12 +673,13 @@ class TrackEventService {
         log('-----------------Booking Event List Call--------------------');
         log(responseData.toString());
 
-        if (responseData['success'] != null && responseData['success'] == true) {
+        if (responseData['success'] != null &&
+            responseData['success'] == true) {
           final data = responseData['data'] as List<dynamic>?;
           if (data != null) {
             eventBookingList = data
-                .map((e) =>
-                EventHistoryRunningModel.fromJson(e as Map<String, dynamic>))
+                .map((e) => EventHistoryRunningModel.fromJson(
+                    e as Map<String, dynamic>))
                 .toList();
           }
         } else {
@@ -697,7 +703,6 @@ class TrackEventService {
 
     return eventBookingList;
   }
-
 
   static Future<SingleEventModel> getSingleEventData({
     required String eventId,
@@ -784,6 +789,28 @@ class TrackEventService {
     }
   }
 
+ static Future<Map<String, String>> fetchCurrencies() async {
+    Map<String, String> currencyList = {};
+    final url =
+        'https://v6.exchangerate-api.com/v6/${GoogleClient.currencyApiKey}/codes';
+    debugPrint(url);
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      if (data['result'] == 'success') {
+        currencyList = Map.fromIterable(
+          data['symbols'],
+          key: (item) => item[0], // Currency code
+          value: (item) => item[1], // Currency name
+        );
+      }
+    } else {
+      print('Failed to load currencies');
+    }
+    return currencyList;
+  }
+
   static Future<bool> joinEventSlotRequest({
     required String eventId,
     required String slotId,
@@ -807,6 +834,44 @@ class TrackEventService {
       final responseData = json.decode(response.body);
       log('-----------------join event slot call--------------------');
       log(body.toString());
+      log(responseData.toString());
+      if (responseData['success'] != null && responseData['success'] == true) {
+        showCustomSnackbar(
+            title: AppStaticString.success,
+            message: responseData['message'],
+            type: SnackBarType.success);
+        return true;
+      } else {
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
+        return false;
+      }
+    } catch (e) {
+      showCustomSnackbar(
+          title: AppStaticString.failed,
+          message: e.toString(),
+          type: SnackBarType.failed);
+      debugPrint(e.toString());
+      return false;
+    }
+  }
+
+  static Future<bool> onBoardingRequest({
+    required String dynamicUrl,
+  }) async {
+    try {
+      final url = Uri.parse(dynamicUrl);
+
+
+      final response = await http.get(
+        url, /*headers: headers,*/
+      );
+      final responseData = json.decode(response.body);
+      log('-----------------onboarding hit call--------------------');
+
+      log(url.toString());
       log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {
         showCustomSnackbar(

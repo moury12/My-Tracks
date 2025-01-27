@@ -11,7 +11,7 @@ import 'package:track_trek/core/model/track-event/single_event_model.dart';
 import 'package:track_trek/core/model/track-event/single_track_model.dart';
 import 'package:track_trek/core/service/track-event/track_event_service.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
-import 'package:track_trek/view/add/upload_track.dart';
+import 'package:track_trek/view/add/upload_track_event.dart';
 
 class CreateTrackEventController extends GetxController {
   static CreateTrackEventController get to => Get.find();
@@ -94,10 +94,12 @@ class CreateTrackEventController extends GetxController {
       TextEditingController(text: kDebugMode ? 'NID' : '').obs;
   RxList<TextEditingController> eventControllerList =
       <TextEditingController>[].obs;
+  RxMap currencyList = {}.obs;
 
   ///=====================dynamic Strings=============================///
 
   var selectedCategory = Rx<String?>(null);
+  var selectedCurrencyFrom = Rx<String?>(null);
   RxString destinationLat = ''.obs;
   RxString destinationLng = ''.obs;
   RxString selectedAddress = ''.obs;
@@ -122,6 +124,7 @@ class CreateTrackEventController extends GetxController {
   RxBool isLoadingEvent = false.obs;
   RxBool isLoadingCategory = false.obs;
   RxBool isLoadingPostEvent = false.obs;
+  RxBool isLoadingCurrencies = false.obs;
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   categoryListCall() async {
@@ -182,7 +185,7 @@ class CreateTrackEventController extends GetxController {
         isLoadingPostTrack.value = false;
         trackId.value = value;
         clearAfterPostTrack();
-        Get.toNamed(UploadTrackScreen.routeName, arguments: 'track');
+        Get.toNamed(CreateTrackEventSlotScreen.routeName, arguments: 'track');
         // navigator!.pop();
       } else {
         isLoadingPostTrack.value = false;
@@ -196,7 +199,8 @@ class CreateTrackEventController extends GetxController {
   updateTrackCall() async {
     if (NetworkController.to.isConnected.value) {
       isLoadingUpdateTrack.value = true;
-      bool isUpdate = await TrackEventService.updateTrackRequest(
+      String isUpdate = await TrackEventService.updateTrackRequest(
+        totalTrackDayInMonth: days.value,
         trackId: trackId.value,
         trackDays: weekDays
             .where((e) => e['selected'] == true)
@@ -204,14 +208,10 @@ class CreateTrackEventController extends GetxController {
                 e['day_name'].toString()) // Extract the 'day' field as a String
             .toList(),
       );
-      if (isUpdate) {
+      if (isUpdate.isNotEmpty) {
         final initialSelectedDays =
             weekDays.where((e) => e['selected'] == true).toList();
-        days.value = initialSelectedDays
-            .map((e) => e['day_name'] as String)
-            .toList()
-            .length
-            .toString();
+        days.value = isUpdate;
 
         if (initialSelectedDays.isNotEmpty) {
           selectedDay.value = 0; // Set index to the first selected day
@@ -226,6 +226,12 @@ class CreateTrackEventController extends GetxController {
     }
   }
 
+  getCurrenciesList() async {
+    isLoadingCurrencies.value = true;
+    currencyList.value=await TrackEventService.fetchCurrencies();
+    isLoadingCurrencies.value = false;
+
+  }
   createSlotTrackCall() async {
     if (NetworkController.to.isConnected.value) {
       isLoadingCreateSlot.value = true;
@@ -316,7 +322,7 @@ class CreateTrackEventController extends GetxController {
       if (value.isNotEmpty) {
         isLoadingPostEvent.value = false;
         eventId.value = value;
-        Get.toNamed(UploadTrackScreen.routeName, arguments: 'event');
+        Get.toNamed(CreateTrackEventSlotScreen.routeName, arguments: 'event');
         // navigator!.pop();
         clearAfterPostEvent();
       } else {
@@ -371,7 +377,7 @@ class CreateTrackEventController extends GetxController {
   void onInit() {
     categoryListCall();
     getWeekDays();
-
+getCurrenciesList();
     super.onInit();
   }
 

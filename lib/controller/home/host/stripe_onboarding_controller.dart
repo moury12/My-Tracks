@@ -3,9 +3,11 @@ import 'package:get/get.dart';
 import 'package:track_trek/controller/network_controller.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/init/api_client.dart';
+import 'package:track_trek/core/service/track-event/track_event_service.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/view/add/create_track_event_page.dart';
 import 'package:track_trek/view/home/host/add_bank_acc_host.dart';
+import 'package:track_trek/view/initial/bottom_navigation_screen.dart';
 import 'package:track_trek/view/initial/splash.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../../../core/service/manage/manage_service.dart';
@@ -77,14 +79,32 @@ class StripeOnboardingController extends GetxController {
             Get.snackbar('Error', error.description,
                 snackPosition: SnackPosition.BOTTOM);
           },
-         onNavigationRequest: (NavigationRequest request) {
-           if (request.url.startsWith(ApiClient.baseUrlWithoutPort)) {
-             // Allow navigation to your local development server
-             return NavigationDecision.navigate;
-           }
-            //  if (request.url.contains('${ApiClient.baseUrl}/payment/return')) {
-            //   Get.offAllNamed(SplashScreen.routeName);
-            // }
+          onNavigationRequest: (NavigationRequest request) async {
+            if (request.url.contains('${ApiClient.baseUrl}/payment/return')) {
+              debugPrint("Intercepted target URL: ${request.url}");
+
+              // Perform the HTTP POST request
+              try {
+                bool isSuccess = await TrackEventService.onBoardingRequest(dynamicUrl: request.url);
+                if (isSuccess) {
+                  debugPrint("Onboarding process completed successfully");
+                  Get.toNamed(SplashScreen.routeName);
+                } else {
+                  debugPrint("Onboarding failed");
+                  Get.snackbar('Error', 'Onboarding process failed',
+                      snackPosition: SnackPosition.BOTTOM);
+                }
+              } catch (e) {
+                debugPrint("Error during onboarding: $e");
+                Get.snackbar('Error', 'Failed to complete the onboarding process',
+                    snackPosition: SnackPosition.BOTTOM);
+              }
+
+              // Prevent WebView from loading the intercepted URL
+              return NavigationDecision.prevent;
+            }
+
+            // Allow navigation for all other URLs
             return NavigationDecision.navigate;
           },
         ),

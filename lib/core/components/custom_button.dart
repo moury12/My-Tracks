@@ -65,7 +65,9 @@ class CustomButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(radius ?? 8.r),
             color: fillColor),
         child: isLoading == true
-            ? const DefaultProgressIndicator()
+            ? const DefaultProgressIndicator(
+                      strokeWidth: 2,
+                    )
             : child ??
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -111,9 +113,12 @@ class DefaultProgressIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CircularProgressIndicator(
-      color: color ?? AppColors.blackBackgroundColor,
-      strokeWidth: strokeWidth ?? 4,
+    return SizedBox( height: 15.w,
+      width: 15.w,
+      child: CircularProgressIndicator(
+        color: color ?? AppColors.blackBackgroundColor,
+        strokeWidth: strokeWidth ?? 2,
+      ),
     );
   }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:track_trek/controller/home/host/stripe_onboarding_controller.dart';
-import 'package:track_trek/controller/home/host/stripe_onboarding_controller.dart';
 import 'package:track_trek/core/components/custom_appbar.dart';
 import 'package:track_trek/core/components/custom_button.dart';
 import 'package:track_trek/core/constant/app_strings.dart';

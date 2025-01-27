@@ -13,7 +13,7 @@ import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/init/api_client.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/core/utils/text_style.dart';
-import 'package:track_trek/view/add/upload_track.dart';
+import 'package:track_trek/view/add/upload_track_event.dart';
 import 'package:track_trek/view/add/widgets/select_date_button.dart';
 import 'package:track_trek/view/add/widgets/track_slot_widget.dart';
 import 'package:track_trek/view/book-track-join-event/book_track_payment_page.dart';

@@ -353,16 +353,14 @@ class CreateTrackEventScreen extends StatelessWidget {
                                                   .eventLocationController
                                                   .value
                                                   .text =
-                                              CreateTrackEventController
-                                                  .to.selectedAddress.value;
+                                          address['description'];
                                         } else {
                                           CreateTrackEventController
                                                   .to
                                                   .trackLocationController
                                                   .value
                                                   .text =
-                                              CreateTrackEventController
-                                                  .to.selectedAddress.value;
+                                          address['description'];
                                         }
 
                                         CommonController.to.addressSuggestion
