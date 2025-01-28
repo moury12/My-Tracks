@@ -377,7 +377,7 @@ class CreateTrackEventSlotScreen extends StatelessWidget {
                    () {
                     return CustomDropdown<dynamic>(
                       isRequired: true,
-                      title: 'Currency',
+                      title: AppStaticString.currency,
                       selectedValue:
                           CreateTrackEventController.to.selectedCurrencyFrom.value,
                       items: CreateTrackEventController.to.currencyList.keys

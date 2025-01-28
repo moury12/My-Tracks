@@ -19,6 +19,7 @@ class AppStaticString {
   static const String profile = "Profile";
   static const String history = "History";
   static const String eventUser = "Event User";
+  static const String trackUser = "Track User";
   static const String eventHistory = "Event History";
   static const String termsCondition = "Terms & Conditions";
   static const String search = "Search";
@@ -116,8 +117,11 @@ class AppStaticString {
   static const String dummyTime = "10:00AM - 12:00 PM";
   static const String  emailUser= "Email: ";
   static const String  contact= "Contact Info: ";
+  static const String  bookingDateTime= "Booking Date & Time: ";
+
   static const String  dateOfBirth= "Date Of Birth: ";
   static const String  address= "Address: ";
+  static const String  currency= 'Currency';
   static const String inProgress = "In Progress";
   static const String seeMore = "See More";
   static const String slotNumber = "Slot Number: ";

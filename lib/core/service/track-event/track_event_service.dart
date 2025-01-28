@@ -469,6 +469,7 @@ class TrackEventService {
     required String slotId,
     required String numOfPeople,
     required String date,
+    required String currency,
   }) async {
     try {
       final url = Uri.parse(ApiClient.getBookASlotUrl);
@@ -478,7 +479,7 @@ class TrackEventService {
         'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
       };
       final body = jsonEncode(
-          {"slotId": slotId, "numOfPeople": numOfPeople, "date": date});
+          {"slotId": slotId, "numOfPeople": numOfPeople, "date": date, "currency": currency});
       final response = await http.post(url, headers: headers, body: body);
       final responseData = json.decode(response.body);
       log('-----------------book track slot call--------------------');
@@ -819,6 +820,7 @@ class TrackEventService {
   static Future<bool> joinEventSlotRequest({
     required String eventId,
     required String slotId,
+    required String currency,
     required int price,
     required List<dynamic> data,
   }) async {
@@ -832,6 +834,7 @@ class TrackEventService {
       final body = jsonEncode({
         "eventId": eventId,
         "slotId": slotId,
+        "currency": currency,
         "data": data,
         "price": price,
       });
@@ -1135,5 +1138,25 @@ class TrackEventService {
       debugPrint(e.toString());
       return false;
     }
+  }
+static  Future<String> convertCurrency({
+    required String selectedCurrencyFrom,
+    required String selectedCurrencyTo,
+    required String amount,
+}) async {
+    final url =
+        'https://v6.exchangerate-api.com/v6/${GoogleClient.currencyApiKey}/pair/$selectedCurrencyFrom/$selectedCurrencyTo/$amount';
+    final response = await http.get(Uri.parse(url));
+    String convertedAmount ='';
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      if (data['result'] == 'success') {
+
+          convertedAmount = data['conversion_result'].toString();
+
+      }
+    } else {
+      debugPrint('Failed to convert currency');
+    }return convertedAmount;
   }
 }

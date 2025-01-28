@@ -243,7 +243,8 @@ class CreateTrackEventController extends GetxController {
           endTime: selectedEndTime.value,
           price: uploadTrackPriceController.value.text,
           maxPeople: uploadTrackPeopleNumberController.value.text,
-          description: uploadTrackDescriptionController.value.text, currency: selectedCurrencyFrom.value.toString());
+          description: uploadTrackDescriptionController.value.text,
+          currency: selectedCurrencyFrom.value.toString());
       if (isUpdate) {
         isLoadingCreateSlot.value = false;
         getTrackDetailsCall(trackId: trackId.value);
@@ -410,6 +411,7 @@ getCurrenciesList();
     uploadTrackPriceController.value.clear();
     uploadTrackPeopleNumberController.value.clear();
     selectedEndTime.value = '';
+    selectedCurrencyFrom.value=null;
     selectedStartTime.value = '';
     uploadTrackPeopleNumberFocusNode.unfocus();
     uploadTrackPriceFocusNode.unfocus();
@@ -422,6 +424,7 @@ getCurrenciesList();
     uploadEventTotalSeatController.value.clear();
     uploadEventPriceController.value.clear();
     uploadEventDescriptionController.value.clear();
+    selectedCurrencyFrom.value=null;
     FocusScope.of(Get.context!).unfocus();
 // formKey.currentState?.reset();
 

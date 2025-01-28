@@ -12,6 +12,7 @@ import 'package:track_trek/core/constant/fontsize_constant.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/model/track-event/single_event_model.dart';
 import 'package:track_trek/core/utils/app_color.dart';
+import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/home/widgets/event_card_widget.dart';
 import 'package:track_trek/view/manage/widgets/blue_container_widget.dart';
@@ -30,6 +31,7 @@ class _JoinEventPaymentScreenState extends State<JoinEventPaymentScreen> {
   dynamic slot = '';
 
   String price = '';
+  String currency = '';
   String unsold = '';
   String totalSeat = '';
   @override
@@ -37,12 +39,14 @@ class _JoinEventPaymentScreenState extends State<JoinEventPaymentScreen> {
     argument = Get.arguments;
     type = argument['type'];
     slot = argument['slot'];
-    BookTrackJoinEventController.to.eventData.value = argument['event']??SingleEventModel();
-    price = slot is EventSlots ? slot.price.toString() : '\$0.0';
-    unsold =slot is EventSlots
+    BookTrackJoinEventController.to.eventData.value =
+        argument['event'] ?? SingleEventModel();
+    price = slot is EventSlots ? slot.price.toString() : '0.0';
+    currency = slot is EventSlots ? slot.currency : '';
+    unsold = slot is EventSlots
         ? ((slot.maxPeople ?? 0) - (slot.currentPeople ?? 0)).toString()
         : '0';
-    totalSeat=slot is EventSlots ? slot.maxPeople.toString() : '0';
+    totalSeat = slot is EventSlots ? slot.maxPeople.toString() : '0';
     super.initState();
   }
 
@@ -72,10 +76,18 @@ class _JoinEventPaymentScreenState extends State<JoinEventPaymentScreen> {
                             ),
 
                             ///=======================dynamic price=====================///
-                            Text('\$$price',
-                                style: poppinsMedium.copyWith(
-                                    color: AppColors.blackLightColor,
-                                    fontSize: getButtonFontSizeLarge(context)))
+                            Obx(
+                              () {
+                                if( BookTrackJoinEventController.to.convertPrice.isNotEmpty&& BookTrackJoinEventController.to.selectedCurrencyFrom.value!=null){
+                                  price=BookTrackJoinEventController.to.convertPrice.value;
+                                  currency=BookTrackJoinEventController.to.selectedCurrencyFrom.value.toString();
+                                }
+                                return BookTrackJoinEventController.to.isLoadingCurrencyConvert.value?DefaultProgressIndicator(): Text('$currency $price',
+                                    style: poppinsMedium.copyWith(
+                                        color: AppColors.blackLightColor,
+                                        fontSize: getButtonFontSizeLarge(context)));
+                              }
+                            )
                           ],
                         ),
                       ),
@@ -89,6 +101,46 @@ class _JoinEventPaymentScreenState extends State<JoinEventPaymentScreen> {
                               '${AppStaticString.allowedPeople} $totalSeat   ${AppStaticString.unsold} $unsold',
                           textAlign: TextAlign.start,
                         ),
+                        space12H,
+                        Obx(() {
+                          return CustomDropdown<dynamic>(
+                            isRequired: true,
+                            title: AppStaticString.currency,
+                            selectedValue: BookTrackJoinEventController
+                                .to.selectedCurrencyFrom.value,
+                            items: BookTrackJoinEventController
+                                .to.currencyList.keys
+                                .map(
+                                  (e) => '$e',
+                                )
+                                .toList(),
+                            isLoading: BookTrackJoinEventController
+                                .to.isLoadingCurrencies.value,
+                            onChanged: (value) {
+                              BookTrackJoinEventController
+                                  .to.selectedCurrencyFrom.value = value;
+                              if (BookTrackJoinEventController
+                                          .to.selectedCurrencyFrom.value !=
+                                      null &&
+                                  currency.isNotEmpty &&
+                                  price.isNotEmpty) {
+                                BookTrackJoinEventController.to
+                                    .convertCurrencies(
+                                        selectedCurrencyFrom: currency,
+                                        selectedCurrencyTo:
+                                            BookTrackJoinEventController
+                                                .to.selectedCurrencyFrom.value
+                                                .toString(),
+                                        amount: price);
+                              } else {
+                                showCustomSnackbar(
+                                    title: AppStaticString.failed,
+                                    message: 'Cannot convert currency!!',
+                                    type: SnackBarType.failed);
+                              }
+                            },
+                          );
+                        }),
                         space12H,
                         Obx(() {
                           return CustomDropdown<int>(
@@ -106,8 +158,11 @@ class _JoinEventPaymentScreenState extends State<JoinEventPaymentScreen> {
                         }),
                         space16H,
                         Obx(() {
-                          return BookTrackJoinEventController.to.eventData.value!.moreInfo == null ||
-                                  BookTrackJoinEventController.to.eventData.value!.moreInfo!.isEmpty
+                          return BookTrackJoinEventController
+                                          .to.eventData.value.moreInfo ==
+                                      null ||
+                                  BookTrackJoinEventController
+                                      .to.eventData.value.moreInfo!.isEmpty
                               ? const SizedBox.shrink()
                               : Column(
                                   children: List.generate(
@@ -126,7 +181,12 @@ class _JoinEventPaymentScreenState extends State<JoinEventPaymentScreen> {
                                             .to.moreInfoControllers
                                             .add(
                                           List.generate(
-                                            BookTrackJoinEventController.to.eventData.value!.moreInfo!.length,
+                                            BookTrackJoinEventController
+                                                .to
+                                                .eventData
+                                                .value
+                                                .moreInfo!
+                                                .length,
                                             (_) => TextEditingController(),
                                           ),
                                         );
@@ -148,10 +208,20 @@ class _JoinEventPaymentScreenState extends State<JoinEventPaymentScreen> {
                                           Column(
                                             spacing: 12.h,
                                             children: List.generate(
-                                              BookTrackJoinEventController.to.eventData.value!.moreInfo!.length,
+                                              BookTrackJoinEventController
+                                                  .to
+                                                  .eventData
+                                                  .value
+                                                  .moreInfo!
+                                                  .length,
                                               (indexOfMoreInfo) {
-                                                final more = BookTrackJoinEventController.to.eventData.value!
-                                                    .moreInfo![indexOfMoreInfo];
+                                                final more =
+                                                    BookTrackJoinEventController
+                                                            .to
+                                                            .eventData
+                                                            .value
+                                                            .moreInfo![
+                                                        indexOfMoreInfo];
 
                                                 return CustomTextField(
                                                   title: more.label,
@@ -177,11 +247,18 @@ class _JoinEventPaymentScreenState extends State<JoinEventPaymentScreen> {
                                                           ? "self"
                                                           : 'other',
                                                       'moreInfo': List.generate(
-                                                        BookTrackJoinEventController.to.eventData.value!
-                                                            .moreInfo!.length,
+                                                        BookTrackJoinEventController
+                                                            .to
+                                                            .eventData
+                                                            .value
+                                                            .moreInfo!
+                                                            .length,
                                                         (indexMoreData) {
                                                           final moreData =
-                                                              BookTrackJoinEventController.to.eventData.value!
+                                                              BookTrackJoinEventController
+                                                                      .to
+                                                                      .eventData
+                                                                      .value
                                                                       .moreInfo![
                                                                   indexMoreData];
                                                           BookTrackJoinEventController
@@ -240,9 +317,23 @@ class _JoinEventPaymentScreenState extends State<JoinEventPaymentScreen> {
                     BookTrackJoinEventController.to.isLoadingBookTrack.value,
                 onTap: () {
                   if (slot is EventSlots) {
-                    BookTrackJoinEventController.to.joinEventSlotCall(
-                        price: slot.price ?? 0,
-                        eventId: BookTrackJoinEventController.to.eventData.value!.sId ?? '',
+                    final priceValue = double.parse(price) ; // Fallback to 0 if price is null or invalid
+                    final selectedValue = BookTrackJoinEventController.to.selectedValue.value ?? 1; // Fallback to 1 if null
+                    final total = priceValue * selectedValue;
+/*for(int i=0;i>BookTrackJoinEventController
+    .to.eventField.length;i++){
+  for(int j=0 ;j>BookTrackJoinEventController
+      .to.eventField[i]['moreInfo'].length;j++){
+    print('-------------');
+   print( BookTrackJoinEventController
+        .to.eventField[i]['moreInfo'][j]['value']);
+  }
+    }*/
+                    BookTrackJoinEventController.to.joinEventSlotCall(currency: currency,
+                        price: total.toInt(),
+                        eventId: BookTrackJoinEventController
+                                .to.eventData.value.sId ??
+                            '',
                         slotId: slot.sId ?? '');
                   }
                 },

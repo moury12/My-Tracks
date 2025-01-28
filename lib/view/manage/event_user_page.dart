@@ -17,8 +17,8 @@ class EventUserScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     String argument = Get.arguments;
     return Scaffold(
-      appBar: const CustomAppbar(
-        tile: AppStaticString.eventUser,
+      appBar:  CustomAppbar(
+        tile:argument == 'event'? AppStaticString.eventUser:AppStaticString.trackUser,
       ),
       body: SingleChildScrollView(
         child: Padding(

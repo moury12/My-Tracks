@@ -174,6 +174,8 @@ class EventSlots {
   String? slotNo;
   int? price;
   int? maxPeople;
+  String? currency;
+
   int? currentPeople;
   String? description;
   String? status;
@@ -187,6 +189,8 @@ class EventSlots {
         this.event,
         this.slotNo,
         this.price,
+        this.currency,
+
         this.maxPeople,
         this.currentPeople,
         this.description,
@@ -202,6 +206,8 @@ class EventSlots {
     slotNo = json['slotNo'];
     price = json['price'];
     maxPeople = json['maxPeople'];
+    currency = json['currency'];
+
     currentPeople = json['currentPeople'];
     description = json['description'];
     status = json['status'];
@@ -217,6 +223,8 @@ class EventSlots {
     data['event'] = event;
     data['slotNo'] = slotNo;
     data['price'] = price;
+    data['currency'] = this.currency;
+
     data['maxPeople'] = maxPeople;
     data['currentPeople'] = currentPeople;
     data['description'] = description;

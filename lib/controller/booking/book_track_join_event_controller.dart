@@ -2,12 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:track_trek/controller/network_controller.dart';
-import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/model/track-event/single_event_model.dart';
 import 'package:track_trek/core/model/track-event/single_track_model.dart';
 import 'package:track_trek/core/service/track-event/track_event_service.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
-import 'package:track_trek/view/book-track-join-event/book_track_join_event_page.dart';
 import 'package:track_trek/view/initial/splash.dart';
 
 class BookTrackJoinEventController extends GetxController {
@@ -26,7 +24,7 @@ class BookTrackJoinEventController extends GetxController {
   RxList<dynamic> eventField = [].obs;
   List<List<TextEditingController>> moreInfoControllers = [];
   RxList<TrackSlots> trackSlotList = <TrackSlots>[].obs;
-
+  RxMap currencyList = {}.obs;
   ///=======================single dynamic object====================///
   ///
   Rx<SingleEventModel> singleEvent = SingleEventModel().obs;
@@ -37,6 +35,8 @@ class BookTrackJoinEventController extends GetxController {
   RxBool isLoadingTrackEvent = false.obs;
   RxBool isLoadingSlotList = false.obs;
   RxBool isLoadingBookTrack = false.obs;
+  RxBool isLoadingCurrencies = false.obs;
+  RxBool isLoadingCurrencyConvert = false.obs;
 
   ///======================dynamic controller======================///
   Rx<PageController> pageController = PageController(initialPage: 0).obs;
@@ -44,7 +44,15 @@ class BookTrackJoinEventController extends GetxController {
       TextEditingController().obs;
   Rx<TextEditingController> peopleNumberForEventController =
       TextEditingController(text: '0').obs;
+///==================== dynamic string ============================///
+  var selectedCurrencyFrom = Rx<String?>(null);
+  RxString convertPrice =''.obs;
 
+  @override
+  void onInit() {
+getCurrenciesList();
+super.onInit();
+  }
   void updateSubSelectedValue() {
     if (selectedValue.value != null && selectedValue.value! > 0) {
       subSelectedValue.value = List.generate(selectedValue.value!,
@@ -53,7 +61,21 @@ class BookTrackJoinEventController extends GetxController {
       subSelectedValue.clear();
     }
   }
+  getCurrenciesList() async {
+    isLoadingCurrencies.value = true;
+    currencyList.value=await TrackEventService.fetchCurrencies();
+    isLoadingCurrencies.value = false;
 
+  }convertCurrencies({
+    required String selectedCurrencyFrom,
+    required String selectedCurrencyTo,
+    required String amount,
+  }) async {
+    isLoadingCurrencyConvert.value = true;
+    convertPrice.value=await TrackEventService.convertCurrency(selectedCurrencyFrom: selectedCurrencyFrom, selectedCurrencyTo: selectedCurrencyTo, amount: amount);
+    isLoadingCurrencyConvert.value = false;
+
+  }
   getTrackSlotListCall({required String trackId}) async {
     if (NetworkController.to.isConnected.value) {
       isLoadingSlotList.value = true;
@@ -76,7 +98,7 @@ class BookTrackJoinEventController extends GetxController {
       bool isBooked = await TrackEventService.bookTrackSlotRequest(
         date: selectDate.value,
         numOfPeople: peopleNumberController.value.text,
-        slotId: slotId,
+        slotId: slotId, currency: '',
       );
       if (isBooked) {
         isLoadingBookTrack.value = false;
@@ -108,12 +130,13 @@ class BookTrackJoinEventController extends GetxController {
   joinEventSlotCall({
     required String slotId,
     required String eventId,
+    required String currency,
     required int price,
   }) async {
     if (NetworkController.to.isConnected.value) {
       isLoadingBookTrack.value = true;
       bool isBooked = await TrackEventService.joinEventSlotRequest(
-          slotId: slotId, eventId: eventId, data: eventField, price: price);
+          slotId: slotId, eventId: eventId, data: eventField, price: price, currency: selectedCurrencyFrom.value??currency);
       if (isBooked) {
         isLoadingBookTrack.value = false;
         eventField.clear();
@@ -124,7 +147,7 @@ class BookTrackJoinEventController extends GetxController {
         Get.offAllNamed(SplashScreen.routeName);
       } else {
         eventField.clear();
-        selectedValue.value = null;
+        selectedValue.value=null;
         updateSubSelectedValue();
         savedIndices.clear();
         clearMoreInfoControllers();

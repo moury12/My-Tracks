@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:track_trek/core/components/custom_network_image.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
@@ -121,6 +122,12 @@ class UserInfoContentWidget extends StatelessWidget {
     final String phone = eventPartModel != null
         ? eventPartModel!.user!.phoneNumber ?? 'n/a'
         :trackPartModel!=null? trackPartModel!.user!.phoneNumber ?? 'Not Provided':rentersModel!.user!.phoneNumber??'';
+final String startDate = eventPartModel != null
+        ? eventPartModel!.startDateTime ?? 'n/a'
+        :trackPartModel!=null? trackPartModel!.startDateTime ?? 'Not Provided':rentersModel!.user!.phoneNumber??'';
+final String createdDate = eventPartModel != null
+        ? eventPartModel!.createdAt ?? 'n/a'
+        :trackPartModel!=null? trackPartModel!.createdAt ?? 'Not Provided':rentersModel!.user!.phoneNumber??'';
 
     final String address = eventPartModel != null
         ? eventPartModel!.user!.address ?? 'n/a'
@@ -128,6 +135,8 @@ class UserInfoContentWidget extends StatelessWidget {
     final String imageUrl = eventPartModel != null
         ? eventPartModel!.user!.profileImage ?? ''
         :trackPartModel!=null? trackPartModel!.user!.profileImage ?? '':rentersModel!.user!.profileImage??'';
+   final String formatedStartDate = DateFormat('dd MMM yyy').format(DateTime.parse(startDate));
+   final String formatedBookDate = DateFormat('dd MMM yyy').format(DateTime.parse(createdDate));
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -162,6 +171,10 @@ class UserInfoContentWidget extends StatelessWidget {
 
               UserInfoText(
                 text: '${AppStaticString.address}$address',
+              ),UserInfoText(
+                text: '${AppStaticString.startDateTime}: $formatedStartDate',
+              ),UserInfoText(
+                text: '${AppStaticString.bookingDateTime} $formatedBookDate',
               ),
               eventPartModel != null &&
                       eventPartModel!.moreInfo != null &&
