@@ -37,7 +37,8 @@ class TrackSlotWidget extends StatelessWidget {
     this.eventSlots,
     this.onViewAllParticipant,
     this.needToBook = false,
-    this.onBook, this.buttonLoading=false,
+    this.onBook,
+    this.buttonLoading = false,
   });
 
   @override
@@ -56,7 +57,8 @@ class TrackSlotWidget extends StatelessWidget {
 
           ///================= slot price dynamic========================///
           Text(
-            '\$${slots != null ? slots!.price ?? 'n/a' : ''}${eventSlots != null ? eventSlots!.price ?? 'n/a' : ''}',
+            '${slots != null ?( slots!.currency?? 'n/a' ).toUpperCase(): '' } ${slots != null ? slots!.price ?? 'n/a' : ''}'
+            '${eventSlots != null ? (eventSlots!.currency ?? 'n/a').toUpperCase() : ''} ${eventSlots != null ? eventSlots!.price ?? 'n/a' : ''}',
             style: poppinsSemiBold.copyWith(
                 fontSize: getFontSizeExtraLarge(context),
                 color: AppColors.primaryColor),
@@ -168,8 +170,8 @@ class TrackSlotWidget extends StatelessWidget {
                 ),
           needToBook == true
               ? CustomButton(
-            isLoading: buttonLoading,
-            marginVerticel:6.h ,
+                  isLoading: buttonLoading,
+                  marginVerticel: 6.h,
                   onTap: onBook ?? () {},
                   title: AppStaticString.bookSlot,
                 )
@@ -216,14 +218,14 @@ class SlotLoadingWidget extends StatelessWidget {
             space12H,
             // Loading effect for Slot description or time
             Container(
-              height: 15.h,
+              height: 20.h,
               width: double.infinity,
               color: Colors.grey,
             ),
             space12H,
             // Loading effect for ExpandableText
             Container(
-              height: 60.h,
+              height: 80.h,
               width: double.infinity,
               color: Colors.grey,
             ),

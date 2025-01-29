@@ -40,6 +40,7 @@ class ApiClient {
   static String get postReviewUrl => '$baseUrl/review/post-review';
   static String get getAllReviewUrl => '$baseUrl/review/get-all-review';
   static String get postFeedbackUrl => '$baseUrl/feedback/post-feedback';
+  static String get paymentCheckoutUrl => '$baseUrl/payment/checkout-booking';
   static String get getTermsConditionUrl =>
       '$baseUrl/manage/get-terms-conditions';
   static String get getPrivacyPolicy => '$baseUrl/manage/get-privacy-policy';

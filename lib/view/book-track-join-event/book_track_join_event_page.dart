@@ -292,7 +292,7 @@ class _BookTrackJoinEventScreenState extends State<BookTrackJoinEventScreen> {
                       }),
 
                       ///===================regular slot list======================///
-                      const TitleTextWidget(title: AppStaticString.regularSlot),
+                      const TitleTextWidget(title: AppStaticString.regularSlot),space6H,
                       Obx(
                         () {
                           List<dynamic> slotsList = [];

@@ -24,6 +24,8 @@ class HomeController extends GetxController {
   RxString isBooked = ''.obs;
   Rx<SingleTrackModel?> selectedTrack = Rx<SingleTrackModel?>(null);
   RxString promotionBannerImage = ''.obs;
+  var selectedCurrencyFrom = Rx<String?>(null);
+
 
   ///========================List variables=====================///
   ///
@@ -220,7 +222,7 @@ class HomeController extends GetxController {
         String isPromoted = await TrackEventService.checkoutPromotion(
             trackId: selectedTrack.value!.sId ?? '',
             amount: '10',
-            file: File(promotionBannerImage.value));
+            file: File(promotionBannerImage.value), currency: selectedCurrencyFrom.value??'AUD');
         if (isPromoted.isNotEmpty) {
           isLoadingPromoteTrack.value = false;
           selectedTrack.value = null;

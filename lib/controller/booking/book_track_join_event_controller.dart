@@ -2,11 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:track_trek/controller/network_controller.dart';
+import 'package:track_trek/core/init/api_client.dart';
 import 'package:track_trek/core/model/track-event/single_event_model.dart';
 import 'package:track_trek/core/model/track-event/single_track_model.dart';
 import 'package:track_trek/core/service/track-event/track_event_service.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
+import 'package:track_trek/view/book-track-join-event/payment/checkout_booking_page.dart';
 import 'package:track_trek/view/initial/splash.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class BookTrackJoinEventController extends GetxController {
   static BookTrackJoinEventController get to => Get.find();
@@ -24,7 +27,8 @@ class BookTrackJoinEventController extends GetxController {
   RxList<dynamic> eventField = [].obs;
   List<List<TextEditingController>> moreInfoControllers = [];
   RxList<TrackSlots> trackSlotList = <TrackSlots>[].obs;
-  RxMap currencyList = {}.obs;
+
+
   ///=======================single dynamic object====================///
   ///
   Rx<SingleEventModel> singleEvent = SingleEventModel().obs;
@@ -35,8 +39,9 @@ class BookTrackJoinEventController extends GetxController {
   RxBool isLoadingTrackEvent = false.obs;
   RxBool isLoadingSlotList = false.obs;
   RxBool isLoadingBookTrack = false.obs;
-  RxBool isLoadingCurrencies = false.obs;
+
   RxBool isLoadingCurrencyConvert = false.obs;
+  var isLoading = true.obs;
 
   ///======================dynamic controller======================///
   Rx<PageController> pageController = PageController(initialPage: 0).obs;
@@ -44,15 +49,58 @@ class BookTrackJoinEventController extends GetxController {
       TextEditingController().obs;
   Rx<TextEditingController> peopleNumberForEventController =
       TextEditingController(text: '0').obs;
-///==================== dynamic string ============================///
+
+  ///==================== dynamic string ============================///
   var selectedCurrencyFrom = Rx<String?>(null);
-  RxString convertPrice =''.obs;
+  RxString checkoutUrl = ''.obs;
+  RxString convertPrice = ''.obs;
 
   @override
   void onInit() {
-getCurrenciesList();
-super.onInit();
+
+    super.onInit();
   }
+
+  WebViewController? webController;
+
+  void initializeWebViewController() {
+    if (webController != null) {
+      return; // Avoid re-initialization
+    }
+    webController = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setUserAgent('Mozilla/5.0 (Mobile; rv:52.0) Gecko/52.0 Firefox/52.0')
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onProgress: (int progress) {
+            debugPrint("WebView progress: $progress");
+            isLoading.value = progress < 100;
+          },
+          onPageStarted: (String url) {
+            debugPrint("Page started loading: $url");
+            isLoading.value = true;
+          },
+          onPageFinished: (String url) {
+            debugPrint("Page finished loading: $url");
+            isLoading.value = false;
+          },
+          onHttpError: (HttpResponseError error) {
+            debugPrint("HTTP Error: ${error}");
+          },
+          onWebResourceError: (WebResourceError error) {
+            debugPrint("Web Resource Error: ${error.description}");
+          },
+          onNavigationRequest: (NavigationRequest request) {
+            if (request.url.contains('${ApiClient.baseUrl}/payment/success')) {
+              Get.offAllNamed(SplashScreen.routeName);
+            }
+            return NavigationDecision.navigate;
+          },
+        ),
+      )
+      ..loadRequest(Uri.parse(checkoutUrl.value));
+  }
+
   void updateSubSelectedValue() {
     if (selectedValue.value != null && selectedValue.value! > 0) {
       subSelectedValue.value = List.generate(selectedValue.value!,
@@ -61,21 +109,22 @@ super.onInit();
       subSelectedValue.clear();
     }
   }
-  getCurrenciesList() async {
-    isLoadingCurrencies.value = true;
-    currencyList.value=await TrackEventService.fetchCurrencies();
-    isLoadingCurrencies.value = false;
 
-  }convertCurrencies({
+
+
+  convertCurrencies({
     required String selectedCurrencyFrom,
     required String selectedCurrencyTo,
     required String amount,
   }) async {
     isLoadingCurrencyConvert.value = true;
-    convertPrice.value=await TrackEventService.convertCurrency(selectedCurrencyFrom: selectedCurrencyFrom, selectedCurrencyTo: selectedCurrencyTo, amount: amount);
+    convertPrice.value = await TrackEventService.convertCurrency(
+        selectedCurrencyFrom: selectedCurrencyFrom,
+        selectedCurrencyTo: selectedCurrencyTo,
+        amount: amount);
     isLoadingCurrencyConvert.value = false;
-
   }
+
   getTrackSlotListCall({required String trackId}) async {
     if (NetworkController.to.isConnected.value) {
       isLoadingSlotList.value = true;
@@ -92,18 +141,29 @@ super.onInit();
     }
   }
 
-  bookTrackSlotCall({required String slotId}) async {
+  bookTrackSlotCall({
+    required String slotId,
+    required String currency,
+    required String price,
+  }) async {
     if (NetworkController.to.isConnected.value) {
       isLoadingBookTrack.value = true;
-      bool isBooked = await TrackEventService.bookTrackSlotRequest(
+      String bookingId = await TrackEventService.bookTrackSlotRequest(
         date: selectDate.value,
         numOfPeople: peopleNumberController.value.text,
-        slotId: slotId, currency: '',
+        slotId: slotId,
+        currency: selectedCurrencyFrom.value ?? currency,
       );
-      if (isBooked) {
+      if (bookingId.isNotEmpty) {
         isLoadingBookTrack.value = false;
         peopleNumberController.value.clear();
-        Get.offAllNamed(SplashScreen.routeName);
+        checkoutUrl.value = await TrackEventService.paymentCheckOutBooking(
+            bookingId: bookingId.toString(),
+            currency: selectedCurrencyFrom.value ?? currency,
+            amount: price.toString());
+        if (checkoutUrl.value.isNotEmpty) {
+          Get.toNamed(CheckoutBookingScreen.routeName);
+        }
       } else {
         peopleNumberController.value.clear();
         isLoadingBookTrack.value = false;
@@ -131,23 +191,36 @@ super.onInit();
     required String slotId,
     required String eventId,
     required String currency,
-    required int price,
+    required double price,
   }) async {
     if (NetworkController.to.isConnected.value) {
       isLoadingBookTrack.value = true;
-      bool isBooked = await TrackEventService.joinEventSlotRequest(
-          slotId: slotId, eventId: eventId, data: eventField, price: price, currency: selectedCurrencyFrom.value??currency);
-      if (isBooked) {
+      String bookingId = await TrackEventService.joinEventSlotRequest(
+          slotId: slotId,
+          eventId: eventId,
+          data: eventField,
+          price: price,
+          currency: selectedCurrencyFrom.value ?? currency);
+      print('bookingId');
+      print(bookingId);
+      if (bookingId.isNotEmpty) {
         isLoadingBookTrack.value = false;
         eventField.clear();
         selectedValue.value = null;
         savedIndices.clear();
         clearMoreInfoControllers();
         updateSubSelectedValue();
-        Get.offAllNamed(SplashScreen.routeName);
+
+        checkoutUrl.value = await TrackEventService.paymentCheckOutBooking(
+            bookingId: bookingId.toString(),
+            currency: selectedCurrencyFrom.value ?? currency,
+            amount: price.toString());
+        if (checkoutUrl.value.isNotEmpty) {
+          Get.toNamed(CheckoutBookingScreen.routeName);
+        }
       } else {
         eventField.clear();
-        selectedValue.value=null;
+        selectedValue.value = null;
         updateSubSelectedValue();
         savedIndices.clear();
         clearMoreInfoControllers();

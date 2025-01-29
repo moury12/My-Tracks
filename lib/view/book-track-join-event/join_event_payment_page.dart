@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:track_trek/controller/booking/book_track_join_event_controller.dart';
+import 'package:track_trek/controller/common_controller.dart';
+import 'package:track_trek/controller/common_controller.dart';
 import 'package:track_trek/core/components/custom_appbar.dart';
 import 'package:track_trek/core/components/custom_button.dart';
 import 'package:track_trek/core/components/custom_drop_down_button.dart';
@@ -39,6 +41,20 @@ class _JoinEventPaymentScreenState extends State<JoinEventPaymentScreen> {
     argument = Get.arguments;
     type = argument['type'];
     slot = argument['slot'];
+    BookTrackJoinEventController.to.selectedCurrencyFrom.value=null;
+    BookTrackJoinEventController
+        .to.selectedValue.value =null;
+    BookTrackJoinEventController
+        .to.eventField.clear();
+    BookTrackJoinEventController
+        .to.savedIndices.clear();
+    BookTrackJoinEventController.to.moreInfoControllers.clear();
+/*    for (var controller in BookTrackJoinEventController.to.moreInfoControllers) {
+      controller.clear();
+    }*/
+ /*   BookTrackJoinEventController
+        .to.eventData.value.moreInfo!.clear();*/
+
     BookTrackJoinEventController.to.eventData.value =
         argument['event'] ?? SingleEventModel();
     price = slot is EventSlots ? slot.price.toString() : '0.0';
@@ -76,18 +92,27 @@ class _JoinEventPaymentScreenState extends State<JoinEventPaymentScreen> {
                             ),
 
                             ///=======================dynamic price=====================///
-                            Obx(
-                              () {
-                                if( BookTrackJoinEventController.to.convertPrice.isNotEmpty&& BookTrackJoinEventController.to.selectedCurrencyFrom.value!=null){
-                                  price=BookTrackJoinEventController.to.convertPrice.value;
-                                  currency=BookTrackJoinEventController.to.selectedCurrencyFrom.value.toString();
-                                }
-                                return BookTrackJoinEventController.to.isLoadingCurrencyConvert.value?DefaultProgressIndicator(): Text('$currency $price',
-                                    style: poppinsMedium.copyWith(
-                                        color: AppColors.blackLightColor,
-                                        fontSize: getButtonFontSizeLarge(context)));
+                            Obx(() {
+                              if (BookTrackJoinEventController
+                                      .to.convertPrice.isNotEmpty &&
+                                  BookTrackJoinEventController
+                                          .to.selectedCurrencyFrom.value !=
+                                      null) {
+                                price = BookTrackJoinEventController
+                                    .to.convertPrice.value;
+                                currency = BookTrackJoinEventController
+                                    .to.selectedCurrencyFrom.value
+                                    .toString();
                               }
-                            )
+                              return BookTrackJoinEventController
+                                      .to.isLoadingCurrencyConvert.value
+                                  ? DefaultProgressIndicator()
+                                  : Text('$currency $price',
+                                      style: poppinsMedium.copyWith(
+                                          color: AppColors.blackLightColor,
+                                          fontSize:
+                                              getButtonFontSizeLarge(context)));
+                            })
                           ],
                         ),
                       ),
@@ -104,17 +129,17 @@ class _JoinEventPaymentScreenState extends State<JoinEventPaymentScreen> {
                         space12H,
                         Obx(() {
                           return CustomDropdown<dynamic>(
-                            isRequired: true,
+                           /* isRequired: true,*/
                             title: AppStaticString.currency,
                             selectedValue: BookTrackJoinEventController
                                 .to.selectedCurrencyFrom.value,
-                            items: BookTrackJoinEventController
+                            items: CommonController
                                 .to.currencyList.keys
                                 .map(
                                   (e) => '$e',
                                 )
                                 .toList(),
-                            isLoading: BookTrackJoinEventController
+                            isLoading: CommonController
                                 .to.isLoadingCurrencies.value,
                             onChanged: (value) {
                               BookTrackJoinEventController
@@ -144,6 +169,7 @@ class _JoinEventPaymentScreenState extends State<JoinEventPaymentScreen> {
                         space12H,
                         Obx(() {
                           return CustomDropdown<int>(
+                            isRequired: true,
                             title: AppStaticString.selectPeople,
                             items: BookTrackJoinEventController.to.memberList,
                             selectedValue: BookTrackJoinEventController
@@ -224,6 +250,7 @@ class _JoinEventPaymentScreenState extends State<JoinEventPaymentScreen> {
                                                         indexOfMoreInfo];
 
                                                 return CustomTextField(
+                                                  isRequired: true,
                                                   title: more.label,
                                                   textEditingController:
                                                       moreInfoControllersForPerson[
@@ -239,7 +266,19 @@ class _JoinEventPaymentScreenState extends State<JoinEventPaymentScreen> {
                                               Expanded(
                                                   child: CustomButton(
                                                 onTap: () {
-                                                  if (!isSaved) {
+                                                  bool hasEmptyField = false;
+print( BookTrackJoinEventController
+    .to.savedIndices);
+                                                  // Loop through controllers to check if any field is empty
+                                                  for (int indexMoreData = 0;
+                                                  indexMoreData < moreInfoControllersForPerson.length;
+                                                  indexMoreData++) {
+                                                    if (moreInfoControllersForPerson[indexMoreData].text.trim().isEmpty) {
+                                                      hasEmptyField = true;
+                                                      break; // Stop checking further if an empty field is found
+                                                    }
+                                                  }
+                                                  if (!isSaved&&!hasEmptyField) {
                                                     BookTrackJoinEventController
                                                         .to.eventField
                                                         .add({
@@ -281,7 +320,12 @@ class _JoinEventPaymentScreenState extends State<JoinEventPaymentScreen> {
                                                         BookTrackJoinEventController
                                                             .to.eventField
                                                             .toString());
-                                                  }
+                                                  } else{
+                                                    showCustomSnackbar(
+                                                      title: AppStaticString.failed,
+                                                      message: 'Fill up required fields',
+                                                      type: SnackBarType.failed,
+                                                    );                                                  }
                                                 },
                                                 title: isSaved
                                                     ? AppStaticString.saved
@@ -317,24 +361,63 @@ class _JoinEventPaymentScreenState extends State<JoinEventPaymentScreen> {
                     BookTrackJoinEventController.to.isLoadingBookTrack.value,
                 onTap: () {
                   if (slot is EventSlots) {
-                    final priceValue = double.parse(price) ; // Fallback to 0 if price is null or invalid
-                    final selectedValue = BookTrackJoinEventController.to.selectedValue.value ?? 1; // Fallback to 1 if null
+                    final priceValue = double.parse(
+                        price); // Fallback to 0 if price is null or invalid
+                    final selectedValue =
+                        BookTrackJoinEventController.to.selectedValue.value ??
+                            1; // Fallback to 1 if null
                     final total = priceValue * selectedValue;
-/*for(int i=0;i>BookTrackJoinEventController
-    .to.eventField.length;i++){
-  for(int j=0 ;j>BookTrackJoinEventController
-      .to.eventField[i]['moreInfo'].length;j++){
-    print('-------------');
-   print( BookTrackJoinEventController
-        .to.eventField[i]['moreInfo'][j]['value']);
-  }
-    }*/
-                    BookTrackJoinEventController.to.joinEventSlotCall(currency: currency,
-                        price: total.toInt(),
+                  /*  bool hasEmptyField = false;
+                    for (var element
+                        in BookTrackJoinEventController.to.eventField) {
+                      if (element is Map &&
+                          element.containsKey('moreInfo') &&
+                          element['moreInfo'] is List) {
+                        for (var info in element['moreInfo']) {
+                          if (info is Map &&
+                              info.containsKey('value') &&
+                              info['value'] != null &&
+                              info['value'].toString().isNotEmpty) {
+                            // Perform operation if value is not empty
+                          } else {
+                            hasEmptyField = true;
+                            break;
+                            // Perform operation if value is empty
+                          }
+                        }
+                      }
+                      if (hasEmptyField) break;
+                    }*/
+
+                    print(BookTrackJoinEventController
+                        .to.savedIndices.length);
+                    if ( BookTrackJoinEventController
+                        .to.savedIndices.length!=BookTrackJoinEventController
+                        .to.selectedValue.value /*||
+                        BookTrackJoinEventController
+                                .to.selectedCurrencyFrom.value ==
+                            null*/ ||  BookTrackJoinEventController
+                                .to.selectedValue.value ==
+                            null ||
+                        currency.isEmpty ||
+                        total == 0 ||
+                        total.toString().isEmpty) {
+                      showCustomSnackbar(
+                        title: AppStaticString.failed,
+                        message: 'Fill up required fields',
+                        type: SnackBarType.failed,
+                      );
+                    } else {
+                      // If no empty fields, proceed with API call
+                      BookTrackJoinEventController.to.joinEventSlotCall(
+                        currency: currency,
+                        price: total,
                         eventId: BookTrackJoinEventController
                                 .to.eventData.value.sId ??
                             '',
-                        slotId: slot.sId ?? '');
+                        slotId: slot.sId ?? '',
+                      );
+                    }
                   }
                 },
                 title: AppStaticString.goPay,

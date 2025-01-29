@@ -13,6 +13,8 @@ import 'package:track_trek/view/auth/sign_up.dart';
 import 'package:track_trek/view/book-track-join-event/book_track_join_event_page.dart';
 import 'package:track_trek/view/book-track-join-event/book_track_payment_page.dart';
 import 'package:track_trek/view/book-track-join-event/join_event_payment_page.dart';
+import 'package:track_trek/view/book-track-join-event/payment/checkout_booking_page.dart';
+import 'package:track_trek/view/book-track-join-event/payment/checkout_booking_page.dart';
 import 'package:track_trek/view/feedback/feedback_page.dart';
 import 'package:track_trek/view/history/history_page.dart';
 import 'package:track_trek/view/home/host/add_bank_acc_host.dart';
@@ -100,6 +102,10 @@ class AppRoutes {
         GetPage(
             name: BookTrackJoinEventScreen.routeName,
             page: () => const BookTrackJoinEventScreen(),
+            binding: BookTrackJoinEventBinding()),
+        GetPage(
+            name: CheckoutBookingScreen.routeName,
+            page: () => const CheckoutBookingScreen(),
             binding: BookTrackJoinEventBinding()),
         GetPage(
             name: JoinEventPaymentScreen.routeName,

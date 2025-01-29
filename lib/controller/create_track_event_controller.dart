@@ -387,7 +387,7 @@ getCurrenciesList();
     trackNameController.value.clear();
     trackLocationController.value.clear();
     trackDescriptionController.value.clear();
-
+selectedCurrencyFrom.value=null;
     selectedCategory.value = null;
   }
 
@@ -403,6 +403,8 @@ getCurrenciesList();
     selectedEventStartTime.value = '';
     selectedEventEndTime.value = '';
     selectedCategory.value = null;
+    selectedCurrencyFrom.value=null;
+
   }
 
   clearAfterCreateSlotForTrack() {

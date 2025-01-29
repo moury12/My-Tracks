@@ -71,13 +71,11 @@ class StripeOnboardingController extends GetxController {
           },
           onHttpError: (HttpResponseError error) {
             debugPrint("HTTP Error: ${error}");
-            Get.snackbar('Error', 'HTTP Error: ',
-                snackPosition: SnackPosition.BOTTOM);
+
           },
           onWebResourceError: (WebResourceError error) {
             debugPrint("Web Resource Error: ${error.description}");
-            Get.snackbar('Error', error.description,
-                snackPosition: SnackPosition.BOTTOM);
+
           },
           onNavigationRequest: (NavigationRequest request) async {
             if (request.url.contains('${ApiClient.baseUrl}/payment/return')) {
@@ -91,13 +89,11 @@ class StripeOnboardingController extends GetxController {
                   Get.toNamed(SplashScreen.routeName);
                 } else {
                   debugPrint("Onboarding failed");
-                  Get.snackbar('Error', 'Onboarding process failed',
-                      snackPosition: SnackPosition.BOTTOM);
+
                 }
               } catch (e) {
                 debugPrint("Error during onboarding: $e");
-                Get.snackbar('Error', 'Failed to complete the onboarding process',
-                    snackPosition: SnackPosition.BOTTOM);
+
               }
 
               // Prevent WebView from loading the intercepted URL

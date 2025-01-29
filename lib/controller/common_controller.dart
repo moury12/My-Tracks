@@ -10,6 +10,7 @@ import 'package:track_trek/core/init/api_client.dart';
 import 'package:track_trek/core/init/google_map_api_key.dart';
 import 'package:track_trek/core/init/hive_boxes.dart';
 import 'package:track_trek/core/service/review/review_service.dart';
+import 'package:track_trek/core/service/track-event/track_event_service.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:http/http.dart' as http;
 import 'package:track_trek/view/initial/splash.dart';
@@ -17,15 +18,24 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 class CommonController extends GetxController {
   static CommonController get to => Get.find();
-  /*RxBool isLoadingPostLike = false.obs;*/
   RxBool isLiked = false.obs;
   RxBool isLoadingOnFetch = false.obs;
   RxBool isLoadingOnLocationSuggestion = false.obs;
-
-  // RxString stripeUrl ='https://checkout.stripe.com/c/pay/cs_test_a145Ie3jBXtvrM28zoB0JJz69cotaDOpdSxsG0nyZI0C66YofS6PoVz6Zo#fidkdWxOYHwnPyd1blpxYHZxWjA0STVuNnVHXWc3akhWcmpKdk10UVZqYzNzRF0xTER3ajJSSGpTV3V2YUh2dFdVX3dgbWxkQF9SSmd2Q01fTnNAbnBzUUJkYFJJS2RAXFZ1aEJnVU00YT1VNTVXMXxPU1dcaycpJ2N3amhWYHdzYHcnP3F3cGApJ2lkfGpwcVF8dWAnPyd2bGtiaWBabHFgaCcpJ2BrZGdpYFVpZGZgbWppYWB3dic%2FcXdwYHgl'.obs;
+  RxBool isLoadingCurrencies = false.obs;
   RxString stripeUrl =''.obs;
   RxList<dynamic> addressSuggestion = [].obs;
+  RxMap currencyList = {}.obs;
 
+  getCurrenciesList() async {
+    // if (NetworkController.to.isConnected.value) {
+      isLoadingCurrencies.value = true;
+      currencyList.value = await TrackEventService.fetchCurrencies();
+      isLoadingCurrencies.value = false;
+    /*} else {
+      isLoadingCurrencies.value = false;
+      *//*noInternetShowCustomSnackbar();*//*
+    }*/
+  }
   postLikeDisLikeCall({required String trackId}) async {
     if (NetworkController.to.isConnected.value) {
       try {
@@ -126,11 +136,9 @@ class CommonController extends GetxController {
           },
           onHttpError: (HttpResponseError error) {
             debugPrint("HTTP Error: ${error}");
-            Get.snackbar('Error', 'HTTP Error: ', snackPosition: SnackPosition.BOTTOM);
           },
           onWebResourceError: (WebResourceError error) {
             debugPrint("Web Resource Error: ${error.description}");
-            Get.snackbar('Error', error.description, snackPosition: SnackPosition.BOTTOM);
           },
 
           onNavigationRequest: (NavigationRequest request) {
@@ -184,11 +192,13 @@ class CommonController extends GetxController {
 
   @override
   void onInit() {
+    getCurrenciesList();
     Boxes.getUserData().get(roleKey) != null
         ? Boxes.getUserData().get(roleKey) == 'USER'
             ? 0.obs
             : 1.obs
         : 0.obs;
+
     // categoryListCall();
     super.onInit();
   }
@@ -208,6 +218,7 @@ class CommonController extends GetxController {
   @override
   void onClose() {
     webController = null; // Clear WebViewController
+
     super.onClose();
   }
 

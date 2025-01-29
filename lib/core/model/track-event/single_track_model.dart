@@ -50,7 +50,8 @@ class SingleTrackModel {
     category = json['category'];
     trackImage = json['track_image']?.cast<String>();
     address = json['address'];
-    location = json['location'] != null ? Location.fromJson(json['location']) : null;
+    location =
+        json['location'] != null ? Location.fromJson(json['location']) : null;
     description = json['description'];
     status = json['status'];
     isPromoted = json['isPromoted'];
@@ -137,6 +138,7 @@ class TrackSlots {
   String? slotNo;
   String? startTime;
   String? endTime;
+  String? currency;
   int? price;
   int? maxPeople;
   String? description;
@@ -148,6 +150,7 @@ class TrackSlots {
       this.day,
       this.slotNo,
       this.startTime,
+      this.currency,
       this.endTime,
       this.price,
       this.maxPeople,
@@ -161,6 +164,7 @@ class TrackSlots {
     slotNo = json['slotNo'];
     startTime = json['startTime'];
     endTime = json['endTime'];
+    currency = json['currency'];
     price = json['price'];
     maxPeople = json['maxPeople'];
     description = json['description'];
@@ -175,6 +179,7 @@ class TrackSlots {
     data['slotNo'] = slotNo;
     data['startTime'] = startTime;
     data['endTime'] = endTime;
+    data['currency'] = currency;
     data['price'] = price;
     data['maxPeople'] = maxPeople;
     data['description'] = description;

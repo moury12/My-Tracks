@@ -104,6 +104,7 @@ class TrackEventService {
   static Future<String> checkoutPromotion({
     required String trackId,
     required String amount,
+    required String currency,
     required File? file,
   })
   async {
@@ -118,6 +119,7 @@ class TrackEventService {
 
       request.fields['trackId'] = trackId;
       request.fields['amount'] = amount;
+      request.fields['currency'] = currency;
 
       if (file != null && await file.exists()) {
         final mimeType =
@@ -465,7 +467,7 @@ class TrackEventService {
     }
   }
 
-  static Future<bool> bookTrackSlotRequest({
+  static Future<String> bookTrackSlotRequest({
     required String slotId,
     required String numOfPeople,
     required String date,
@@ -490,13 +492,13 @@ class TrackEventService {
             title: AppStaticString.success,
             message: responseData['message'],
             type: SnackBarType.success);
-        return true;
+        return responseData['data']['_id'];
       } else {
         showCustomSnackbar(
             title: AppStaticString.failed,
             message: responseData['message'],
             type: SnackBarType.failed);
-        return false;
+        return '';
       }
     } catch (e) {
       showCustomSnackbar(
@@ -504,7 +506,7 @@ class TrackEventService {
           message: e.toString(),
           type: SnackBarType.failed);
       debugPrint(e.toString());
-      return false;
+      return '';
     }
   }
 
@@ -794,34 +796,40 @@ class TrackEventService {
     }
   }
 
- static Future<Map<String, String>> fetchCurrencies() async {
+  static Future<Map<String, String>> fetchCurrencies() async {
     Map<String, String> currencyList = {};
-    final url =
-        'https://v6.exchangerate-api.com/v6/${GoogleClient.currencyApiKey}/codes';
-    debugPrint(url);
-    final response = await http.get(Uri.parse(url));
+    final url = 'https://v6.exchangerate-api.com/v6/${GoogleClient.currencyApiKey}/codes';
 
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      if (data['result'] == 'success' && data['supported_codes'] != null) {
-        // Map supported_codes to a key-value pair (code, name)
-        currencyList = Map.fromIterable(
-          data['supported_codes'],
-          key: (item) => item[0], // Currency code
-          value: (item) => item[1], // Currency name
-        );
+    debugPrint('Fetching currencies from: $url');
+
+    try {
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+
+        if (data['result'] == 'success' && data['supported_codes'] is List) {
+          // Convert the list of lists into a Map<String, String>
+          currencyList = {
+            for (var item in data['supported_codes']) item[0] as String: item[1] as String
+          };
+        }
+        debugPrint('Currencies fetched: $currencyList');
+      } else {
+        debugPrint('Failed to load currencies. Status Code: ${response.statusCode}');
       }
-    } else {
-      print('Failed to load currencies');
+    } catch (e) {
+      debugPrint('Error fetching currencies: $e');
     }
+
     return currencyList;
   }
 
-  static Future<bool> joinEventSlotRequest({
+  static Future<String> joinEventSlotRequest({
     required String eventId,
     required String slotId,
     required String currency,
-    required int price,
+    required double price,  // <-- Change String to double
     required List<dynamic> data,
   }) async {
     try {
@@ -836,11 +844,63 @@ class TrackEventService {
         "slotId": slotId,
         "currency": currency,
         "data": data,
-        "price": price,
+        "price": price,  // Ensure this is a number, not a string
+      });
+
+      final response = await http.post(url, headers: headers, body: body);
+      final responseData = json.decode(response.body);
+
+      log('-----------------join event slot call--------------------');
+      log(body.toString());
+      log(responseData.toString());
+
+      if (responseData['success'] != null && responseData['success'] == true) {
+        showCustomSnackbar(
+            title: AppStaticString.success,
+            message: responseData['message'],
+            type: SnackBarType.success);
+        return responseData['data'][0]['_id'].toString();
+      } else {
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
+        return '';
+      }
+    } catch (e) {
+      showCustomSnackbar(
+          title: AppStaticString.failed,
+          message: e.toString(),
+          type: SnackBarType.failed);
+      debugPrint(ApiClient.getJoinEventUrl);
+      debugPrint(e.toString());
+      return '';
+    }
+  }
+
+  static Future<String> paymentCheckOutBooking({
+    required String bookingId,
+    required String currency,
+    required String amount,
+
+  })
+  async {
+    try {
+      final url = Uri.parse(ApiClient.paymentCheckoutUrl);
+      final headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
+      };
+      final body = jsonEncode({
+        "bookingId": bookingId,
+        "currency": currency,
+
+        "amount": amount,
       });
       final response = await http.post(url, headers: headers, body: body);
       final responseData = json.decode(response.body);
-      log('-----------------join event slot call--------------------');
+      log('-----------------checkout booking call--------------------');
       log(body.toString());
       log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {
@@ -848,21 +908,22 @@ class TrackEventService {
             title: AppStaticString.success,
             message: responseData['message'],
             type: SnackBarType.success);
-        return true;
+        return responseData['data'];
       } else {
         showCustomSnackbar(
             title: AppStaticString.failed,
             message: responseData['message'],
             type: SnackBarType.failed);
-        return false;
+        return '';
       }
     } catch (e) {
       showCustomSnackbar(
           title: AppStaticString.failed,
           message: e.toString(),
           type: SnackBarType.failed);
+      debugPrint('checkout booking');
       debugPrint(e.toString());
-      return false;
+      return '';
     }
   }
 
@@ -899,6 +960,7 @@ class TrackEventService {
           title: AppStaticString.failed,
           message: e.toString(),
           type: SnackBarType.failed);
+
       debugPrint(e.toString());
       return false;
     }

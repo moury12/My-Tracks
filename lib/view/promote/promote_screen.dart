@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:track_trek/controller/booking/book_track_join_event_controller.dart';
+import 'package:track_trek/controller/common_controller.dart';
 import 'package:track_trek/controller/home/host/home_controller.dart';
 import 'package:track_trek/core/components/custom_button.dart';
 import 'package:track_trek/core/components/custom_drop_down_button.dart';
@@ -21,6 +23,7 @@ class PromoteScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return SingleChildScrollView(
       child: Padding(
         padding: padding16,
@@ -43,7 +46,27 @@ class PromoteScreen extends StatelessWidget {
                 },
               );
             }),
+            Obx(() {
+              return CustomDropdown<dynamic>(
+               isRequired: true,
+                title: AppStaticString.currency,
+                selectedValue: HomeController
+                    .to.selectedCurrencyFrom.value,
+                items: CommonController.to.currencyList.keys
+                    .map(
+                      (e) => '$e',
+                )
+                    .toList(),
+                isLoading:
+                CommonController.to.isLoadingCurrencies.value,
+                onChanged: (value) {
+                  HomeController
+                      .to.selectedCurrencyFrom.value = value;
 
+
+                },
+              );
+            }),
             ///===============================upload images================================///
             Obx(() {
               return UploadImageWidget(
