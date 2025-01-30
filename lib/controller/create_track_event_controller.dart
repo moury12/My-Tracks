@@ -268,10 +268,7 @@ class CreateTrackEventController extends GetxController {
         isLoadingTrack.value = false;
       } else {
         isLoadingTrack.value = false;
-        showCustomSnackbar(
-            title: AppStaticString.failed,
-            message: AppStaticString.failedToLoadData,
-            type: SnackBarType.failed);
+
       }
     } else {
       isLoadingTrack.value = false;
@@ -413,7 +410,6 @@ selectedCurrencyFrom.value=null;
     uploadTrackPriceController.value.clear();
     uploadTrackPeopleNumberController.value.clear();
     selectedEndTime.value = '';
-    selectedCurrencyFrom.value=null;
     selectedStartTime.value = '';
     uploadTrackPeopleNumberFocusNode.unfocus();
     uploadTrackPriceFocusNode.unfocus();

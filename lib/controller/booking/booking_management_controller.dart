@@ -194,6 +194,8 @@ class BookingManagementController extends GetxController {
           review: reviewController.text,
           rating: ratingValue.value);
       if (isGivenRating) {
+        reviewController.clear();
+        ratingValue.value=2.5;
         isLoadingRating.value = false;
       } else {
         isLoadingRating.value = false;

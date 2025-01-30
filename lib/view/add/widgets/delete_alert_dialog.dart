@@ -34,6 +34,7 @@ class DeleteAlertDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      scrollable: true,
       backgroundColor: AppColors.blackColor,
       content: Column(
         mainAxisSize: MainAxisSize.min,

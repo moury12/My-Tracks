@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:track_trek/controller/network_controller.dart';
+import 'package:track_trek/controller/profile_controller.dart';
 import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/model/category/category_model.dart';
 import 'package:track_trek/core/model/review/review_model.dart';
@@ -182,6 +183,8 @@ class HomeUserController extends GetxController {
 
   ///=========================== Refresh method ===========================///
   onRefreshUserPanel() {
+    Get.put(ProfileController());
+    ProfileController.to.getUserProfileData();
     selectedIndexCategory.value = 0;
     getPromoteTrackListCall();
     getCategoryListCall();

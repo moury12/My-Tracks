@@ -65,56 +65,54 @@ class HomeUserScreen extends StatelessWidget {
                   space12H,
 
                   ///================dynamic banner==================///
-                  Obx(() {
-                    if (HomeUserController.to.promoteTrackList.isEmpty) {
-                      return SizedBox.shrink();
-                    }
-                    return SizedBox(
-                        height: 150.h,
-                        child: PageView.builder(
-                          itemCount:
-                              HomeUserController.to.promoteTrackList.length,
-                          controller: HomeUserController.to.controller.value,
-                          // itemCount: promoteTrackList.length,
-                          itemBuilder: (_, index) {
-                            return HomeUserController
-                                    .to.isLoadingPromoteTrack.value
-                                ? Shimmer.fromColors(
-                                    baseColor: Colors.grey[800]!,
-                                    highlightColor: Colors.grey[700]!,
-                                    child: Container(
-                                      height: 150.h,
-                                      width: double.maxFinite,
-                                      color: Colors.grey[800],
+                                Obx(() {
+                                  if (HomeUserController.to.promoteTrackList.isEmpty) {
+                                    return SizedBox.shrink();
+                                  }
+
+                                  bool isLoading = HomeUserController.to.isLoadingPromoteTrack.value;
+
+                                  return SizedBox(
+                                    height: 150.h,
+                                    child: isLoading
+                                        ? Shimmer.fromColors(
+                                      baseColor: Colors.grey[800]!,
+                                      highlightColor: Colors.grey[700]!,
+                                      child: Container(
+                                        height: 150.h,
+                                        width: double.maxFinite,
+                                        color: Colors.grey[800],
+                                      ),
+                                    )
+                                        : PageView.builder(
+                                      itemCount: HomeUserController.to.promoteTrackList.length,
+                                      controller: HomeUserController.to.controller.value,
+                                      itemBuilder: (_, index) {
+                                        final trackItem = HomeUserController.to.promoteTrackList[index];
+
+                                        return GestureDetector(
+                                          onTap: () {
+                                            Get.toNamed(BookTrackJoinEventScreen.routeName, arguments: {
+                                              'id': trackItem.track ?? '',
+                                              'type': 'track'
+                                            });
+                                          },
+                                          child: Padding(
+                                            padding: padding6H,
+                                            child: CustomNetworkImage(
+                                              borderRadius: BorderRadius.circular(10.r),
+                                              imageUrl: '${ApiClient.baseUrl}/${trackItem.bannerImage ?? ''}',
+                                              height: 150.h,
+                                              width: double.maxFinite,
+                                            ),
+                                          ),
+                                        );
+                                      },
                                     ),
-                                  )
-                                : GestureDetector(
-                                    onTap: () {
-                                      Get.toNamed(
-                                          BookTrackJoinEventScreen.routeName,
-                                          arguments: {
-                                            'id': HomeUserController
-                                                    .to
-                                                    .promoteTrackList[index]
-                                                    .track ??
-                                                '',
-                                            'type': 'track'
-                                          });
-                                    },
-                                    child: Padding(
-                                        padding: padding6H,
-                                        child: CustomNetworkImage(
-                                            borderRadius:
-                                                BorderRadius.circular(10.r),
-                                            imageUrl:
-                                                '${ApiClient.baseUrl}/${HomeUserController.to.promoteTrackList[index].bannerImage ?? ''}',
-                                            height: 150.h,
-                                            width: double.maxFinite)),
                                   );
-                          },
-                        ));
-                  }),
-                  space12H,
+                                }),
+
+                                space12H,
                   Obx(() {
                     return Center(
                       child: HomeUserController.to.promoteTrackList.isNotEmpty

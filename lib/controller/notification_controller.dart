@@ -17,10 +17,7 @@ class NotificationController extends GetxController {
         isLoadingNotification.value = false;
       } else {
         isLoadingNotification.value = false;
-        showCustomSnackbar(
-            title: AppStaticString.failed,
-            message: AppStaticString.failedToLoadData,
-            type: SnackBarType.failed);
+         
       }
     } else {
       isLoadingNotification.value = false;

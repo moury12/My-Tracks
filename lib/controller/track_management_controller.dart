@@ -38,10 +38,7 @@ class TrackManagementController extends GetxController {
         isLoadingEventList.value = false;
       } else {
         isLoadingEventList.value = false;
-        showCustomSnackbar(
-            title: AppStaticString.failed,
-            message: AppStaticString.failedToLoadData,
-            type: SnackBarType.failed);
+         
       }
     } else {
       isLoadingEventList.value = false;

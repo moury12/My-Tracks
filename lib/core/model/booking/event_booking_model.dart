@@ -42,8 +42,12 @@ class EventHistoryRunningModel {
         : null;
     startDateTime = json['startDateTime'];
     endDateTime = json['endDateTime'];
-    price = json['price'];
-    numOfPeople = json['numOfPeople'];
+    price = json['price'] is int
+        ? json['price']
+        : (json['price'] is double ? json['price'].toInt() : null);
+    numOfPeople = json['numOfPeople'] is int
+        ? json['numOfPeople']
+        : (json['numOfPeople'] is double ? json['numOfPeople'].toInt() : null);;
     bookingFor = json['bookingFor'];
     if (json['moreInfo'] != null) {
       moreInfo = <MoreInfo>[];

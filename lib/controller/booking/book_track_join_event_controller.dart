@@ -44,7 +44,7 @@ class BookTrackJoinEventController extends GetxController {
   var isLoading = true.obs;
 
   ///======================dynamic controller======================///
-  Rx<PageController> pageController = PageController(initialPage: 0).obs;
+  Rx<PageController> pageController = PageController(initialPage: 0,keepPage: true).obs;
   Rx<TextEditingController> peopleNumberController =
       TextEditingController().obs;
   Rx<TextEditingController> peopleNumberForEventController =

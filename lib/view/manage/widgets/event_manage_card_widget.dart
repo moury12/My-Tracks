@@ -124,10 +124,10 @@ class UserInfoContentWidget extends StatelessWidget {
         :trackPartModel!=null? trackPartModel!.user!.phoneNumber ?? 'Not Provided':rentersModel!.user!.phoneNumber??'';
 final String startDate = eventPartModel != null
         ? eventPartModel!.startDateTime ?? 'n/a'
-        :trackPartModel!=null? trackPartModel!.startDateTime ?? 'Not Provided':rentersModel!.user!.phoneNumber??'';
+        :trackPartModel!=null? trackPartModel!.startDateTime ?? 'Not Provided':rentersModel!.startDateTime??'';
 final String createdDate = eventPartModel != null
         ? eventPartModel!.createdAt ?? 'n/a'
-        :trackPartModel!=null? trackPartModel!.createdAt ?? 'Not Provided':rentersModel!.user!.phoneNumber??'';
+        :trackPartModel!=null? trackPartModel!.createdAt ?? 'Not Provided':rentersModel!.createdAt??'';
 
     final String address = eventPartModel != null
         ? eventPartModel!.user!.address ?? 'n/a'
@@ -135,8 +135,8 @@ final String createdDate = eventPartModel != null
     final String imageUrl = eventPartModel != null
         ? eventPartModel!.user!.profileImage ?? ''
         :trackPartModel!=null? trackPartModel!.user!.profileImage ?? '':rentersModel!.user!.profileImage??'';
-   final String formatedStartDate = DateFormat('dd MMM yyy').format(DateTime.parse(startDate));
-   final String formatedBookDate = DateFormat('dd MMM yyy').format(DateTime.parse(createdDate));
+   final String formatedStartDate = DateFormat('dd MMM yyy, hh:mm a').format(DateTime.parse(startDate));
+   final String formatedBookDate = DateFormat('dd MMM yyy, hh:mm a').format(DateTime.parse(createdDate));
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

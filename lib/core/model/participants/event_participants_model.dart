@@ -40,19 +40,32 @@ class EventParticipantsModel {
     eventSlot = json['eventSlot'];
     startDateTime = json['startDateTime'];
     endDateTime = json['endDateTime'];
-    price = json['price'];
-    numOfPeople = json['numOfPeople'];
+
+    // ✅ Ensure `price` is always an `int`
+    price = json['price'] is int
+        ? json['price']
+        : (json['price'] is double ? json['price'].toInt() : null);
+
+    // ✅ Ensure `numOfPeople` is always an `int`
+    numOfPeople = json['numOfPeople'] is int
+        ? json['numOfPeople']
+        : (json['numOfPeople'] is double ? json['numOfPeople'].toInt() : null);
+
     bookingFor = json['bookingFor'];
+
     if (json['moreInfo'] != null) {
       moreInfo = <MoreInfo>[];
       json['moreInfo'].forEach((v) {
         moreInfo!.add(MoreInfo.fromJson(v));
       });
     }
+
     status = json['status'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
-    iV = json['__v'];
+
+    // ✅ Ensure `iV` is always an `int`
+    iV = json['__v'] is int ? json['__v'] : (json['__v'] is double ? json['__v'].toInt() : null);
   }
 
   Map<String, dynamic> toJson() {
@@ -66,8 +79,8 @@ class EventParticipantsModel {
     data['eventSlot'] = eventSlot;
     data['startDateTime'] = startDateTime;
     data['endDateTime'] = endDateTime;
-    data['price'] = price;
-    data['numOfPeople'] = numOfPeople;
+    data['price'] = price ?? 0; // Ensures price is never null
+    data['numOfPeople'] = numOfPeople ?? 1; // Default to 1 person if null
     data['bookingFor'] = bookingFor;
     if (moreInfo != null) {
       data['moreInfo'] = moreInfo!.map((v) => v.toJson()).toList();
@@ -75,7 +88,7 @@ class EventParticipantsModel {
     data['status'] = status;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
-    data['__v'] = iV;
+    data['__v'] = iV ?? 0; // Ensures version is always an int
     return data;
   }
 }

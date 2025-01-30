@@ -74,10 +74,7 @@ class HomeController extends GetxController {
         isLoadingTrackList.value = false;
       } else {
         isLoadingTrackList.value = false;
-        /* showCustomSnackbar(
-            title: AppStaticString.failed,
-            message: AppStaticString.failedToLoadData,
-            type: SnackBarType.failed);*/
+        /*  */
       }
     } else {
       isLoadingTrackList.value = false;
@@ -94,10 +91,7 @@ class HomeController extends GetxController {
         isLoadingEventList.value = false;
       } else {
         isLoadingEventList.value = false;
-        /*  showCustomSnackbar(
-            title: AppStaticString.failed,
-            message: AppStaticString.failedToLoadData,
-            type: SnackBarType.failed);*/
+        /*   */
       }
     } else {
       isLoadingEventList.value = false;

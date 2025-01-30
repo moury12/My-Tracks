@@ -473,34 +473,29 @@ class TrackCardWidget extends StatelessWidget {
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (context) {
-        return Stack(
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height / 2,
-              child: GoogleMap(
-                zoomGesturesEnabled: true,
-                scrollGesturesEnabled: true,
-                initialCameraPosition: CameraPosition(
-                  target: LatLng(latitude, longitude),
-                  zoom: 14, // Set a more focused zoom level
-                ),
-                myLocationEnabled: true,
-                myLocationButtonEnabled: false, // Custom button added
-                zoomControlsEnabled: true, // Custom zoom controls added
-                markers: {
-                  Marker(
-                    markerId: const MarkerId("selected_location"),
-                    position: LatLng(latitude, longitude),
-                    infoWindow: const InfoWindow(
-                      title: "Selected Location",
-                      snippet: "This is the chosen spot.",
-                    ),
-                  ),
-                },
-              ),
+        return SizedBox(
+          height: MediaQuery.of(context).size.height / 2,
+          child: GoogleMap(
+            zoomGesturesEnabled: true,
+            scrollGesturesEnabled: true,
+            initialCameraPosition: CameraPosition(
+              target: LatLng(latitude, longitude),
+              zoom: 14, // Set a more focused zoom level
             ),
-            // Custom zoom controls
-          ],
+            myLocationEnabled: true,
+            myLocationButtonEnabled: false, // Custom button added
+            zoomControlsEnabled: true, // Custom zoom controls added
+            markers: {
+              Marker(
+                markerId: const MarkerId("selected_location"),
+                position: LatLng(latitude, longitude),
+                infoWindow: const InfoWindow(
+                  title: "Selected Location",
+                  snippet: "This is the chosen spot.",
+                ),
+              ),
+            },
+          ),
         );
       },
     );
@@ -592,6 +587,7 @@ class ReviewListWidget extends StatelessWidget {
                                 Padding(
                                   padding: const EdgeInsets.all(16.0),
                                   child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       review.user!.profileImage != null
                                           ? CustomNetworkImage(

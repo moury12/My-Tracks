@@ -161,10 +161,10 @@ await  getUserProfileData();
 
   @override
   void onClose() {
-    nameController.value.dispose();
-    emailController.value.dispose();
-    locationController.value.dispose();
-    contactNumberController.value.dispose();
+    // nameController.value.dispose();
+    // emailController.value.dispose();
+    // locationController.value.dispose();
+    // contactNumberController.value.dispose();
     super.onClose();
   }
 }

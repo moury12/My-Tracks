@@ -56,8 +56,10 @@ class EventTrackSlotScreen extends StatelessWidget {
                       slots: type == 'track' ? slot as TrackSlots : null,
                       onTap: () {
                         if (type == 'track') {
+                          debugPrint('slotId');
+                          debugPrint(slotId!);
                           HomeController.to.getTrackParticipantListCall(
-                            trackSlotId: slotId!,
+                            trackSlotId: slotId,
                           );
                         } else {
                           HomeController.to.getEventParticipantListCall(

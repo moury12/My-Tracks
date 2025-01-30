@@ -33,7 +33,10 @@ class SearchResultScreen extends StatelessWidget {
                   HomeUserController.to.lng.value.isEmpty*/
               ? const EmptyTextWidget(text: AppStaticString.noTrackFound)
               :HomeUserController.to.isLoadingTrackList.value?
-          const LoadingTrackListWidget()
+          Padding(
+            padding:padding12H,
+            child: const LoadingTrackListWidget(),
+          )
               : ListView.builder(
                   itemCount: HomeUserController.to.trackList.length,
                   padding: padding16,
