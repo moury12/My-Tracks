@@ -196,15 +196,24 @@ class HomeUserController extends GetxController {
   @override
   void onInit() {
     onRefreshUserPanel();
-
+    bool isForward = true;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         timer = Timer.periodic(const Duration(seconds: 2), (timer) {
-          if (currentPage.value < promoteTrackList.length - 1) {
-            currentPage.value++;
+          if (isForward) {
+            if (currentPage.value < promoteTrackList.length - 1) {
+              currentPage.value++;
+            } else {
+              isForward = false; // Reverse direction
+              currentPage.value--;
+            }
           } else {
-            currentPage.value = 0;
+            if (currentPage.value > 0) {
+              currentPage.value--;
+            } else {
+              isForward = true; // Change direction to forward
+              currentPage.value++;
+            }
           }
-
           if (controller.value.hasClients) {
             controller.value.animateToPage(
               currentPage.value,

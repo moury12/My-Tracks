@@ -147,6 +147,7 @@ class TrackCardWidget extends StatelessWidget {
                 Expanded(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Image.asset(
                         locationIconUrl,
@@ -159,6 +160,7 @@ class TrackCardWidget extends StatelessWidget {
                       Expanded(
                           child: Text(
                         location,
+                        maxLines: 2,
                         style: poppinsMedium.copyWith(
                             fontSize: getFontSizeSmall(context)),
                       ))
@@ -167,7 +169,7 @@ class TrackCardWidget extends StatelessWidget {
                 )
               ],
             ),
-            space12H,
+            space6H,
 
             ///====================dynamic description =====================///
             ExpandableText(

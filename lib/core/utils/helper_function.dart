@@ -205,7 +205,7 @@ Future<String?> selectAndFormatTime({
       final formattedTime = DateFormat.jm().format(
         DateTime(
             now.year, now.month, now.day, pickedTime.hour, pickedTime.minute),
-      );
+      ).replaceAll('\u202F', ' ');
       return formattedTime; // Return the formatted time
     } else {
       return null; // No time selected
