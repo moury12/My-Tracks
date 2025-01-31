@@ -200,7 +200,7 @@ class HomeUserController extends GetxController {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         timer = Timer.periodic(const Duration(seconds: 2), (timer) {
           if (isForward) {
-            if (currentPage.value < promoteTrackList.length - 1) {
+            if (currentPage.value < (promoteTrackList.length>10?10:promoteTrackList.length) - 1) {
               currentPage.value++;
             } else {
               isForward = false; // Reverse direction

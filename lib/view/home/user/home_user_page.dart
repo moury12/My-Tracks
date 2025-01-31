@@ -39,12 +39,12 @@ class HomeUserScreen extends StatelessWidget {
           ),
           Expanded(
               child: Padding(
-                padding: padding12,
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                              /* padding: padding16,*/
-                              children: [
+            padding: padding12,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                /* padding: padding16,*/
+                children: [
                   GestureDetector(
                     child: CustomTextField(
                       hintText: AppStaticString.searchHerr,
@@ -65,61 +65,78 @@ class HomeUserScreen extends StatelessWidget {
                   space12H,
 
                   ///================dynamic banner==================///
-                                Obx(() {
-                                  if (HomeUserController.to.promoteTrackList.isEmpty) {
-                                    return SizedBox.shrink();
-                                  }
+                  Obx(() {
+                    if (HomeUserController.to.promoteTrackList.isEmpty) {
+                      return SizedBox.shrink();
+                    }
 
-                                  bool isLoading = HomeUserController.to.isLoadingPromoteTrack.value;
+                    bool isLoading =
+                        HomeUserController.to.isLoadingPromoteTrack.value;
 
-                                  return SizedBox(
-                                    height: 150.h,
-                                    child: isLoading
-                                        ? Shimmer.fromColors(
-                                      baseColor: Colors.grey[800]!,
-                                      highlightColor: Colors.grey[700]!,
-                                      child: Container(
-                                        height: 150.h,
-                                        width: double.maxFinite,
-                                        color: Colors.grey[800],
-                                      ),
-                                    )
-                                        : PageView.builder(
-                                      itemCount: HomeUserController.to.promoteTrackList.length,
-                                      controller: HomeUserController.to.controller.value,
-                                      itemBuilder: (_, index) {
-                                        final trackItem = HomeUserController.to.promoteTrackList[index];
+                    return SizedBox(
+                      height: 150.h,
+                      child: isLoading
+                          ? Shimmer.fromColors(
+                              baseColor: Colors.grey[800]!,
+                              highlightColor: Colors.grey[700]!,
+                              child: Container(
+                                height: 150.h,
+                                width: double.maxFinite,
+                                color: Colors.grey[800],
+                              ),
+                            )
+                          : PageView.builder(
+                              itemCount: HomeUserController
+                                          .to.promoteTrackList.length >
+                                      10
+                                  ? 10
+                                  : HomeUserController
+                                      .to.promoteTrackList.length,
+                              controller:
+                                  HomeUserController.to.controller.value,
+                              itemBuilder: (_, index) {
+                                final trackItem = HomeUserController
+                                    .to.promoteTrackList[index];
 
-                                        return GestureDetector(
-                                          onTap: () {
-                                            Get.toNamed(BookTrackJoinEventScreen.routeName, arguments: {
-                                              'id': trackItem.track ?? '',
-                                              'type': 'track'
-                                            });
-                                          },
-                                          child: Padding(
-                                            padding: padding6H,
-                                            child: CustomNetworkImage(
-                                              borderRadius: BorderRadius.circular(10.r),
-                                              imageUrl: '${ApiClient.baseUrl}/${trackItem.bannerImage ?? ''}',
-                                              height: 150.h,
-                                              width: double.maxFinite,
-                                            ),
-                                          ),
-                                        );
-                                      },
+                                return GestureDetector(
+                                  onTap: () {
+                                    Get.toNamed(
+                                        BookTrackJoinEventScreen.routeName,
+                                        arguments: {
+                                          'id': trackItem.track ?? '',
+                                          'type': 'track'
+                                        });
+                                  },
+                                  child: Padding(
+                                    padding: padding6H,
+                                    child: CustomNetworkImage(
+                                      borderRadius: BorderRadius.circular(10.r),
+                                      imageUrl:
+                                          '${ApiClient.baseUrl}/${trackItem.bannerImage ?? ''}',
+                                      height: 150.h,
+                                      width: double.maxFinite,
                                     ),
-                                  );
-                                }),
+                                  ),
+                                );
+                              },
+                            ),
+                    );
+                  }),
 
-                                space12H,
+                  space12H,
                   Obx(() {
                     return Center(
                       child: HomeUserController.to.promoteTrackList.isNotEmpty
                           ? SmoothPageIndicator(
-                              controller: HomeUserController.to.controller.value,
+                              controller:
+                                  HomeUserController.to.controller.value,
                               count:
-                                  HomeUserController.to.promoteTrackList.length,
+                              HomeUserController
+                                  .to.promoteTrackList.length >
+                                  10
+                                  ? 10
+                                  : HomeUserController
+                                  .to.promoteTrackList.length,
                               effect: ExpandingDotsEffect(
                                   dotHeight: 12.w,
                                   dotWidth: 12.w,
@@ -185,7 +202,8 @@ class HomeUserScreen extends StatelessWidget {
                         ? const EmptyTextWidget(text: 'Event Service not found')
                         : SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
-                            child: HomeUserController.to.isLoadingEventList.value
+                            child: HomeUserController
+                                    .to.isLoadingEventList.value
                                 ? const LoadingEventListWidget()
                                 : Row(
                                     spacing: 12.w,
@@ -196,20 +214,22 @@ class HomeUserScreen extends StatelessWidget {
                                               MediaQuery.sizeOf(context).width /
                                                   1.3,
                                           child: EventCardWidget(
-                                            eventModelForUser: HomeUserController
-                                                .to.eventList[index],
+                                            eventModelForUser:
+                                                HomeUserController
+                                                    .to.eventList[index],
                                             onTap: () {
                                               Get.toNamed(
                                                   BookTrackJoinEventScreen
                                                       .routeName,
                                                   arguments: {
-                                                    'id': HomeUserController
-                                                        .to.eventList[index].sId,
+                                                    'id': HomeUserController.to
+                                                        .eventList[index].sId,
                                                     'type': 'event'
                                                   });
                                             },
                                             fromUser: true,
-                                            buttonText: AppStaticString.joinEvent,
+                                            buttonText:
+                                                AppStaticString.joinEvent,
                                             buttonImg: doubleArrowIconUrl,
                                           )),
                                     ),
@@ -237,10 +257,10 @@ class HomeUserScreen extends StatelessWidget {
                                 ),
                               );
                   })
-                              ],
-                            ),
-                ),
-              ))
+                ],
+              ),
+            ),
+          ))
         ],
       ),
     );
