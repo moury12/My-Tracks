@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:app_links/app_links.dart';
 import 'package:get/get.dart';
+import 'package:track_trek/controller/booking/book_track_join_event_controller.dart';
 import 'package:track_trek/controller/booking/booking_management_controller.dart';
 import 'package:track_trek/controller/common_controller.dart';
 import 'package:track_trek/controller/feedback/feedback_controller.dart';
@@ -108,10 +109,11 @@ class SplashController extends GetxController {
           Get.put(BookingManagementController());
           Get.put(ProfileController());
           Get.put(NotificationController());
+          Get.put(BookTrackJoinEventController());
 
           Get.toNamed(
             BookTrackJoinEventScreen.routeName,
-            arguments: {'id': trackId, 'type': type,'form':'deepLink'},
+            arguments: {'id': trackId, 'type': type},
           );
         }
 
@@ -121,5 +123,10 @@ class SplashController extends GetxController {
         // );
       }
     }
+  }
+  @override
+  void onClose() {
+_appLinks.getInitialLink().ignore();
+    super.onClose();
   }
 }

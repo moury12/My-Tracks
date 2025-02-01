@@ -405,43 +405,48 @@ class _BookTrackJoinEventScreenState extends State<BookTrackJoinEventScreen> {
                                               spacing: 12.h,
                                               children: List.generate(
                                                 slotsList.length,
-                                                (index) =>
-                                                    MarronGradientContainerWidget(
-                                                  child: SizedBox(
-                                                    /*height: 150.h, */
-                                                    width: 200.w,
-                                                    child: TrackSlotWidget(
-                                                      slots: /*argument != null &&*/
-                                                              type == event
-                                                          ? null
-                                                          : BookTrackJoinEventController
-                                                                  .to
-                                                                  .selectDate
-                                                                  .value
-                                                                  .isNotEmpty
-                                                              ? controller
-                                                                      .trackSlotList[
-                                                                  index]
-                                                              : controller
-                                                                  .singleTrack
-                                                                  .value
-                                                                  .slots![index],
-                                                      argument: userPanel,
-                                                      onBook: () {
-                                                        Get.toNamed(
-                                                            BookTrackPaymentScreen
-                                                                .routeName,
-                                                            arguments: {
-                                                              'type': type,
-                                                              'slot': slotsList[
-                                                                  index],
-                                                              /*'event':controller.singleEvent*/
-                                                            });
-                                                      },
-                                                      needToBook: true,
+                                                (index) {
+                                                  if (index >= slotsList.length) {
+                                                    return SizedBox.shrink(); // Prevent invalid index access
+                                                  }
+                                              return    MarronGradientContainerWidget(
+                                                    child: SizedBox(
+                                                      /*height: 150.h, */
+                                                      width: 200.w,
+                                                      child: TrackSlotWidget(
+                                                        slots: /*argument != null &&*/
+                                                        type == event
+                                                            ? null
+                                                            : BookTrackJoinEventController
+                                                            .to
+                                                            .selectDate
+                                                            .value
+                                                            .isNotEmpty
+                                                            ? controller
+                                                            .trackSlotList[
+                                                        index]
+                                                            : controller
+                                                            .singleTrack
+                                                            .value
+                                                            .slots![index],
+                                                        argument: userPanel,
+                                                        onBook: () {
+                                                          Get.toNamed(
+                                                              BookTrackPaymentScreen
+                                                                  .routeName,
+                                                              arguments: {
+                                                                'type': type,
+                                                                'slot': slotsList[
+                                                                index],
+                                                                /*'event':controller.singleEvent*/
+                                                              });
+                                                        },
+                                                        needToBook: true,
+                                                      ),
                                                     ),
-                                                  ),
-                                                ),
+                                                  );
+                                                }
+
                                               ),
                                             ),
                                           );

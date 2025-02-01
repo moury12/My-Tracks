@@ -57,7 +57,7 @@ class TrackSlotWidget extends StatelessWidget {
 
           ///================= slot price dynamic========================///
           Text(
-            '${slots != null ?( slots!.currency?? 'n/a' ).toUpperCase(): '' } ${slots != null ? slots!.price ?? 'n/a' : ''}'
+            '${slots != null ?( slots!.currency?? '\$' ).toUpperCase(): '' } ${slots != null ? slots!.price ?? 'n/a' : ''}'
             '${eventSlots != null ? (eventSlots!.currency ?? 'n/a').toUpperCase() : ''} ${eventSlots != null ? eventSlots!.price ?? 'n/a' : ''}',
             style: poppinsSemiBold.copyWith(
                 fontSize: getFontSizeExtraLarge(context),

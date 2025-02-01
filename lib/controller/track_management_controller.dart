@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:track_trek/controller/home/host/home_controller.dart';
 import 'package:track_trek/controller/network_controller.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/model/renter/renters_model.dart';
@@ -45,7 +46,12 @@ class TrackManagementController extends GetxController {
       // noInternetShowCustomSnackbar();
     }
   }
-
+Future<void> refreshManageScreen() async{
+  await  HomeController.to.getTrackListCall();
+  HomeController.to.trackList.refresh();
+  await  HomeController.to.getEventListCall();
+  HomeController.to.eventList.refresh();
+}
   getRentersListCall({required String date}) async {
     if (NetworkController.to.isConnected.value) {
       isLoadingRentersList.value = true;

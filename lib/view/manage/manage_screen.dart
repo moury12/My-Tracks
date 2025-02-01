@@ -153,8 +153,7 @@ class ManagementScreen extends StatelessWidget {
         body: CustomRefreshIndicator(
 
           onRefresh: () async{
-          await  HomeController.to.getTrackListCall();
-            HomeController.to.trackList.refresh();
+         await TrackManagementController.to.refreshManageScreen();
           },
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),

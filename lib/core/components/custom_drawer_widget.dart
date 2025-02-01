@@ -38,7 +38,7 @@ class CustomDrawerWidget extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    Image.asset(trackImgUrl),
+                    Image.asset(splashImgUrl),
                     Image.asset(horizontalDividerUrl),
                     CommonController.to.selectedRoleOption.value == 0
                         ?  DrawerContentWidget(
