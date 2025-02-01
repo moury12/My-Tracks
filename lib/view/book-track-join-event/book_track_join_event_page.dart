@@ -25,7 +25,13 @@ import 'package:track_trek/view/home/widgets/category_circle_widget.dart';
 import 'package:track_trek/view/home/widgets/event_card_widget.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 import 'package:track_trek/view/home/widgets/track_card_widget.dart';
+import 'package:track_trek/view/initial/bottom_navigation_screen.dart';
 import 'package:track_trek/view/manage/widgets/event_manage_card_widget.dart';
+
+import '../../controller/booking/booking_management_controller.dart';
+import '../../controller/home/user/home_user_controller.dart';
+import '../../controller/notification_controller.dart';
+import '../../controller/profile_controller.dart';
 
 class BookTrackJoinEventScreen extends StatefulWidget {
   static const String routeName = '/book-join-track-event';
@@ -82,6 +88,7 @@ class _BookTrackJoinEventScreenState extends State<BookTrackJoinEventScreen> {
         tile: /*argument != null &&*/ type == event
             ? AppStaticString.joinEvent
             : AppStaticString.bookTRack,
+
       ),
       body: CustomRefreshIndicator(
         onRefresh: () {

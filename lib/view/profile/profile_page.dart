@@ -28,7 +28,7 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // Get.put(ProfileController());
 
-    String? argument = Get.arguments;
+    final argument = Get.arguments;
     return PopScope(
       onPopInvokedWithResult: (didPop, result) {
         ProfileController.to.uploadProfileImg.value = '';

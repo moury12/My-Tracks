@@ -28,10 +28,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="http"
-                    android:host="10.0.60.26"
-                    android:port="8001" android:path="/"  android:pathPattern="/.*"  />
+                    android:host="209.97.134.184"
+                    android:port="8001" android:path="/" />
 
-                <data android:scheme="https"/>
+<!--                <data android:scheme="http"/>-->
             </intent-filter>
             <meta-data android:name="flutter_deeplinking_enabled" android:value="true" />
             <!-- Specifies an Android theme to apply to this Activity as soon as

@@ -61,7 +61,7 @@ class TrackCardWidget extends StatelessWidget {
     final String imageHostUrl = trackModel != null
         ? ''
         : trackModelUserPanel != null
-            ? '${ApiClient.baseUrl}/${trackModelUserPanel!.host!.profileImage}'
+            ?trackModelUserPanel!.host!=null? '${ApiClient.baseUrl}/${trackModelUserPanel!.host!.profileImage}':''
             : '';
     final String sId = trackModel != null
         ? trackModel!.sId ?? ''
@@ -116,7 +116,8 @@ class TrackCardWidget extends StatelessWidget {
     final String hostName = trackModel != null
         ? 'n/a'
         : trackModelUserPanel != null
-            ? trackModelUserPanel!.host!.name ?? ''
+            ? trackModelUserPanel!.host != null
+            ? trackModelUserPanel!.host!.name ?? '':''
             : 'n/a';
     final String rating = trackModel != null
         ? '4.5'

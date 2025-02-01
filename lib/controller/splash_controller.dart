@@ -29,19 +29,24 @@ class SplashController extends GetxController {
     super.onInit();
 
     log(Boxes.getUserData().values.toString());
-
+    _initializeApp();
     // Initialize AppLinks for deep link handling
     _appLinks = AppLinks();
 
-    // Listen for deep links
-    _appLinks.uriLinkStream.listen((Uri? uri) async {
+    _appLinks.getInitialLink().then((Uri? uri) {
       if (uri != null) {
-        await _handleDeepLink(uri);
+        _handleDeepLink(uri);
+      }
+    });
+
+    _appLinks.uriLinkStream.listen((Uri? uri) {
+      if (uri != null) {
+        _handleDeepLink(uri);
       }
     });
 
     // Initialize app state and handle navigation
-    _initializeApp();
+
   }
 
   Future<void> _initializeApp() async {
@@ -88,15 +93,32 @@ class SplashController extends GetxController {
     // Extract query parameters
     final String? trackId = uri.queryParameters['trackId'];
     final String? type = uri.queryParameters['type'];
-
+    print('Deep link received: ${uri.toString()}');
+    print('Deep link path received: ${uri.path}');
     if (trackId != null && type != null) {
       // Wait for initialization to complete
       await _loadingCompleter.future;
       if (Boxes.getUserData().get(roleKey) == 'USER') {
-        Get.toNamed(
-          BookTrackJoinEventScreen.routeName,
-          arguments: {'id': trackId, 'type': type},
-        );
+        // if (!Get.isRegistered<HomeUserController>()) {
+        //   Get.lazyPut(() => HomeUserController(), fenix: true);
+        // }
+        if (uri.path == '/') {// Adjust this based on your deep link URL format
+
+          Get.put(HomeUserController());
+          Get.put(BookingManagementController());
+          Get.put(ProfileController());
+          Get.put(NotificationController());
+
+          Get.toNamed(
+            BookTrackJoinEventScreen.routeName,
+            arguments: {'id': trackId, 'type': type,'form':'deepLink'},
+          );
+        }
+
+        // Get.toNamed(
+        //   BookTrackJoinEventScreen.routeName,
+        //   arguments: {'id': trackId, 'type': type},
+        // );
       }
     }
   }
