@@ -5,7 +5,7 @@ import 'package:track_trek/core/components/custom_refresh_indicator.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
-import 'package:track_trek/view/home/host/event_slot_page.dart';
+import 'package:track_trek/view/home/host/event_track_slot_page.dart';
 import 'package:track_trek/view/home/host/widget/loading_event_card.dart';
 import 'package:track_trek/view/home/user/widget/loading_widgets.dart';
 import 'package:track_trek/view/home/widgets/dynamic_tab_widget.dart';

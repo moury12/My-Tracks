@@ -15,17 +15,6 @@ import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/global/string_variable.dart';
-import 'package:track_trek/core/global/string_variable.dart';
-import 'package:track_trek/core/global/string_variable.dart';
-import 'package:track_trek/core/global/string_variable.dart';
-import 'package:track_trek/core/global/string_variable.dart';
-import 'package:track_trek/core/global/string_variable.dart';
-import 'package:track_trek/core/global/string_variable.dart';
-import 'package:track_trek/core/global/string_variable.dart';
-import 'package:track_trek/core/global/string_variable.dart';
-import 'package:track_trek/core/global/string_variable.dart';
-import 'package:track_trek/core/global/string_variable.dart';
-import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/view/add/widgets/upload_image_widget.dart';
@@ -80,6 +69,7 @@ class CreateTrackEventScreen extends StatelessWidget {
                     },
                   ),
                   space6H,
+
                   argument != null && argument == event
                       ? GestureDetector(
                           onTap: () async {
@@ -438,7 +428,10 @@ class CreateTrackEventScreen extends StatelessWidget {
                                 .validate() /*&&
                             CreateTrackEventController
                                     .to.selectedCategory.value !=
-                                null &&
+                                null&&
+                            CreateTrackEventController
+                                    .to.selectedCurrencyFrom.value !=
+                                null*/ /*&&
                             CreateTrackEventController
                                 .to.trackPhotosList.isNotEmpty*/
                             ) {

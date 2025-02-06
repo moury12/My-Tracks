@@ -23,7 +23,7 @@ import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/add/widgets/buttons.dart';
 import 'package:track_trek/view/book-track-join-event/book_track_join_event_page.dart';
-import 'package:track_trek/view/home/host/event_slot_page.dart';
+import 'package:track_trek/view/home/host/event_track_slot_page.dart';
 import 'package:track_trek/view/home/widgets/event_card_widget.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 
@@ -272,6 +272,7 @@ class TrackCardWidget extends StatelessWidget {
                               Get.toNamed(
                                 EventTrackSlotScreen.routeName,
                                 arguments: {
+                                  'id':sId,
                                   'slots': trackModel!.slots,
                                   'type': 'track'
                                 },

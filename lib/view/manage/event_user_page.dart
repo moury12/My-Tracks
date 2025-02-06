@@ -5,7 +5,7 @@ import 'package:track_trek/controller/home/host/home_controller.dart';
 import 'package:track_trek/core/components/custom_appbar.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
-import 'package:track_trek/view/home/host/event_slot_page.dart';
+import 'package:track_trek/view/home/host/event_track_slot_page.dart';
 import 'package:track_trek/view/manage/widgets/event_manage_card_widget.dart';
 import 'package:track_trek/view/manage/widgets/loading_widget.dart';
 

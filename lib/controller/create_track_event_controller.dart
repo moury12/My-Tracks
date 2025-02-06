@@ -4,14 +4,13 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:track_trek/controller/network_controller.dart';
-import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/model/category/category_model.dart';
 import 'package:track_trek/core/model/location/place_search_model.dart';
 import 'package:track_trek/core/model/track-event/single_event_model.dart';
 import 'package:track_trek/core/model/track-event/single_track_model.dart';
 import 'package:track_trek/core/service/track-event/track_event_service.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
-import 'package:track_trek/view/add/upload_track_event.dart';
+import 'package:track_trek/view/add/create_track_event_slot.dart';
 
 class CreateTrackEventController extends GetxController {
   static CreateTrackEventController get to => Get.find();
@@ -185,7 +184,8 @@ class CreateTrackEventController extends GetxController {
         isLoadingPostTrack.value = false;
         trackId.value = value;
         clearAfterPostTrack();
-        Get.toNamed(CreateTrackEventSlotScreen.routeName, arguments: 'track');
+        Get.toNamed(CreateTrackEventSlotScreen.routeName,
+            arguments: {'type': 'track', 'id': trackId.value});
         // navigator!.pop();
       } else {
         isLoadingPostTrack.value = false;
@@ -228,10 +228,10 @@ class CreateTrackEventController extends GetxController {
 
   getCurrenciesList() async {
     isLoadingCurrencies.value = true;
-    currencyList.value=await TrackEventService.fetchCurrencies();
+    currencyList.value = await TrackEventService.fetchCurrencies();
     isLoadingCurrencies.value = false;
-
   }
+
   createSlotTrackCall() async {
     if (NetworkController.to.isConnected.value) {
       isLoadingCreateSlot.value = true;
@@ -268,7 +268,6 @@ class CreateTrackEventController extends GetxController {
         isLoadingTrack.value = false;
       } else {
         isLoadingTrack.value = false;
-
       }
     } else {
       isLoadingTrack.value = false;
@@ -320,7 +319,10 @@ class CreateTrackEventController extends GetxController {
       if (value.isNotEmpty) {
         isLoadingPostEvent.value = false;
         eventId.value = value;
-        Get.toNamed(CreateTrackEventSlotScreen.routeName, arguments: 'event');
+        Get.toNamed(
+          CreateTrackEventSlotScreen.routeName,
+          arguments: {'type': 'event', 'id': eventId.value},
+        );
         // navigator!.pop();
         clearAfterPostEvent();
       } else {
@@ -340,7 +342,8 @@ class CreateTrackEventController extends GetxController {
           slotNo: slotNoControllerForEvent.value.text,
           maxPeople: uploadEventTotalSeatController.value.text,
           price: uploadEventPriceController.value.text,
-          description: uploadEventDescriptionController.value.text, currency:selectedCurrencyFrom.value.toString());
+          description: uploadEventDescriptionController.value.text,
+          currency: selectedCurrencyFrom.value.toString());
       if (isUpdate) {
         isLoadingCreateSlot.value = false;
         getEventDetailsCall(eventId: eventId.value);
@@ -375,7 +378,7 @@ class CreateTrackEventController extends GetxController {
   void onInit() {
     categoryListCall();
     getWeekDays();
-getCurrenciesList();
+    getCurrenciesList();
     super.onInit();
   }
 
@@ -384,7 +387,7 @@ getCurrenciesList();
     trackNameController.value.clear();
     trackLocationController.value.clear();
     trackDescriptionController.value.clear();
-selectedCurrencyFrom.value=null;
+    // selectedCurrencyFrom.value = null;
     selectedCategory.value = null;
   }
 
@@ -400,8 +403,7 @@ selectedCurrencyFrom.value=null;
     selectedEventStartTime.value = '';
     selectedEventEndTime.value = '';
     selectedCategory.value = null;
-    selectedCurrencyFrom.value=null;
-
+    // selectedCurrencyFrom.value = null;
   }
 
   clearAfterCreateSlotForTrack() {
@@ -422,7 +424,7 @@ selectedCurrencyFrom.value=null;
     uploadEventTotalSeatController.value.clear();
     uploadEventPriceController.value.clear();
     uploadEventDescriptionController.value.clear();
-    selectedCurrencyFrom.value=null;
+    // selectedCurrencyFrom.value = null;
     FocusScope.of(Get.context!).unfocus();
 // formKey.currentState?.reset();
 

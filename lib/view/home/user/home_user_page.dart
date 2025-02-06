@@ -14,7 +14,7 @@ import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/init/api_client.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/view/book-track-join-event/book_track_join_event_page.dart';
-import 'package:track_trek/view/home/host/event_slot_page.dart';
+import 'package:track_trek/view/home/host/event_track_slot_page.dart';
 import 'package:track_trek/view/home/user/widget/loading_widgets.dart';
 import 'package:track_trek/view/search/search_page.dart';
 import 'package:track_trek/view/home/widgets/category_circle_widget.dart';

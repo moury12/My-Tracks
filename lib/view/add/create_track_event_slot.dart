@@ -10,8 +10,8 @@ import 'package:track_trek/core/components/custom_textfield.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
-import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
+import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/core/utils/text_style.dart';
@@ -22,21 +22,44 @@ import 'package:track_trek/view/manage/widgets/event_manage_card_widget.dart';
 
 import 'widgets/select_date_button.dart';
 
-class CreateTrackEventSlotScreen extends StatelessWidget {
+class CreateTrackEventSlotScreen extends StatefulWidget {
   static String routeName = '/upload';
   const CreateTrackEventSlotScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    String? argument = Get.arguments;
-    return PopScope(
-       onPopInvokedWithResult: (didPop, result) {
-         CreateTrackEventController.to.selectedCurrencyFrom.value=null;
+  State<CreateTrackEventSlotScreen> createState() =>
+      _CreateTrackEventSlotScreenState();
+}
 
-       },
+class _CreateTrackEventSlotScreenState
+    extends State<CreateTrackEventSlotScreen> {
+  String? type;
+  String? id;
+  @override
+  void initState() {
+    type = Get.arguments['type'] as String;
+    id = Get.arguments['id'] as String;
+    if (type == event) {
+      CreateTrackEventController.to.eventId.value = id ?? '';
+    } else {
+      CreateTrackEventController.to.trackId.value = id ?? '';
+    }
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Map<String,dynamic> argument = Get.arguments;
+
+    return PopScope(
+      onPopInvokedWithResult: (didPop, result) {
+        CreateTrackEventController.to.selectedCurrencyFrom.value=null;
+
+      },
       child: Scaffold(
         appBar: CustomAppbar(
-          tile: argument != null && argument == 'event'
+          tile: type == event
               ? AppStaticString.createEvent
               : AppStaticString.uploadTrack,
         ),
@@ -49,7 +72,7 @@ class CreateTrackEventSlotScreen extends StatelessWidget {
                 spacing: 16.h,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  argument != null && argument == 'event'
+                  type == event
                       ? const SizedBox.shrink()
                       : Row(
                           spacing: 16.w,
@@ -57,6 +80,8 @@ class CreateTrackEventSlotScreen extends StatelessWidget {
                             Expanded(
                               child: SelectDateButton(
                                 onTap: () {
+                                  print('-----------');
+                                  print(type);
                                   showModalBottomSheet(
                                     showDragHandle: false,
                                     context: context,
@@ -210,7 +235,7 @@ class CreateTrackEventSlotScreen extends StatelessWidget {
                         ),
 
                   ///======================Week Days==================///
-                  argument != null && argument == 'event'
+                  type == event
                       ? const SizedBox.shrink()
                       : Obx(() {
                           return CreateTrackEventController.to.weekDays
@@ -274,14 +299,32 @@ class CreateTrackEventSlotScreen extends StatelessWidget {
                         }),
 
                   /* ///===================dynamic available slot===================//
-                  argument != null && argument == 'event'
+                  argument != null && type==event
                       ? const SizedBox.shrink()
                       : Text(
                           '${AppStaticString.availableSlot} 10',
                           style: poppinsMedium.copyWith(
                               fontSize: getFontSizeLarge(context)),
                         ),*/
-
+                  Obx(() {
+                    return CustomDropdown<dynamic>(
+                      isRequired: true,
+                      title: AppStaticString.currency,
+                      selectedValue: CreateTrackEventController
+                          .to.selectedCurrencyFrom.value,
+                      items: CreateTrackEventController.to.currencyList.keys
+                          .map(
+                            (e) => '$e',
+                          )
+                          .toList(),
+                      isLoading:
+                          CreateTrackEventController.to.isLoadingCurrencies.value,
+                      onChanged: (value) {
+                        CreateTrackEventController.to.selectedCurrencyFrom.value =
+                            value;
+                      },
+                    );
+                  }),
                   Row(
                     spacing: 4.w,
                     children: [
@@ -289,13 +332,12 @@ class CreateTrackEventSlotScreen extends StatelessWidget {
                           child: CustomTextField(
                         isRequired: true,
                         title: AppStaticString.slotNo,
-                        textEditingController:
-                            argument != null && argument == 'event'
-                                ? CreateTrackEventController
-                                    .to.slotNoControllerForEvent.value
-                                : CreateTrackEventController
-                                    .to.slotNoController.value,
-                        focusNode: argument != null && argument == 'event'
+                        textEditingController: type == event
+                            ? CreateTrackEventController
+                                .to.slotNoControllerForEvent.value
+                            : CreateTrackEventController
+                                .to.slotNoController.value,
+                        focusNode: type == event
                             ? CreateTrackEventController
                                 .to.slotNoFocusNodeForEvent
                             : CreateTrackEventController
@@ -307,7 +349,7 @@ class CreateTrackEventSlotScreen extends StatelessWidget {
                           return null;
                         },
                       )),
-                      argument != null && argument == 'event'
+                      type == event
                           ? const SizedBox.shrink()
                           : Obx(() {
                               return Expanded(
@@ -328,7 +370,7 @@ class CreateTrackEventSlotScreen extends StatelessWidget {
                                 ),
                               ));
                             }),
-                      argument != null && argument == 'event'
+                      type == event
                           ? const SizedBox.shrink()
                           : Obx(() {
                               return Expanded(
@@ -356,17 +398,17 @@ class CreateTrackEventSlotScreen extends StatelessWidget {
 
                   CustomTextField(
                     isRequired: true,
-                    title: argument != null && argument == 'event'
+                    title: type == event
                         ? AppStaticString.totalSeat
                         : AppStaticString.howManyPeopleCanTrack,
                     hintText: AppStaticString.typeHere,
                     keyboardType: TextInputType.number,
-                    focusNode: argument != null && argument == 'event'
+                    focusNode: type == event
                         ? CreateTrackEventController
                             .to.uploadEventTotalSeatFocusNode
                         : CreateTrackEventController
                             .to.uploadTrackPeopleNumberFocusNode,
-                    textEditingController: argument != null && argument == 'event'
+                    textEditingController: type == event
                         ? CreateTrackEventController
                             .to.uploadEventTotalSeatController.value
                         : CreateTrackEventController
@@ -378,26 +420,6 @@ class CreateTrackEventSlotScreen extends StatelessWidget {
                       return null;
                     },
                   ),
-                  Obx(
-                     () {
-                      return CustomDropdown<dynamic>(
-                        isRequired: true,
-                        title: AppStaticString.currency,
-                        selectedValue:
-                            CreateTrackEventController.to.selectedCurrencyFrom.value,
-                        items: CreateTrackEventController.to.currencyList.keys
-                            .map(
-                              (e) => '$e',
-                            )
-                            .toList(),
-                        isLoading:
-                            CreateTrackEventController.to.isLoadingCurrencies.value,
-                        onChanged: (value) {
-                          CreateTrackEventController.to.selectedCurrencyFrom.value =value;
-                        },
-                      );
-                    }
-                  ),
 
                   ///=====================input price=========================///
 
@@ -406,12 +428,12 @@ class CreateTrackEventSlotScreen extends StatelessWidget {
                     title: AppStaticString.price,
                     keyboardType: TextInputType.number,
                     hintText: AppStaticString.typeHere,
-                    textEditingController: argument != null && argument == 'event'
+                    textEditingController: type == event
                         ? CreateTrackEventController
                             .to.uploadEventPriceController.value
                         : CreateTrackEventController
                             .to.uploadTrackPriceController.value,
-                    focusNode: argument != null && argument == 'event'
+                    focusNode: type == event
                         ? CreateTrackEventController.to.uploadEventPriceFocusNode
                         : CreateTrackEventController.to.uploadTrackPriceFocusNode,
                     validator: (value) {
@@ -427,12 +449,12 @@ class CreateTrackEventSlotScreen extends StatelessWidget {
                     isRequired: true,
                     title: AppStaticString.description,
                     hintText: AppStaticString.typeHere,
-                    textEditingController: argument != null && argument == 'event'
+                    textEditingController: type == event
                         ? CreateTrackEventController
                             .to.uploadEventDescriptionController.value
                         : CreateTrackEventController
                             .to.uploadTrackDescriptionController.value,
-                    focusNode: argument != null && argument == 'event'
+                    focusNode: type == event
                         ? CreateTrackEventController
                             .to.uploadEventDescriptionFocusNode
                         : CreateTrackEventController
@@ -459,7 +481,7 @@ class CreateTrackEventSlotScreen extends StatelessWidget {
                           )
                         : SaveSmallButtonWidget(
                             onTap: () {
-                              if (argument != null && argument == 'event') {
+                              if (type == event) {
                                 if (CreateTrackEventController
                                     .to.formKey.currentState!
                                     .validate()) {
@@ -472,9 +494,6 @@ class CreateTrackEventSlotScreen extends StatelessWidget {
                                         .validate() &&
                                     CreateTrackEventController
                                         .to.selectedStartTime.isNotEmpty &&
-                                    CreateTrackEventController
-                                            .to.selectedCurrencyFrom.value !=
-                                        null &&
                                     CreateTrackEventController
                                         .to.selectedEndTime.isNotEmpty) {
                                   CreateTrackEventController.to
@@ -493,7 +512,7 @@ class CreateTrackEventSlotScreen extends StatelessWidget {
                   }),
 
                   ///============================dynamic slot list ===========================///
-                  argument != null && argument == 'event'
+                  type == event
                       ? Obx(
                           () => CreateTrackEventController
                                       .to.singleEvent.value.slots !=

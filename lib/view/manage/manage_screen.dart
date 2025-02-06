@@ -11,7 +11,7 @@ import 'package:track_trek/core/model/track-event/single_event_model.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/view/add/widgets/track_slot_widget.dart';
-import 'package:track_trek/view/home/host/event_slot_page.dart';
+import 'package:track_trek/view/home/host/event_track_slot_page.dart';
 import 'package:track_trek/view/home/user/widget/loading_widgets.dart';
 import 'package:track_trek/view/home/widgets/dynamic_tab_widget.dart';
 import 'package:track_trek/view/home/widgets/track_card_widget.dart';

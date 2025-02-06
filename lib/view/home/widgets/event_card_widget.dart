@@ -16,7 +16,7 @@ import 'package:track_trek/core/model/track-event/single_event_model.dart';
 import 'package:track_trek/core/model/track-event/single_track_model.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
-import 'package:track_trek/view/home/host/event_slot_page.dart';
+import 'package:track_trek/view/home/host/event_track_slot_page.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 import 'package:track_trek/view/home/widgets/track_card_widget.dart';
 import 'package:track_trek/view/manage/event_user_page.dart';
@@ -208,7 +208,7 @@ class EventCardWidget extends StatelessWidget {
                     onTap: onTap ??
                         () {
                           Get.toNamed(EventTrackSlotScreen.routeName
-                            ,arguments: {'slots': eventModel!.slots, 'type': 'event'}, );
+                            ,arguments: {'slots': eventModel!.slots, 'type': 'event', 'id':sId,}, );
                         },
                     title: buttonText ?? AppStaticString.viewAllSlot,
                     img: buttonImg ?? arrowTopImgUrl,
