@@ -454,7 +454,9 @@ class CreateTrackEventScreen extends StatelessWidget {
                               type: SnackBarType.failed);
                         }
                       },
-                      title: AppStaticString.next,
+                      title: argument != null && argument == event
+                          ? AppStaticString.createEvent
+                          : AppStaticString.createTrack,
                     );
                   })
                 ],

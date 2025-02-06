@@ -93,7 +93,7 @@ class _JoinEventPaymentScreenState extends State<JoinEventPaymentScreen> {
 
                             ///=======================dynamic price=====================///
                             Obx(() {
-                              if (BookTrackJoinEventController
+                             /* if (BookTrackJoinEventController
                                       .to.convertPrice.isNotEmpty &&
                                   BookTrackJoinEventController
                                           .to.selectedCurrencyFrom.value !=
@@ -103,7 +103,7 @@ class _JoinEventPaymentScreenState extends State<JoinEventPaymentScreen> {
                                 currency = BookTrackJoinEventController
                                     .to.selectedCurrencyFrom.value
                                     .toString();
-                              }
+                              }*/
                               return BookTrackJoinEventController
                                       .to.isLoadingCurrencyConvert.value
                                   ? DefaultProgressIndicator()
@@ -126,46 +126,46 @@ class _JoinEventPaymentScreenState extends State<JoinEventPaymentScreen> {
                               '${AppStaticString.allowedPeople} $totalSeat   ${AppStaticString.unsold} $unsold',
                           textAlign: TextAlign.start,
                         ),
-                        space12H,
-                        Obx(() {
-                          return CustomDropdown<dynamic>(
-                           /* isRequired: true,*/
-                            title: AppStaticString.currency,
-                            selectedValue: BookTrackJoinEventController
-                                .to.selectedCurrencyFrom.value,
-                            items: CommonController
-                                .to.currencyList.keys
-                                .map(
-                                  (e) => '$e',
-                                )
-                                .toList(),
-                            isLoading: CommonController
-                                .to.isLoadingCurrencies.value,
-                            onChanged: (value) {
-                              BookTrackJoinEventController
-                                  .to.selectedCurrencyFrom.value = value;
-                              if (BookTrackJoinEventController
-                                          .to.selectedCurrencyFrom.value !=
-                                      null &&
-                                  currency.isNotEmpty &&
-                                  price.isNotEmpty) {
-                                BookTrackJoinEventController.to
-                                    .convertCurrencies(
-                                        selectedCurrencyFrom: currency,
-                                        selectedCurrencyTo:
-                                            BookTrackJoinEventController
-                                                .to.selectedCurrencyFrom.value
-                                                .toString(),
-                                        amount: price);
-                              } else {
-                                showCustomSnackbar(
-                                    title: AppStaticString.failed,
-                                    message: 'Cannot convert currency!!',
-                                    type: SnackBarType.failed);
-                              }
-                            },
-                          );
-                        }),
+                        // space12H,
+                        // Obx(() {
+                        //   return CustomDropdown<dynamic>(
+                        //    /* isRequired: true,*/
+                        //     title: AppStaticString.currency,
+                        //     selectedValue: BookTrackJoinEventController
+                        //         .to.selectedCurrencyFrom.value,
+                        //     items: CommonController
+                        //         .to.currencyList.keys
+                        //         .map(
+                        //           (e) => '$e',
+                        //         )
+                        //         .toList(),
+                        //     isLoading: CommonController
+                        //         .to.isLoadingCurrencies.value,
+                        //     onChanged: (value) {
+                        //       BookTrackJoinEventController
+                        //           .to.selectedCurrencyFrom.value = value;
+                        //       if (BookTrackJoinEventController
+                        //                   .to.selectedCurrencyFrom.value !=
+                        //               null &&
+                        //           currency.isNotEmpty &&
+                        //           price.isNotEmpty) {
+                        //         BookTrackJoinEventController.to
+                        //             .convertCurrencies(
+                        //                 selectedCurrencyFrom: currency,
+                        //                 selectedCurrencyTo:
+                        //                     BookTrackJoinEventController
+                        //                         .to.selectedCurrencyFrom.value
+                        //                         .toString(),
+                        //                 amount: price);
+                        //       } else {
+                        //         showCustomSnackbar(
+                        //             title: AppStaticString.failed,
+                        //             message: 'Cannot convert currency!!',
+                        //             type: SnackBarType.failed);
+                        //       }
+                        //     },
+                        //   );
+                        // }),
                         space12H,
                         Obx(() {
                           return CustomDropdown<int>(
