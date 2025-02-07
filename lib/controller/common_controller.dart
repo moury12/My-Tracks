@@ -13,6 +13,7 @@ import 'package:track_trek/core/service/review/review_service.dart';
 import 'package:track_trek/core/service/track-event/track_event_service.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:http/http.dart' as http;
+import 'package:track_trek/view/initial/bottom_navigation_screen.dart';
 import 'package:track_trek/view/initial/splash.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -146,7 +147,7 @@ class CommonController extends GetxController {
               return NavigationDecision.prevent;
             }*/
             if (request.url.contains('${ApiClient.baseUrl}/payment/success')) {
-              Get.offAllNamed(SplashScreen.routeName);
+              Get.offAllNamed(BottomNavigationScreen.routeName);
             }
             return NavigationDecision.navigate;
           },

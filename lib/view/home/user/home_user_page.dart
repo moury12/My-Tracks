@@ -197,8 +197,7 @@ class HomeUserScreen extends StatelessWidget {
                   space12H,
                   const TitleTextWidget(title: AppStaticString.event),
                   Obx(() {
-                    return HomeUserController.to.eventList.isEmpty &&
-                            !HomeUserController.to.isLoadingEventList.value
+                    return HomeUserController.to.eventList.isEmpty
                         ? const EmptyTextWidget(text: 'Event Service not found')
                         : SingleChildScrollView(
                             scrollDirection: Axis.horizontal,

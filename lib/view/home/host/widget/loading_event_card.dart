@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
+import 'package:track_trek/core/constant/padding_constant.dart';
+import 'package:track_trek/view/add/widgets/black_container_with_border.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 
 class EventCardLoadingWidget extends StatelessWidget {
@@ -9,8 +11,8 @@ class EventCardLoadingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(12.0),
+    return BlackContainerWidget(
+
       child: Shimmer.fromColors(
         baseColor: Colors.grey[800]!,
         highlightColor: Colors.grey[600]!,
@@ -106,7 +108,7 @@ class ListOfEventLoadingWidget extends StatelessWidget {
       spacing: 12.h,
       children: List.generate(
         4,
-        (index) => const BlackContainerWidget(child: EventCardLoadingWidget()),
+        (index) => EventCardLoadingWidget(),
       ),
     );
   }

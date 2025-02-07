@@ -5,6 +5,7 @@ import 'package:track_trek/controller/common_controller.dart';
 import 'package:track_trek/controller/home/host/home_controller.dart';
 import 'package:track_trek/controller/home/user/home_user_controller.dart';
 import 'package:track_trek/controller/notification_controller.dart';
+import 'package:track_trek/controller/profile_controller.dart';
 import 'package:track_trek/controller/track_management_controller.dart';
 import 'package:track_trek/core/components/custom_appbar.dart';
 import 'package:track_trek/core/components/custom_drawer_widget.dart';
@@ -43,7 +44,9 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
       Get.put(HomeUserController());
       Get.put(BookingManagementController());
     }
+    Get.put(ProfileController());
     Get.put(NotificationController());
+
   }
 
   String? getAppBarTitle(int index) {

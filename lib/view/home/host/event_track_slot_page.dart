@@ -7,6 +7,7 @@ import 'package:track_trek/controller/create_track_event_controller.dart';
 import 'package:track_trek/controller/home/host/home_controller.dart';
 import 'package:track_trek/core/components/custom_appbar.dart';
 import 'package:track_trek/core/components/custom_button.dart';
+import 'package:track_trek/core/components/custom_refresh_indicator.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
 import 'package:track_trek/core/constant/image_constants.dart';
@@ -17,7 +18,7 @@ import 'package:track_trek/core/model/track-event/single_track_model.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/add/create_track_event_slot.dart';
-import 'package:track_trek/view/add/widgets/track_slot_widget.dart';
+import 'package:track_trek/view/add/widgets/track_event_slot_widget.dart';
 import 'package:track_trek/view/book-track-join-event/widgets/loading_widgets.dart';
 import 'package:track_trek/view/home/host/widget/loading_slot_widget.dart';
 import 'package:track_trek/view/manage/event_user_page.dart';
@@ -58,7 +59,6 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,30 +68,48 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
           Obx(() {
             bool isLoading = true;
             if (type == 'track') {
-              isLoading =
-                  CreateTrackEventController.to.isLoadingTrack.value;}else {
-              isLoading =
-                  CreateTrackEventController.to.isLoadingEvent.value;
+              isLoading = CreateTrackEventController.to.isLoadingTrack.value;
+            } else {
+              isLoading = CreateTrackEventController.to.isLoadingEvent.value;
             }
             return IconButton(
               onPressed: () {
                 if (type == 'track') {
-
-                  for (String day in CreateTrackEventController
-                          .to.singleTrack.value.trackDays ??
-                      []) {
-                    CreateTrackEventController.to.weekDays
-                        .add({'day_name': day, 'selected': true});
+                  // CreateTrackEventController.to.weekDays.clear();
+                  if (CreateTrackEventController.to.weekDays.isEmpty) {
+                    for (String day in CreateTrackEventController
+                            .to.singleTrack.value.trackDays ??
+                        []) {
+                      CreateTrackEventController.to.weekDays
+                          .add({'day_name': day, 'selected': true});
+                    }
+                    if (CreateTrackEventController
+                                .to.singleTrack.value.trackDays !=
+                            null &&
+                        CreateTrackEventController
+                            .to.singleTrack.value.trackDays!.isNotEmpty) {
+                      CreateTrackEventController
+                          .to.selectedWeekDay.value =CreateTrackEventController
+                          .to.singleTrack.value.trackDays![0];
+                    }
                   }
-                  CreateTrackEventController.to.days.value=CreateTrackEventController.to.singleTrack.value.totalTrackDayInMonth.toString();
+                  CreateTrackEventController.to.days.value =
+                      CreateTrackEventController
+                          .to.singleTrack.value.totalTrackDayInMonth
+                          .toString();
                 }
                 if (!isLoading) {
-                  Get.toNamed(CreateTrackEventSlotScreen.routeName,
-                      arguments: {
+                  Get.toNamed(CreateTrackEventSlotScreen.routeName, arguments: {
                     'type': type,
-                        'id': id,
-                        'edit':true,
-                      });
+                    'id': id,
+                    'edit': CreateTrackEventController
+                                    .to.singleTrack.value.trackDays !=
+                                null &&
+                            CreateTrackEventController
+                                .to.singleTrack.value.trackDays!.isNotEmpty
+                        ? true
+                        : false,
+                  });
                 }
               },
               icon: Container(
@@ -100,75 +118,93 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
                 // width: 40.w,
                 decoration: BoxDecoration(
                     image: DecorationImage(image: AssetImage(addIconUrl))),
-                child:isLoading?DefaultProgressIndicator(strokeWidth: 2 ,color: AppColors.primaryColor,): Image.asset(
-                  plusIconUrl,
-                  height: 17.w,
-                  width: 17.w,
-                  color: AppColors.whiteLightColor,
-                ),
+                child: isLoading
+                    ? DefaultProgressIndicator(
+                        strokeWidth: 2,
+                        color: AppColors.primaryColor,
+                      )
+                    : Image.asset(
+                        plusIconUrl,
+                        height: 17.w,
+                        width: 17.w,
+                        color: AppColors.whiteLightColor,
+                      ),
               ),
             );
           })
         ],
       ),
-      body: Obx(() {
-        List<dynamic> slotList = [];
-        bool isLoading = true;
-        if (type == event) {
-          slotList =
-              CreateTrackEventController.to.singleEvent.value.slots ?? [];
-          isLoading = CreateTrackEventController.to.isLoadingEvent.value;
-        } else {
-          slotList =
-              CreateTrackEventController.to.singleTrack.value.slots ?? [];
-          isLoading = CreateTrackEventController.to.isLoadingTrack.value;
-        }
-        return isLoading
-            ? SlotListHorizontalLoadingWidget()
-            : slotList.isEmpty
-                ? const EmptyTextWidget(
-                    text: AppStaticString.slotListIsEmpty,
-                  )
-                : ListView.builder(
-                    padding: padding16,
-                    itemBuilder: (context, index) {
-                      final slot = slotList[index];
+      body: CustomRefreshIndicator(
+        onRefresh: () async {
+          if (type == event) {
+            await CreateTrackEventController.to
+                .getEventDetailsCall(eventId: id);
+          } else {
+            await CreateTrackEventController.to
+                .getTrackDetailsCall(trackId: id);
+            // CreateTrackEventController.to.getTrackSlotListCall(trackId: sId);
+          }
+        },
+        child: Obx(() {
+          List<dynamic> slotList = [];
+          bool isLoading = true;
+          if (type == event) {
+            slotList =
+                CreateTrackEventController.to.singleEvent.value.slots ?? [];
+            isLoading = CreateTrackEventController.to.isLoadingEvent.value;
+          } else {
+            slotList =
+                CreateTrackEventController.to.singleTrack.value.slots ?? [];
+            isLoading = CreateTrackEventController.to.isLoadingTrack.value;
+          }
+          return isLoading
+              ? SlotListHorizontalLoadingWidget()
+              : slotList.isEmpty
+                  ? const EmptyTextWidget(
+                      text: AppStaticString.slotListIsEmpty,
+                    )
+                  : ListView.builder(
+                      padding: padding16,
+                      itemBuilder: (context, index) {
+                        final slot = slotList[index];
 
-                      // Determine the ID dynamically
+                        // Determine the ID dynamically
 
-                      return Padding(
-                        padding: padding6V,
-                        child: MarronGradientContainerWidget(
-                          child: TrackSlotWidget(
-                            needToShowSeat: type == 'event',
-                            eventSlots:
-                                type == 'event' ? slot as EventSlots : null,
-                            slots: type == 'track' ? slot as TrackSlots : null,
-                            onTap: () {
-                              if (type == 'track') {
-                                debugPrint('slotId');
-                                debugPrint(slot.sId);
-                                HomeController.to.getTrackParticipantListCall(
-                                  trackSlotId: slot.sId,
+                        return Padding(
+                          padding: padding6V,
+                          child: MarronGradientContainerWidget(
+                            child: TrackEventSlotWidget(
+                              needToShowSeat: type == 'event',
+                              eventSlots:
+                                  type == 'event' ? slot as EventSlots : null,
+                              slots:
+                                  type == 'track' ? slot as TrackSlots : null,
+                              onTap: () {
+                                if (type == 'track') {
+                                  debugPrint('slotId');
+                                  debugPrint(slot.sId);
+                                  HomeController.to.getTrackParticipantListCall(
+                                    trackSlotId: slot.sId,
+                                  );
+                                } else {
+                                  HomeController.to.getEventParticipantListCall(
+                                    eventSlotID: slot.sId!,
+                                  );
+                                }
+                                Get.toNamed(
+                                  EventUserScreen.routeName,
+                                  arguments: type,
                                 );
-                              } else {
-                                HomeController.to.getEventParticipantListCall(
-                                  eventSlotID: slot.sId!,
-                                );
-                              }
-                              Get.toNamed(
-                                EventUserScreen.routeName,
-                                arguments: type,
-                              );
-                            },
-                            argument: userPanel,
+                              },
+                              argument: userPanel,
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                    itemCount: slotList.length,
-                  );
-      }),
+                        );
+                      },
+                      itemCount: slotList.length,
+                    );
+        }),
+      ),
     );
   }
 }

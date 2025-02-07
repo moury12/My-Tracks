@@ -89,8 +89,8 @@ class EventCardWidget extends StatelessWidget {
                     ///==============dynamic event location==============///
 
                     Text('${AppStaticString.locationWithClone}$location',
-                        // maxLines: 1,
-                        // overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         style: poppinsRegular.copyWith(
                             fontSize: getFontSizeSmall(context)))
                   ],

@@ -70,69 +70,18 @@ class _BookTrackPaymentScreenState extends State<BookTrackPaymentScreen> {
                             ),
 
                             ///=======================dynamic price=====================///
-                            Obx(() {
-                              /*if (BookTrackJoinEventController
-                                      .to.convertPrice.isNotEmpty &&
-                                  BookTrackJoinEventController
-                                          .to.selectedCurrencyFrom.value !=
-                                      null) {
-                                price = BookTrackJoinEventController
-                                    .to.convertPrice.value;
-                                currency = BookTrackJoinEventController
-                                    .to.selectedCurrencyFrom.value
-                                    .toString();
-                              }*/
-                              return BookTrackJoinEventController
-                                      .to.isLoadingCurrencyConvert.value
-                                  ? DefaultProgressIndicator()
-                                  : Text('$currency $price',
+                            Text('$currency $price',
                                       style: poppinsMedium.copyWith(
                                           color: AppColors.blackLightColor,
                                           fontSize:
-                                              getButtonFontSizeLarge(context)));
-                            })
+                                              getButtonFontSizeLarge(context)))
+
                           ],
                         ),
                       ),
                     ),
                     space12H,
-                    // Obx(() {
-                    //   return CustomDropdown<dynamic>(
-                    //     /* isRequired: true,*/
-                    //     title: AppStaticString.currency,
-                    //     selectedValue: BookTrackJoinEventController
-                    //         .to.selectedCurrencyFrom.value,
-                    //     items: CommonController.to.currencyList.keys
-                    //         .map(
-                    //           (e) => '$e',
-                    //         )
-                    //         .toList(),
-                    //     isLoading:
-                    //         CommonController.to.isLoadingCurrencies.value,
-                    //     onChanged: (value) {
-                    //       BookTrackJoinEventController
-                    //           .to.selectedCurrencyFrom.value = value;
-                    //       if (BookTrackJoinEventController
-                    //                   .to.selectedCurrencyFrom.value !=
-                    //               null &&
-                    //           currency.isNotEmpty &&
-                    //           price.isNotEmpty) {
-                    //         BookTrackJoinEventController.to.convertCurrencies(
-                    //             selectedCurrencyFrom: currency,
-                    //             selectedCurrencyTo: BookTrackJoinEventController
-                    //                 .to.selectedCurrencyFrom.value
-                    //                 .toString(),
-                    //             amount: price);
-                    //       } else {
-                    //         showCustomSnackbar(
-                    //             title: AppStaticString.failed,
-                    //             message: 'Cannot convert currency!!',
-                    //             type: SnackBarType.failed);
-                    //       }
-                    //     },
-                    //   );
-                    // }),
-                    // space12H,
+
                     Padding(
                       padding: EdgeInsets.only(top: 12.h),
                       child: CustomTextField(
@@ -156,7 +105,8 @@ class _BookTrackPaymentScreenState extends State<BookTrackPaymentScreen> {
                     BookTrackJoinEventController.to.isLoadingBookTrack.value,
                 onTap: () {
                   BookTrackJoinEventController.to.bookTrackSlotCall(
-                      price: price, slotId: slot.sId ?? '', currency: currency);
+                      price: (int.parse(price)*int.parse(BookTrackJoinEventController
+                          .to.peopleNumberController.value.text)).toString(), slotId: slot.sId ?? '', currency: currency);
                 },
                 title: AppStaticString.goPay,
               );

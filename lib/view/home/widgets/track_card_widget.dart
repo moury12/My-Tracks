@@ -61,7 +61,9 @@ class TrackCardWidget extends StatelessWidget {
     final String imageHostUrl = trackModel != null
         ? ''
         : trackModelUserPanel != null
-            ?trackModelUserPanel!.host!=null? '${ApiClient.baseUrl}/${trackModelUserPanel!.host!.profileImage}':''
+            ? trackModelUserPanel!.host != null
+                ? '${ApiClient.baseUrl}/${trackModelUserPanel!.host!.profileImage}'
+                : ''
             : '';
     final String sId = trackModel != null
         ? trackModel!.sId ?? ''
@@ -117,7 +119,8 @@ class TrackCardWidget extends StatelessWidget {
         ? 'n/a'
         : trackModelUserPanel != null
             ? trackModelUserPanel!.host != null
-            ? trackModelUserPanel!.host!.name ?? '':''
+                ? trackModelUserPanel!.host!.name ?? ''
+                : ''
             : 'n/a';
     final String rating = trackModel != null
         ? '4.5'
@@ -162,6 +165,7 @@ class TrackCardWidget extends StatelessWidget {
                           child: Text(
                         location,
                         maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         style: poppinsMedium.copyWith(
                             fontSize: getFontSizeSmall(context)),
                       ))
@@ -272,7 +276,7 @@ class TrackCardWidget extends StatelessWidget {
                               Get.toNamed(
                                 EventTrackSlotScreen.routeName,
                                 arguments: {
-                                  'id':sId,
+                                  'id': sId,
                                   'slots': trackModel!.slots,
                                   'type': 'track'
                                 },
@@ -382,7 +386,8 @@ class TrackCardWidget extends StatelessWidget {
                                 final String type = 'track';
                                 final String fullLink =
                                     '$deepLink?trackId=$trackId&type=$type&fallback=$fallbackLink';
-                                Share.share(fullLink,
+                                Share.share(
+                                  fullLink,
                                 );
                                 /* await Share.share(
                                     'Check out this cool Flutter app!');*/
@@ -591,7 +596,8 @@ class ReviewListWidget extends StatelessWidget {
                                 Padding(
                                   padding: const EdgeInsets.all(16.0),
                                   child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       review.user!.profileImage != null
                                           ? CustomNetworkImage(

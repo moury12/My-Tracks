@@ -377,7 +377,7 @@ class CreateTrackEventController extends GetxController {
   @override
   void onInit() {
     categoryListCall();
-    getWeekDays();
+
     getCurrenciesList();
     super.onInit();
   }

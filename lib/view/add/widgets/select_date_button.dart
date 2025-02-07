@@ -23,6 +23,7 @@ class SelectDateButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GradientContainerWidget(
       secondColor:isDisable==true? AppColors.greyColor:null,
+      firstColor:isDisable==true? AppColors.greyColor:null,
       onTap: onTap ??
               () {
             selectedDay =selectDate(context).toString();

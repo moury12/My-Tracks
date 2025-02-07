@@ -16,7 +16,7 @@ import 'package:track_trek/view/home/widgets/event_card_widget.dart';
 import 'package:track_trek/view/home/widgets/track_card_widget.dart';
 import 'package:track_trek/view/manage/widgets/event_manage_card_widget.dart';
 
-class TrackSlotWidget extends StatelessWidget {
+class TrackEventSlotWidget extends StatelessWidget {
   final String? argument;
   final bool? needToShowSeat;
   final bool? needToBook;
@@ -27,7 +27,7 @@ class TrackSlotWidget extends StatelessWidget {
   final Function()? onViewAllParticipant;
   final Function()? onDelete;
   final Function()? onBook;
-  const TrackSlotWidget({
+  const TrackEventSlotWidget({
     super.key,
     this.argument,
     this.needToShowSeat = false,

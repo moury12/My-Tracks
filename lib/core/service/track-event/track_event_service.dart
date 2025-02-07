@@ -814,7 +814,7 @@ class TrackEventService {
             for (var item in data['supported_codes']) item[0] as String: item[1] as String
           };
         }
-        debugPrint('Currencies fetched: $currencyList');
+        debugPrint('Currencies fetched: $data');
       } else {
         debugPrint('Failed to load currencies. Status Code: ${response.statusCode}');
       }

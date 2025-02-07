@@ -89,7 +89,7 @@ class EventListWidget extends StatelessWidget {
     return Padding(
       padding: padding12V,
       child: Obx(() {
-        return HomeController.to.isLoadingEventList.value
+        return   HomeController.to.isLoadingEventList.value
             ? const ListOfEventLoadingWidget()
             : HomeController.to.eventList.isEmpty
                 ? const EmptyTextWidget(text: AppStaticString.eventNotFound)

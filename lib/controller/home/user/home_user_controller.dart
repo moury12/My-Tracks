@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:track_trek/controller/network_controller.dart';
 import 'package:track_trek/controller/profile_controller.dart';
+import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/model/category/category_model.dart';
 import 'package:track_trek/core/model/review/review_model.dart';
@@ -32,6 +33,9 @@ class HomeUserController extends GetxController {
   RxList<TrackForUserPanelModel> trackList = <TrackForUserPanelModel>[].obs;
   RxList<EventForUserPanelModel> eventList = <EventForUserPanelModel>[].obs;
   RxList<ReviewModel> reviewList = <ReviewModel>[].obs;
+  var tabContent = <Widget>[].obs;
+  RxList<String> tabs = [AppStaticString.track, AppStaticString.event].obs;
+
 
   ///================== loading variable =====================///
 

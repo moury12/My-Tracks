@@ -33,7 +33,7 @@ class _JoinEventPaymentScreenState extends State<JoinEventPaymentScreen> {
   dynamic slot = '';
 
   String price = '';
-  String currency = '';
+  String inputCurrency = '';
   String unsold = '';
   String totalSeat = '';
   @override
@@ -58,7 +58,7 @@ class _JoinEventPaymentScreenState extends State<JoinEventPaymentScreen> {
     BookTrackJoinEventController.to.eventData.value =
         argument['event'] ?? SingleEventModel();
     price = slot is EventSlots ? slot.price.toString() : '0.0';
-    currency = slot is EventSlots ? slot.currency : '';
+    inputCurrency = slot is EventSlots ? slot.currency : '';
     unsold = slot is EventSlots
         ? ((slot.maxPeople ?? 0) - (slot.currentPeople ?? 0)).toString()
         : '0';
@@ -107,7 +107,7 @@ class _JoinEventPaymentScreenState extends State<JoinEventPaymentScreen> {
                               return BookTrackJoinEventController
                                       .to.isLoadingCurrencyConvert.value
                                   ? DefaultProgressIndicator()
-                                  : Text('$currency $price',
+                                  : Text('$inputCurrency $price',
                                       style: poppinsMedium.copyWith(
                                           color: AppColors.blackLightColor,
                                           fontSize:
@@ -399,7 +399,7 @@ print( BookTrackJoinEventController
                             null*/ ||  BookTrackJoinEventController
                                 .to.selectedValue.value ==
                             null ||
-                        currency.isEmpty ||
+                        inputCurrency.isEmpty ||
                         total == 0 ||
                         total.toString().isEmpty) {
                       showCustomSnackbar(
@@ -410,7 +410,7 @@ print( BookTrackJoinEventController
                     } else {
                       // If no empty fields, proceed with API call
                       BookTrackJoinEventController.to.joinEventSlotCall(
-                        currency: currency,
+                        currency: inputCurrency,
                         price: total,
                         eventId: BookTrackJoinEventController
                                 .to.eventData.value.sId ??

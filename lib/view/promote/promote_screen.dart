@@ -52,16 +52,14 @@ class PromoteScreen extends StatelessWidget {
                 title: AppStaticString.currency,
                 selectedValue: HomeController
                     .to.selectedCurrencyFrom.value,
-                items: CommonController.to.currencyList.keys
-                    .map(
-                      (e) => '$e',
-                )
+                items: CommonController.to.currencyList
+                    .entries.map((e) => '${e.key} - ${e.value}',)
                     .toList(),
                 isLoading:
                 CommonController.to.isLoadingCurrencies.value,
                 onChanged: (value) {
                   HomeController
-                      .to.selectedCurrencyFrom.value = value;
+                      .to.selectedCurrencyFrom.value = value.toString().split(' ').first;
 
 
                 },

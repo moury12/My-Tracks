@@ -8,6 +8,7 @@ import 'package:track_trek/core/model/track-event/single_track_model.dart';
 import 'package:track_trek/core/service/track-event/track_event_service.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/view/book-track-join-event/payment/checkout_booking_page.dart';
+import 'package:track_trek/view/initial/bottom_navigation_screen.dart';
 import 'package:track_trek/view/initial/splash.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -92,7 +93,7 @@ class BookTrackJoinEventController extends GetxController {
           },
           onNavigationRequest: (NavigationRequest request) {
             if (request.url.contains('${ApiClient.baseUrl}/payment/success')) {
-              Get.offAllNamed(SplashScreen.routeName);
+              Get.offAllNamed(BottomNavigationScreen.routeName);
             }
             return NavigationDecision.navigate;
           },

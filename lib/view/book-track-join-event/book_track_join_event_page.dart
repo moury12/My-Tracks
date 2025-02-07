@@ -15,7 +15,7 @@ import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/add/create_track_event_slot.dart';
 import 'package:track_trek/view/add/widgets/select_date_button.dart';
-import 'package:track_trek/view/add/widgets/track_slot_widget.dart';
+import 'package:track_trek/view/add/widgets/track_event_slot_widget.dart';
 import 'package:track_trek/view/book-track-join-event/book_track_payment_page.dart';
 import 'package:track_trek/view/book-track-join-event/join_event_payment_page.dart';
 import 'package:track_trek/view/book-track-join-event/widgets/buttons_widget.dart';
@@ -325,7 +325,7 @@ class _BookTrackJoinEventScreenState extends State<BookTrackJoinEventScreen> {
                                               MarronGradientContainerWidget(
                                             child: SizedBox(
                                               width: 200.w,
-                                              child: TrackSlotWidget(
+                                              child: TrackEventSlotWidget(
                                                 needToBook: type == event
                                                     ? true
                                                     : false,
@@ -413,7 +413,7 @@ class _BookTrackJoinEventScreenState extends State<BookTrackJoinEventScreen> {
                                                     child: SizedBox(
                                                       /*height: 150.h, */
                                                       width: 200.w,
-                                                      child: TrackSlotWidget(
+                                                      child: TrackEventSlotWidget(
                                                         slots: /*argument != null &&*/
                                                         type == event
                                                             ? null
