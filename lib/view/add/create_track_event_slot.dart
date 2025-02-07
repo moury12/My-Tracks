@@ -18,12 +18,13 @@ import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/add/widgets/buttons.dart';
 import 'package:track_trek/view/add/widgets/track_slot_widget.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
+import 'package:track_trek/view/initial/bottom_navigation_screen.dart';
 import 'package:track_trek/view/manage/widgets/event_manage_card_widget.dart';
 
 import 'widgets/select_date_button.dart';
 
 class CreateTrackEventSlotScreen extends StatefulWidget {
-  static String routeName = '/upload';
+  static String routeName = '/create-slot';
   const CreateTrackEventSlotScreen({super.key});
 
   @override
@@ -35,10 +36,13 @@ class _CreateTrackEventSlotScreenState
     extends State<CreateTrackEventSlotScreen> {
   String? type;
   String? id;
+  bool edit=false;
   @override
   void initState() {
     type = Get.arguments['type'] as String;
     id = Get.arguments['id'] as String;
+    edit = Get.arguments['edit'] as bool;
+    print(CreateTrackEventController.to.weekDays.toString());
     if (type == event) {
       CreateTrackEventController.to.eventId.value = id ?? '';
     } else {
@@ -79,7 +83,8 @@ class _CreateTrackEventSlotScreenState
                           children: [
                             Expanded(
                               child: SelectDateButton(
-                                onTap: () {
+                                isDisable:edit ,
+                                onTap:edit?(){}: () {
                                   print('-----------');
                                   print(type);
                                   showModalBottomSheet(
@@ -511,6 +516,12 @@ class _CreateTrackEventSlotScreenState
                           );
                   }),
 
+                  CustomButton(onTap: () {
+                    Get.offAllNamed(BottomNavigationScreen.routeName);
+
+                  },
+                    title: AppStaticString.confrim,
+                  ),
                   ///============================dynamic slot list ===========================///
                   type == event
                       ? Obx(
@@ -585,6 +596,7 @@ class _CreateTrackEventSlotScreenState
                                 )
                               : const SizedBox.shrink(),
                         ),
+
                 ],
               ),
             ),

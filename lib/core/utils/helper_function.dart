@@ -231,17 +231,42 @@ Future<String> selectDate(
     barrierDismissible: false,
     builder: (context, child) {
       return Theme(
+
         data: Theme.of(context).copyWith(
+          colorScheme: ColorScheme.light(
+            primary: AppColors.blueColor, // header background color
+            onPrimary: AppColors.blackBackgroundColor, // header text color
+            onSurface: AppColors.blackBackgroundColor, // body text color
+          ),
           datePickerTheme: DatePickerThemeData(
+dayOverlayColor: const WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
+
+            headerHelpStyle: TextStyle(
+              color: AppColors.blackLightColor,
+              fontSize: 16.sp,
+            ), yearOverlayColor: const WidgetStatePropertyAll<Color>(AppColors.blackLightColor) ,
             headerForegroundColor: AppColors.blackLightColor,
             rangePickerHeaderForegroundColor: AppColors.blackLightColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.r),
             ),
+            dayBackgroundColor: WidgetStateProperty.resolveWith<Color?>((states) {
+              if (states.contains(WidgetState.selected)) {
+                return AppColors.blackLightColor;  // Change this color
+              }
+              return null; // Default background
+            }),
+            rangeSelectionBackgroundColor: AppColors.blackLightColor,
+            todayBackgroundColor: const WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
             yearForegroundColor:
                 const WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
             dayForegroundColor:
-                const WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
+            WidgetStateProperty.resolveWith<Color?>((states) {
+              if (states.contains(WidgetState.selected)) {
+                return AppColors.whiteLightColor;   // Change this color
+              }
+              return AppColors.blackLightColor; // Default background
+            }),
             todayForegroundColor:
                 const WidgetStatePropertyAll<Color>(AppColors.whiteLightColor),
             confirmButtonStyle: const ButtonStyle(
@@ -257,8 +282,7 @@ Future<String> selectDate(
             ),
             backgroundColor: AppColors.blueColor,
             dividerColor: Colors.transparent,
-            todayBackgroundColor:
-                const WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
+            // todayBackgroundColor: const WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
             yearStyle: TextStyle(
               color: AppColors.blackLightColor,
               fontSize: 16.sp,
@@ -270,7 +294,7 @@ Future<String> selectDate(
               fontSize: 14.sp,
               fontWeight: FontWeight.w500,
             ),
-            rangeSelectionBackgroundColor: AppColors.blackLightColor,
+            // rangeSelectionBackgroundColor: AppColors.blackLightColor,
             headerHeadlineStyle: TextStyle(
               color:
                   AppColors.blackLightColor, // Color for month/year in header

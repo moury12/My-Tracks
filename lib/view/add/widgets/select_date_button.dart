@@ -12,15 +12,17 @@ import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 class SelectDateButton extends StatelessWidget {
   final Function()? onTap;
   final String? date;
+  final bool? isDisable;
   String? selectedDay;
   SelectDateButton({
     super.key,
-    this.onTap, this.selectedDay, this.date,
+    this.onTap, this.selectedDay, this.date, this.isDisable =false,
   });
 
   @override
   Widget build(BuildContext context) {
     return GradientContainerWidget(
+      secondColor:isDisable==true? AppColors.greyColor:null,
       onTap: onTap ??
               () {
             selectedDay =selectDate(context).toString();

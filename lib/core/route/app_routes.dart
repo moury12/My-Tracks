@@ -62,7 +62,7 @@ class AppRoutes {
         GetPage(
             name: EventTrackSlotScreen.routeName,
             page: () => const EventTrackSlotScreen(),
-            binding: HomeBinding()),
+            bindings: [HomeBinding(),CreateTrackBinding()]),
         GetPage(
             name: HomeScreen.routeName,
             page: () => const HomeScreen(),
