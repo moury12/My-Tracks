@@ -71,6 +71,7 @@ class SearchScreen extends StatelessWidget {
 
                               CommonController.to.addressSuggestion.clear();
                               HomeUserController.to.getTrackListCall();
+                              HomeUserController.to.getEventListCall();
 
                               Get.toNamed(SearchResultScreen.routeName);
                             },

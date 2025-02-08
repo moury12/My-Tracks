@@ -158,6 +158,8 @@ class HomeUserController extends GetxController {
   getEventListCall() async {
     if (NetworkController.to.isConnected.value) {
       isLoadingEventList.value = true;
+      debugPrint( 'lat.value');
+      debugPrint( lat.value);
       eventList.value = await UserHomeService.getEventListForUserPanel(
           lat: lat.value, long: lng.value);
       if (eventList.isNotEmpty) {
