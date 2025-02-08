@@ -49,7 +49,7 @@ class TrackEventSlotWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '${slots != null ? slots!.slotNo ?? 'n/a' : ''} ${eventSlots != null ? eventSlots!.slotNo ?? 'n/a' : ''} Slot',
+            '${slots != null ? slots!.slotNo ?? 'n/a' : ''} ${eventSlots != null ? eventSlots!.slotNo ?? 'n/a' : ''} ',
             style: poppinsRegular.copyWith(
                 fontSize: getFontSizeExtraLarge(context)),
           ),

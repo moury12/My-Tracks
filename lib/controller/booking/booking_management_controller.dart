@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:track_trek/controller/booking/book_track_join_event_controller.dart';
 import 'package:track_trek/controller/network_controller.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/model/booking/event_booking_model.dart';
@@ -7,6 +8,7 @@ import 'package:track_trek/core/model/booking/track_booking_model.dart';
 import 'package:track_trek/core/service/review/review_service.dart';
 import 'package:track_trek/core/service/track-event/track_event_service.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
+import 'package:track_trek/view/book-track-join-event/payment/checkout_booking_page.dart';
 
 class BookingManagementController extends GetxController {
   static BookingManagementController get to => Get.find();
@@ -94,7 +96,20 @@ class BookingManagementController extends GetxController {
       }
     }
   }
-
+checkoutTrackEvent({
+    required String bookingId,
+    required String selectedCurrencyFrom,
+    required String price,
+})async{
+    Get.put(BookTrackJoinEventController());
+  BookTrackJoinEventController.to.checkoutUrl.value = await TrackEventService.paymentCheckOutBooking(
+      bookingId: bookingId,
+      currency: selectedCurrencyFrom,
+      amount: price);
+  if (BookTrackJoinEventController.to.checkoutUrl.value.isNotEmpty) {
+    Get.toNamed(CheckoutBookingScreen.routeName);
+  }
+}
   handleLabelChange(int index) async {
     BookingManagementController.to.selectedLabel.value = index;
     if (BookingManagementController.to.selectedLabel.value == 0) {

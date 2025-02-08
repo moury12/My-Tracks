@@ -7,6 +7,7 @@ class EventHistoryRunningModel {
   String? startDateTime;
   String? endDateTime;
   int? price;
+  String? currency;
   int? numOfPeople;
   String? bookingFor;
   List<MoreInfo>? moreInfo;
@@ -24,6 +25,7 @@ class EventHistoryRunningModel {
         this.startDateTime,
         this.endDateTime,
         this.price,
+        this.currency,
         this.numOfPeople,
         this.bookingFor,
         this.moreInfo,
@@ -36,9 +38,9 @@ class EventHistoryRunningModel {
     sId = json['_id'];
     user = json['user'];
     host = json['host'];
-    event = json['event'] != null ? Event.fromJson(json['event']) : null;
+    event = json['event'] != null ? new Event.fromJson(json['event']) : null;
     eventSlot = json['eventSlot'] != null
-        ? EventSlot.fromJson(json['eventSlot'])
+        ? new EventSlot.fromJson(json['eventSlot'])
         : null;
     startDateTime = json['startDateTime'];
     endDateTime = json['endDateTime'];
@@ -47,12 +49,13 @@ class EventHistoryRunningModel {
         : (json['price'] is double ? json['price'].toInt() : null);
     numOfPeople = json['numOfPeople'] is int
         ? json['numOfPeople']
-        : (json['numOfPeople'] is double ? json['numOfPeople'].toInt() : null);;
+        : (json['numOfPeople'] is double ? json['numOfPeople'].toInt() : null);
+    currency = json['currency'];
     bookingFor = json['bookingFor'];
     if (json['moreInfo'] != null) {
       moreInfo = <MoreInfo>[];
       json['moreInfo'].forEach((v) {
-        moreInfo!.add(MoreInfo.fromJson(v));
+        moreInfo!.add(new MoreInfo.fromJson(v));
       });
     }
     status = json['status'];
@@ -62,28 +65,29 @@ class EventHistoryRunningModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['_id'] = sId;
-    data['user'] = user;
-    data['host'] = host;
-    if (event != null) {
-      data['event'] = event!.toJson();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['user'] = this.user;
+    data['host'] = this.host;
+    if (this.event != null) {
+      data['event'] = this.event!.toJson();
     }
-    if (eventSlot != null) {
-      data['eventSlot'] = eventSlot!.toJson();
+    if (this.eventSlot != null) {
+      data['eventSlot'] = this.eventSlot!.toJson();
     }
-    data['startDateTime'] = startDateTime;
-    data['endDateTime'] = endDateTime;
-    data['price'] = price;
-    data['numOfPeople'] = numOfPeople;
-    data['bookingFor'] = bookingFor;
-    if (moreInfo != null) {
-      data['moreInfo'] = moreInfo!.map((v) => v.toJson()).toList();
+    data['startDateTime'] = this.startDateTime;
+    data['endDateTime'] = this.endDateTime;
+    data['price'] = this.price;
+    data['currency'] = this.currency;
+    data['numOfPeople'] = this.numOfPeople;
+    data['bookingFor'] = this.bookingFor;
+    if (this.moreInfo != null) {
+      data['moreInfo'] = this.moreInfo!.map((v) => v.toJson()).toList();
     }
-    data['status'] = status;
-    data['createdAt'] = createdAt;
-    data['updatedAt'] = updatedAt;
-    data['__v'] = iV;
+    data['status'] = this.status;
+    data['createdAt'] = this.createdAt;
+    data['updatedAt'] = this.updatedAt;
+    data['__v'] = this.iV;
     return data;
   }
 }
@@ -111,12 +115,12 @@ class Event {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['_id'] = sId;
-    data['eventName'] = eventName;
-    data['address'] = address;
-    data['startDateTime'] = startDateTime;
-    data['endDateTime'] = endDateTime;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['eventName'] = this.eventName;
+    data['address'] = this.address;
+    data['startDateTime'] = this.startDateTime;
+    data['endDateTime'] = this.endDateTime;
     return data;
   }
 }
@@ -133,9 +137,9 @@ class EventSlot {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['_id'] = sId;
-    data['maxPeople'] = maxPeople;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['maxPeople'] = this.maxPeople;
     return data;
   }
 }
@@ -154,10 +158,11 @@ class MoreInfo {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['label'] = label;
-    data['value'] = value;
-    data['_id'] = sId;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['label'] = this.label;
+    data['value'] = this.value;
+    data['_id'] = this.sId;
     return data;
   }
 }
+

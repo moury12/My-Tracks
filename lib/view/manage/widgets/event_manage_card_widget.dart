@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:track_trek/controller/booking/booking_management_controller.dart';
+import 'package:track_trek/core/components/custom_button.dart';
 import 'package:track_trek/core/components/custom_network_image.dart';
+import 'package:track_trek/core/components/custom_text_button.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
@@ -50,28 +53,31 @@ class TrackEventInfoContentWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String name = eventModel!=null?eventModel!.event!.eventName??'':'n/a';
+    final String bookingId = eventModel!=null?eventModel!.sId??'':'n/a';
+    final String selectedCurrencyFrom = eventModel!=null?eventModel!.currency??'':'n/a';
     final String location = eventModel!=null?eventModel!.event!.address??'':'n/a';
     final String date = eventModel!=null?formatDateTime(eventModel!.startDateTime??''):'n/a';
     final String totalPerson = eventModel!=null?eventModel!.numOfPeople.toString():'n/a';
     final String price = eventModel!=null?eventModel!.price.toString():'n/a';
-    return Column(
+    final String status = eventModel!=null?eventModel!.status.toString():'n/a';
+    return Column(spacing: 12.h,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           name,
           style: poppinsMedium.copyWith(fontSize: getFontSizeSmall(context)),
         ),
-        space12H,
+
         Text(
           '${AppStaticString.locationWithClone} $location',
           style: poppinsRegular.copyWith(fontSize: getFontSizeSmall(context)),
         ),
-        space12H,
+
         Text(
           '${AppStaticString.dateWithClone} $date',
           style: poppinsRegular.copyWith(fontSize: getFontSizeSmall(context)),
         ),
-        space12H,
+
         Row(
           children: [
              BlueTextWidget(text:'${AppStaticString.priceWithClone}\$$price',),
@@ -91,7 +97,14 @@ class TrackEventInfoContentWidget extends StatelessWidget {
               ),
             )
           ],
-        )
+        ),
+        if(status!='paid')
+        CustomButton(title: AppStaticString.payNow ,onTap: () {
+BookingManagementController.to.checkoutTrackEvent(
+    bookingId: bookingId,
+    selectedCurrencyFrom: selectedCurrencyFrom,
+    price: price);
+        },)
       ],
     );
   }

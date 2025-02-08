@@ -36,8 +36,14 @@ class HistoryContentWidget extends StatelessWidget {
         trackModel != null ? trackModel!.trackSlot!.slotNo.toString() : 'n/a';
     final String price =
         trackModel != null ? trackModel!.price.toString() : 'n/a';
+    final String bookingId =
+        trackModel != null ? trackModel!.sId.toString() : 'n/a';
+    final String selectedCurrencyFrom =
+        trackModel != null ? trackModel!.currency.toString() : 'n/a';
     final String day =
         trackModel != null ? trackModel!.trackSlot!.day.toString() : 'n/a';
+    final String status =
+        trackModel != null ? trackModel!.status.toString() : 'n/a';
     final String startDateTime = trackModel != null
         ? formatDateTime(trackModel!.startDateTime ?? '').toString()
         : 'n/a';
@@ -112,6 +118,13 @@ class HistoryContentWidget extends StatelessWidget {
           style: poppinsMedium.copyWith(
               color: AppColors.blueColor, fontSize: getFontSizeSmall(context)),
         ),
+        if(status!='paid'&&addRating == false)
+          CustomButton(title: AppStaticString.payNow ,onTap: () {
+            BookingManagementController.to.checkoutTrackEvent(
+                bookingId: bookingId,
+                selectedCurrencyFrom: selectedCurrencyFrom,
+                price: price);
+          },)
       ],
     );
   }

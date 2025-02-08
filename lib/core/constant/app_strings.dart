@@ -41,6 +41,7 @@ class AppStaticString {
   ///--------- others text-----------///
   static const String signUpUser = "Sign up as a user or tracker?";
   static const String user = "User";
+  static const String payNow = "Pay Now";
   static const String host = "Host";
   static const String retry = "Retry";
   static const String noInternetText = 'No Internet Connection';

@@ -7,6 +7,7 @@ class TrackHistoryRunningModel {
   TrackSlot? trackSlot;
   String? startDateTime;
   String? endDateTime;
+  String? currency;
   int? price;
   int? numOfPeople;
   String? status;
@@ -24,6 +25,7 @@ class TrackHistoryRunningModel {
         this.startDateTime,
         this.endDateTime,
         this.price,
+        this.currency,
         this.numOfPeople,
         this.status,
         this.moreInfo,
@@ -36,6 +38,7 @@ class TrackHistoryRunningModel {
     user = json['user'];
     host = json['host'];
     track = json['track'];
+    currency = json['currency'];
     trackSlot = json['trackSlot'] != null
         ? TrackSlot.fromJson(json['trackSlot'])
         : null;
@@ -63,6 +66,7 @@ class TrackHistoryRunningModel {
     data['user'] = user;
     data['host'] = host;
     data['track'] = track;
+    data['currency'] = currency;
     if (trackSlot != null) {
       data['trackSlot'] = trackSlot!.toJson();
     }
