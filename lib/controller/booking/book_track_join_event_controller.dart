@@ -196,14 +196,14 @@ class BookTrackJoinEventController extends GetxController {
   }) async {
     if (NetworkController.to.isConnected.value) {
       isLoadingBookTrack.value = true;
-      String bookingId = await TrackEventService.joinEventSlotRequest(
+      List<dynamic> bookingId = await TrackEventService.joinEventSlotRequest(
           slotId: slotId,
           eventId: eventId,
           data: eventField,
           price: price,
           currency: selectedCurrencyFrom.value ?? currency);
-      print('bookingId');
-      print(bookingId);
+      // print('bookingId');
+      // print(bookingId);
       if (bookingId.isNotEmpty) {
         isLoadingBookTrack.value = false;
         eventField.clear();

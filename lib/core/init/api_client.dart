@@ -1,5 +1,6 @@
 class ApiClient {
-  static const String baseUrl = 'http://209.97.134.184:8001';
+  static const String baseUrl = 'http://10.0.60.26:8001';
+  // static const String baseUrl = 'http://209.97.134.184:8001';
   static const String baseUrlWithoutPort = 'http://209.97.134.184';
   static String get loginUrl => '$baseUrl/auth/login';
   static String get registrationUrl => '$baseUrl/auth/register';

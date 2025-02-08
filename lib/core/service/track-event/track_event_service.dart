@@ -825,14 +825,16 @@ class TrackEventService {
     return currencyList;
   }
 
-  static Future<String> joinEventSlotRequest({
+  static Future<List<dynamic>> joinEventSlotRequest({
     required String eventId,
     required String slotId,
     required String currency,
     required double price,  // <-- Change String to double
     required List<dynamic> data,
   }) async {
+    List<dynamic> bookingIds=[];
     try {
+
       final url = Uri.parse(ApiClient.getJoinEventUrl);
       final headers = {
         'Accept': 'application/json',
@@ -858,14 +860,18 @@ class TrackEventService {
         showCustomSnackbar(
             title: AppStaticString.success,
             message: responseData['message'],
-            type: SnackBarType.success);
-        return responseData['data'][0]['_id'].toString();
+            type: SnackBarType.success); 
+        log('-----------------booking id before--------------------');
+        bookingIds=responseData['data'].map((e)=>e['_id'].toString()).toList() ;
+        log('-----------------booking id--------------------');
+        log(bookingIds.toString());
+        return bookingIds;
       } else {
         showCustomSnackbar(
             title: AppStaticString.failed,
             message: responseData['message'],
             type: SnackBarType.failed);
-        return '';
+        return bookingIds;
       }
     } catch (e) {
       showCustomSnackbar(
@@ -874,13 +880,12 @@ class TrackEventService {
           type: SnackBarType.failed);
       debugPrint(ApiClient.getJoinEventUrl);
       debugPrint(e.toString());
-      return '';
+      return bookingIds;
     }
   }
 
   static Future<String> paymentCheckOutBooking({
-    required String bookingId,
-    required String currency,
+    required dynamic bookingId,    required String currency,
     required String amount,
 
   })
@@ -893,7 +898,7 @@ class TrackEventService {
         'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
       };
       final body = jsonEncode({
-        "bookingId": bookingId,
+        "bookingId": bookingId is List ? bookingId : bookingId.toString(),
         "currency": currency,
 
         "amount": amount,

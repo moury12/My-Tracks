@@ -392,6 +392,14 @@ print( BookTrackJoinEventController
                     print(BookTrackJoinEventController
                         .to.savedIndices.length);
                     if ( BookTrackJoinEventController
+                        .to
+                        .eventData
+                        .value
+                        .moreInfo!=null &&  BookTrackJoinEventController
+                        .to
+                        .eventData
+                        .value
+                        .moreInfo!.isNotEmpty&& BookTrackJoinEventController
                         .to.savedIndices.length!=BookTrackJoinEventController
                         .to.selectedValue.value /*||
                         BookTrackJoinEventController
