@@ -106,8 +106,7 @@ class TrackEventService {
     required String amount,
     required String currency,
     required File? file,
-  })
-  async {
+  }) async {
     try {
       final request = http.MultipartRequest(
         'POST',
@@ -387,7 +386,8 @@ class TrackEventService {
       log(body.toString());
       log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {
-        totalTrackDayInMonth=responseData['data']['totalTrackDayInMonth'].toString();
+        totalTrackDayInMonth =
+            responseData['data']['totalTrackDayInMonth'].toString();
         showCustomSnackbar(
             title: AppStaticString.success,
             message: responseData['message'],
@@ -480,8 +480,12 @@ class TrackEventService {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
       };
-      final body = jsonEncode(
-          {"slotId": slotId, "numOfPeople": numOfPeople, "date": date, "currency": currency});
+      final body = jsonEncode({
+        "slotId": slotId,
+        "numOfPeople": numOfPeople,
+        "date": date,
+        "currency": currency
+      });
       final response = await http.post(url, headers: headers, body: body);
       final responseData = json.decode(response.body);
       log('-----------------book track slot call--------------------');
@@ -798,7 +802,8 @@ class TrackEventService {
 
   static Future<Map<String, String>> fetchCurrencies() async {
     Map<String, String> currencyList = {};
-    final url = 'https://v6.exchangerate-api.com/v6/${GoogleClient.currencyApiKey}/codes';
+    final url =
+        'https://v6.exchangerate-api.com/v6/${GoogleClient.currencyApiKey}/codes';
 
     debugPrint('Fetching currencies from: $url');
 
@@ -811,12 +816,14 @@ class TrackEventService {
         if (data['result'] == 'success' && data['supported_codes'] is List) {
           // Convert the list of lists into a Map<String, String>
           currencyList = {
-            for (var item in data['supported_codes']) item[0] as String: item[1] as String
+            for (var item in data['supported_codes'])
+              item[0] as String: item[1] as String
           };
         }
         debugPrint('Currencies fetched: $data');
       } else {
-        debugPrint('Failed to load currencies. Status Code: ${response.statusCode}');
+        debugPrint(
+            'Failed to load currencies. Status Code: ${response.statusCode}');
       }
     } catch (e) {
       debugPrint('Error fetching currencies: $e');
@@ -829,12 +836,11 @@ class TrackEventService {
     required String eventId,
     required String slotId,
     required String currency,
-    required double price,  // <-- Change String to double
+    required double price, // <-- Change String to double
     required List<dynamic> data,
   }) async {
-    List<dynamic> bookingIds=[];
+    List<dynamic> bookingIds = [];
     try {
-
       final url = Uri.parse(ApiClient.getJoinEventUrl);
       final headers = {
         'Accept': 'application/json',
@@ -846,7 +852,7 @@ class TrackEventService {
         "slotId": slotId,
         "currency": currency,
         "data": data,
-        "price": price,  // Ensure this is a number, not a string
+        "price": price, // Ensure this is a number, not a string
       });
 
       final response = await http.post(url, headers: headers, body: body);
@@ -860,9 +866,10 @@ class TrackEventService {
         showCustomSnackbar(
             title: AppStaticString.success,
             message: responseData['message'],
-            type: SnackBarType.success); 
+            type: SnackBarType.success);
         log('-----------------booking id before--------------------');
-        bookingIds=responseData['data'].map((e)=>e['_id'].toString()).toList() ;
+        bookingIds =
+            responseData['data'].map((e) => e['_id'].toString()).toList();
         log('-----------------booking id--------------------');
         log(bookingIds.toString());
         return bookingIds;
@@ -885,11 +892,11 @@ class TrackEventService {
   }
 
   static Future<String> paymentCheckOutBooking({
-    required dynamic bookingId,    required String currency,
+     String? bookingId,
+     List<dynamic>? bookingIds,
+    required String currency,
     required String amount,
-
-  })
-  async {
+  }) async {
     try {
       final url = Uri.parse(ApiClient.paymentCheckoutUrl);
       final headers = {
@@ -898,9 +905,10 @@ class TrackEventService {
         'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
       };
       final body = jsonEncode({
-        "bookingId": bookingId is List ? bookingId : bookingId.toString(),
+        "bookingIds":
+           bookingIds/*is List ? bookingId.toList() : bookingId.toString()*/,
         "currency": currency,
-
+        "bookingId": bookingId,
         "amount": amount,
       });
       final response = await http.post(url, headers: headers, body: body);
@@ -937,7 +945,6 @@ class TrackEventService {
   }) async {
     try {
       final url = Uri.parse(dynamicUrl);
-
 
       final response = await http.get(
         url, /*headers: headers,*/
@@ -1206,24 +1213,24 @@ class TrackEventService {
       return false;
     }
   }
-static  Future<String> convertCurrency({
+
+  static Future<String> convertCurrency({
     required String selectedCurrencyFrom,
     required String selectedCurrencyTo,
     required String amount,
-}) async {
+  }) async {
     final url =
         'https://v6.exchangerate-api.com/v6/${GoogleClient.currencyApiKey}/pair/$selectedCurrencyFrom/$selectedCurrencyTo/$amount';
     final response = await http.get(Uri.parse(url));
-    String convertedAmount ='';
+    String convertedAmount = '';
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       if (data['result'] == 'success') {
-
-          convertedAmount = data['conversion_result'].toString();
-
+        convertedAmount = data['conversion_result'].toString();
       }
     } else {
       debugPrint('Failed to convert currency');
-    }return convertedAmount;
+    }
+    return convertedAmount;
   }
 }

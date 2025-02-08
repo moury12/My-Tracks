@@ -41,18 +41,15 @@ class _JoinEventPaymentScreenState extends State<JoinEventPaymentScreen> {
     argument = Get.arguments;
     type = argument['type'];
     slot = argument['slot'];
-    BookTrackJoinEventController.to.selectedCurrencyFrom.value=null;
-    BookTrackJoinEventController
-        .to.selectedValue.value =null;
-    BookTrackJoinEventController
-        .to.eventField.clear();
-    BookTrackJoinEventController
-        .to.savedIndices.clear();
+    BookTrackJoinEventController.to.selectedCurrencyFrom.value = null;
+    BookTrackJoinEventController.to.selectedValue.value = null;
+    BookTrackJoinEventController.to.eventField.clear();
+    BookTrackJoinEventController.to.savedIndices.clear();
     BookTrackJoinEventController.to.moreInfoControllers.clear();
 /*    for (var controller in BookTrackJoinEventController.to.moreInfoControllers) {
       controller.clear();
     }*/
- /*   BookTrackJoinEventController
+    /*   BookTrackJoinEventController
         .to.eventData.value.moreInfo!.clear();*/
 
     BookTrackJoinEventController.to.eventData.value =
@@ -93,7 +90,7 @@ class _JoinEventPaymentScreenState extends State<JoinEventPaymentScreen> {
 
                             ///=======================dynamic price=====================///
                             Obx(() {
-                             /* if (BookTrackJoinEventController
+                              /* if (BookTrackJoinEventController
                                       .to.convertPrice.isNotEmpty &&
                                   BookTrackJoinEventController
                                           .to.selectedCurrencyFrom.value !=
@@ -126,46 +123,7 @@ class _JoinEventPaymentScreenState extends State<JoinEventPaymentScreen> {
                               '${AppStaticString.allowedPeople} $totalSeat   ${AppStaticString.unsold} $unsold',
                           textAlign: TextAlign.start,
                         ),
-                        // space12H,
-                        // Obx(() {
-                        //   return CustomDropdown<dynamic>(
-                        //    /* isRequired: true,*/
-                        //     title: AppStaticString.currency,
-                        //     selectedValue: BookTrackJoinEventController
-                        //         .to.selectedCurrencyFrom.value,
-                        //     items: CommonController
-                        //         .to.currencyList.keys
-                        //         .map(
-                        //           (e) => '$e',
-                        //         )
-                        //         .toList(),
-                        //     isLoading: CommonController
-                        //         .to.isLoadingCurrencies.value,
-                        //     onChanged: (value) {
-                        //       BookTrackJoinEventController
-                        //           .to.selectedCurrencyFrom.value = value;
-                        //       if (BookTrackJoinEventController
-                        //                   .to.selectedCurrencyFrom.value !=
-                        //               null &&
-                        //           currency.isNotEmpty &&
-                        //           price.isNotEmpty) {
-                        //         BookTrackJoinEventController.to
-                        //             .convertCurrencies(
-                        //                 selectedCurrencyFrom: currency,
-                        //                 selectedCurrencyTo:
-                        //                     BookTrackJoinEventController
-                        //                         .to.selectedCurrencyFrom.value
-                        //                         .toString(),
-                        //                 amount: price);
-                        //       } else {
-                        //         showCustomSnackbar(
-                        //             title: AppStaticString.failed,
-                        //             message: 'Cannot convert currency!!',
-                        //             type: SnackBarType.failed);
-                        //       }
-                        //     },
-                        //   );
-                        // }),
+
                         space12H,
                         Obx(() {
                           return CustomDropdown<int>(
@@ -179,6 +137,24 @@ class _JoinEventPaymentScreenState extends State<JoinEventPaymentScreen> {
                                   .to.selectedValue.value = value;
                               BookTrackJoinEventController.to
                                   .updateSubSelectedValue();
+                              if (BookTrackJoinEventController
+                                          .to.eventData.value.moreInfo ==
+                                      null ||
+                                  BookTrackJoinEventController
+                                      .to.eventData.value.moreInfo!.isEmpty) {
+                                for (int i = 0;
+                                    i <
+                                        (BookTrackJoinEventController
+                                                .to.selectedValue.value ??
+                                            0);
+                                    i++) {
+                                  BookTrackJoinEventController.to.eventField.add(
+                                      {"bookingFor": i == 0
+                                          ? "self"
+                                          : 'other',
+                                        'moreInfo':[]});
+                                }
+                              }
                             },
                           );
                         }),
@@ -267,18 +243,26 @@ class _JoinEventPaymentScreenState extends State<JoinEventPaymentScreen> {
                                                   child: CustomButton(
                                                 onTap: () {
                                                   bool hasEmptyField = false;
-print( BookTrackJoinEventController
-    .to.savedIndices);
+                                                  print(
+                                                      BookTrackJoinEventController
+                                                          .to.savedIndices);
                                                   // Loop through controllers to check if any field is empty
                                                   for (int indexMoreData = 0;
-                                                  indexMoreData < moreInfoControllersForPerson.length;
-                                                  indexMoreData++) {
-                                                    if (moreInfoControllersForPerson[indexMoreData].text.trim().isEmpty) {
+                                                      indexMoreData <
+                                                          moreInfoControllersForPerson
+                                                              .length;
+                                                      indexMoreData++) {
+                                                    if (moreInfoControllersForPerson[
+                                                            indexMoreData]
+                                                        .text
+                                                        .trim()
+                                                        .isEmpty) {
                                                       hasEmptyField = true;
                                                       break; // Stop checking further if an empty field is found
                                                     }
                                                   }
-                                                  if (!isSaved&&!hasEmptyField) {
+                                                  if (!isSaved &&
+                                                      !hasEmptyField) {
                                                     BookTrackJoinEventController
                                                         .to.eventField
                                                         .add({
@@ -320,12 +304,15 @@ print( BookTrackJoinEventController
                                                         BookTrackJoinEventController
                                                             .to.eventField
                                                             .toString());
-                                                  } else{
+                                                  } else {
                                                     showCustomSnackbar(
-                                                      title: AppStaticString.failed,
-                                                      message: 'Fill up required fields',
+                                                      title: AppStaticString
+                                                          .failed,
+                                                      message:
+                                                          'Fill up required fields',
                                                       type: SnackBarType.failed,
-                                                    );                                                  }
+                                                    );
+                                                  }
                                                 },
                                                 title: isSaved
                                                     ? AppStaticString.saved
@@ -367,7 +354,7 @@ print( BookTrackJoinEventController
                         BookTrackJoinEventController.to.selectedValue.value ??
                             1; // Fallback to 1 if null
                     final total = priceValue * selectedValue;
-                  /*  bool hasEmptyField = false;
+                    /*  bool hasEmptyField = false;
                     for (var element
                         in BookTrackJoinEventController.to.eventField) {
                       if (element is Map &&
@@ -389,23 +376,21 @@ print( BookTrackJoinEventController
                       if (hasEmptyField) break;
                     }*/
 
-                    print(BookTrackJoinEventController
-                        .to.savedIndices.length);
-                    if ( BookTrackJoinEventController
-                        .to
-                        .eventData
-                        .value
-                        .moreInfo!=null &&  BookTrackJoinEventController
-                        .to
-                        .eventData
-                        .value
-                        .moreInfo!.isNotEmpty&& BookTrackJoinEventController
-                        .to.savedIndices.length!=BookTrackJoinEventController
-                        .to.selectedValue.value /*||
+                    print(BookTrackJoinEventController.to.savedIndices.length);
+                    if (BookTrackJoinEventController
+                                    .to.eventData.value.moreInfo !=
+                                null &&
+                            BookTrackJoinEventController
+                                .to.eventData.value.moreInfo!.isNotEmpty &&
+                            BookTrackJoinEventController
+                                    .to.savedIndices.length !=
+                                BookTrackJoinEventController.to.selectedValue
+                                    .value /*||
                         BookTrackJoinEventController
                                 .to.selectedCurrencyFrom.value ==
-                            null*/ ||  BookTrackJoinEventController
-                                .to.selectedValue.value ==
+                            null*/
+                        ||
+                        BookTrackJoinEventController.to.selectedValue.value ==
                             null ||
                         inputCurrency.isEmpty ||
                         total == 0 ||

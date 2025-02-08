@@ -15,26 +15,33 @@ class CheckoutBookingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bookingController = BookTrackJoinEventController.to;
-
+debugPrint('-------------------check out url-----------------------');
+debugPrint(bookingController.checkoutUrl.value);
     // Initialize WebViewController if not already done
     if (bookingController.webController == null) {
       bookingController.initializeWebViewController();
 
     }
 
-    return Scaffold(
-      appBar:CustomAppbar(tile: AppStaticString.payment,),
-      body: Stack(
-        children: [
-          WebViewWidget(controller: bookingController.webController!),
-          Obx(
-                () => bookingController.isLoading.value
-                ? const Center(
-              child: DefaultProgressIndicator(),
-            )
-                : const SizedBox.shrink(),
-          ),
-        ],
+    return PopScope(
+      onPopInvokedWithResult: (didPop, result) {
+        bookingController.checkoutUrl.value = "";
+        bookingController.webController=null;
+      },
+      child: Scaffold(
+        appBar:CustomAppbar(tile: AppStaticString.payment,),
+        body: Stack(
+          children: [
+            WebViewWidget(controller: bookingController.webController!),
+            Obx(
+                  () => bookingController.isLoading.value
+                  ? const Center(
+                child: DefaultProgressIndicator(),
+              )
+                  : const SizedBox.shrink(),
+            ),
+          ],
+        ),
       ),
     );
   }

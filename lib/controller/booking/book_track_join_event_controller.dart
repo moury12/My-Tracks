@@ -9,7 +9,6 @@ import 'package:track_trek/core/service/track-event/track_event_service.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/view/book-track-join-event/payment/checkout_booking_page.dart';
 import 'package:track_trek/view/initial/bottom_navigation_screen.dart';
-import 'package:track_trek/view/initial/splash.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class BookTrackJoinEventController extends GetxController {
@@ -93,6 +92,7 @@ class BookTrackJoinEventController extends GetxController {
           },
           onNavigationRequest: (NavigationRequest request) {
             if (request.url.contains('${ApiClient.baseUrl}/payment/success')) {
+              checkoutUrl.value = "";
               Get.offAllNamed(BottomNavigationScreen.routeName);
             }
             return NavigationDecision.navigate;
@@ -213,7 +213,7 @@ class BookTrackJoinEventController extends GetxController {
         updateSubSelectedValue();
 
         checkoutUrl.value = await TrackEventService.paymentCheckOutBooking(
-            bookingId: bookingId.toString(),
+            bookingIds: bookingId,
             currency: selectedCurrencyFrom.value ?? currency,
             amount: price.toString());
         if (checkoutUrl.value.isNotEmpty) {
@@ -265,5 +265,13 @@ class BookTrackJoinEventController extends GetxController {
       isLoadingTrackEvent.value = false;
       noInternetShowCustomSnackbar();
     }
+  }
+  @override
+  void onClose() {
+    webController!.clearCache();
+    webController = null;
+    checkoutUrl.value='';
+    // TODO: implement onClose
+    super.onClose();
   }
 }
