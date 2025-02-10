@@ -37,21 +37,61 @@ class EventCardWidget extends StatelessWidget {
     this.buttonText,
     this.buttonImg,
     this.onTap,
-    this.eventModel, this.trackModel, this.eventModelForUser,
+    this.eventModel,
+    this.trackModel,
+    this.eventModelForUser,
   });
 
   @override
   Widget build(BuildContext context) {
-    final String imageUrl= eventModel!=null?'${ApiClient.baseUrl}/${eventModel!.eventImage?.first}':trackModel!=null?'${ApiClient.baseUrl}/${trackModel!.trackImage?.first}':eventModelForUser!=null?'${ApiClient.baseUrl}/${eventModelForUser!.eventImage?.first}':'n/a';
-    final String sId= eventModel!=null?eventModel!.sId??'':trackModel!=null?trackModel!.sId??'n/a':eventModelForUser!=null?eventModelForUser!.sId??'n/a':AppStaticString.dummyEvent;
-    final String name= eventModel!=null?eventModel!.eventName??'':trackModel!=null?trackModel!.trackName??'n/a':eventModelForUser!=null?eventModelForUser!.eventName??'n/a':AppStaticString.dummyEvent;
-    final String location= eventModel!=null?eventModel!.address??'':trackModel!=null?trackModel!.address??'n/a':eventModelForUser!=null?eventModelForUser!.address??'n/a':AppStaticString.dummyAddress;
-    final String startDate= eventModel!=null?eventModel!.startDate??'':trackModel!=null?trackModel!.totalTrackDayInMonth??'n/a':eventModelForUser!=null?eventModelForUser!.startDate??'n/a':AppStaticString.dummyDate;
-    final String totalSlot= eventModel!=null?eventModel!.slots!.length.toString():trackModel!=null?trackModel!.totalTrackDayInMonth??'n/a':eventModelForUser!=null?eventModelForUser!.slots!.length.toString():AppStaticString.dummyDate;
+    final String imageUrl = eventModel != null
+        ? '${ApiClient.baseUrl}/${eventModel!.eventImage?.first}'
+        : trackModel != null
+            ? '${ApiClient.baseUrl}/${trackModel!.trackImage?.first}'
+            : eventModelForUser != null
+                ? '${ApiClient.baseUrl}/${eventModelForUser!.eventImage?.first}'
+                : 'n/a';
+    final String sId = eventModel != null
+        ? eventModel!.sId ?? ''
+        : trackModel != null
+            ? trackModel!.sId ?? 'n/a'
+            : eventModelForUser != null
+                ? eventModelForUser!.sId ?? 'n/a'
+                : AppStaticString.dummyEvent;
+    final String name = eventModel != null
+        ? eventModel!.eventName ?? ''
+        : trackModel != null
+            ? trackModel!.trackName ?? 'n/a'
+            : eventModelForUser != null
+                ? eventModelForUser!.eventName ?? 'n/a'
+                : AppStaticString.dummyEvent;
+    final String location = eventModel != null
+        ? eventModel!.address ?? ''
+        : trackModel != null
+            ? trackModel!.address ?? 'n/a'
+            : eventModelForUser != null
+                ? eventModelForUser!.address ?? 'n/a'
+                : AppStaticString.dummyAddress;
+    final String startDate = eventModel != null
+        ? eventModel!.startDate ?? ''
+        : trackModel != null
+            ? trackModel!.totalTrackDayInMonth ?? 'n/a'
+            : eventModelForUser != null
+                ? eventModelForUser!.startDate ?? 'n/a'
+                : AppStaticString.dummyDate;
+    final String totalSlot = eventModel != null
+        ? eventModel!.slots!.length.toString()
+        : trackModel != null
+            ? trackModel!.totalTrackDayInMonth ?? 'n/a'
+            : eventModelForUser != null
+                ? eventModelForUser!.slots!.length.toString()
+                : AppStaticString.dummyDate;
     // final String unsold= eventModel!=null?eventModel!.??'':trackModel!=null?trackModel!.totalTrackDayInMonth??'n/a':eventModelForUser!=null?eventModelForUser!.??'n/a':AppStaticString.dummyDate;
-    final String time=    eventModel != null
-        ? '${eventModel!.startTime} - ${eventModel!.endTime}': eventModelForUser != null
-        ? '${eventModelForUser!.startTime} - ${eventModelForUser!.endTime}':AppStaticString.dummyTime;
+    final String time = eventModel != null
+        ? '${eventModel!.startTime} - ${eventModel!.endTime}'
+        : eventModelForUser != null
+            ? '${eventModelForUser!.startTime} - ${eventModelForUser!.endTime}'
+            : AppStaticString.dummyTime;
     return Padding(
       padding: padding12T,
       child: BlackContainerWidget(
@@ -65,11 +105,7 @@ class EventCardWidget extends StatelessWidget {
 
                 ///==============dynamic event image==============///
                 child: CustomNetworkImage(
-                        imageUrl:
-                            imageUrl,
-                        height: 150.h,
-                        width: double.infinity)
-                   ),
+                    imageUrl: imageUrl, height: 150.h, width: double.infinity)),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -103,15 +139,14 @@ class EventCardWidget extends StatelessWidget {
                     ///==============dynamic event date==============///
 
                     Text('${AppStaticString.dateWithClone} $startDate ',
-                      /*  maxLines: 1,
+                        /*  maxLines: 1,
                         overflow: TextOverflow.ellipsis,*/
                         style: poppinsRegular.copyWith(
                             fontSize: getFontSizeSmall(context))),
 
                     ///==============dynamic event time==============///
 
-                    Text(
-                  time,
+                    Text(time,
                         /*maxLines: 1,
                         overflow: TextOverflow.ellipsis,*/
                         style: poppinsRegular.copyWith(
@@ -129,16 +164,14 @@ class EventCardWidget extends StatelessWidget {
                         BlueTextWidget(
                           text: HomeController.to.selectedLabel.value == 2
                               ? '${AppStaticString.totalSeatWithClone}120'
-                              : '${AppStaticString.priceWithClone}\$${ eventModel == null||eventModel!.slots==null||eventModel!.slots!.isEmpty
-                        ?'120': eventModel!.slots!.first.price??''}',
+                              : '${AppStaticString.priceWithClone}\$${eventModel == null || eventModel!.slots == null || eventModel!.slots!.isEmpty ? '120' : eventModel!.slots!.first.price ?? ''}',
                         ),
                         const DividerVertical(),
 
                         ///==============dynamic event total slot==============///
 
                         Text(
-                          '${AppStaticString.totalSlot}${eventModel == null
-                              ?'12': eventModel!.slots!.length??''}',
+                          '${AppStaticString.totalSlot}${eventModel == null ? '12' : eventModel!.slots!.length ?? ''}',
                           style: poppinsRegular.copyWith(
                               fontSize: getFontSizeSmall(context)),
                         ),
@@ -150,8 +183,8 @@ class EventCardWidget extends StatelessWidget {
 
                             ///==============dynamic event unsold==============///
 
-                            : Text('${AppStaticString.status}: ${eventModel == null
-                            ?'12': eventModel!.status??''}',
+                            : Text(
+                                '${AppStaticString.status}: ${eventModel == null ? '12' : eventModel!.status ?? ''}',
                                 style: poppinsRegular.copyWith(
                                     fontSize: getFontSizeSmall(context))),
                       ],
@@ -162,32 +195,37 @@ class EventCardWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       ///=====================dynamic total slot==================///
-                       Expanded(
-                          child: BlueTextWidget(
-                        text: '${AppStaticString.totalSlot} $totalSlot',
+                      Expanded(
+                          child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: BlueTextWidget(
+                          text: '${AppStaticString.totalSlot} $totalSlot',
+                        ),
                       )),
-                      const DividerVertical(
+
+                      DividerVertical(
                         color: AppColors.blueColor,
+                        height: 15.w,
                       ),
 
                       ///=====================dynamic unsold==================///
 
-                  /*     Expanded(
+                      /*     Expanded(
                           child: BlueTextWidget(
                         text: '${AppStaticString.unsold} $unsold',
                       )),
                       space8W,*/
-                      space8W,
                       Expanded(
-
                           child: OptionWidget(
                               function: () async {
                                 const String deepLink = '${ApiClient.baseUrl}/';
 
-                                const String fallbackLink = 'https://play.google.com/store/apps/details?id=com.mytracks.track';
+                                const String fallbackLink =
+                                    'https://play.google.com/store/apps/details?id=com.mytracks.track';
                                 final String trackId = sId;
                                 final String type = 'event';
-                                final String fullLink = '$deepLink?trackId=$trackId&type=$type&fallback=$fallbackLink';
+                                final String fullLink =
+                                    '$deepLink?trackId=$trackId&type=$type&fallback=$fallbackLink';
                                 Share.share(fullLink);
                               },
                               icon: shareIconUrl,
@@ -197,9 +235,9 @@ class EventCardWidget extends StatelessWidget {
 
             ///======================dynamic user===================///
             !fromUser!
-                ?  ExpandableText(
+                ? ExpandableText(
                     text:
-                        eventModel!=null?eventModel!.description??'':'',
+                        eventModel != null ? eventModel!.description ?? '' : '',
                     maxLines: 3, // Number of lines to show before truncating
                   )
                 : const SizedBox.shrink(),
@@ -207,8 +245,14 @@ class EventCardWidget extends StatelessWidget {
                 ? CustomButton(
                     onTap: onTap ??
                         () {
-                          Get.toNamed(EventTrackSlotScreen.routeName
-                            ,arguments: {'slots': eventModel!.slots, 'type': 'event', 'id':sId,}, );
+                          Get.toNamed(
+                            EventTrackSlotScreen.routeName,
+                            arguments: {
+                              'slots': eventModel!.slots,
+                              'type': 'event',
+                              'id': sId,
+                            },
+                          );
                         },
                     title: buttonText ?? AppStaticString.viewAllSlot,
                     img: buttonImg ?? arrowTopImgUrl,

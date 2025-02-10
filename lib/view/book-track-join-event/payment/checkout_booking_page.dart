@@ -7,11 +7,16 @@ import 'package:track_trek/core/components/custom_button.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class CheckoutBookingScreen extends StatelessWidget {
+class CheckoutBookingScreen extends StatefulWidget {
   static const String routeName = '/checkout-booking';
 
   const CheckoutBookingScreen({super.key});
 
+  @override
+  State<CheckoutBookingScreen> createState() => _CheckoutBookingScreenState();
+}
+
+class _CheckoutBookingScreenState extends State<CheckoutBookingScreen> {
   @override
   Widget build(BuildContext context) {
     final bookingController = BookTrackJoinEventController.to;
@@ -44,5 +49,12 @@ debugPrint(bookingController.checkoutUrl.value);
         ),
       ),
     );
+  }
+  @override
+  void dispose() {
+    BookTrackJoinEventController.to.checkoutUrl.value = "";
+    BookTrackJoinEventController.to.webController=null;
+    // TODO: implement dispose
+    super.dispose();
   }
 }

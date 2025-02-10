@@ -37,6 +37,7 @@ class CategoryCircleWidget extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.all(4.sp),
                   child: CustomNetworkImage(imageUrl: imageUrl,
+                      imageErrorUrl: 'assets/dummy_cat.jpg',
                       height:70.w, width:70.w,boxShape: BoxShape.circle,),
                 ),
               ),

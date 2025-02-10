@@ -28,7 +28,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="http"
-                    android:host="209.97.134.184"
+                    android:host="10.0.60.26"
                     android:port="8001" android:path="/" />
 
 <!--                <data android:scheme="http"/>-->

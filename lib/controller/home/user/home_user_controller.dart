@@ -192,6 +192,7 @@ class HomeUserController extends GetxController {
     Get.put(ProfileController());
     ProfileController.to.getUserProfileData();
     selectedIndexCategory.value = 0;
+    categorySearch.value='';
     getPromoteTrackListCall();
     getCategoryListCall();
     getEventListCall();

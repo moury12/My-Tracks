@@ -327,7 +327,7 @@ class TrackCardWidget extends StatelessWidget {
                           }
                           showModalBottomSheet(
                             constraints: BoxConstraints.tightForFinite(
-                              height: MediaQuery.of(context).size.height / 2,
+                              // height: MediaQuery.of(context).size.height / 2,
                               width: MediaQuery.of(context).size.width,
                             ),
                             context: context,
@@ -582,7 +582,7 @@ class ReviewListWidget extends StatelessWidget {
                           child: Text(
                             AppStaticString.comments,
                             style: poppinsMedium.copyWith(
-                              fontSize: getFontSizeSmall(context),
+                              fontSize: getFontSizeLarge(context),
                             ),
                           ),
                         ),
@@ -602,8 +602,8 @@ class ReviewListWidget extends StatelessWidget {
                                       review.user!.profileImage != null
                                           ? CustomNetworkImage(
                                               imageUrl:
-                                                  review.user!.profileImage ??
-                                                      '',
+                                                  '${ApiClient.baseUrl}/${review.user!.profileImage ??
+                                                      ''}',
                                               height: 45.w,
                                               width: 45.w,
                                               imageErrorUrl: dummyProfileImgUrl,
@@ -654,13 +654,14 @@ class ReviewListWidget extends StatelessWidget {
                                                     : '0.0'),
 
                                             ///===================== Comment text =================///
-                                            Text(
-                                              review.review.toString(),
-                                              style: poppinsRegular.copyWith(
-                                                color: const Color(0xffD2D2D2),
-                                                fontSize:
-                                                    getFontSizeDefault(context),
-                                              ),
+                                            ExpandableText(
+                                            text:  review.review.toString(),
+                                              maxLines: 2 ,
+                                              // style: poppinsRegular.copyWith(
+                                              //   color: const Color(0xffD2D2D2),
+                                              //   fontSize:
+                                              //       getFontSizeDefault(context),
+                                              // ),
                                             ),
                                           ],
                                         ),
@@ -718,6 +719,7 @@ class OptionWidget extends StatelessWidget {
     return InkWell(
       onTap: function,
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Image.asset(
             icon,

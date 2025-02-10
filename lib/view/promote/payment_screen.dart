@@ -6,11 +6,16 @@ import 'package:track_trek/core/components/custom_button.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class PaymentScreen extends StatelessWidget {
+class PaymentScreen extends StatefulWidget {
   static const String routeName = '/payment';
 
   const PaymentScreen({super.key});
 
+  @override
+  State<PaymentScreen> createState() => _PaymentScreenState();
+}
+
+class _PaymentScreenState extends State<PaymentScreen> {
   @override
   Widget build(BuildContext context) {
     final commonController = CommonController.to;
@@ -35,5 +40,12 @@ class PaymentScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+  @override
+  void dispose() {
+    CommonController.to.webController=null;
+    CommonController.to.stripeUrl.value='';
+    // TODO: implement dispose
+    super.dispose();
   }
 }

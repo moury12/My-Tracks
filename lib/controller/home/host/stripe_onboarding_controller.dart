@@ -86,7 +86,7 @@ class StripeOnboardingController extends GetxController {
                 bool isSuccess = await TrackEventService.onBoardingRequest(dynamicUrl: request.url);
                 if (isSuccess) {
                   debugPrint("Onboarding process completed successfully");
-                  Get.toNamed(BottomNavigationScreen.routeName);
+                  Get.offAllNamed(BottomNavigationScreen.routeName);
                 } else {
                   debugPrint("Onboarding failed");
 

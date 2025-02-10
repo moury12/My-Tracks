@@ -70,6 +70,7 @@ class SearchScreen extends StatelessWidget {
                                   HomeUserController.to.selectedAddress.value;
 
                               CommonController.to.addressSuggestion.clear();
+                              HomeUserController.to. categorySearch.value='';
                               HomeUserController.to.getTrackListCall();
                               HomeUserController.to.getEventListCall();
 
