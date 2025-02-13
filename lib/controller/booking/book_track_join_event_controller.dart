@@ -268,7 +268,9 @@ class BookTrackJoinEventController extends GetxController {
   }
   @override
   void onClose() {
-    webController!.clearCache();
+    if(webController!=null){
+      webController!.clearCache();
+    }
     webController = null;
     checkoutUrl.value='';
     // TODO: implement onClose
