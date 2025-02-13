@@ -18,6 +18,12 @@
 	<string>My Tracks</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+	<key>UILaunchScreen</key>
+    <dict>
+        <key>UIBackgroundColor</key>
+        <string>#000000</string>
+    </dict>
+
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
