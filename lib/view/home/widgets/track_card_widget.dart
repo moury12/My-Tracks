@@ -381,7 +381,7 @@ class TrackCardWidget extends StatelessWidget {
                                 const String deepLink = '${ApiClient.baseUrl}/';
 
                                 const String fallbackLink =
-                                    'https://play.google.com/store/apps/details?id=com.mytracks.track';
+                                    'https://play.google.com/store/apps/details?id=com.mytracksdarren.roe';
                                 final String trackId = sId;
                                 final String type = 'track';
                                 final String fullLink =
