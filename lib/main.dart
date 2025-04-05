@@ -13,6 +13,8 @@ import 'package:track_trek/view/initial/splash.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
+  await ScreenUtil.ensureScreenSize();
+
   await Hive.initFlutter();
   await Hive.openBox(userBoxName);
   SystemChrome.setPreferredOrientations([
