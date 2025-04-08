@@ -24,8 +24,7 @@ class HomeUserController extends GetxController {
   RxInt selectedIndexCategory = 0.obs;
   RxBool react = false.obs;
   Timer? timer;
-  Rx<PageController> controller =
-      PageController(initialPage: 0, viewportFraction: 0.9, keepPage: true).obs;
+  Rx<PageController> controller = PageController(initialPage: 0, viewportFraction: 0.9, keepPage: true).obs;
 
   ///================== dynamic list variable =====================///
   RxList<CategoryModel> catList = <CategoryModel>[].obs;
@@ -35,7 +34,6 @@ class HomeUserController extends GetxController {
   RxList<ReviewModel> reviewList = <ReviewModel>[].obs;
   var tabContent = <Widget>[].obs;
   RxList<String> tabs = [AppStaticString.track, AppStaticString.event].obs;
-
 
   ///================== loading variable =====================///
 
@@ -52,6 +50,20 @@ class HomeUserController extends GetxController {
   RxString lng = ''.obs;
   RxString selectedAddress = ''.obs;
   RxInt currentPageForReview = 1.obs;
+
+  ///====================Event pagination variable========================///
+
+  final RxInt currentEventPage = 1.obs;
+  final RxInt itemsEventPerPage = 7.obs;
+  final RxInt totalEventPages = 7.obs;
+  final RxBool isEventLoadingMore = false.obs;
+
+  ///====================Track pagination variable========================///
+
+  final RxInt currentTrackPage = 1.obs;
+  final RxInt itemsTrackPerPage = 7.obs;
+  final RxInt totalTrackPages = 7.obs;
+  final RxBool isTrackLoadingMore = false.obs;
 
   ///==================textEditing controller variable =====================///
 
@@ -76,31 +88,10 @@ class HomeUserController extends GetxController {
     }
   }
 
-  getTrackListCall() async {
-    if (NetworkController.to.isConnected.value) {
-      isLoadingTrackList.value = true;
-      trackList.value = await UserHomeService.getTrackListForUserPanel(
-          category: categorySearch.value, lat: lat.value, long: lng.value);
-      if (trackList.isNotEmpty) {
-        isLoadingTrackList.value = false;
-      } else {
-        isLoadingTrackList.value = false;
-        // showCustomSnackbar(
-        //     title: AppStaticString.failed,
-        //     message: AppStaticString.failedToLoadData,
-        //     type: SnackBarType.failed);
-      }
-    } else {
-      isLoadingTrackList.value = false;
-      // noInternetShowCustomSnackbar();
-    }
-  }
-
   getPromoteTrackListCall() async {
     if (NetworkController.to.isConnected.value) {
       isLoadingPromoteTrack.value = true;
-      promoteTrackList.value =
-          await TrackEventService.getPromoteTrackListCall();
+      promoteTrackList.value = await TrackEventService.getPromoteTrackListCall();
       if (promoteTrackList.isNotEmpty) {
         isLoadingPromoteTrack.value = false;
       } else {
@@ -116,10 +107,7 @@ class HomeUserController extends GetxController {
     }
   }
 
-  getTrackReviewListCall(
-      {required String trackId,
-      String sort = '',
-      bool loadMoreData = false}) async {
+  getTrackReviewListCall({required String trackId, String sort = '', bool loadMoreData = false}) async {
     if (NetworkController.to.isConnected.value) {
       if (loadMoreData) {
         isLoadingMoreForReview.value = true;
@@ -128,8 +116,7 @@ class HomeUserController extends GetxController {
         currentPageForReview.value = 1;
       }
 
-      List<ReviewModel> reviews = await ReviewService.getReviewList(
-          trackId: trackId, page: currentPageForReview.value, sort: sort);
+      List<ReviewModel> reviews = await ReviewService.getReviewList(trackId: trackId, page: currentPageForReview.value, sort: sort);
       if (reviews.isNotEmpty) {
         isLoadingTrackReviewList.value = false;
         if (loadMoreData) {
@@ -155,21 +142,64 @@ class HomeUserController extends GetxController {
     reviewList.refresh();
   }
 
-  getEventListCall() async {
+  getTrackListCall({
+    bool loadMore = false,
+  }) async {
     if (NetworkController.to.isConnected.value) {
-      isLoadingEventList.value = true;
-      debugPrint( 'lat.value');
-      debugPrint( lat.value);
-      eventList.value = await UserHomeService.getEventListForUserPanel(
-          lat: lat.value, long: lng.value);
-      if (eventList.isNotEmpty) {
-        isLoadingEventList.value = false;
+      if (loadMore && currentTrackPage.value >= totalTrackPages.value) {
+        return;
+      }
+      if (loadMore) {
+        isTrackLoadingMore.value = true;
+        // Don't increment page here - we'll do it after successful response
       } else {
-        isLoadingEventList.value = false;
-        // showCustomSnackbar(
-        //     title: AppStaticString.failed,
-        //     message: AppStaticString.failedToLoadData,
-        //     type: SnackBarType.failed);
+        isLoadingTrackList.value = true;
+        currentTrackPage.value = 1;
+      }
+      final trackInitialList = await UserHomeService.getTrackListForUserPanel(category: categorySearch.value, lat: lat.value, long: lng.value);
+      isLoadingTrackList.value = false;
+      isTrackLoadingMore.value = false;
+      if (loadMore) {
+        currentEventPage.value++;
+        trackList.addAll(trackInitialList);
+      } else {
+        trackList.value = trackInitialList;
+      }
+    } else {
+      isLoadingTrackList.value = false;
+      // noInternetShowCustomSnackbar();
+    }
+  }
+
+  getEventListCall({
+    bool loadMore = false,
+  }) async {
+    if (NetworkController.to.isConnected.value) {
+      if (loadMore && currentEventPage.value >= totalEventPages.value) {
+        return;
+      }
+      if (loadMore) {
+        isEventLoadingMore.value = true;
+        // Don't increment page here - we'll do it after successful response
+      } else {
+        isLoadingEventList.value = true;
+        currentEventPage.value = 1;
+      }
+
+      debugPrint('lat.value');
+      debugPrint(lat.value);
+      final eventInitialList = await UserHomeService.getEventListForUserPanel(
+          currentEventPage: currentEventPage.value.toString(),
+          itemsEventPerPage: itemsEventPerPage.value.toString(),
+          lat: lat.value,
+          long: lng.value);
+      isLoadingEventList.value = false;
+      isEventLoadingMore.value = false;
+      if (loadMore) {
+        currentEventPage.value++;
+        eventList.addAll(eventInitialList);
+      } else {
+        eventList.value = eventInitialList;
       }
     } else {
       isLoadingEventList.value = false;
@@ -179,11 +209,9 @@ class HomeUserController extends GetxController {
 
   void updateCategorySearch() {
     if (catList.isNotEmpty && selectedIndexCategory < catList.length) {
-      categorySearch.value =
-          catList[selectedIndexCategory.value].name ?? ''; // Safely update
+      categorySearch.value = catList[selectedIndexCategory.value].name ?? ''; // Safely update
     } else {
-      categorySearch.value =
-          ''; // Fallback to empty if the list or index is invalid
+      categorySearch.value = ''; // Fallback to empty if the list or index is invalid
     }
   }
 
@@ -192,7 +220,7 @@ class HomeUserController extends GetxController {
     Get.put(ProfileController());
     ProfileController.to.getUserProfileData();
     selectedIndexCategory.value = 0;
-    categorySearch.value='';
+    categorySearch.value = '';
     getPromoteTrackListCall();
     getCategoryListCall();
     getEventListCall();
@@ -204,33 +232,32 @@ class HomeUserController extends GetxController {
   void onInit() {
     onRefreshUserPanel();
     bool isForward = true;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        timer = Timer.periodic(const Duration(seconds: 2), (timer) {
-          if (isForward) {
-            if (currentPage.value < (promoteTrackList.length>10?10:promoteTrackList.length) - 1) {
-              currentPage.value++;
-            } else {
-              isForward = false; // Reverse direction
-              currentPage.value--;
-            }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      timer = Timer.periodic(const Duration(seconds: 2), (timer) {
+        if (isForward) {
+          if (currentPage.value < (promoteTrackList.length > 10 ? 10 : promoteTrackList.length) - 1) {
+            currentPage.value++;
           } else {
-            if (currentPage.value > 0) {
-              currentPage.value--;
-            } else {
-              isForward = true; // Change direction to forward
-              currentPage.value++;
-            }
+            isForward = false; // Reverse direction
+            currentPage.value--;
           }
-          if (controller.value.hasClients) {
-            controller.value.animateToPage(
-              currentPage.value,
-              duration: const Duration(milliseconds: 400),
-              curve: Curves.linear,
-            );
+        } else {
+          if (currentPage.value > 0) {
+            currentPage.value--;
+          } else {
+            isForward = true; // Change direction to forward
+            currentPage.value++;
           }
-        });
+        }
+        if (controller.value.hasClients) {
+          controller.value.animateToPage(
+            currentPage.value,
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.linear,
+          );
+        }
       });
-
+    });
 
     super.onInit();
   }

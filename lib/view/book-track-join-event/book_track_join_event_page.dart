@@ -67,22 +67,7 @@ class _BookTrackJoinEventScreenState extends State<BookTrackJoinEventScreen> {
   }
   @override
   Widget build(BuildContext context) {
-/*    final argument = Get.arguments ?? {};
-    String sId = argument['id'] ?? '';
-    String type = argument['type'] ?? '';
-    final controller = BookTrackJoinEventController.to;
 
-    // Check if `sId` and `type` are valid
-    if (sId.isNotEmpty && type.isNotEmpty) {
-      if (type == event) {
-        BookTrackJoinEventController.to.getEventDetailsCall(eventId: sId);
-      } else {
-        BookTrackJoinEventController.to.getTrackDetailsCall(trackId: sId);
-        BookTrackJoinEventController.to.getTrackSlotListCall(trackId: sId);
-      }
-    } else {
-      debugPrint('Error: Missing eventId or trackId.');
-    }*/
     return Scaffold(
       appBar: CustomAppbar(
         tile: /*argument != null &&*/ type == event

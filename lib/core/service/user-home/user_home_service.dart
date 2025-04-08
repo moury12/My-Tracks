@@ -16,14 +16,18 @@ import 'package:track_trek/core/model/track-event/single_event_model.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 
 class UserHomeService {
-
-
-  static Future<List<TrackForUserPanelModel>> getTrackListForUserPanel(
-      {String category = '', String? long, String? lat}) async {
+  static Future<List<TrackForUserPanelModel>> getTrackListForUserPanel({
+    String category = '',
+    String? long,
+    String? lat,
+    String currentTrackPage = "1",
+    String itemsTrackPerPage = "7",
+    String totalTrackPages = "7",
+  }) async {
     List<TrackForUserPanelModel> trackList = [];
     try {
       final url = Uri.parse(
-          '${ApiClient.getAllBusinessUrl}?track=yes${lat != null && long != null ? '&longitude=$long&latitude=$lat' : ''}${category.isNotEmpty?'&category=$category':''}');
+          '${ApiClient.getAllBusinessUrl}?track=yes${lat != null && long != null ? '&longitude=$long&latitude=$lat' : ''}${category.isNotEmpty ? '&category=$category' : ''}&page=$currentTrackPage&limit=$itemsTrackPerPage');
       final headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -40,16 +44,16 @@ class UserHomeService {
       log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {
         if (responseData['data']["tracks"] is List) {
-          trackList = (responseData['data']["tracks"] as List)
-              .map((e) => TrackForUserPanelModel.fromJson(e))
-              .toList();
+          trackList = (responseData['data']["tracks"] as List).map((e) => TrackForUserPanelModel.fromJson(e)).toList();
+        }
+        if (responseData["data"]['pagination'] != null) {
+          currentTrackPage = responseData["data"]['pagination']['page'] ?? 1;
+          totalTrackPages = responseData["data"]['pagination']['totalTracks'] ?? 1; // Add this line
+          itemsTrackPerPage = responseData["data"]['pagination']['limit'] ?? 7;
         }
         return trackList;
       } else {
-        showCustomSnackbar(
-            title: AppStaticString.failed,
-            message: responseData['message'],
-            type: SnackBarType.failed);
+        showCustomSnackbar(title: AppStaticString.failed, message: responseData['message'], type: SnackBarType.failed);
         return trackList;
       }
     } catch (e) {
@@ -58,12 +62,17 @@ class UserHomeService {
     return trackList;
   }
 
-  static Future<List<EventForUserPanelModel>> getEventListForUserPanel(
-      {String? long, String? lat}) async {
+  static Future<List<EventForUserPanelModel>> getEventListForUserPanel({
+    String? long,
+    String? lat,
+    String currentEventPage = "1",
+    String itemsEventPerPage = "7",
+    String totalEventPages = "7",
+  }) async {
     List<EventForUserPanelModel> eventList = [];
     try {
       final url = Uri.parse(
-          '${ApiClient.getAllBusinessUrl}?event=yes${lat != null && long != null ? '&longitude=$long&latitude=$lat' : ''}');
+          '${ApiClient.getAllBusinessUrl}?event=yes${lat != null && long != null ? '&longitude=$long&latitude=$lat' : ''}&page=$currentEventPage&limit=$itemsEventPerPage');
       final headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -80,16 +89,16 @@ class UserHomeService {
       log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {
         if (responseData['data']["events"] is List) {
-          eventList = (responseData['data']["events"] as List)
-              .map((e) => EventForUserPanelModel.fromJson(e))
-              .toList();
+          eventList = (responseData['data']["events"] as List).map((e) => EventForUserPanelModel.fromJson(e)).toList();
+        }
+        if (responseData["data"]['pagination'] != null) {
+          currentEventPage = responseData["data"]['pagination']['page'] ?? 1;
+          totalEventPages = responseData["data"]['pagination']['totalEvents'] ?? 1; // Add this line
+          itemsEventPerPage = responseData["data"]['pagination']['limit'] ?? 7;
         }
         return eventList;
       } else {
-        showCustomSnackbar(
-            title: AppStaticString.failed,
-            message: responseData['message'],
-            type: SnackBarType.failed);
+        showCustomSnackbar(title: AppStaticString.failed, message: responseData['message'], type: SnackBarType.failed);
         return eventList;
       }
     } catch (e) {

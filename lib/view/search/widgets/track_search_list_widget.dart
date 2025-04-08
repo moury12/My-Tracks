@@ -24,7 +24,10 @@ class TrackSearchListWidget extends StatelessWidget {
                         HomeUserController.to.lng.value.isEmpty*/
             ? const EmptyTextWidget(text: AppStaticString.noTrackFound)
             : HomeUserController.to.isLoadingTrackList.value
-                ? const LoadingTrackListWidget()
+                ? Padding(
+                  padding: EdgeInsets.symmetric(vertical: 12.h),
+                  child: const LoadingTrackListWidget(),
+                )
                 : Column(
           spacing: 12.h ,
                     children: List.generate(
