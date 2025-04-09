@@ -20,25 +20,38 @@ import 'package:track_trek/view/promote/payment_screen.dart';
 class HomeController extends GetxController {
   static HomeController get to => Get.find();
   var selectedLabel = 0.obs;
+  RxInt currentTabIndex = 0.obs;
+  RxInt currentManageTabIndex = 0.obs;
+
   var react = false.obs;
   RxString isBooked = ''.obs;
   Rx<SingleTrackModel?> selectedTrack = Rx<SingleTrackModel?>(null);
   RxString promotionBannerImage = ''.obs;
   var selectedCurrencyFrom = Rx<String?>(null);
 
+  ///====================Event pagination variable========================///
+
+  final RxInt currentEventPage = 1.obs;
+  final RxInt itemsEventPerPage = 7.obs;
+  final RxInt totalEventPages = 7.obs;
+  final RxBool isEventLoadingMore = false.obs;
+
+  ///====================Track pagination variable========================///
+
+  final RxInt currentTrackPage = 1.obs;
+  final RxInt itemsTrackPerPage = 7.obs;
+  final RxInt totalTrackPages = 7.obs;
+  final RxBool isTrackLoadingMore = false.obs;
 
   ///========================List variables=====================///
   ///
   RxList<String> tabs = [AppStaticString.track, AppStaticString.event].obs;
-  RxList<String> labelTabs =
-      [AppStaticString.running, '', AppStaticString.booked].obs;
+  RxList<String> labelTabs = [AppStaticString.running, '', AppStaticString.booked].obs;
   var tabContent = <Widget>[].obs;
   RxList<SingleTrackModel> trackList = <SingleTrackModel>[].obs;
   RxList<SingleEventModel> eventList = <SingleEventModel>[].obs;
-  RxList<TrackParticipantsModel> trackParticipantList =
-      <TrackParticipantsModel>[].obs;
-  RxList<EventParticipantsModel> eventParticipantList =
-      <EventParticipantsModel>[].obs;
+  RxList<TrackParticipantsModel> trackParticipantList = <TrackParticipantsModel>[].obs;
+  RxList<EventParticipantsModel> eventParticipantList = <EventParticipantsModel>[].obs;
   RxList<ReviewModel> reviewList = <ReviewModel>[].obs;
 
   ///========================Loading variables=====================///
@@ -55,7 +68,6 @@ class HomeController extends GetxController {
   RxInt currentPageForReview = 1.obs;
   var isLoadingMoreForReview = false.obs;
   Future<void> refreshCall() async {
-
     await getTrackListCall();
     await getEventListCall();
     trackList.refresh();
@@ -66,15 +78,32 @@ class HomeController extends GetxController {
     await ProfileController.to.getUserProfileData();
   }
 
-  getTrackListCall() async {
+  getTrackListCall({
+    bool loadMore = false,
+  }) async {
     if (NetworkController.to.isConnected.value) {
-      isLoadingTrackList.value = true;
-      trackList.value = await TrackEventService.getMyBusinessTrack();
-      if (trackList.isNotEmpty) {
-        isLoadingTrackList.value = false;
+      if (loadMore && currentTrackPage.value >= totalTrackPages.value) {
+        return;
+      }
+      if (loadMore) {
+        isTrackLoadingMore.value = true;
+        currentTrackPage.value++;
+
+        // Don't increment page here - we'll do it after successful response
       } else {
-        isLoadingTrackList.value = false;
-        /*  */
+        isLoadingTrackList.value = true;
+        currentTrackPage.value = 1;
+      }
+      final trackInitialList = await TrackEventService.getMyBusinessTrack(
+          currentTrackPage: currentTrackPage.value.toString(),
+          itemsTrackPerPage: itemsTrackPerPage.value.toString(),
+          totalTrackPages: totalTrackPages.value.toString());
+      isLoadingTrackList.value = false;
+      isTrackLoadingMore.value = false;
+      if (loadMore) {
+        trackList.addAll(trackInitialList);
+      } else {
+        trackList.value = trackInitialList;
       }
     } else {
       isLoadingTrackList.value = false;
@@ -82,16 +111,31 @@ class HomeController extends GetxController {
     }
   }
 
-  getEventListCall() async {
+  getEventListCall({bool loadMore = false}) async {
     if (NetworkController.to.isConnected.value) {
-      isLoadingEventList.value = true;
-      eventList.value =
-          await TrackEventService.getMyBusinessEvent(booked: isBooked.value);
-      if (eventList.isNotEmpty) {
-        isLoadingEventList.value = false;
+      if (loadMore && currentEventPage.value >= totalEventPages.value) {
+        return;
+      }
+      if (loadMore) {
+        isEventLoadingMore.value = true;
+        currentEventPage.value++;
+
+        // Don't increment page here - we'll do it after successful response
       } else {
-        isLoadingEventList.value = false;
-        /*   */
+        isLoadingEventList.value = true;
+        currentEventPage.value = 1;
+      }
+      final eventInitialList = await TrackEventService.getMyBusinessEvent(
+          booked: isBooked.value,
+          currentEventPage: currentEventPage.value.toString(),
+          itemsEventPerPage: itemsEventPerPage.value.toString(),
+          totalEventPages: totalEventPages.value.toString());
+      isLoadingEventList.value = false;
+      isEventLoadingMore.value = false;
+      if (loadMore) {
+        eventList.addAll(eventInitialList);
+      } else {
+        eventList.value = eventInitialList;
       }
     } else {
       isLoadingEventList.value = false;
@@ -102,8 +146,7 @@ class HomeController extends GetxController {
   getEventParticipantListCall({required String eventSlotID}) async {
     if (NetworkController.to.isConnected.value) {
       isLoadingEventParticipantList.value = true;
-      eventParticipantList.value = await TrackEventService.getEventParticipants(
-          eventSlotId: eventSlotID);
+      eventParticipantList.value = await TrackEventService.getEventParticipants(eventSlotId: eventSlotID);
       if (eventParticipantList.isNotEmpty) {
         isLoadingEventParticipantList.value = false;
       } else {
@@ -122,8 +165,7 @@ class HomeController extends GetxController {
   getTrackParticipantListCall({required String trackSlotId}) async {
     if (NetworkController.to.isConnected.value) {
       isLoadingTrackParticipantList.value = true;
-      trackParticipantList.value = await TrackEventService.getTrackParticipants(
-          trackSlotId: trackSlotId);
+      trackParticipantList.value = await TrackEventService.getTrackParticipants(trackSlotId: trackSlotId);
       if (trackParticipantList.isNotEmpty) {
         isLoadingTrackParticipantList.value = false;
       } else {
@@ -139,10 +181,7 @@ class HomeController extends GetxController {
     }
   }
 
-  getTrackReviewListCall(
-      {required String trackId,
-      String sort = '',
-      bool loadMoreData = false}) async {
+  getTrackReviewListCall({required String trackId, String sort = '', bool loadMoreData = false}) async {
     if (NetworkController.to.isConnected.value) {
       if (loadMoreData) {
         isLoadingMoreForReview.value = true;
@@ -151,8 +190,7 @@ class HomeController extends GetxController {
         currentPageForReview.value = 1;
       }
 
-      List<ReviewModel> reviews = await ReviewService.getReviewList(
-          trackId: trackId, page: currentPageForReview.value, sort: sort);
+      List<ReviewModel> reviews = await ReviewService.getReviewList(trackId: trackId, page: currentPageForReview.value, sort: sort);
       if (reviews.isNotEmpty) {
         isLoadingTrackReviewList.value = false;
         if (loadMoreData) {
@@ -216,7 +254,8 @@ class HomeController extends GetxController {
         String isPromoted = await TrackEventService.checkoutPromotion(
             trackId: selectedTrack.value!.sId ?? '',
             amount: '10',
-            file: File(promotionBannerImage.value), currency: selectedCurrencyFrom.value??'AUD');
+            file: File(promotionBannerImage.value),
+            currency: selectedCurrencyFrom.value ?? 'AUD');
         if (isPromoted.isNotEmpty) {
           isLoadingPromoteTrack.value = false;
           selectedTrack.value = null;
@@ -228,15 +267,30 @@ class HomeController extends GetxController {
         }
       } else {
         isLoadingPromoteTrack.value = false;
-        showCustomSnackbar(
-            title: AppStaticString.failed,
-            message: AppStaticString.selectATrackFirst,
-            type: SnackBarType.failed);
+        showCustomSnackbar(title: AppStaticString.failed, message: AppStaticString.selectATrackFirst, type: SnackBarType.failed);
       }
     } else {
       isLoadingPromoteTrack.value = false;
       noInternetShowCustomSnackbar();
     }
+  }
+
+  void resetEventList() {
+    // eventList.clear();                 // Clear the current list
+    currentEventPage.value = 1; // Reset page number
+    totalEventPages.value = 7; // Reset total pages
+    itemsEventPerPage.value = 7; // Reset item limit
+    isEventLoadingMore.value = false; // Reset loading flags
+    // getEventListCall();
+  }
+
+  void resetTrackList() {
+    // eventList.clear();                 // Clear the current list
+    currentTrackPage.value = 1; // Reset page number
+    totalTrackPages.value = 7; // Reset total pages
+    itemsTrackPerPage.value = 7; // Reset item limit
+    isTrackLoadingMore.value = false; // Reset loading flags
+    // getEventListCall();
   }
 
   @override

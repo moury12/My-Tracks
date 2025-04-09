@@ -1,5 +1,4 @@
 
-import 'package:get/get.dart';
 
 class TrackForUserPanelModel {
   String? sId;
@@ -15,12 +14,12 @@ class TrackForUserPanelModel {
   List<String>? trackDays;
   List<String>? renters;
   List<String>? slots;
-  int? totalLikes;
-  int? totalReview;
+  String? totalLikes;
+  String? totalReview;
   String? createdAt;
   String? updatedAt;
-  int? iV;
-  int? totalTrackDayInMonth;
+  String? iV;
+  String? totalTrackDayInMonth;
   double? rating;
   bool? isLiked;
 
@@ -49,27 +48,27 @@ class TrackForUserPanelModel {
       });
 
   TrackForUserPanelModel.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
+    sId = json['_id'].toString()=="null"?"":json['_id'].toString();
     host = json['host'] != null ? new Host.fromJson(json['host']) : null;
-    trackName = json['trackName'];
-    category = json['category'];
+    trackName = json['trackName'].toString()=="null"?"":json['trackName'].toString();
+    category = json['category'].toString()=="null"?"":json['category'].toString();
     trackImage = json['track_image'].cast<String>();
-    address = json['address'];
+    address = json['address'].toString()=="null"?"":json['address'].toString();
     location = json['location'] != null
         ? new Location.fromJson(json['location'])
         : null;
-    description = json['description'];
-    status = json['status'];
+    description = json['description'].toString()=="null"?"":json['description'].toString();
+    status = json['status'].toString()=="null"?"":json['status'].toString();
     isPromoted = json['isPromoted'];
     trackDays = json['trackDays'].cast<String>();
     renters = json['renters'].cast<String>();
     slots = json['slots'].cast<String>();
-    totalLikes = json['totalLikes'];
-    totalReview = json['totalReview'];
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
-    iV = json['__v'];
-    totalTrackDayInMonth = json['totalTrackDayInMonth'];
+    totalLikes = json['totalLikes'].toString()=="null"?"":json['totalLikes'].toString();
+    totalReview = json['totalReview'].toString()=="null"?"":json['totalReview'].toString();
+    createdAt = json['createdAt'].toString()=="null"?"":json['createdAt'].toString();
+    updatedAt = json['updatedAt'].toString()=="null"?"":json['updatedAt'].toString();
+    iV = json['__v'].toString()=="null"?"":json['__v'].toString();
+    totalTrackDayInMonth = json['totalTrackDayInMonth'].toString()=="null"?"":json['totalTrackDayInMonth'].toString();
     rating = (json['rating'] as num?)?.toDouble() ?? 0.0;
     isLiked = json['isLiked'];
   }

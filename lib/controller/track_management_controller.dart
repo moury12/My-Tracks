@@ -34,7 +34,7 @@ class TrackManagementController extends GetxController {
   getEventListCall() async {
     if (NetworkController.to.isConnected.value) {
       isLoadingEventList.value = true;
-      eventList.value = await TrackEventService.getMyBusinessEvent();
+      eventList.value = await TrackEventService.getMyBusinessEvent(itemsEventPerPage: "100");
       if (eventList.isNotEmpty) {
         isLoadingEventList.value = false;
       } else {

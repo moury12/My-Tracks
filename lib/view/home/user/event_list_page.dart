@@ -32,25 +32,30 @@ class _EventListScreenState extends State<EventListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppbar(
-        tile: "Event List",
+    return PopScope(
+      onPopInvokedWithResult: (didPop, result) {
+        HomeUserController.to.resetEventList();
+      },
+      child: Scaffold(
+        appBar: CustomAppbar(
+          tile: "Event List",
+        ),
+        body: SingleChildScrollView(
+            controller: scrollController,
+            child: Column(
+              children: [
+                EventSearchListWidget(),
+                Padding(
+                  padding: padding12,
+                  child: Obx(
+                    () {
+                      return HomeUserController.to.isEventLoadingMore.value ? DefaultProgressIndicator(color: AppColors.primaryColor,) : SizedBox.shrink();
+                    },
+                  ),
+                )
+              ],
+            )),
       ),
-      body: SingleChildScrollView(
-          controller: scrollController,
-          child: Column(
-            children: [
-              EventSearchListWidget(),
-              Padding(
-                padding: padding12,
-                child: Obx(
-                  () {
-                    return HomeUserController.to.isEventLoadingMore.value ? DefaultProgressIndicator(color: AppColors.primaryColor,) : SizedBox.shrink();
-                  },
-                ),
-              )
-            ],
-          )),
     );
   }
 }

@@ -46,16 +46,16 @@ class CommonController extends GetxController {
 
         // Save the previous state for rollback
         final previousIsLiked = trackItem.isLiked;
-        final previousTotalLikes = trackItem.totalLikes ?? 0;
+        final previousTotalLikes = int.parse(trackItem.totalLikes?? "0") ;
 
         // Optimistically toggle the isLiked state
         trackItem.isLiked = !(trackItem.isLiked ?? false);
 
         // Update totalLikes optimistically
         if (trackItem.isLiked == true) {
-          trackItem.totalLikes = previousTotalLikes + 1;
+          trackItem.totalLikes = (previousTotalLikes + 1).toString();
         } else {
-          trackItem.totalLikes = previousTotalLikes - 1;
+          trackItem.totalLikes = (previousTotalLikes - 1).toString();
         }
 
         // Refresh the list to update the UI
@@ -71,16 +71,16 @@ class CommonController extends GetxController {
 
           // Adjust totalLikes if needed
           if (trackItem.isLiked == true && previousIsLiked != true) {
-            trackItem.totalLikes = previousTotalLikes + 1;
+            trackItem.totalLikes = (previousTotalLikes + 1).toString();
           } else if (trackItem.isLiked == false && previousIsLiked != false) {
-            trackItem.totalLikes = previousTotalLikes - 1;
+            trackItem.totalLikes = (previousTotalLikes - 1).toString();
           }
 
           HomeUserController.to.trackList.refresh();
         } else {
           // Rollback on failure
           trackItem.isLiked = previousIsLiked;
-          trackItem.totalLikes = previousTotalLikes;
+          trackItem.totalLikes = previousTotalLikes.toString();
 
           HomeUserController.to.trackList.refresh();
           throw Exception("Failed to update like status.");

@@ -23,7 +23,8 @@ class UserHomeService {
     String currentTrackPage = "1",
     String itemsTrackPerPage = "7",
     String totalTrackPages = "7",
-  }) async {
+  })
+  async {
     List<TrackForUserPanelModel> trackList = [];
     try {
       final url = Uri.parse(
@@ -68,7 +69,8 @@ class UserHomeService {
     String currentEventPage = "1",
     String itemsEventPerPage = "7",
     String totalEventPages = "7",
-  }) async {
+  })
+  async {
     List<EventForUserPanelModel> eventList = [];
     try {
       final url = Uri.parse(

@@ -19,8 +19,36 @@ import 'package:track_trek/view/manage/event_user_page.dart';
 import 'package:track_trek/view/manage/widgets/event_manage_card_widget.dart';
 import 'package:track_trek/view/manage/widgets/loading_widget.dart';
 
-class ManagementScreen extends StatelessWidget {
+import '../../core/components/custom_button.dart';
+
+class ManagementScreen extends StatefulWidget {
   const ManagementScreen({super.key});
+
+  @override
+  State<ManagementScreen> createState() => _ManagementScreenState();
+}
+
+class _ManagementScreenState extends State<ManagementScreen> {
+  final ScrollController scrollController = ScrollController();
+
+  @override
+  void initState() {
+    // HomeController.to.itemsEventPerPage.value=100;
+    // HomeController.to.getEventListCall();
+    HomeController.to.resetTrackList();
+    scrollController.addListener(
+      () {
+        if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
+          if (TrackManagementController.to.selectedTabIndex.value == 1) {
+            HomeController.to.getEventListCall(loadMore: true);
+          } else if (TrackManagementController.to.selectedTabIndex.value == 0) {
+            HomeController.to.getTrackListCall(loadMore: true);
+          }
+        }
+      },
+    );
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,35 +57,31 @@ class ManagementScreen extends StatelessWidget {
     ///
     TrackManagementController.to.tabContent.add(Padding(
       padding: padding12V,
-      child: Obx(
-       () {
-          return HomeController.to.isLoadingTrackList.value
-              ? const LoadingTrackListWidget()
-              : HomeController.to.trackList.isEmpty
-              ? const EmptyTextWidget(text: AppStaticString.trackNotFound)
-              : Column(
-            ///============================track part=============================///
-            children: List.generate(
-                HomeController.to.trackList.length,
-                (i) => TrackCardWidget(
-                      onActive: () {
-                        Navigator.pop(context);
-                        TrackManagementController.to.trackActiveDeactivateCall(
-                            trackId: HomeController.to.trackList[i].sId.toString(),
-                            status: "active");
-                      },
-                      onDeactivate: () {
-                        TrackManagementController.to.trackActiveDeactivateCall(
-                            trackId: HomeController.to.trackList[i].sId.toString(),
-                            status: "deactivated");
-                      },
-                      fromManage: true,
-                      react: false.obs,
-                      trackModel: HomeController.to.trackList[i],
-                    )),
-          );
-        }
-      ),
+      child: Obx(() {
+        return HomeController.to.isLoadingTrackList.value
+            ? const LoadingTrackListWidget()
+            : HomeController.to.trackList.isEmpty
+                ? const EmptyTextWidget(text: AppStaticString.trackNotFound)
+                : Column(
+                    ///============================track part=============================///
+                    children: List.generate(
+                        HomeController.to.trackList.length,
+                        (i) => TrackCardWidget(
+                              onActive: () {
+                                Navigator.pop(context);
+                                TrackManagementController.to
+                                    .trackActiveDeactivateCall(trackId: HomeController.to.trackList[i].sId.toString(), status: "active");
+                              },
+                              onDeactivate: () {
+                                TrackManagementController.to
+                                    .trackActiveDeactivateCall(trackId: HomeController.to.trackList[i].sId.toString(), status: "deactivated");
+                              },
+                              fromManage: true,
+                              react: false.obs,
+                              trackModel: HomeController.to.trackList[i],
+                            )),
+                  );
+      }),
     ));
 
     ///============================event part=============================///
@@ -74,39 +98,28 @@ class ManagementScreen extends StatelessWidget {
             fillColor: AppColors.blackBackgroundColor,
             hintColor: AppColors.whiteLightColor,
             hintText: "Select Event",
-            items: TrackManagementController
-                .to.eventList /*.map((element) => element.eventName).toList()*/,
+            items: TrackManagementController.to.eventList /*.map((element) => element.eventName).toList()*/,
             onChanged: (value) {
               TrackManagementController.to.selectedEvent.value = value;
             },
           ),
           TrackManagementController.to.selectedEvent.value == null ||
-                  TrackManagementController.to.selectedEvent.value!.slots ==
-                      null ||
-                  TrackManagementController
-                      .to.selectedEvent.value!.slots!.isEmpty
+                  TrackManagementController.to.selectedEvent.value!.slots == null ||
+                  TrackManagementController.to.selectedEvent.value!.slots!.isEmpty
               ? Padding(
                   padding: padding14,
-                  child: const EmptyTextWidget(
-                      text: AppStaticString.slotListIsEmpty),
+                  child: const EmptyTextWidget(text: AppStaticString.slotListIsEmpty),
                 )
               : Column(
                   children: List.generate(
-                      TrackManagementController
-                          .to.selectedEvent.value!.slots!.length,
+                      TrackManagementController.to.selectedEvent.value!.slots!.length,
                       (i) => Padding(
                             padding: padding12T,
                             child: MarronGradientContainerWidget(
                               child: TrackEventSlotWidget(
                                 onViewAllParticipant: () {
                                   HomeController.to.getEventParticipantListCall(
-                                    eventSlotID: TrackManagementController
-                                            .to
-                                            .selectedEvent
-                                            .value!
-                                            .slots![i]
-                                            .sId ??
-                                        '',
+                                    eventSlotID: TrackManagementController.to.selectedEvent.value!.slots![i].sId ?? '',
                                   );
                                   Get.toNamed(
                                     EventUserScreen.routeName,
@@ -114,8 +127,7 @@ class ManagementScreen extends StatelessWidget {
                                   );
                                 },
                                 needToShowSeat: true,
-                                eventSlots: TrackManagementController
-                                    .to.selectedEvent.value!.slots![i],
+                                eventSlots: TrackManagementController.to.selectedEvent.value!.slots![i],
                                 argument: 'track_management',
                               ),
                             ),
@@ -130,50 +142,62 @@ class ManagementScreen extends StatelessWidget {
     TrackManagementController.to.tabContent.add(Obx(() {
       return Padding(
         padding: padding12V,
-        child: TrackManagementController.to.isLoadingRentersList.value?
-        const UserInfoListLoading():TrackManagementController.to.renterList.isEmpty
-            ? const EmptyTextWidget(text: 'Renters not found')
-            : Column(
-                children: List.generate(
-                    TrackManagementController.to.renterList.length,
-                    (i) => Padding(
-                          padding: padding12T,
-                          child: MarronGradientContainerWidget(
-                            child: UserInfoContentWidget(
-                              rentersModel:
-                                  TrackManagementController.to.renterList[i],
-                            ),
-                          ),
-                        )),
-              ),
+        child: TrackManagementController.to.isLoadingRentersList.value
+            ? const UserInfoListLoading()
+            : TrackManagementController.to.renterList.isEmpty
+                ? const EmptyTextWidget(text: 'Renters not found')
+                : Column(
+                    children: List.generate(
+                        TrackManagementController.to.renterList.length,
+                        (i) => Padding(
+                              padding: padding12T,
+                              child: MarronGradientContainerWidget(
+                                child: UserInfoContentWidget(
+                                  rentersModel: TrackManagementController.to.renterList[i],
+                                ),
+                              ),
+                            )),
+                  ),
       );
     }));
 
     return Scaffold(
         body: CustomRefreshIndicator(
+      onRefresh: () async {
+        await TrackManagementController.to.refreshManageScreen();
+      },
+      child: SingleChildScrollView(
+        controller: scrollController,
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: Column(
+          children: [
+            Padding(
+              padding: padding16.copyWith(top: 0),
+              child: DynamicTabWidget(
+                  function: (val) async {
+                    TrackManagementController.to.selectedTabIndex.value = val;
 
-          onRefresh: () async{
-         await TrackManagementController.to.refreshManageScreen();
-          },
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
+                    if (val == 2) {
+                      String selectedDate = await selectDate(context);
+                      await TrackManagementController.to.getRentersListCall(date: selectedDate);
+                    }
+                  },
+                  tabs: TrackManagementController.to.tabs,
+                  tabContent: TrackManagementController.to.tabContent),
+            ),
+            if (TrackManagementController.to.selectedTabIndex.value == 0) Obx(
+                  () {
 
-                child: Padding(
-          padding: padding16.copyWith(top: 0),
-          child: DynamicTabWidget(
-              function: (val) async {
-                TrackManagementController.to.selectedTabIndex.value = val;
-
-                if (val == 2) {
-                  String selectedDate = await selectDate(context);
-                  await TrackManagementController.to
-                      .getRentersListCall(date: selectedDate);
-                }
+                return HomeController.to.isTrackLoadingMore.value
+                    ? DefaultProgressIndicator(
+                  color: AppColors.primaryColor,
+                )
+                    : SizedBox.shrink();
               },
-              tabs: TrackManagementController.to.tabs,
-              tabContent: TrackManagementController.to.tabContent),
-                ),
-              ),
-        ));
+            )
+          ],
+        ),
+      ),
+    ));
   }
 }

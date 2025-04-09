@@ -21,6 +21,7 @@ import 'package:track_trek/core/service/user-home/user_home_service.dart';
 class HomeUserController extends GetxController {
   static HomeUserController get to => Get.find();
   RxInt currentPage = 0.obs;
+  RxInt currentTabIndex = 0.obs;
   RxInt selectedIndexCategory = 0.obs;
   RxBool react = false.obs;
   Timer? timer;
@@ -151,6 +152,8 @@ class HomeUserController extends GetxController {
       }
       if (loadMore) {
         isTrackLoadingMore.value = true;
+        currentTrackPage.value++;
+
         // Don't increment page here - we'll do it after successful response
       } else {
         isLoadingTrackList.value = true;
@@ -160,7 +163,6 @@ class HomeUserController extends GetxController {
       isLoadingTrackList.value = false;
       isTrackLoadingMore.value = false;
       if (loadMore) {
-        currentEventPage.value++;
         trackList.addAll(trackInitialList);
       } else {
         trackList.value = trackInitialList;
@@ -173,13 +175,16 @@ class HomeUserController extends GetxController {
 
   getEventListCall({
     bool loadMore = false,
-  }) async {
+  })
+  async {
     if (NetworkController.to.isConnected.value) {
       if (loadMore && currentEventPage.value >= totalEventPages.value) {
         return;
       }
       if (loadMore) {
         isEventLoadingMore.value = true;
+        currentEventPage.value++;
+
         // Don't increment page here - we'll do it after successful response
       } else {
         isLoadingEventList.value = true;
@@ -196,7 +201,6 @@ class HomeUserController extends GetxController {
       isLoadingEventList.value = false;
       isEventLoadingMore.value = false;
       if (loadMore) {
-        currentEventPage.value++;
         eventList.addAll(eventInitialList);
       } else {
         eventList.value = eventInitialList;
@@ -260,5 +264,21 @@ class HomeUserController extends GetxController {
     });
 
     super.onInit();
+  }
+
+  void resetEventList() {
+    // eventList.clear();                 // Clear the current list
+    currentEventPage.value = 1;       // Reset page number
+    totalEventPages.value = 7;        // Reset total pages
+    itemsEventPerPage.value = 7;      // Reset item limit
+    isEventLoadingMore.value = false; // Reset loading flags
+    // getEventListCall();
+  } void resetTrackList() {
+    // eventList.clear();                 // Clear the current list
+    currentTrackPage.value = 1;       // Reset page number
+    totalTrackPages.value = 7;        // Reset total pages
+    itemsTrackPerPage.value = 7;      // Reset item limit
+    isTrackLoadingMore.value = false; // Reset loading flags
+    // getEventListCall();
   }
 }

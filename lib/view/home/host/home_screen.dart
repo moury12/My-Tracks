@@ -12,15 +12,41 @@ import 'package:track_trek/view/home/widgets/dynamic_tab_widget.dart';
 import 'package:track_trek/view/home/widgets/event_card_widget.dart';
 import 'package:track_trek/view/home/widgets/home_app_bar.dart';
 
+import '../../../core/components/custom_button.dart';
+import '../../../core/utils/app_color.dart';
 import '../widgets/gradient_container_widget.dart';
 import '../widgets/track_card_widget.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   final Function()? openDrawer;
   static const String routeName = '/home';
 
   const HomeScreen({super.key, this.openDrawer});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final ScrollController scrollController = ScrollController();
+
+  @override
+  void initState() {
+    HomeController.to.resetEventList();
+    HomeController.to.resetTrackList();
+    scrollController.addListener(
+          () {
+        if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
+          if (HomeController.to.currentTabIndex.value == 1) {
+            HomeController.to.getEventListCall(loadMore: true);
+          } else {
+            HomeController.to.getTrackListCall(loadMore: true);
+          }
+        }
+      },
+    );
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -35,9 +61,10 @@ class HomeScreen extends StatelessWidget {
       onRefresh: HomeController.to.refreshCall,
       child: Column(
         children: [
-          HomeAppBar(openDrawer: openDrawer),
+          HomeAppBar(openDrawer: widget.openDrawer),
           Expanded(
             child: ListView(
+              controller: scrollController,
               padding: padding16,
               children: [
                 // Dynamic Label Row
@@ -68,11 +95,26 @@ class HomeScreen extends StatelessWidget {
                 }),
                 DynamicTabWidget(
                   tabs: HomeController.to.tabs,
+                  function:    (p0) {
+                    HomeController.to.currentTabIndex.value=p0;
+                  },
                   tabContent: HomeController.to.tabContent,
                 )
               ],
             ),
           ),
+          Obx(
+                () {
+              bool isLoading = HomeController.to.currentTabIndex.value == 1
+                  ? HomeController.to.isEventLoadingMore.value
+                  : HomeController.to.isTrackLoadingMore.value;
+              return isLoading
+                  ? DefaultProgressIndicator(
+                color: AppColors.primaryColor,
+              )
+                  : SizedBox.shrink();
+            },
+          )
         ],
       ),
     );
