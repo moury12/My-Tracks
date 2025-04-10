@@ -41,7 +41,7 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
   @override
   void initState() {
     scrollController.addListener(
-          () {
+      () {
         if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
           HomeUserController.to.getTrackListCall(loadMore: true);
         }
@@ -117,6 +117,7 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
 
                                 return GestureDetector(
                                   onTap: () {
+                                    log("message");
                                     Get.toNamed(BookTrackJoinEventScreen.routeName, arguments: {'id': trackItem.track ?? '', 'type': 'track'});
                                   },
                                   child: Padding(
@@ -240,8 +241,12 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
             ),
           )),
           Obx(
-                () {
-              return HomeUserController.to.isTrackLoadingMore.value ? DefaultProgressIndicator(color: AppColors.primaryColor,) : SizedBox.shrink();
+            () {
+              return HomeUserController.to.isTrackLoadingMore.value
+                  ? DefaultProgressIndicator(
+                      color: AppColors.primaryColor,
+                    )
+                  : SizedBox.shrink();
             },
           )
         ],

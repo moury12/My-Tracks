@@ -31,6 +31,7 @@ class PromoteScreen extends StatelessWidget {
           spacing: 16.h,
           children: [
             Obx(() {
+
               return CustomDropdown<SingleTrackModel>(
                 isLoading: HomeController.to.isLoadingTrackList.value,
                 selectedValue: HomeController.to.selectedTrack.value,
@@ -40,7 +41,7 @@ class PromoteScreen extends StatelessWidget {
                 hintColor: AppColors.whiteLightColor,
                 hintText: AppStaticString.selectTrack,
                 items: HomeController.to
-                    .trackList /*.map((element) => element.eventName).toList()*/,
+                    .promoteTrackList /*.map((element) => element.eventName).toList()*/,
                 onChanged: (value) {
                   HomeController.to.selectedTrack.value = value;
                 },

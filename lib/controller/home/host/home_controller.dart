@@ -49,6 +49,7 @@ class HomeController extends GetxController {
   RxList<String> labelTabs = [AppStaticString.running, '', AppStaticString.booked].obs;
   var tabContent = <Widget>[].obs;
   RxList<SingleTrackModel> trackList = <SingleTrackModel>[].obs;
+  RxList<SingleTrackModel> promoteTrackList = <SingleTrackModel>[].obs;
   RxList<SingleEventModel> eventList = <SingleEventModel>[].obs;
   RxList<TrackParticipantsModel> trackParticipantList = <TrackParticipantsModel>[].obs;
   RxList<EventParticipantsModel> eventParticipantList = <EventParticipantsModel>[].obs;
@@ -97,6 +98,10 @@ class HomeController extends GetxController {
       final trackInitialList = await TrackEventService.getMyBusinessTrack(
           currentTrackPage: currentTrackPage.value.toString(),
           itemsTrackPerPage: itemsTrackPerPage.value.toString(),
+          totalTrackPages: totalTrackPages.value.toString());
+      promoteTrackList.value = await TrackEventService.getMyBusinessTrack(
+          currentTrackPage: currentTrackPage.value.toString(),
+        itemsTrackPerPage: "100",
           totalTrackPages: totalTrackPages.value.toString());
       isLoadingTrackList.value = false;
       isTrackLoadingMore.value = false;

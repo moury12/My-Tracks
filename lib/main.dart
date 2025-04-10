@@ -24,12 +24,8 @@ void main()async {
 /*  if (defaultTargetPlatform == TargetPlatform.android) {
     WebViewPlatform.instance = SurfaceAndroidViewController as WebViewPlatform?;
   }*/
-  runApp(DevicePreview(
-    enabled: !kReleaseMode,
-    builder: (context) {
-      return const MyApp();
-    }
-  ));
+  runApp( const MyApp()
+    );
 }
 
 class MyApp extends StatelessWidget {
