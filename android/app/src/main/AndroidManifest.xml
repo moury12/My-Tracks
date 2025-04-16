@@ -28,8 +28,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="http"
-                    android:host="209.97.134.184"
-                    android:port="8001" android:path="/" />
+                    android:host="mytrackss.com" />
+                <data android:scheme="https" />
 
 <!--                <data android:scheme="http"/>-->
             </intent-filter>
