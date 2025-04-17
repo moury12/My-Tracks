@@ -159,7 +159,9 @@ class HomeUserController extends GetxController {
         isLoadingTrackList.value = true;
         currentTrackPage.value = 1;
       }
-      final trackInitialList = await UserHomeService.getTrackListForUserPanel(category: categorySearch.value, lat: lat.value, long: lng.value);
+      final trackInitialList = await UserHomeService.getTrackListForUserPanel(category: categorySearch.value, lat: lat.value,
+          long: lng.value,totalTrackPages:totalTrackPages.value.toString() ,itemsTrackPerPage:itemsTrackPerPage.value.toString() ,
+          currentTrackPage: currentTrackPage.value.toString());
       isLoadingTrackList.value = false;
       isTrackLoadingMore.value = false;
       if (loadMore) {
@@ -196,6 +198,7 @@ class HomeUserController extends GetxController {
       final eventInitialList = await UserHomeService.getEventListForUserPanel(
           currentEventPage: currentEventPage.value.toString(),
           itemsEventPerPage: itemsEventPerPage.value.toString(),
+          totalEventPages: totalEventPages.value.toString(),
           lat: lat.value,
           long: lng.value);
       isLoadingEventList.value = false;
