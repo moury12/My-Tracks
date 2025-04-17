@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:track_trek/view/add/widgets/black_container_with_border.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 
 class LoadingCategoryListWidget extends StatelessWidget {

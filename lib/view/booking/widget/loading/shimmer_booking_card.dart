@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
-import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 import 'package:track_trek/view/manage/widgets/event_manage_card_widget.dart';
 
 class ShimmerBookingCard extends StatelessWidget {

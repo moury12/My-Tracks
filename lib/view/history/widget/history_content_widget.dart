@@ -16,7 +16,6 @@ import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/add/widgets/buttons.dart';
-import 'package:track_trek/view/add/widgets/delete_alert_dialog.dart';
 
 class HistoryContentWidget extends StatelessWidget {
   final bool? addRating;

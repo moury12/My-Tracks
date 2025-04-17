@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:track_trek/controller/profile_controller.dart';
 import 'package:track_trek/core/components/custom_network_image.dart';
-import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
 import 'package:track_trek/core/constant/image_constants.dart';
@@ -11,7 +10,6 @@ import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/init/api_client.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/home/host/widget/loading_event_card.dart';
-import 'package:track_trek/view/manage/widgets/loading_widget.dart';
 
 class HomeAppBar extends StatelessWidget {
   final Function()? openDrawer;

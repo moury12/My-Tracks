@@ -8,7 +8,6 @@ import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/view/add/create_track_event_page.dart';
 import 'package:track_trek/view/home/host/add_bank_acc_host.dart';
 import 'package:track_trek/view/initial/bottom_navigation_screen.dart';
-import 'package:track_trek/view/initial/splash.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../../../core/service/manage/manage_service.dart';
 

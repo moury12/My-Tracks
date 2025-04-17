@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:track_trek/controller/auth/auth_controller.dart';
 import 'package:track_trek/core/components/custom_appbar.dart';

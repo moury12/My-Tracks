@@ -1,19 +1,15 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:track_trek/controller/network_controller.dart';
 import 'package:track_trek/controller/profile_controller.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
-import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/model/category/category_model.dart';
 import 'package:track_trek/core/model/review/review_model.dart';
 import 'package:track_trek/core/model/track-event-for-userpanel/event_for_user_panel_model.dart';
 import 'package:track_trek/core/model/track-event-for-userpanel/track_for_user_panel.dart';
 import 'package:track_trek/core/model/track-event/promote_track_model.dart';
-import 'package:track_trek/core/model/track-event/promote_track_model.dart';
-import 'package:track_trek/core/model/track-event/single_event_model.dart';
 import 'package:track_trek/core/service/review/review_service.dart';
 import 'package:track_trek/core/service/track-event/track_event_service.dart';
 import 'package:track_trek/core/service/user-home/user_home_service.dart';

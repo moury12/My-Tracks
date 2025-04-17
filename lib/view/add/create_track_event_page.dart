@@ -13,8 +13,6 @@ import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/global/string_variable.dart';
-import 'package:track_trek/core/global/string_variable.dart';
-import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/view/add/widgets/upload_image_widget.dart';

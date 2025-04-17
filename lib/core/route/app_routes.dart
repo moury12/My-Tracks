@@ -14,16 +14,13 @@ import 'package:track_trek/view/book-track-join-event/book_track_join_event_page
 import 'package:track_trek/view/book-track-join-event/book_track_payment_page.dart';
 import 'package:track_trek/view/book-track-join-event/join_event_payment_page.dart';
 import 'package:track_trek/view/book-track-join-event/payment/checkout_booking_page.dart';
-import 'package:track_trek/view/book-track-join-event/payment/checkout_booking_page.dart';
 import 'package:track_trek/view/feedback/feedback_page.dart';
 import 'package:track_trek/view/history/history_page.dart';
-import 'package:track_trek/view/home/host/add_bank_acc_host.dart';
 import 'package:track_trek/view/home/host/add_bank_acc_host.dart';
 import 'package:track_trek/view/home/host/event_track_slot_page.dart';
 import 'package:track_trek/view/home/host/home_screen.dart';
 import 'package:track_trek/view/home/host/user_details_page.dart';
 import 'package:track_trek/view/home/user/event_list_page.dart';
-import 'package:track_trek/view/promote/payment_screen.dart';
 import 'package:track_trek/view/promote/payment_screen.dart';
 import 'package:track_trek/view/search/search_page.dart';
 import 'package:track_trek/view/initial/bottom_navigation_screen.dart';

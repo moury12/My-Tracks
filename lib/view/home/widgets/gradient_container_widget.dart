@@ -68,8 +68,8 @@ class BlackContainerWidget extends StatelessWidget {
         padding:padding??padding16,
         decoration:  BoxDecoration(
             borderRadius:BorderRadius.circular(radius??12.r) ,
-            border: Border.all(width:.5.w ,color:borderColor?? AppColors.greyColor.withOpacity(.5)),
-           color: fillColor??AppColors.blackExtraLightColor.withOpacity(.5)
+            border: Border.all(width:.5.w ,color:borderColor?? AppColors.greyColor.withValues(alpha:.5)),
+           color: fillColor??AppColors.blackExtraLightColor.withValues(alpha:.5)
         ),
         child: child?? Text(text??'Running',style: textStyle?? poppinsMedium.copyWith(
             fontSize: getFontSizeLarge(context),color:textColor??AppColors.whiteLightColor

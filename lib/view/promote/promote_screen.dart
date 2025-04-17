@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:track_trek/controller/booking/book_track_join_event_controller.dart';
 import 'package:track_trek/controller/common_controller.dart';
 import 'package:track_trek/controller/home/host/home_controller.dart';
 import 'package:track_trek/core/components/custom_button.dart';

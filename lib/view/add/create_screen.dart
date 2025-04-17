@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:track_trek/controller/common_controller.dart';
-import 'package:track_trek/controller/home/host/stripe_onboarding_controller.dart';
 import 'package:track_trek/controller/home/host/stripe_onboarding_controller.dart';
 import 'package:track_trek/core/components/custom_button.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
@@ -11,7 +9,6 @@ import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
-import 'package:track_trek/view/add/create_track_event_page.dart';
 
 class CreateScreen extends StatefulWidget {
   const CreateScreen({super.key});

@@ -19,7 +19,6 @@ import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/home/host/event_track_slot_page.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 import 'package:track_trek/view/home/widgets/track_card_widget.dart';
-import 'package:track_trek/view/manage/event_user_page.dart';
 
 class EventCardWidget extends StatelessWidget {
   final bool? noButton;
@@ -171,7 +170,7 @@ class EventCardWidget extends StatelessWidget {
                         ///==============dynamic event total slot==============///
 
                         Text(
-                          '${AppStaticString.totalSlot}${eventModel == null ? '12' : eventModel!.slots!.length ?? ''}',
+                          '${AppStaticString.totalSlot}${eventModel == null ? '12' : eventModel!.slots!.length }',
                           style: poppinsRegular.copyWith(
                               fontSize: getFontSizeSmall(context)),
                         ),

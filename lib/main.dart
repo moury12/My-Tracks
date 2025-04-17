@@ -1,5 +1,3 @@
-import 'package:device_preview/device_preview.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,7 +8,6 @@ import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/route/app_routes.dart';
 import 'package:track_trek/core/theme/theme.dart';
 import 'package:track_trek/view/initial/splash.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
   await ScreenUtil.ensureScreenSize();
@@ -41,8 +38,8 @@ class MyApp extends StatelessWidget {
 
        builder: (context, child) =>GetMaterialApp(
          useInheritedMediaQuery: true,
-         locale: DevicePreview.locale(context),
-         builder: DevicePreview.appBuilder,
+         // locale: DevicePreview.locale(context),
+         // builder: DevicePreview.appBuilder,
          title: 'My Tracks',
 initialBinding: CommonBinding(),
           theme: darkTheme,

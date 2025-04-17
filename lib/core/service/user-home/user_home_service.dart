@@ -7,12 +7,8 @@ import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/init/api_client.dart';
 import 'package:track_trek/core/init/hive_boxes.dart';
-import 'package:track_trek/core/model/category/category_model.dart';
-import 'package:track_trek/core/model/track-event-for-userpanel/event_for_user_panel_model.dart';
-import 'package:track_trek/core/model/track-event-for-userpanel/event_for_user_panel_model.dart';
 import 'package:track_trek/core/model/track-event-for-userpanel/event_for_user_panel_model.dart';
 import 'package:track_trek/core/model/track-event-for-userpanel/track_for_user_panel.dart';
-import 'package:track_trek/core/model/track-event/single_event_model.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 
 class UserHomeService {

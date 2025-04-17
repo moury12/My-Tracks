@@ -13,7 +13,6 @@ import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/init/api_client.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/core/utils/text_style.dart';
-import 'package:track_trek/view/add/create_track_event_slot.dart';
 import 'package:track_trek/view/add/widgets/select_date_button.dart';
 import 'package:track_trek/view/add/widgets/track_event_slot_widget.dart';
 import 'package:track_trek/view/book-track-join-event/book_track_payment_page.dart';
@@ -25,13 +24,8 @@ import 'package:track_trek/view/home/widgets/category_circle_widget.dart';
 import 'package:track_trek/view/home/widgets/event_card_widget.dart';
 import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 import 'package:track_trek/view/home/widgets/track_card_widget.dart';
-import 'package:track_trek/view/initial/bottom_navigation_screen.dart';
 import 'package:track_trek/view/manage/widgets/event_manage_card_widget.dart';
 
-import '../../controller/booking/booking_management_controller.dart';
-import '../../controller/home/user/home_user_controller.dart';
-import '../../controller/notification_controller.dart';
-import '../../controller/profile_controller.dart';
 
 class BookTrackJoinEventScreen extends StatefulWidget {
   static const String routeName = '/book-join-track-event';

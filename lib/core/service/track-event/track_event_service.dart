@@ -17,8 +17,6 @@ import 'package:track_trek/core/model/participants/event_participants_model.dart
 import 'package:track_trek/core/model/participants/track_participants_model.dart';
 import 'package:track_trek/core/model/renter/renters_model.dart';
 import 'package:track_trek/core/model/track-event/promote_track_model.dart';
-import 'package:track_trek/core/model/track-event/promote_track_model.dart';
-import 'package:track_trek/core/model/track-event/promote_track_model.dart';
 import 'package:track_trek/core/model/track-event/single_event_model.dart';
 import 'package:track_trek/core/model/track-event/single_track_model.dart';
 import 'package:track_trek/core/utils/helper_function.dart';

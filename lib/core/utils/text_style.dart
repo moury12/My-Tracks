@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 

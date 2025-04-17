@@ -1,9 +1,7 @@
 import 'package:get/get.dart';
 import 'package:track_trek/controller/network_controller.dart';
-import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/model/notification/Notification_model.dart';
 import 'package:track_trek/core/service/notification/notification_service.dart';
-import 'package:track_trek/core/utils/helper_function.dart';
 
 class NotificationController extends GetxController {
   static NotificationController get to =>Get.find();

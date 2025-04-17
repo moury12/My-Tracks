@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:track_trek/controller/home/user/home_user_controller.dart';
 import 'package:track_trek/controller/network_controller.dart';
-import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/init/api_client.dart';
 import 'package:track_trek/core/init/google_map_api_key.dart';
@@ -14,7 +13,6 @@ import 'package:track_trek/core/service/track-event/track_event_service.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:http/http.dart' as http;
 import 'package:track_trek/view/initial/bottom_navigation_screen.dart';
-import 'package:track_trek/view/initial/splash.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class CommonController extends GetxController {

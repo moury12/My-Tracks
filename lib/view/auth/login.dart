@@ -15,7 +15,6 @@ import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/auth/forget_password.dart';
 import 'package:track_trek/view/auth/sign_up.dart';
-import 'package:track_trek/view/initial/bottom_navigation_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   static const String routeName = '/login';

@@ -5,10 +5,7 @@ import 'package:track_trek/controller/booking/booking_management_controller.dart
 import 'package:track_trek/controller/common_controller.dart';
 import 'package:track_trek/core/components/custom_appbar.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
-import 'package:track_trek/core/constant/fontsize_constant.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
-import 'package:track_trek/core/utils/app_color.dart';
-import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/history/widget/history_content_widget.dart';
 import 'package:track_trek/view/manage/widgets/event_manage_card_widget.dart';
 

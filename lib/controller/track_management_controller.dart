@@ -4,10 +4,8 @@ import 'package:track_trek/controller/home/host/home_controller.dart';
 import 'package:track_trek/controller/network_controller.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/model/renter/renters_model.dart';
-import 'package:track_trek/core/model/renter/renters_model.dart';
 import 'package:track_trek/core/model/track-event/single_event_model.dart';
 import 'package:track_trek/core/service/track-event/track_event_service.dart';
-import 'package:track_trek/core/utils/helper_function.dart';
 
 class TrackManagementController extends GetxController {
   static TrackManagementController get to => Get.find();

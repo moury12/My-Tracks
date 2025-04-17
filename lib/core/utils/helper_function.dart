@@ -20,29 +20,10 @@ void showCustomSnackbar({
   required SnackBarType type,
   SnackPosition position = SnackPosition.BOTTOM, // Default position
 }) {
-  Color backgroundColor = AppColors.primaryColor;
-  IconData icon = Icons.sentiment_dissatisfied_outlined;
-  Color textColor = Colors.white;
-  switch (type) {
-    case SnackBarType.success:
-      backgroundColor = AppColors.greenColor;
-      icon = Icons.emoji_emotions_outlined;
-      break;
-    case SnackBarType.failed:
-      backgroundColor = Colors.redAccent;
-      Icons.sentiment_dissatisfied_outlined;
-      break;
-    // TODO: Handle this case.
-    case SnackBarType.alert:
-      backgroundColor = Colors.orangeAccent;
-      icon = Icons.sentiment_neutral;
-      break;
-    // TODO: Handle this case.
-  }
   Get.snackbar(
     title,
     message,
-    backgroundColor: AppColors.blackBackgroundColor.withOpacity(.5),
+    backgroundColor: AppColors.blackBackgroundColor.withValues(alpha:.5),
     padding: const EdgeInsets.all(12),
     margin: const EdgeInsets.all(12),
     colorText: AppColors.whiteLightColor,

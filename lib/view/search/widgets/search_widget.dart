@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
 import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
