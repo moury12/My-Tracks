@@ -44,7 +44,8 @@ Future<void> pickImages({
   bool allowMultiple = false,
   RxList<String>? uploadImages,
   RxString? singleImagePath,
-}) async {
+})
+async {
   try {
     final result = await FilePicker.platform.pickFiles(
         type: FileType.image, // Restrict to image files
