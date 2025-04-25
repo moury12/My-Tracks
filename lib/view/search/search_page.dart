@@ -20,70 +20,75 @@ class SearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const CustomAppbar(
-        tile: AppStaticString.search,
-      ),
-      body: Padding(
-        padding: padding16,
-        child: Obx(() {
-          return Column(
-            children: [
-              CustomTextField(
-                textEditingController:
-                    HomeUserController.to.searchFieldController.value,
-                onChanged: (val) {
-                  CommonController.to.fetchSuggestedPlaces(val);
-                },
-                hintText: AppStaticString.searchHerr,
-                prefixIcon: Padding(
-                  padding: padding8,
-                  child: Image.asset(
-                    searchIconUrl,
-                    height: 24.w,
-                    width: 24.w,
+    return PopScope(
+      onPopInvokedWithResult: (didPop, result) {
+
+      },
+      child: Scaffold(
+        appBar: const CustomAppbar(
+          tile: AppStaticString.search,
+        ),
+        body: Padding(
+          padding: padding16,
+          child: Obx(() {
+            return Column(
+              children: [
+                CustomTextField(
+                  textEditingController:
+                      HomeUserController.to.searchFieldController.value,
+                  onChanged: (val) {
+                    CommonController.to.fetchSuggestedPlaces(val);
+                  },
+                  hintText: AppStaticString.searchHerr,
+                  prefixIcon: Padding(
+                    padding: padding8,
+                    child: Image.asset(
+                      searchIconUrl,
+                      height: 24.w,
+                      width: 24.w,
+                    ),
                   ),
                 ),
-              ),
-              space12H,
-              CommonController.to.isLoadingOnLocationSuggestion.value
-                  ? DefaultProgressIndicator(
-                      color: AppColors.primaryColor,
-                    )
-                  : Column(
-                      children: List.generate(
-                        CommonController.to.addressSuggestion.length,
-                        (index) {
-                          final address =
-                              CommonController.to.addressSuggestion[index];
-                          return SearchAddress(
-                            onTap: () async {
-                              final placeId = address['place_id'];
-                              await CommonController.to.getLatLngFromPlace(
-                                  placeId,
-                                  lat: HomeUserController.to.lat,
-                                  lng: HomeUserController.to.lng,
-                                  selectedAddress:
-                                      HomeUserController.to.selectedAddress);
-                              HomeUserController
-                                      .to.searchFieldController.value.text =
-                                  HomeUserController.to.selectedAddress.value;
-
-                              CommonController.to.addressSuggestion.clear();
-                              HomeUserController.to. categorySearch.value='';
-                              HomeUserController.to.getTrackListCall();
-                              HomeUserController.to.getEventListCall();
-
-                              Get.toNamed(SearchResultScreen.routeName);
-                            },
-                            title: address['description'],
-                          );
-                        },
-                      ),
-                    )
-            ],
-          );
-        }),
+                space12H,
+                CommonController.to.isLoadingOnLocationSuggestion.value
+                    ? DefaultProgressIndicator(
+                        color: AppColors.primaryColor,
+                      )
+                    : Column(
+                        children: List.generate(
+                          CommonController.to.addressSuggestion.length,
+                          (index) {
+                            final address =
+                                CommonController.to.addressSuggestion[index];
+                            return SearchAddress(
+                              onTap: () async {
+                                final placeId = address['place_id'];
+                                await CommonController.to.getLatLngFromPlace(
+                                    placeId,
+                                    lat: HomeUserController.to.lat,
+                                    lng: HomeUserController.to.lng,
+                                    selectedAddress:
+                                        HomeUserController.to.selectedAddress);
+                                HomeUserController
+                                        .to.searchFieldController.value.text =
+                                    HomeUserController.to.selectedAddress.value;
+      
+                                CommonController.to.addressSuggestion.clear();
+                                HomeUserController.to. categorySearch.value='';
+                                HomeUserController.to.getTrackListCall();
+                                HomeUserController.to.getEventListCall();
+      
+                                Get.toNamed(SearchResultScreen.routeName);
+                              },
+                              title: address['description'],
+                            );
+                          },
+                        ),
+                      )
+              ],
+            );
+          }),
+        ),
       ),
     );
   }

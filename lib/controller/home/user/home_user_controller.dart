@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:track_trek/controller/common_controller.dart';
 import 'package:track_trek/controller/network_controller.dart';
 import 'package:track_trek/controller/profile_controller.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
@@ -43,6 +45,8 @@ class HomeUserController extends GetxController {
 
   ///========================= String dynamic variable =====================///
   RxString categorySearch = ''.obs;
+  RxString originalLat = ''.obs;
+  RxString originalLng = ''.obs;
   RxString lat = ''.obs;
   RxString lng = ''.obs;
   RxString selectedAddress = ''.obs;
@@ -139,7 +143,7 @@ class HomeUserController extends GetxController {
     reviewList.refresh();
   }
 
-  getTrackListCall({
+  Future<void> getTrackListCall({
     bool loadMore = false,
   }) async {
     if (NetworkController.to.isConnected.value) {
@@ -155,8 +159,12 @@ class HomeUserController extends GetxController {
         isLoadingTrackList.value = true;
         currentTrackPage.value = 1;
       }
-      final trackInitialList = await UserHomeService.getTrackListForUserPanel(category: categorySearch.value, lat: lat.value,
-          long: lng.value,totalTrackPages:totalTrackPages.value.toString() ,itemsTrackPerPage:itemsTrackPerPage.value.toString() ,
+      final trackInitialList = await UserHomeService.getTrackListForUserPanel(
+          category: categorySearch.value,
+          lat: lat.value,
+          long: lng.value,
+          totalTrackPages: totalTrackPages.value.toString(),
+          itemsTrackPerPage: itemsTrackPerPage.value.toString(),
           currentTrackPage: currentTrackPage.value.toString());
       isLoadingTrackList.value = false;
       isTrackLoadingMore.value = false;
@@ -171,10 +179,9 @@ class HomeUserController extends GetxController {
     }
   }
 
-  getEventListCall({
+  Future<void> getEventListCall({
     bool loadMore = false,
-  })
-  async {
+  }) async {
     if (NetworkController.to.isConnected.value) {
       if (loadMore && currentEventPage.value >= totalEventPages.value) {
         return;
@@ -226,14 +233,38 @@ class HomeUserController extends GetxController {
     categorySearch.value = '';
     getPromoteTrackListCall();
     getCategoryListCall();
-    getEventListCall();
-    getTrackListCall();
+    fetchLocation();
     updateCategorySearch();
+  }
+
+  void fetchLocation() async {
+    try {
+      isLoadingTrackList.value = true;
+      isLoadingEventList.value = true;
+      // Step 1: Fetch location
+      Position position = await CommonController.to.getCurrentLocation();
+      originalLat.value = position.latitude.toString();
+      originalLat.value = position.longitude.toString();
+      lat.value = position.latitude.toString();
+      lng.value = position.longitude.toString();
+      print('Latitude: ${lat.value}, Longitude: ${lng.value}');
+
+      // Step 2: Trigger loading flags and data calls
+
+      // Start all async operations in parallel
+      await Future.wait([
+        getEventListCall(),
+        getTrackListCall(),
+      ]);
+    } catch (e) {
+      print('Error fetching location or initializing data: $e');
+    }
   }
 
   @override
   void onInit() {
     onRefreshUserPanel();
+
     bool isForward = true;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       timer = Timer.periodic(const Duration(seconds: 2), (timer) {
@@ -267,16 +298,18 @@ class HomeUserController extends GetxController {
 
   void resetEventList() {
     // eventList.clear();                 // Clear the current list
-    currentEventPage.value = 1;       // Reset page number
-    totalEventPages.value = 7;        // Reset total pages
-    itemsEventPerPage.value = 7;      // Reset item limit
+    currentEventPage.value = 1; // Reset page number
+    totalEventPages.value = 7; // Reset total pages
+    itemsEventPerPage.value = 7; // Reset item limit
     isEventLoadingMore.value = false; // Reset loading flags
     // getEventListCall();
-  } void resetTrackList() {
+  }
+
+  void resetTrackList() {
     // eventList.clear();                 // Clear the current list
-    currentTrackPage.value = 1;       // Reset page number
-    totalTrackPages.value = 7;        // Reset total pages
-    itemsTrackPerPage.value = 7;      // Reset item limit
+    currentTrackPage.value = 1; // Reset page number
+    totalTrackPages.value = 7; // Reset total pages
+    itemsTrackPerPage.value = 7; // Reset item limit
     isTrackLoadingMore.value = false; // Reset loading flags
     // getEventListCall();
   }

@@ -1,0 +1,2 @@
+/Users/bdcalling/Documents/sadiaproject/my_track/android/app/.cxx/Debug/5y5g5w59/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/bdcalling/Documents/sadiaproject/my_track/android/app/.cxx/Debug/5y5g5w59/armeabi-v7a/CMakeFiles/rebuild_cache.dir

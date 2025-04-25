@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:track_trek/controller/home/user/home_user_controller.dart';
 import 'package:track_trek/controller/network_controller.dart';
@@ -112,7 +113,8 @@ class CommonController extends GetxController {
 
    WebViewController? webController;
 
-  void initializeWebViewController() {
+  void initializeWebViewController()
+  {
     if (webController != null) {
       return; // Avoid re-initialization
     }
@@ -158,7 +160,8 @@ class CommonController extends GetxController {
     required RxString lat,
     required RxString lng,
     required RxString selectedAddress,
-  }) async {
+  })
+  async {
     final String url =
         'https://maps.googleapis.com/maps/api/geocode/json?place_id=$placeId&key=${GoogleClient.googleMapUrl}';
 
@@ -214,6 +217,34 @@ class CommonController extends GetxController {
   }
 
   RxString image = ''.obs;
+  Future<Position> getCurrentLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Check if location services are enabled
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    // Check permission
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permission denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error('Location permission permanently denied');
+    }
+
+    // Get current location
+    return await Geolocator.getCurrentPosition(
+
+    );
+  }
   @override
   void onClose() {
     webController = null; // Clear WebViewController

@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:track_trek/controller/common_controller.dart';
 import 'package:track_trek/controller/home/user/home_user_controller.dart';
 import 'package:track_trek/core/components/custom_appbar.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
@@ -50,8 +51,9 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
     // Get.put(HomeUserController());
     return PopScope(
       onPopInvokedWithResult: (didPop, result) {
-        HomeUserController.to.lat.value = '';
-        HomeUserController.to.lng.value = '';
+
+        HomeUserController.to.lat.value = HomeUserController.to.originalLng.value;
+        HomeUserController.to.lng.value = HomeUserController.to.originalLng.value;
         HomeUserController.to.selectedAddress.value = '';
         HomeUserController.to.searchFieldController.value.clear();
         HomeUserController.to.getTrackListCall();
