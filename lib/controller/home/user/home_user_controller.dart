@@ -145,6 +145,8 @@ class HomeUserController extends GetxController {
 
   Future<void> getTrackListCall({
     bool loadMore = false,
+    String ? latitude,
+    String ? lngi
   }) async {
     if (NetworkController.to.isConnected.value) {
       if (loadMore && currentTrackPage.value >= totalTrackPages.value) {
@@ -161,8 +163,8 @@ class HomeUserController extends GetxController {
       }
       final trackInitialList = await UserHomeService.getTrackListForUserPanel(
           category: categorySearch.value,
-          lat: lat.value,
-          long: lng.value,
+          lat:latitude?? lat.value,
+          long: lngi?? lng.value,
           totalTrackPages: totalTrackPages.value.toString(),
           itemsTrackPerPage: itemsTrackPerPage.value.toString(),
           currentTrackPage: currentTrackPage.value.toString());
@@ -181,6 +183,8 @@ class HomeUserController extends GetxController {
 
   Future<void> getEventListCall({
     bool loadMore = false,
+    String ? latitude,
+    String ? lngi
   }) async {
     if (NetworkController.to.isConnected.value) {
       if (loadMore && currentEventPage.value >= totalEventPages.value) {
@@ -202,8 +206,8 @@ class HomeUserController extends GetxController {
           currentEventPage: currentEventPage.value.toString(),
           itemsEventPerPage: itemsEventPerPage.value.toString(),
           totalEventPages: totalEventPages.value.toString(),
-          lat: lat.value,
-          long: lng.value);
+        lat:latitude?? lat.value,
+        long: lngi?? lng.value,);
       isLoadingEventList.value = false;
       isEventLoadingMore.value = false;
       if (loadMore) {

@@ -20,6 +20,8 @@ class SearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String lat ="";
+    String lng ="";
     return PopScope(
       onPopInvokedWithResult: (didPop, result) {
 
@@ -65,8 +67,8 @@ class SearchScreen extends StatelessWidget {
                                 final placeId = address['place_id'];
                                 await CommonController.to.getLatLngFromPlace(
                                     placeId,
-                                    lat: HomeUserController.to.lat,
-                                    lng: HomeUserController.to.lng,
+                                    lat: HomeUserController.to.originalLat,
+                                    lng: HomeUserController.to.originalLng,
                                     selectedAddress:
                                         HomeUserController.to.selectedAddress);
                                 HomeUserController
@@ -75,8 +77,8 @@ class SearchScreen extends StatelessWidget {
       
                                 CommonController.to.addressSuggestion.clear();
                                 HomeUserController.to. categorySearch.value='';
-                                HomeUserController.to.getTrackListCall();
-                                HomeUserController.to.getEventListCall();
+                                HomeUserController.to.getTrackListCall(latitude:HomeUserController.to.originalLat.value,lngi:HomeUserController.to.originalLng.value  );
+                                HomeUserController.to.getEventListCall(latitude:HomeUserController.to.originalLat.value,lngi:HomeUserController.to.originalLng.value);
       
                                 Get.toNamed(SearchResultScreen.routeName);
                               },

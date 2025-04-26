@@ -24,64 +24,72 @@ class HomeAppBar extends StatelessWidget {
       padding: paddingH16V6,
       child: Obx(
          () {
-          return  Row(
-                children: [
-                  ProfileController.to.isLoadingUserData.value
-                      ?userInfoLoadingWidget(context):   Row(
-                              children: [
-                  ProfileController.to.userModel.value.profileImage != null &&
-                      ProfileController.to.userModel.value.profileImage!.isNotEmpty
-                      ? CustomNetworkImage(
-                    imageErrorUrl: dummyProfileImgUrl,
-                    boxShape: BoxShape.circle,
-                    imageUrl:
-                    '${ApiClient.baseUrl}/${ProfileController.to.userModel.value.profileImage}',
-                    height: 52.w,
-                    width: 52.w,
-                  )
-                      : Image.asset(
-                    dummyProfileImgUrl,
-                    height: 52.w,
-                  ),
-                  space12W,
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        ProfileController.to.userModel.value.name ??
-                            'n/a',
-                        style: poppinsMedium.copyWith(
-                            fontSize: getFontSizeLarge(context)),
-                      ),
-                      Row(
+          return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ProfileController.to.isLoadingUserData.value
+                  ? userInfoLoadingWidget(context)
+                  : Flexible( // 👈 Wrap here
+                child: Row(
+
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ProfileController.to.userModel.value.profileImage != null &&
+                        ProfileController.to.userModel.value.profileImage!.isNotEmpty
+                        ? CustomNetworkImage(
+                      imageErrorUrl: dummyProfileImgUrl,
+                      boxShape: BoxShape.circle,
+                      imageUrl: '${ApiClient.baseUrl}/${ProfileController.to.userModel.value.profileImage}',
+                      height: 52.w,
+                      width: 52.w,
+                    )
+                        : Image.asset(
+                      dummyProfileImgUrl,
+                      height: 52.w,
+                    ),
+                    space12W,
+                    Expanded( // ✅ this is now safe
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Image.asset(
-                            userLocationIconUrl,
-                            height: 21.w,
-                          ),
                           Text(
-                            ProfileController.to.userModel.value.address ??
-                                'n/a',
-                            style: poppinsMedium.copyWith(
-                                fontSize: getFontSizeSemiSmall(context)),
+                            ProfileController.to.userModel.value.name ?? 'n/a',
+                            style: poppinsMedium.copyWith(fontSize: getFontSizeLarge(context)),
+                          ),
+                          Row(
+                            children: [
+                              Image.asset(
+                                userLocationIconUrl,
+                                height: 21.w,
+                              ),
+                              Flexible(
+                                child: Text(
+                                  ProfileController.to.userModel.value.address ?? 'n/a',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: poppinsMedium.copyWith(
+                                    fontSize: getFontSizeSemiSmall(context),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
+                ),
+              ),
+              GestureDetector(
+                onTap: openDrawer ?? () {},
+                child: Image.asset(
+                  drawerIconUrl,
+                  height: 50.w,
+                ),
+              ),
+            ],
+          );
 
-                              ],
-                            ),
-                  Spacer(),
-                  GestureDetector(
-                      onTap: openDrawer ?? () {},
-                      child: Image.asset(
-                        drawerIconUrl,
-                        height: 50.w,
-                      ))
-                ],
-              );
-        }
+         }
       ),
     );
   }

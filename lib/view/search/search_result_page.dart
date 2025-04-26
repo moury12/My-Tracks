@@ -52,8 +52,8 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
     return PopScope(
       onPopInvokedWithResult: (didPop, result) {
 
-        HomeUserController.to.lat.value = HomeUserController.to.originalLng.value;
-        HomeUserController.to.lng.value = HomeUserController.to.originalLng.value;
+        HomeUserController.to.originalLng.value="";
+     HomeUserController.to.originalLng.value="";
         HomeUserController.to.selectedAddress.value = '';
         HomeUserController.to.searchFieldController.value.clear();
         HomeUserController.to.getTrackListCall();
@@ -71,7 +71,7 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
                 function: (p0) {
                   HomeUserController.to.currentTabIndex.value = p0;
                   if (p0 == 1) {
-                    HomeUserController.to.getEventListCall();
+                    HomeUserController.to.getEventListCall(latitude:HomeUserController.to.originalLat.value,lngi:HomeUserController.to.originalLng.value);
                   }
                 },
                 tabs: HomeUserController.to.tabs,

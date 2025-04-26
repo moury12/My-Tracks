@@ -51,6 +51,7 @@ class ProfileController extends GetxController {
       TextEditingController().obs;
 
   RxString uploadProfileImg = ''.obs;
+  RxString selectedAddress = ''.obs;
   getUserProfileData() async {
     if (NetworkController.to.isConnected.value) {
       isLoadingUserData.value = true;

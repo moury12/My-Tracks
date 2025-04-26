@@ -19,6 +19,10 @@ import 'package:track_trek/view/home/widgets/gradient_container_widget.dart';
 import 'package:track_trek/view/home/widgets/track_card_widget.dart';
 import 'package:track_trek/view/manage/widgets/event_manage_card_widget.dart';
 
+import '../../controller/common_controller.dart';
+import '../../controller/home/user/home_user_controller.dart';
+import '../search/widgets/search_widget.dart';
+
 class ProfileScreen extends StatelessWidget {
   final bool? showAppbar;
   static const String routeName = '/profile';
@@ -182,10 +186,37 @@ class ProfileScreen extends StatelessWidget {
                   Obx(() {
                     return CustomTextField(
                       title: AppStaticString.location,
+                      onChanged: (val) {
+                        CommonController.to.fetchSuggestedPlaces(val);
+                      },
                       isEnable:
                           argument != null && argument == 'edit' ? true : false,
                       textEditingController:
                           ProfileController.to.locationController.value,
+                    );
+                  }),
+                  Obx(() {
+                    return CommonController.to.isLoadingOnLocationSuggestion.value
+                        ? DefaultProgressIndicator(
+                      color: AppColors.primaryColor,
+                    )
+                        : Column(
+                      children: List.generate(
+                        CommonController.to.addressSuggestion.length,
+                            (index) {
+                          final address =
+                          CommonController.to.addressSuggestion[index];
+                          return SearchAddress(
+                            onTap: () async {
+
+                              ProfileController.to.locationController.value.text =
+                                  address["description"].toString();
+                              CommonController.to.addressSuggestion.clear();
+                            },
+                            title: address['description'],
+                          );
+                        },
+                      ),
                     );
                   }),
                   argument != null && argument == 'edit'
@@ -193,6 +224,7 @@ class ProfileScreen extends StatelessWidget {
                       () {
                           return CustomButton(
                                           isLoading: ProfileController.to.isLoadingUpdateProfile.value,
+
                               onTap: ()async {
                                await ProfileController.to.updateProfileRequest();
                               },
