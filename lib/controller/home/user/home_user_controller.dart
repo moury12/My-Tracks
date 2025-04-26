@@ -147,7 +147,8 @@ class HomeUserController extends GetxController {
     bool loadMore = false,
     String ? latitude,
     String ? lngi
-  }) async {
+  })
+  async {
     if (NetworkController.to.isConnected.value) {
       if (loadMore && currentTrackPage.value >= totalTrackPages.value) {
         return;
@@ -185,7 +186,8 @@ class HomeUserController extends GetxController {
     bool loadMore = false,
     String ? latitude,
     String ? lngi
-  }) async {
+  })
+  async {
     if (NetworkController.to.isConnected.value) {
       if (loadMore && currentEventPage.value >= totalEventPages.value) {
         return;
@@ -231,14 +233,15 @@ class HomeUserController extends GetxController {
 
   ///=========================== Refresh method ===========================///
   onRefreshUserPanel() {
+    categorySearch.value = '';
     Get.put(ProfileController());
     ProfileController.to.getUserProfileData();
     selectedIndexCategory.value = 0;
-    categorySearch.value = '';
+
     getPromoteTrackListCall();
     getCategoryListCall();
     fetchLocation();
-    updateCategorySearch();
+    // updateCategorySearch();
   }
 
   void fetchLocation() async {

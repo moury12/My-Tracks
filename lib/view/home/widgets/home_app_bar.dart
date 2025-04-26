@@ -28,7 +28,7 @@ class HomeAppBar extends StatelessWidget {
             children: [
               ProfileController.to.isLoadingUserData.value
                   ? userInfoLoadingWidget(context)
-                  : Flexible( // 👈 Wrap here
+                  : Flexible(
                 child: Row(
 
                   mainAxisSize: MainAxisSize.min,
