@@ -380,12 +380,11 @@ class TrackCardWidget extends StatelessWidget {
                               function: () async {
                                 const String deepLink = '${ApiClient.baseUrl}/';
 
-                                const String fallbackLink =
-                                    'https://play.google.com/store/apps/details?id=com.mytracksdarren.roe';
+
                                 final String trackId = sId;
                                 final String type = 'track';
                                 final String fullLink =
-                                    '$deepLink?trackId=$trackId&type=$type&fallback=$fallbackLink';
+                                    '$deepLink?trackId=$trackId&type=$type';
                                 Share.share(
                                   fullLink,
                                 );
