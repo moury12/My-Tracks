@@ -240,11 +240,13 @@ class TrackCardWidget extends StatelessWidget {
                 ? const SizedBox.shrink()
                 : Row(
                     children: [
-                      Flexible(
+            trackModel!.renters != null&&trackModel!.renters!.isNotEmpty
+            ?   Flexible(
                         flex: 5,
                         child: SizedBox(
                           height: 45.w,
-                          child: Stack(
+                          child:
+                             Stack(
                             children: List.generate(
                                 trackModel != null &&
                                         trackModel!.renters != null
@@ -267,7 +269,7 @@ class TrackCardWidget extends StatelessWidget {
                                         : const ProfileCircleImageWidget())),
                           ),
                         ),
-                      ),
+                      ):Expanded(flex:4,child: Text("No Renters!!")),
                       space8W,
                       Flexible(
                           flex: 4,
@@ -285,7 +287,7 @@ class TrackCardWidget extends StatelessWidget {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Expanded(
+                                Flexible(
                                   child: Padding(
                                     padding: padding12H,
                                     child: Text(AppStaticString.viewAllSlot,

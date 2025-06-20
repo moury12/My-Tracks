@@ -49,7 +49,7 @@ class DynamicTabWidget extends StatelessWidget {
               onTap: function ?? (value) {},
               tabs: tabs
                   .map((tabName) => Padding(
-                        padding: padding16b24,
+                        padding: padding16.copyWith(top: 6),
                         child: FittedBox(
                           child: Text(
                             tabName,

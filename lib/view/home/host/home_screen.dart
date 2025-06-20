@@ -34,23 +34,22 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     HomeController.to.resetEventList();
     HomeController.to.resetTrackList();
-    scrollController.addListener(
-          () {
-        if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
-          if (HomeController.to.currentTabIndex.value == 1) {
-            HomeController.to.getEventListCall(loadMore: true);
-          } else {
-            HomeController.to.getTrackListCall(loadMore: true);
-          }
+
+    scrollController.addListener(() {
+      if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
+        if (HomeController.to.currentTabIndex.value == 1) {
+          HomeController.to.getEventListCall(loadMore: true);
+        } else {
+          HomeController.to.getTrackListCall(loadMore: true);
         }
-      },
-    );
+      }
+    });
+
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
-
-
     // Initial tab content setup
     HomeController.to.tabContent.addAll([
       const TrackListWidget(),
@@ -59,62 +58,124 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return CustomRefreshIndicator(
       onRefresh: HomeController.to.refreshCall,
-      child: Column(
-        children: [
-          HomeAppBar(openDrawer: widget.openDrawer),
-          Expanded(
-            child: ListView(
-              controller: scrollController,
-              padding: padding16,
-              children: [
-                // Dynamic Label Row
-                Obx(() {
-                  return Row(
-                    children: [
-                      ...List.generate(
-                        HomeController.to.labelTabs.length,
-                        (index) => HomeController.to.selectedLabel.value == index
-                            ? Expanded(
-                                child: GradientContainerWidget(
-                                  text: HomeController.to.labelTabs[index],
-                                ),
-                              )
-                            : HomeController.to.labelTabs[index].isEmpty
-                                ? space16W
-                                : Expanded(
-                                    child: BlackContainerWidget(
-                                      onTap: () {
-                                        HomeController.to.handleLabelChange(index: index);
-                                      },
-                                      text: HomeController.to.labelTabs[index],
-                                    ),
-                                  ),
+      child: CustomScrollView(
+        controller: scrollController,
+        slivers: [
+          /// App Bar
+          SliverToBoxAdapter(child: HomeAppBar(openDrawer: widget.openDrawer)),
+
+          /// Dynamic Labels
+          SliverToBoxAdapter(
+            child: Obx(() {
+              return Padding(
+                padding: paddingH16V6.copyWith(bottom: 0),
+                child: Row(
+                  children: [
+                    ...List.generate(
+                      HomeController.to.labelTabs.length,
+                          (index) => HomeController.to.selectedLabel.value == index
+                          ? Expanded(
+                        child: GradientContainerWidget(
+                          text: HomeController.to.labelTabs[index],
+                        ),
+                      )
+                          : HomeController.to.labelTabs[index].isEmpty
+                          ? space16W
+                          : Expanded(
+                        child: BlackContainerWidget(
+                          onTap: () {
+                            HomeController.to.handleLabelChange(index: index);
+                          },
+                          text: HomeController.to.labelTabs[index],
+                        ),
                       ),
-                    ],
-                  );
-                }),
-                DynamicTabWidget(
-                  tabs: HomeController.to.tabs,
-                  function:    (p0) {
-                    HomeController.to.currentTabIndex.value=p0;
-                  },
-                  tabContent: HomeController.to.tabContent,
-                )
-              ],
+                    ),
+                  ],
+                ),
+              );
+            }),
+          ),
+
+          /// Dynamic Tabs (track/event switch)
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: padding16H,
+              child: DynamicTabWidget(
+                tabs: HomeController.to.tabs,
+                function: (p0) {
+                  HomeController.to.currentTabIndex.value = p0;
+                },
+                tabContent: HomeController.to.tabContent,
+              ),
             ),
           ),
-          Obx(
-                () {
-              bool isLoading = HomeController.to.currentTabIndex.value == 1
-                  ? HomeController.to.isEventLoadingMore.value
-                  : HomeController.to.isTrackLoadingMore.value;
-              return isLoading
-                  ? DefaultProgressIndicator(
-                color: AppColors.primaryColor,
-              )
-                  : SizedBox.shrink();
-            },
-          )
+
+          /// Track/Event List
+          Obx(() {
+            final isTrackTab = HomeController.to.currentTabIndex.value == 0;
+            final isLoading = isTrackTab
+                ? HomeController.to.isLoadingTrackList.value
+                : HomeController.to.isLoadingEventList.value;
+
+            final isEmpty = isTrackTab
+                ? HomeController.to.trackList.isEmpty
+                : HomeController.to.eventList.isEmpty;
+
+            if (isLoading) {
+              return SliverToBoxAdapter(
+                child: Padding(
+                  padding: padding6V,
+                  child: isTrackTab
+                      ? const LoadingTrackListWidget()
+                      : const ListOfEventLoadingWidget(),
+                ),
+              );
+            }
+
+            if (isEmpty) {
+              return SliverToBoxAdapter(
+                child: Padding(
+                  padding: padding12V,
+                  child: Text(
+                    isTrackTab ? AppStaticString.trackNotFound : AppStaticString.eventNotFound,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                ),
+              );
+            }
+
+            final list = isTrackTab ? HomeController.to.trackList : HomeController.to.eventList;
+
+            return SliverList(
+              delegate: SliverChildBuilderDelegate(
+                    (context, i) {
+                  return isTrackTab
+                      ? TrackCardWidget(trackModel:HomeController.to.trackList[i])
+                      : EventCardWidget(eventModel: HomeController.to.eventList[i]);
+                },
+                childCount: list.length,
+              ),
+            );
+          }),
+
+          /// Bottom loading indicator
+          SliverToBoxAdapter(
+            child: Obx(() {
+              final isTrackTab = HomeController.to.currentTabIndex.value == 0;
+              final isLoadingMore = isTrackTab
+                  ? HomeController.to.isTrackLoadingMore.value
+                  : HomeController.to.isEventLoadingMore.value;
+
+              return isLoadingMore
+                  ? Center(
+                    child: Padding(
+                      padding:padding14,
+                      child: DefaultProgressIndicator(color: AppColors.primaryColor,),
+                    ),
+                  )
+                  : const SizedBox.shrink();
+            }),
+          ),
         ],
       ),
     );

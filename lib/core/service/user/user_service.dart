@@ -33,7 +33,10 @@ class UserService {
       log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {
         user = UserModel.fromJson(responseData['data']);
-        return user;
+
+        if (user.profileImage != null && user.profileImage!.isNotEmpty) {
+          await preloadImagesFromUrls([user.profileImage.toString()]);
+        } return user;
       } else {
         showCustomSnackbar(
             title: AppStaticString.failed,

@@ -42,6 +42,19 @@ class UserHomeService {
       if (responseData['success'] != null && responseData['success'] == true) {
         if (responseData['data']["tracks"] is List) {
           trackList = (responseData['data']["tracks"] as List).map((e) => TrackForUserPanelModel.fromJson(e)).toList();
+          final imageUrls = trackList
+              .map((cat) {
+            if (cat.trackImage != null && cat.trackImage!.isNotEmpty) {
+              return "${ApiClient.baseUrl}/${cat.trackImage![0]}";
+            }
+            return null;
+          })
+              .whereType<String>() // filters out nulls safely
+              .where((url) => url.isNotEmpty)
+              .toList();
+
+          preloadImagesFromUrls(imageUrls);
+
         }
         if (responseData["data"]['pagination'] != null) {
           currentTrackPage = responseData["data"]['pagination']['page'] ?? 1;
@@ -88,6 +101,18 @@ class UserHomeService {
       if (responseData['success'] != null && responseData['success'] == true) {
         if (responseData['data']["events"] is List) {
           eventList = (responseData['data']["events"] as List).map((e) => EventForUserPanelModel.fromJson(e)).toList();
+          final imageUrls = eventList
+              .map((cat) {
+            if (cat.eventImage != null && cat.eventImage!.isNotEmpty) {
+              return "${ApiClient.baseUrl}/${cat.eventImage![0]}";
+            }
+            return null;
+          })
+              .whereType<String>() // filters out nulls safely
+              .where((url) => url.isNotEmpty)
+              .toList();
+
+          preloadImagesFromUrls(imageUrls);
         }
         if (responseData["data"]['pagination'] != null) {
           currentEventPage = responseData["data"]['pagination']['page'] ?? 1;

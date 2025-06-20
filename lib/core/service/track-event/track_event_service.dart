@@ -170,7 +170,14 @@ class TrackEventService {
           final data = responseData['data']['category'] as List<dynamic>?;
           if (data != null) {
             category = data.map((e) => CategoryModel.fromJson(e as Map<String, dynamic>)).toList();
-          }
+
+            final imageUrls =
+            category
+                .map((cat) => "${ApiClient.baseUrl}/${cat.categoryImage}")
+                .where((url) => url.isNotEmpty)
+                .toList();
+
+            preloadImagesFromUrls(imageUrls);}
         } else {
           // Handle API-level errors
           showCustomSnackbar(
@@ -219,6 +226,15 @@ class TrackEventService {
           final data = responseData['data'] as List<dynamic>?;
           if (data != null) {
             promoteTrackList = data.map((e) => PromoteTrackModel.fromJson(e as Map<String, dynamic>)).toList();
+
+            final imageUrls =
+            promoteTrackList
+                .map((cat) => "${ApiClient.baseUrl}/${cat.bannerImage}")
+                .where((url) => url.isNotEmpty)
+                .toList();
+
+            preloadImagesFromUrls(imageUrls);
+
           }
         } else {
           // Handle API failure
@@ -246,7 +262,8 @@ class TrackEventService {
   static Future<List<TrackSlots>> getSlotListCall({
     required String date,
     required String trackId,
-  }) async {
+  })
+  async {
     List<TrackSlots> slotList = [];
     try {
       final url = Uri.parse('${ApiClient.searchForSlotUrl}?${date.isNotEmpty ? 'date=$date&' : ''}trackId=$trackId');
@@ -281,7 +298,8 @@ class TrackEventService {
 
   static Future<List<TrackHistoryRunningModel>> getTrackBookingCall({
     String history = '',
-  }) async {
+  })
+  async {
     List<TrackHistoryRunningModel> trackBookingList = [];
     try {
       final url = Uri.parse('${ApiClient.getBookingUrl}${history.isNotEmpty ? '?history=yes' : ''}');
@@ -335,7 +353,8 @@ class TrackEventService {
     required String trackId,
     required String totalTrackDayInMonth,
     required List<String> trackDays,
-  }) async {
+  })
+  async {
     try {
       final url = Uri.parse(ApiClient.updateTrackUrl);
       final headers = {
@@ -374,7 +393,8 @@ class TrackEventService {
     required String currency,
     required String maxPeople,
     required String description,
-  }) async {
+  })
+  async {
     try {
       final url = Uri.parse(ApiClient.createTrackSlotUrl);
       final headers = {
@@ -417,7 +437,8 @@ class TrackEventService {
     required String numOfPeople,
     required String date,
     required String currency,
-  }) async {
+  })
+  async {
     try {
       final url = Uri.parse(ApiClient.getBookASlotUrl);
       final headers = {
@@ -466,6 +487,14 @@ class TrackEventService {
       log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {
         singleTrackDetails = SingleTrackModel.fromJson(responseData['data']);
+       if(singleTrackDetails.trackImage!=null) {
+          final imageUrls = singleTrackDetails.trackImage!
+              .map((cat) => "${ApiClient.baseUrl}/${cat}")
+              .where((url) => url.isNotEmpty)
+              .toList();
+
+          preloadImagesFromUrls(imageUrls);
+        }
         return singleTrackDetails;
       } else {
         showCustomSnackbar(title: AppStaticString.failed, message: responseData['message'], type: SnackBarType.failed);
@@ -636,6 +665,15 @@ class TrackEventService {
       log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {
         singleEventDetails = SingleEventModel.fromJson(responseData['data']);
+
+        if(singleEventDetails.eventImage!=null) {
+          final imageUrls = singleEventDetails.eventImage!
+              .map((cat) => "${ApiClient.baseUrl}/${cat}")
+              .where((url) => url.isNotEmpty)
+              .toList();
+
+          preloadImagesFromUrls(imageUrls);
+        }
         return singleEventDetails;
       } else {
         showCustomSnackbar(title: AppStaticString.failed, message: responseData['message'], type: SnackBarType.failed);
@@ -829,7 +867,7 @@ class TrackEventService {
 
 static Future<List<SingleTrackModel>> getMyBusinessTrack({
     String currentTrackPage = "1",
-    String itemsTrackPerPage = "7",
+    String itemsTrackPerPage = "5",
     String totalTrackPages = "7",
   }) async {
     List<SingleTrackModel> myTrackList = [];
@@ -851,11 +889,37 @@ static Future<List<SingleTrackModel>> getMyBusinessTrack({
       if (responseData['success'] != null && responseData['success'] == true) {
         if (responseData['data']["tracks"] is List) {
           myTrackList = (responseData['data']["tracks"] as List).map((e) => SingleTrackModel.fromJson(e)).toList();
+          final imageUrls = myTrackList
+              .map((cat) {
+            if (cat.trackImage != null && cat.trackImage!.isNotEmpty) {
+              return "${ApiClient.baseUrl}/${cat.trackImage![0]}";
+            }
+            return null;
+          })
+              .whereType<String>() // filters out nulls safely
+              .where((url) => url.isNotEmpty)
+              .toList();
+          final imageUrlsOfRenters = myTrackList
+              .expand((cat) => cat.renters ?? []) // flatten all renters from each track
+              .map((renter) {
+            if (renter.profileImage != null && renter.profileImage!.isNotEmpty) {
+              return "${ApiClient.baseUrl}/${renter.profileImage!}";
+            }
+            return null;
+          })
+              .whereType<String>() // removes nulls
+              .toList();
+
+          preloadImagesFromUrls(imageUrlsOfRenters);
+
+
+          preloadImagesFromUrls(imageUrls);
+
         }
         if (responseData["data"]['pagination'] != null) {
           currentTrackPage = responseData["data"]['pagination']['page'] ?? 1;
           totalTrackPages = responseData["data"]['pagination']['totalCount'] ?? 1; // Add this line
-          itemsTrackPerPage = responseData["data"]['pagination']['limit'] ?? 7;
+          itemsTrackPerPage = responseData["data"]['pagination']['limit'] ?? 5;
         }
         return myTrackList;
       } else {
@@ -871,7 +935,7 @@ static Future<List<SingleTrackModel>> getMyBusinessTrack({
   static Future<List<SingleEventModel>> getMyBusinessEvent({
     String booked = '',
     String currentEventPage = "1",
-    String itemsEventPerPage = "7",
+    String itemsEventPerPage = "5",
     String totalEventPages = "7",
   }) async {
     List<SingleEventModel> myEventList = [];
@@ -894,11 +958,24 @@ static Future<List<SingleTrackModel>> getMyBusinessTrack({
       if (responseData['success'] != null && responseData['success'] == true) {
         if (responseData['data']["events"] is List) {
           myEventList = (responseData['data']["events"] as List).map((e) => SingleEventModel.fromJson(e)).toList();
+          final imageUrls = myEventList
+              .map((cat) {
+            if (cat.eventImage != null && cat.eventImage!.isNotEmpty) {
+              return "${ApiClient.baseUrl}/${cat.eventImage![0]}";
+            }
+            return null;
+          })
+              .whereType<String>() // filters out nulls safely
+              .where((url) => url.isNotEmpty)
+              .toList();
+
+          preloadImagesFromUrls(imageUrls);
+
         }
         if (responseData["data"]['pagination'] != null) {
           currentEventPage = responseData["data"]['pagination']['page'] ?? 1;
           totalEventPages = responseData["data"]['pagination']['totalCount'] ?? 1; // Add this line
-          itemsEventPerPage = responseData["data"]['pagination']['limit'] ?? 7;
+          itemsEventPerPage = responseData["data"]['pagination']['limit'] ?? 5;
         }
         return myEventList;
       } else {
@@ -931,6 +1008,14 @@ static Future<List<SingleTrackModel>> getMyBusinessTrack({
       if (responseData['success'] != null && responseData['success'] == true) {
         if (responseData['data'] is List) {
           myEventList = (responseData['data'] as List).map((e) => EventParticipantsModel.fromJson(e)).toList();
+          final imageUrls =
+          myEventList
+              .map((cat) => "${ApiClient.baseUrl}/${cat.user!.profileImage}")
+              .where((url) => url.isNotEmpty)
+              .toList();
+
+          preloadImagesFromUrls(imageUrls);
+
         }
         return myEventList;
       } else {
@@ -963,7 +1048,14 @@ static Future<List<SingleTrackModel>> getMyBusinessTrack({
       if (responseData['success'] != null && responseData['success'] == true) {
         if (responseData['data'] is List) {
           myEventList = (responseData['data'] as List).map((e) => TrackParticipantsModel.fromJson(e)).toList();
-        }
+
+          final imageUrls =
+          myEventList
+              .map((cat) => "${ApiClient.baseUrl}/${cat.user!.profileImage}")
+              .where((url) => url.isNotEmpty)
+              .toList();
+
+          preloadImagesFromUrls(imageUrls); }
         return myEventList;
       } else {
         showCustomSnackbar(title: AppStaticString.failed, message: responseData['message'], type: SnackBarType.failed);
@@ -996,7 +1088,13 @@ static Future<List<SingleTrackModel>> getMyBusinessTrack({
       if (responseData['success'] != null && responseData['success'] == true) {
         if (responseData['data']['renters'] is List) {
           renterList = (responseData['data']['renters'] as List).map((e) => RentersModel.fromJson(e)).toList();
-        }
+          final imageUrls =
+          renterList
+              .map((cat) => "${ApiClient.baseUrl}/${cat.user!.profileImage}")
+              .where((url) => url.isNotEmpty)
+              .toList();
+
+          preloadImagesFromUrls(imageUrls); }
         return renterList;
       } else {
         showCustomSnackbar(title: AppStaticString.failed, message: responseData['message'], type: SnackBarType.failed);

@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -38,6 +41,37 @@ void showCustomSnackbar({
     duration: const Duration(
         seconds: 3), // Duration for how long the snackbar will be displayed
   );
+}
+Future<void> preloadImagesFromUrls(
+    List<String> imageUrls) async {
+  for (var imageUrl in imageUrls) {
+    if (imageUrl.isNotEmpty) {
+      try {
+        final imageProvider = CachedNetworkImageProvider(imageUrl);
+        final completer = Completer<void>();
+        bool isCompleted = false;
+
+        imageProvider.resolve(const ImageConfiguration()).addListener(
+          ImageStreamListener((_, __) {
+            if (!isCompleted) {
+              completer.complete();
+              isCompleted = true;
+            }
+          }, onError: (error, stackTrace) {
+            if (!isCompleted) {
+              debugPrint("Error caching URL: $imageUrl / $error");
+              completer.complete();
+              isCompleted = true;
+            }
+          }),
+        );
+
+        await completer.future;
+      } catch (e) {
+        debugPrint("Exception while caching URL: $imageUrl / $e");
+      }
+    }
+  }
 }
 
 Future<void> pickImages({
