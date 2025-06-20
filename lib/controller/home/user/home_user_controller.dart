@@ -145,8 +145,8 @@ class HomeUserController extends GetxController {
 
   Future<void> getTrackListCall({
     bool loadMore = false,
-    String ? latitude,
-    String ? lngi
+    String ? latitude ,
+    String?  lngi
   })
   async {
     if (NetworkController.to.isConnected.value) {
@@ -249,11 +249,10 @@ class HomeUserController extends GetxController {
       isLoadingTrackList.value = true;
       isLoadingEventList.value = true;
       // Step 1: Fetch location
-      Position position = await CommonController.to.getCurrentLocation();
-      originalLat.value = position.latitude.toString();
-      originalLat.value = position.longitude.toString();
-      lat.value = position.latitude.toString();
-      lng.value = position.longitude.toString();
+      Map<String, dynamic> locationData = await CommonController.to.getCurrentLocation();
+
+      lat.value =locationData.isNotEmpty? locationData["lat"].toString():"";
+      lng.value =locationData.isNotEmpty? locationData["lng"].toString():"";
       print('Latitude: ${lat.value}, Longitude: ${lng.value}');
 
       // Step 2: Trigger loading flags and data calls

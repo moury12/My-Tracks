@@ -22,30 +22,30 @@ class CommonController extends GetxController {
   RxBool isLoadingOnFetch = false.obs;
   RxBool isLoadingOnLocationSuggestion = false.obs;
   RxBool isLoadingCurrencies = false.obs;
-  RxString stripeUrl =''.obs;
+  RxString stripeUrl = ''.obs;
   RxList<dynamic> addressSuggestion = [].obs;
   RxMap currencyList = {}.obs;
 
   getCurrenciesList() async {
     // if (NetworkController.to.isConnected.value) {
-      isLoadingCurrencies.value = true;
-      currencyList.value = await TrackEventService.fetchCurrencies();
-      isLoadingCurrencies.value = false;
+    isLoadingCurrencies.value = true;
+    currencyList.value = await TrackEventService.fetchCurrencies();
+    isLoadingCurrencies.value = false;
     /*} else {
       isLoadingCurrencies.value = false;
-      *//*noInternetShowCustomSnackbar();*//*
+      */ /*noInternetShowCustomSnackbar();*/ /*
     }*/
   }
+
   postLikeDisLikeCall({required String trackId}) async {
     if (NetworkController.to.isConnected.value) {
       try {
         // Locate the specific track item
-        final trackItem = HomeUserController.to.trackList
-            .firstWhere((track) => track.sId == trackId);
+        final trackItem = HomeUserController.to.trackList.firstWhere((track) => track.sId == trackId);
 
         // Save the previous state for rollback
         final previousIsLiked = trackItem.isLiked;
-        final previousTotalLikes = int.parse(trackItem.totalLikes?? "0") ;
+        final previousTotalLikes = int.parse(trackItem.totalLikes ?? "0");
 
         // Optimistically toggle the isLiked state
         trackItem.isLiked = !(trackItem.isLiked ?? false);
@@ -61,8 +61,7 @@ class CommonController extends GetxController {
         HomeUserController.to.trackList.refresh();
 
         // Make the server request
-        final likeHitted =
-            await ReviewService.likeDislikeRequest(trackId: trackId);
+        final likeHitted = await ReviewService.likeDislikeRequest(trackId: trackId);
 
         if (likeHitted.isNotEmpty) {
           // Update based on server response
@@ -97,8 +96,7 @@ class CommonController extends GetxController {
 
   Future<void> fetchSuggestedPlaces(String input) async {
     isLoadingOnLocationSuggestion.value = true;
-    final url =
-        'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${Uri.encodeComponent(input)}&key=${GoogleClient.googleMapUrl}';
+    final url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${Uri.encodeComponent(input)}&key=${GoogleClient.googleMapUrl}';
     final response = await http.get(Uri.parse(url));
     print(url);
     if (response.statusCode == 200) {
@@ -109,12 +107,12 @@ class CommonController extends GetxController {
       isLoadingOnLocationSuggestion.value = false;
     }
   }
+
   var isLoading = true.obs;
 
-   WebViewController? webController;
+  WebViewController? webController;
 
-  void initializeWebViewController()
-  {
+  void initializeWebViewController() {
     if (webController != null) {
       return; // Avoid re-initialization
     }
@@ -141,9 +139,8 @@ class CommonController extends GetxController {
           onWebResourceError: (WebResourceError error) {
             debugPrint("Web Resource Error: ${error.description}");
           },
-
           onNavigationRequest: (NavigationRequest request) {
-           /* if (request.url.startsWith("https://www.google.com/webhp?hl=en&sa=X&ved=0ahUKEwj4-qy6koSLAxVLRmwGHT7zHXIQPAgI")) {
+            /* if (request.url.startsWith("https://www.google.com/webhp?hl=en&sa=X&ved=0ahUKEwj4-qy6koSLAxVLRmwGHT7zHXIQPAgI")) {
               return NavigationDecision.prevent;
             }*/
             if (request.url.contains('${ApiClient.baseUrl}/payment/success')) {
@@ -155,15 +152,14 @@ class CommonController extends GetxController {
       )
       ..loadRequest(Uri.parse(stripeUrl.value));
   }
+
   Future<void> getLatLngFromPlace(
     String placeId, {
     required RxString lat,
     required RxString lng,
     required RxString selectedAddress,
-  })
-  async {
-    final String url =
-        'https://maps.googleapis.com/maps/api/geocode/json?place_id=$placeId&key=${GoogleClient.googleMapUrl}';
+  }) async {
+    final String url = 'https://maps.googleapis.com/maps/api/geocode/json?place_id=$placeId&key=${GoogleClient.googleMapUrl}';
 
     try {
       final response = await http.get(Uri.parse(url));
@@ -217,39 +213,56 @@ class CommonController extends GetxController {
   }
 
   RxString image = ''.obs;
-  Future<Position> getCurrentLocation() async {
+  Future<Map<String, dynamic>> getCurrentLocation() async {
     bool serviceEnabled;
     LocationPermission permission;
 
-    // Check if location services are enabled
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
+      print("---------------------------");
+      print("Location service disabled. Prompting user...");
+      await Geolocator.openLocationSettings();
+      serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        print("---------------------------");
+
+        print("User did not enable location service.");
+        return {};
+      }
     }
 
-    // Check permission
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
+      print("---------------------------");
+
+      print("Permission denied. Requesting...");
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        return Future.error('Location permission denied');
+        print("---------------------------");
+
+        print("User denied permission.");
+        return {};
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      return Future.error('Location permission permanently denied');
+      print("---------------------------");
+
+      print("Permission permanently denied.");
+      return {};
     }
 
-    // Get current location
-    return await Geolocator.getCurrentPosition(
+    Position position = await Geolocator.getCurrentPosition();
+    print("---------------------------");
 
-    );
+    print("Location fetched: ${position.latitude}, ${position.longitude}");
+    return {"lat": position.latitude, "lng": position.longitude};
   }
+
   @override
   void onClose() {
     webController = null; // Clear WebViewController
 
     super.onClose();
   }
-
 }
