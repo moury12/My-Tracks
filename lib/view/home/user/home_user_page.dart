@@ -87,7 +87,7 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
                       Get.toNamed(SearchScreen.routeName);
                     },
                   ),
-                  space12H,
+                  // space12H,
 
                   ///================dynamic banner==================///
                   Obx(() {
@@ -97,58 +97,63 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
 
                     bool isLoading = HomeUserController.to.isLoadingPromoteTrack.value;
 
-                    return SizedBox(
-                      height: 150.h,
-                      child: isLoading
-                          ? Shimmer.fromColors(
-                              baseColor: Colors.grey[800]!,
-                              highlightColor: Colors.grey[700]!,
-                              child: Container(
-                                height: 150.h,
-                                width: double.maxFinite,
-                                color: Colors.grey[800],
-                              ),
-                            )
-                          : PageView.builder(
-                              itemCount: HomeUserController.to.promoteTrackList.length > 10 ? 10 : HomeUserController.to.promoteTrackList.length,
-                              controller: HomeUserController.to.controller.value,
-                              itemBuilder: (_, index) {
-                                final trackItem = HomeUserController.to.promoteTrackList[index];
+                    return Padding(
+                      padding: padding6V,
+                      child: SizedBox(
+                        height: 150.h,
+                        child: isLoading
+                            ? Shimmer.fromColors(
+                                baseColor: Colors.grey[800]!,
+                                highlightColor: Colors.grey[700]!,
+                                child: Container(
+                                  height: 150.h,
+                                  width: double.maxFinite,
+                                  color: Colors.grey[800],
+                                ),
+                              )
+                            : PageView.builder(
+                                itemCount: HomeUserController.to.promoteTrackList.length > 10 ? 10 : HomeUserController.to.promoteTrackList.length,
+                                controller: HomeUserController.to.controller.value,
+                                itemBuilder: (_, index) {
+                                  final trackItem = HomeUserController.to.promoteTrackList[index];
 
-                                return GestureDetector(
-                                  onTap: () {
-                                    log("message");
-                                    Get.toNamed(BookTrackJoinEventScreen.routeName, arguments: {'id': trackItem.track ?? '', 'type': 'track'});
-                                  },
-                                  child: Padding(
-                                    padding: padding6H,
-                                    child: CustomNetworkImage(
-                                      borderRadius: BorderRadius.circular(10.r),
-                                      imageUrl: '${ApiClient.baseUrl}/${trackItem.bannerImage ?? ''}',
-                                      height: 150.h,
-                                      width: double.maxFinite,
+                                  return GestureDetector(
+                                    onTap: () {
+                                      log("message");
+                                      Get.toNamed(BookTrackJoinEventScreen.routeName, arguments: {'id': trackItem.track ?? '', 'type': 'track'});
+                                    },
+                                    child: Padding(
+                                      padding: padding6H,
+                                      child: CustomNetworkImage(
+                                        borderRadius: BorderRadius.circular(10.r),
+                                        imageUrl: '${ApiClient.baseUrl}/${trackItem.bannerImage ?? ''}',
+                                        height: 150.h,
+                                        width: double.maxFinite,
+                                      ),
                                     ),
-                                  ),
-                                );
-                              },
-                            ),
+                                  );
+                                },
+                              ),
+                      ),
                     );
                   }),
 
-                  space12H,
                   Obx(() {
                     return Center(
                       child: HomeUserController.to.promoteTrackList.isNotEmpty
-                          ? SmoothPageIndicator(
-                              controller: HomeUserController.to.controller.value,
-                              count: HomeUserController.to.promoteTrackList.length > 10 ? 10 : HomeUserController.to.promoteTrackList.length,
-                              effect: ExpandingDotsEffect(
-                                  dotHeight: 12.w, dotWidth: 12.w, dotColor: AppColors.blackBorderColor, activeDotColor: AppColors.blackBorderColor),
-                            )
+                          ? Padding(
+                            padding:padding6H,
+                            child: SmoothPageIndicator(
+                                controller: HomeUserController.to.controller.value,
+                                count: HomeUserController.to.promoteTrackList.length > 10 ? 10 : HomeUserController.to.promoteTrackList.length,
+                                effect: ExpandingDotsEffect(
+                                    dotHeight: 12.w, dotWidth: 12.w, dotColor: AppColors.blackBorderColor, activeDotColor: AppColors.blackBorderColor),
+                              ),
+                          )
                           : SizedBox.shrink(),
                     );
                   }),
-                  space12H,
+                  space8H,
                   const TitleTextWidget(
                     title: AppStaticString.trackCategory,
                   ),
@@ -179,7 +184,7 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
                                   ),
                           );
                   }),
-                  space12H,
+                  space6H,
                   Row(
                     children: [
                       Expanded(child: const TitleTextWidget(title: AppStaticString.event)),
@@ -218,7 +223,7 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
                                   ),
                           );
                   }),
-                  space12H,
+                  space6H,
                   const TitleTextWidget(title: AppStaticString.track),
                   Obx(() {
                     return HomeUserController.to.isLoadingTrackList.value

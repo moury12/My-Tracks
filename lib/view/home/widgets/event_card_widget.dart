@@ -91,187 +91,186 @@ class EventCardWidget extends StatelessWidget {
         : eventModelForUser != null
             ? '${eventModelForUser!.startTime} - ${eventModelForUser!.endTime}'
             : AppStaticString.dummyTime;
-    return Padding(
-      padding: padding12T,
-      child: BlackContainerWidget(
-        child: Column(
-          spacing: 12.h,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-                borderRadius: BorderRadius.circular(8.r),
+    return BlackContainerWidget(
+      child: Column(
+        spacing: 12.h,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+              borderRadius: BorderRadius.circular(8.r),
 
-                ///==============dynamic event image==============///
-                child: CustomNetworkImage(
-                    imageUrl: imageUrl, height: 150.h, width: double.infinity)),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                    child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ///==============dynamic event name==============///
+              /// ============== dynamic event image ============== ///
 
-                    Text(
-                      name,
-                      style: poppinsMedium.copyWith(
-                          fontSize: getFontSizeSmall(context)),
-                    ),
+              child: CustomNetworkImage(
+                  imageUrl: imageUrl, height: 150.h, width: double.infinity)),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                  child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
 
-                    ///==============dynamic event location==============///
+                  ///==============dynamic event name==============///
 
-                    Text('${AppStaticString.locationWithClone}$location',
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: poppinsRegular.copyWith(
-                            fontSize: getFontSizeSmall(context)))
-                  ],
-                )),
-                space16W,
-                Expanded(
-                    child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ///==============dynamic event date==============///
-
-                    Text('${AppStaticString.dateWithClone} $startDate ',
-                        /*  maxLines: 1,
-                        overflow: TextOverflow.ellipsis,*/
-                        style: poppinsRegular.copyWith(
-                            fontSize: getFontSizeSmall(context))),
-
-                    ///==============dynamic event time==============///
-
-                    Text(time,
-                        /*maxLines: 1,
-                        overflow: TextOverflow.ellipsis,*/
-                        style: poppinsRegular.copyWith(
-                            fontSize: getFontSizeSmall(context)))
-                  ],
-                ))
-              ],
-            ),
-            !fromUser!
-                ? Obx(() {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ///================================dynamic price or seat number=========================///
-                        BlueTextWidget(
-                          text: HomeController.to.selectedLabel.value == 2
-                              ? '${AppStaticString.totalSeatWithClone}120'
-                              : '${AppStaticString.priceWithClone}\$${eventModel == null || eventModel!.slots == null || eventModel!.slots!.isEmpty ? '120' : eventModel!.slots!.first.price ?? ''}',
-                        ),
-                        const DividerVertical(),
-
-                        ///==============dynamic event total slot==============///
-
-                        Text(
-                          '${AppStaticString.totalSlot}${eventModel == null ? '12' : eventModel!.slots!.length }',
-                          style: poppinsRegular.copyWith(
-                              fontSize: getFontSizeSmall(context)),
-                        ),
-                        HomeController.to.selectedLabel.value == 2
-                            ? const SizedBox.shrink()
-                            : const DividerVertical(),
-                        HomeController.to.selectedLabel.value == 2
-                            ? const SizedBox.shrink()
-
-                            ///==============dynamic event unsold==============///
-
-                            : Text(
-                                '${AppStaticString.status}: ${eventModel == null ? '12' : eventModel!.status ?? ''}',
-                                style: poppinsRegular.copyWith(
-                                    fontSize: getFontSizeSmall(context))),
-                      ],
-                    );
-                  })
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      ///=====================dynamic total slot==================///
-                      Expanded(
-                          child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: BlueTextWidget(
-                          text: '${AppStaticString.totalSlot} $totalSlot',
-                        ),
-                      )),
-
-                      DividerVertical(
-                        color: AppColors.blueColor,
-                        height: 15.w,
-                      ),
-
-                      ///=====================dynamic unsold==================///
-
-                      /*     Expanded(
-                          child: BlueTextWidget(
-                        text: '${AppStaticString.unsold} $unsold',
-                      )),
-                      space8W,*/
-                      Expanded(
-                          child: OptionWidget(
-                              function: () async {
-                                const String deepLink = '${ApiClient.baseUrl}/';
-
-                                final String trackId = sId;
-                                final String type = 'event';
-                                final String fullLink =
-                                    '$deepLink?trackId=$trackId&type=$type';
-                                Share.share(fullLink);
-                              },
-                              icon: shareIconUrl,
-                              text: AppStaticString.share))
-                    ],
+                  Text(
+                    name,
+                    style: poppinsMedium.copyWith(
+                        fontSize: getFontSizeSmall(context)),
                   ),
 
-            ///======================dynamic user===================///
-            !fromUser!
-                ? ExpandableText(
-                    text:
-                        eventModel != null ? eventModel!.description ?? '' : '',
-                    maxLines: 3, // Number of lines to show before truncating
-                  )
-                : const SizedBox.shrink(),
-            noButton == false
-                ? CustomButton(
-                    onTap: onTap ??
-                        () {
-                          Get.toNamed(
-                            EventTrackSlotScreen.routeName,
-                            arguments: {
-                              'slots': eventModel!.slots,
-                              'type': 'event',
-                              'id': sId,
-                            },
-                          );
-                        },
-                    title: buttonText ?? AppStaticString.viewAllSlot,
-                    img: buttonImg ?? arrowTopImgUrl,
-                    /*child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(AppStaticString.viewAllParticipent,
-                      style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.blackLightColor,
-                          fontSize: getFontSizeSemiSmall(context))),
-                  space8W,
-                  Image.asset(
-                    arrowTopImgUrl,
-                    height: 24.w,
-                  )
+                  ///==============dynamic event location==============///
+
+                  Text('${AppStaticString.locationWithClone}$location',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: poppinsRegular.copyWith(
+                          fontSize: getFontSizeSmall(context)))
                 ],
-              ),*/
-                  )
-                : const SizedBox.shrink()
-          ],
-        ),
+              )),
+              space16W,
+              Expanded(
+                  child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ///==============dynamic event date==============///
+
+                  Text('${AppStaticString.dateWithClone} $startDate ',
+                      /*  maxLines: 1,
+                      overflow: TextOverflow.ellipsis,*/
+                      style: poppinsRegular.copyWith(
+                          fontSize: getFontSizeSmall(context))),
+
+                  ///==============dynamic event time==============///
+
+                  Text(time,
+                      /*maxLines: 1,
+                      overflow: TextOverflow.ellipsis,*/
+                      style: poppinsRegular.copyWith(
+                          fontSize: getFontSizeSmall(context)))
+                ],
+              ))
+            ],
+          ),
+          !fromUser!
+              ? Obx(() {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ///================================dynamic price or seat number=========================///
+                      BlueTextWidget(
+                        text: HomeController.to.selectedLabel.value == 2
+                            ? '${AppStaticString.totalSeatWithClone}120'
+                            : '${AppStaticString.priceWithClone}\$${eventModel == null || eventModel!.slots == null || eventModel!.slots!.isEmpty ? '120' : eventModel!.slots!.first.price ?? ''}',
+                      ),
+                      const DividerVertical(),
+
+                      ///==============dynamic event total slot==============///
+
+                      Text(
+                        '${AppStaticString.totalSlot}${eventModel == null ? '12' : eventModel!.slots!.length }',
+                        style: poppinsRegular.copyWith(
+                            fontSize: getFontSizeSmall(context)),
+                      ),
+                      HomeController.to.selectedLabel.value == 2
+                          ? const SizedBox.shrink()
+                          : const DividerVertical(),
+                      HomeController.to.selectedLabel.value == 2
+                          ? const SizedBox.shrink()
+
+                          ///==============dynamic event unsold==============///
+
+                          : Text(
+                              '${AppStaticString.status}: ${eventModel == null ? '12' : eventModel!.status ?? ''}',
+                              style: poppinsRegular.copyWith(
+                                  fontSize: getFontSizeSmall(context))),
+                    ],
+                  );
+                })
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ///=====================dynamic total slot==================///
+                    Expanded(
+                        child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: BlueTextWidget(
+                        text: '${AppStaticString.totalSlot} $totalSlot',
+                      ),
+                    )),
+
+                    DividerVertical(
+                      color: AppColors.blueColor,
+                      height: 15.w,
+                    ),
+
+                    ///=====================dynamic unsold==================///
+
+                    /*     Expanded(
+                        child: BlueTextWidget(
+                      text: '${AppStaticString.unsold} $unsold',
+                    )),
+                    space8W,*/
+                    Expanded(
+                        child: OptionWidget(
+                            function: () async {
+                              const String deepLink = '${ApiClient.baseUrl}/';
+
+                              final String trackId = sId;
+                              final String type = 'event';
+                              final String fullLink =
+                                  '$deepLink?trackId=$trackId&type=$type';
+                              Share.share(fullLink);
+                            },
+                            icon: shareIconUrl,
+                            text: AppStaticString.share))
+                  ],
+                ),
+
+          ///======================dynamic user===================///
+          !fromUser!
+              ? ExpandableText(
+                  text:
+                      eventModel != null ? eventModel!.description ?? '' : '',
+                  maxLines: 3, // Number of lines to show before truncating
+                )
+              : const SizedBox.shrink(),
+          noButton == false
+              ? CustomButton(
+                  onTap: onTap ??
+                      () {
+                        Get.toNamed(
+                          EventTrackSlotScreen.routeName,
+                          arguments: {
+                            'slots': eventModel!.slots,
+                            'type': 'event',
+                            'id': sId,
+                          },
+                        );
+                      },
+                  title: buttonText ?? AppStaticString.viewAllSlot,
+                  img: buttonImg ?? arrowTopImgUrl,
+                  /*child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(AppStaticString.viewAllParticipent,
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.blackLightColor,
+                        fontSize: getFontSizeSemiSmall(context))),
+                space8W,
+                Image.asset(
+                  arrowTopImgUrl,
+                  height: 24.w,
+                )
+              ],
+            ),*/
+                )
+              : const SizedBox.shrink()
+        ],
       ),
     );
   }
