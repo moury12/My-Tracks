@@ -18,9 +18,6 @@ void main()async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-/*  if (defaultTargetPlatform == TargetPlatform.android) {
-    WebViewPlatform.instance = SurfaceAndroidViewController as WebViewPlatform?;
-  }*/
   runApp( const MyApp()
     );
 }

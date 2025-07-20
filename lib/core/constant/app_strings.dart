@@ -60,7 +60,7 @@ class AppStaticString {
   static const String trackNotFound = "Track not found!!!";
   static const String status = "Status";
   static const String enterCode = "Enter the code";
-  static const String enter4Digit = "Enter the 4 digit code that we just sent to";
+  static const String enter4Digit = "Enter the 6 digit code that we just sent to";
   static const String userName = "User Name";
   static const String password = "Password";
   static const String eventCreatedSuccessfully = "Your event has been created correctly.";

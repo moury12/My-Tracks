@@ -374,7 +374,7 @@ class _BookTrackJoinEventScreenState extends State<BookTrackJoinEventScreen> {
                                 : slotsList.isEmpty
                                     ? EmptyTextWidget(
                                         text:
-                                            '${controller.selectDate.value} this day not contain any slot kindly choose another date')
+                                            'No availability')
                                     : controller.selectDate.value.isEmpty
                                         ? const EmptyTextWidget(
                                             text: 'Please! choose valid date!!')

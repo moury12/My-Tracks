@@ -25,9 +25,7 @@ class BookingTabContent extends StatelessWidget {
             : index == 1
                 ? BookingManagementController.to.trackHistoryBookingList
                 : BookingManagementController.to.trackBookingList;
-        final emptyText = isEventTab
-            ? "Booked Event Not Found!!!"
-            : "Booked Track Not Found!!!";
+        final emptyText = "No bookings found";
         final isLoading = isEventTab
             ? BookingManagementController.to.isLoadingEventHistoryBooking.value
             : BookingManagementController.to.isLoadingHistoryBooking.value;
