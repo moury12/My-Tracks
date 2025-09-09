@@ -268,6 +268,7 @@ void showCalendarDialog(BuildContext context, {Function()? onConfrim}) {
                     DateTime(2021, 3, 14),
                     DateTime(2021, 3, 21),
                   ],
+
                   onDateSelected: (List<DateTime> selected) {
                     // setState(() {
                     //   selectedDates = selected;

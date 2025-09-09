@@ -117,6 +117,7 @@ class CreateTrackEventController extends GetxController {
   ///=======================loading variables=====================///
 
   RxBool isLoadingPostTrack = false.obs;
+  RxBool isSelectedSlot = false.obs;
   RxBool isLoadingUpdateTrack = false.obs;
   RxBool isLoadingCreateSlot = false.obs;
   RxBool isLoadingTrack = false.obs;

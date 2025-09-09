@@ -161,6 +161,7 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
               : CustomScrollView(
             slivers: [
               if (type != event)  SliverToBoxAdapter(child: Container(
+                margin: padding12H,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20.r),
                     gradient: LinearGradient(colors: [AppColors.blueColor,AppColors.blueColorDark])),
@@ -173,8 +174,8 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
                       DateTime(2025, 9, 21),
                     ], // This is an empty list, which is fine now
                     onDateSelected: (selectedDates) {
-                      // Handle selected dates here
-                      print(selectedDates); // Example of handling selected dates
+
+                      print(selectedDates);
                     },
                   ),
                 ),
@@ -184,11 +185,12 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
               SliverList(
 
                 delegate: SliverChildBuilderDelegate(
+
 childCount: slotList.length,  (context, index) {
                     final slot = slotList[index];
 
                     return Padding(
-                      padding: padding6V,
+                      padding: padding12H6V,
                       child: MarronGradientContainerWidget(
                         child: TrackEventSlotWidget(
                           needToShowSeat: type == 'event',
