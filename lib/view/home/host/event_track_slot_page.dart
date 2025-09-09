@@ -16,6 +16,7 @@ import 'package:track_trek/core/model/track-event/single_track_model.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/add/create_track_event_slot.dart';
+import 'package:track_trek/view/add/widgets/multiple_date_picker.dart';
 import 'package:track_trek/view/add/widgets/track_event_slot_widget.dart';
 import 'package:track_trek/view/home/host/widget/loading_slot_widget.dart';
 import 'package:track_trek/view/manage/event_user_page.dart';
@@ -131,75 +132,95 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
           })
         ],
       ),
-      body: CustomRefreshIndicator(
+    body:   CustomRefreshIndicator(
         onRefresh: () async {
           if (type == event) {
-            await CreateTrackEventController.to
-                .getEventDetailsCall(eventId: id);
+            await CreateTrackEventController.to.getEventDetailsCall(eventId: id);
           } else {
-            await CreateTrackEventController.to
-                .getTrackDetailsCall(trackId: id);
-            // CreateTrackEventController.to.getTrackSlotListCall(trackId: sId);
+            await CreateTrackEventController.to.getTrackDetailsCall(trackId: id);
           }
         },
         child: Obx(() {
           List<dynamic> slotList = [];
           bool isLoading = true;
+
           if (type == event) {
-            slotList =
-                CreateTrackEventController.to.singleEvent.value.slots ?? [];
+            slotList = CreateTrackEventController.to.singleEvent.value.slots ?? [];
             isLoading = CreateTrackEventController.to.isLoadingEvent.value;
           } else {
-            slotList =
-                CreateTrackEventController.to.singleTrack.value.slots ?? [];
+            slotList = CreateTrackEventController.to.singleTrack.value.slots ?? [];
             isLoading = CreateTrackEventController.to.isLoadingTrack.value;
           }
+
           return isLoading
               ? SlotListHorizontalLoadingWidget()
               : slotList.isEmpty
-                  ? const EmptyTextWidget(
-                      text: AppStaticString.slotListIsEmpty,
-                    )
-                  : ListView.builder(
-                      padding: padding16,
-                      itemBuilder: (context, index) {
-                        final slot = slotList[index];
+              ? const EmptyTextWidget(
+            text: AppStaticString.slotListIsEmpty,
+          )
+              : CustomScrollView(
+            slivers: [
+              if (type != event)  SliverToBoxAdapter(child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20.r),
+                    gradient: LinearGradient(colors: [AppColors.blueColor,AppColors.blueColorDark])),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: MultipleDatePicker(
+                    preSelectedDates: [
+                      DateTime(2025, 9, 2),
+                      DateTime(2025, 9, 14),
+                      DateTime(2025, 9, 21),
+                    ], // This is an empty list, which is fine now
+                    onDateSelected: (selectedDates) {
+                      // Handle selected dates here
+                      print(selectedDates); // Example of handling selected dates
+                    },
+                  ),
+                ),
+              ),) ,
 
-                        // Determine the ID dynamically
+              // ListView Sliver below the calendar
+              SliverList(
 
-                        return Padding(
-                          padding: padding6V,
-                          child: MarronGradientContainerWidget(
-                            child: TrackEventSlotWidget(
-                              needToShowSeat: type == 'event',
-                              eventSlots:
-                                  type == 'event' ? slot as EventSlots : null,
-                              slots:
-                                  type == 'track' ? slot as TrackSlots : null,
-                              onTap: () {
-                                if (type == 'track') {
-                                  debugPrint('slotId');
-                                  debugPrint(slot.sId);
-                                  HomeController.to.getTrackParticipantListCall(
-                                    trackSlotId: slot.sId,
-                                  );
-                                } else {
-                                  HomeController.to.getEventParticipantListCall(
-                                    eventSlotID: slot.sId!,
-                                  );
-                                }
-                                Get.toNamed(
-                                  EventUserScreen.routeName,
-                                  arguments: type,
-                                );
-                              },
-                              argument: userPanel,
-                            ),
-                          ),
-                        );
-                      },
-                      itemCount: slotList.length,
+                delegate: SliverChildBuilderDelegate(
+childCount: slotList.length,  (context, index) {
+                    final slot = slotList[index];
+
+                    return Padding(
+                      padding: padding6V,
+                      child: MarronGradientContainerWidget(
+                        child: TrackEventSlotWidget(
+                          needToShowSeat: type == 'event',
+                          eventSlots: type == 'event' ? slot as EventSlots : null,
+                          slots: type == 'track' ? slot as TrackSlots : null,
+                          onTap: () {
+                            if (type == 'track') {
+                              debugPrint('slotId');
+                              debugPrint(slot.sId);
+                              HomeController.to.getTrackParticipantListCall(
+                                trackSlotId: slot.sId,
+                              );
+                            } else {
+                              HomeController.to.getEventParticipantListCall(
+                                eventSlotID: slot.sId!,
+                              );
+                            }
+                            Get.toNamed(
+                              EventUserScreen.routeName,
+                              arguments: type,
+                            );
+                          },
+                          argument: userPanel,
+                        ),
+                      ),
                     );
+                  },
+                ),
+
+              ),
+            ],
+          );
         }),
       ),
     );

@@ -244,7 +244,7 @@ void logOutCall() {
   Get.delete<ProfileController>();
   Get.offAllNamed(LoginScreen.routeName);
 }
-void showCalendarDialog(BuildContext context) {
+void showCalendarDialog(BuildContext context, {Function()? onConfrim}) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -296,7 +296,7 @@ void showCalendarDialog(BuildContext context) {
 borderColor: Colors.black,
                         fillColor: Colors.black,
                         radius: 20.r,
-                        onTap: () {  Navigator.pop(context); },
+                        onTap: onConfrim??() { ; Navigator.pop(context); },
                         textColor: Colors.white,
                         title: AppStaticString.confrim,
                       ),

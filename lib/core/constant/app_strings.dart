@@ -9,6 +9,7 @@ class AppStaticString {
   static const String trakManage = "Track Management";
   static const String notification = "Notification";
   static const String manage = "Manage";
+  static const String calender = "Calender";
   static const String userDetails = "User Details";
   static const String promote = "Promote";
   static const String promoteTrack = "Promote track";

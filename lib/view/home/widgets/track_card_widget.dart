@@ -240,7 +240,24 @@ class TrackCardWidget extends StatelessWidget {
                 ? const SizedBox.shrink()
                 : Row(
                     children: [
-            trackModel!.renters != null&&trackModel!.renters!.isNotEmpty
+                      Expanded(
+                        child: CustomButton(onTap: () {
+showCalendarDialog(context,onConfrim: () {
+  Get.toNamed(
+    EventTrackSlotScreen.routeName,
+    arguments: {
+      'id': sId,
+      'slots': trackModel!.slots,
+      'type': 'track'
+    },
+  );
+},);
+                        },fillColor: AppColors.blueColor,
+                          borderColor: AppColors.blueColor,
+                            title: AppStaticString.calender,
+                            img: calenderIconUrl,),
+                      ),
+            /*trackModel!.renters != null&&trackModel!.renters!.isNotEmpty
             ?   Flexible(
                         flex: 5,
                         child: SizedBox(
@@ -269,10 +286,10 @@ class TrackCardWidget extends StatelessWidget {
                                         : const ProfileCircleImageWidget())),
                           ),
                         ),
-                      ):Expanded(flex:4,child: Text("No Renters!!")),
+                      ):Expanded(flex:4,child: Text("No Renters!!")),*/
                       space8W,
-                      Flexible(
-                          flex: 4,
+                      Expanded(
+
                           child: CustomButton(
                             onTap: () {
                               Get.toNamed(
@@ -283,27 +300,9 @@ class TrackCardWidget extends StatelessWidget {
                                   'type': 'track'
                                 },
                               );
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Flexible(
-                                  child: Padding(
-                                    padding: padding12H,
-                                    child: Text(AppStaticString.viewAllSlot,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            color: AppColors.blackLightColor,
-                                            fontSize:
-                                                getFontSizeSemiSmall(context))),
-                                  ),
-                                ),
-                                Image.asset(
-                                  arrowTopImgUrl,
-                                  height: 24.w,
-                                )
-                              ],
-                            ),
+                            },title: AppStaticString.viewAllSlot,
+                            img: arrowTopImgUrl,
+
                           ))
                     ],
                   ),
