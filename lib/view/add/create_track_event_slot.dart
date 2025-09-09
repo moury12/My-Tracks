@@ -10,6 +10,7 @@ import 'package:track_trek/core/components/custom_textfield.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
+import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/utils/app_color.dart';
@@ -77,257 +78,79 @@ class _CreateTrackEventSlotScreenState
                 children: [
                   type == event
                       ? const SizedBox.shrink()
-                      : Row(
-                          spacing: 16.w,
-                          children: [
-                            Expanded(
-                              child: SelectDateButton(
-                                isDisable: edit,
-                                onTap: edit
-                                    ? () {}
-                                    : () {
-                                        CreateTrackEventController.to
-                                            .getWeekDays();
-                                        print('-----------');
-                                        print(type);
-                                        showModalBottomSheet(
-                                          showDragHandle: false,
-                                          context: context,
-                                          constraints:
-                                              BoxConstraints.tightForFinite(
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height /
-                                                2,
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                          ),
-                                          builder: (context) => Container(
-                                            padding: padding16,
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.vertical(
-                                                        top: Radius.circular(
-                                                            8.r))),
-                                            child: SingleChildScrollView(
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      Text(
-                                                        AppStaticString
-                                                            .selectDay,
-                                                        style: poppinsMedium.copyWith(
-                                                            fontSize:
-                                                                getFontSizeDefault(
-                                                                    context)),
-                                                      ),
-                                                      const Spacer(),
-                                                      IconButton(
-                                                          onPressed: () {
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                          },
-                                                          icon: const Icon(
-                                                            CupertinoIcons
-                                                                .multiply,
-                                                            color: AppColors
-                                                                .whiteLightColor,
-                                                          ))
-                                                    ],
-                                                  ),
-                                                  Obx(() {
-                                                    return Wrap(
-                                                      spacing: 12.w,
-                                                      children: [
-                                                        ...List.generate(
-                                                          CreateTrackEventController
-                                                              .to
-                                                              .weekDays
-                                                              .length,
-                                                          (index) => CreateTrackEventController
-                                                                              .to
-                                                                              .weekDays[
-                                                                          index]
-                                                                      [
-                                                                      'selected'] ==
-                                                                  true
-                                                              ? CustomButton(
-                                                                  radius: 20.r,
-                                                                  marginVerticel:
-                                                                      6.h,
-                                                                  width: 100.w,
-                                                                  title: CreateTrackEventController
-                                                                              .to
-                                                                              .weekDays[
-                                                                          index]
-                                                                      [
-                                                                      'day_name'],
-                                                                  onTap: () {
-                                                                    CreateTrackEventController
-                                                                        .to
-                                                                        .toggleWeekDay(
-                                                                            index);
-                                                                  },
-                                                                )
-                                                              : CreateTrackEventController
-                                                                      .to
-                                                                      .weekDays[
-                                                                          index]
-                                                                      .isEmpty
-                                                                  ? space16W
-                                                                  : CustomButton(
-                                                                      radius:
-                                                                          20.r,
-                                                                      marginVerticel:
-                                                                          6.h,
-                                                                      width:
-                                                                          100.w,
-                                                                      fillColor:
-                                                                          AppColors
-                                                                              .blackBackgroundColor,
-                                                                      borderColor:
-                                                                          AppColors
-                                                                              .primaryColor,
-                                                                      title: CreateTrackEventController
-                                                                              .to
-                                                                              .weekDays[index]
-                                                                          [
-                                                                          'day_name'],
-                                                                      textColor:
-                                                                          AppColors
-                                                                              .primaryColor,
-                                                                      onTap:
-                                                                          () {
-                                                                        CreateTrackEventController
-                                                                            .to
-                                                                            .toggleWeekDay(index);
-                                                                      },
-                                                                    ),
-                                                        )
-                                                      ],
-                                                    );
-                                                  }),
-                                                  space12H,
-                                                  Obx(() {
-                                                    return CustomButton(
-                                                      isLoading:
-                                                          CreateTrackEventController
-                                                              .to
-                                                              .isLoadingUpdateTrack
-                                                              .value,
-                                                      onTap: () {
-                                                        if (CreateTrackEventController
-                                                            .to
-                                                            .weekDays
-                                                            .isNotEmpty) {
-                                                          CreateTrackEventController
-                                                              .to
-                                                              .updateTrackCall();
-                                                        } else {
-                                                          showCustomSnackbar(
-                                                              title:
-                                                                  AppStaticString
-                                                                      .failed,
-                                                              message:
-                                                                  'Please select a day',
-                                                              type: SnackBarType
-                                                                  .failed);
-                                                        }
-                                                      },
-                                                      title:
-                                                          AppStaticString.save,
-                                                    );
-                                                  })
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      },
-                              ),
-                            ),
+                      : CustomButton(
+            // isLoading: StripeOnboardingController.to.isLoading.value,
+              title: AppStaticString.selectDate,
+              img: calenderIconUrl,
+              fillColor:AppColors.blueColor ,
+              borderColor:AppColors.blueColor, onTap: () {showCalendarDialog(context);  } ,),
 
-                            ///=============dynamic days==================///
-                            Obx(() {
-                              return PrimaryColorContainer(
-                                text:
-                                    '${CreateTrackEventController.to.days.value} Days',
-                              );
-                            }),
-                            space16W
-                          ],
-                        ),
-
-                  ///======================Week Days==================///
-                  type == event
-                      ? const SizedBox.shrink()
-                      : Obx(() {
-                          return CreateTrackEventController.to.weekDays
-                                  .where((e) => e['selected'] == true)
-                                  .map((e) => e['day_name']
-                                      as String) // Extract the 'day' field as a String
-                                  .toList()
-                                  .isEmpty
-                              ? const SizedBox.shrink()
-                              : SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Row(
-                                    spacing: 10.w,
-                                    children: [
-                                      ...List.generate(
-                                          CreateTrackEventController.to.weekDays
-                                              .where(
-                                                  (e) => e['selected'] == true)
-                                              .map((e) => e['day_name']
-                                                  as String) // Extract the 'day' field as a String
-                                              .toList()
-                                              .length, (index) {
-                                        final day = CreateTrackEventController
-                                            .to.weekDays
-                                            .where((e) => e['selected'] == true)
-                                            .map((e) => e['day_name']
-                                                as String) // Extract the 'day' field as a String
-                                            .toList()[index];
-                                        return CreateTrackEventController
-                                                    .to.selectedDay.value ==
-                                                index
-                                            ? GradientContainerWidget(
-                                                text: day,
-                                                textStyle:
-                                                    poppinsRegular.copyWith(
-                                                        color: AppColors
-                                                            .blackLightColor,
-                                                        fontSize:
-                                                            getFontSizeDefault(
-                                                                context)),
-                                              )
-                                            : BlackContainerWidget(
-                                                textStyle:
-                                                    poppinsRegular.copyWith(
-                                                        fontSize:
-                                                            getFontSizeDefault(
-                                                                context)),
-                                                onTap: () {
-                                                  CreateTrackEventController
-                                                      .to
-                                                      .selectedDay
-                                                      .value = index;
-                                                  CreateTrackEventController
-                                                      .to
-                                                      .selectedWeekDay
-                                                      .value = day.toString();
-                                                },
-                                                text: day,
-                                              );
-                                      })
-                                    ],
-                                  ),
-                                );
-                        }),
+                  // ///======================Week Days==================///
+                  // type == event
+                  //     ? const SizedBox.shrink()
+                  //     : Obx(() {
+                  //         return CreateTrackEventController.to.weekDays
+                  //                 .where((e) => e['selected'] == true)
+                  //                 .map((e) => e['day_name']
+                  //                     as String) // Extract the 'day' field as a String
+                  //                 .toList()
+                  //                 .isEmpty
+                  //             ? const SizedBox.shrink()
+                  //             : SingleChildScrollView(
+                  //                 scrollDirection: Axis.horizontal,
+                  //                 child: Row(
+                  //                   spacing: 10.w,
+                  //                   children: [
+                  //                     ...List.generate(
+                  //                         CreateTrackEventController.to.weekDays
+                  //                             .where(
+                  //                                 (e) => e['selected'] == true)
+                  //                             .map((e) => e['day_name']
+                  //                                 as String) // Extract the 'day' field as a String
+                  //                             .toList()
+                  //                             .length, (index) {
+                  //                       final day = CreateTrackEventController
+                  //                           .to.weekDays
+                  //                           .where((e) => e['selected'] == true)
+                  //                           .map((e) => e['day_name']
+                  //                               as String) // Extract the 'day' field as a String
+                  //                           .toList()[index];
+                  //                       return CreateTrackEventController
+                  //                                   .to.selectedDay.value ==
+                  //                               index
+                  //                           ? GradientContainerWidget(
+                  //                               text: day,
+                  //                               textStyle:
+                  //                                   poppinsRegular.copyWith(
+                  //                                       color: AppColors
+                  //                                           .blackLightColor,
+                  //                                       fontSize:
+                  //                                           getFontSizeDefault(
+                  //                                               context)),
+                  //                             )
+                  //                           : BlackContainerWidget(
+                  //                               textStyle:
+                  //                                   poppinsRegular.copyWith(
+                  //                                       fontSize:
+                  //                                           getFontSizeDefault(
+                  //                                               context)),
+                  //                               onTap: () {
+                  //                                 CreateTrackEventController
+                  //                                     .to
+                  //                                     .selectedDay
+                  //                                     .value = index;
+                  //                                 CreateTrackEventController
+                  //                                     .to
+                  //                                     .selectedWeekDay
+                  //                                     .value = day.toString();
+                  //                               },
+                  //                               text: day,
+                  //                             );
+                  //                     })
+                  //                   ],
+                  //                 ),
+                  //               );
+                  //       }),
 
                   /* ///===================dynamic available slot===================//
                   argument != null && type==event

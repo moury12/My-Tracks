@@ -20,7 +20,81 @@ bottomSheetTheme: BottomSheetThemeData(
   dragHandleColor: AppColors.greyColor,
     dragHandleSize: Size(74.w, 5.h)
 ),
+    colorScheme: ColorScheme.light(
+      primary: AppColors.blueColor, // header background color
+      onPrimary: AppColors.blackBackgroundColor, // header text color
+      onSurface: AppColors.blackBackgroundColor, // body text color
+    ),
+    datePickerTheme: DatePickerThemeData(
+      dayOverlayColor: const WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
 
+      headerHelpStyle: TextStyle(
+        color: AppColors.blackLightColor,
+        fontSize: 16.sp,
+      ), yearOverlayColor: const WidgetStatePropertyAll<Color>(AppColors.blackLightColor) ,
+      headerForegroundColor: AppColors.blackLightColor,
+      rangePickerHeaderForegroundColor: AppColors.blackLightColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.r),
+      ),
+      dayBackgroundColor: WidgetStateProperty.resolveWith<Color?>((states) {
+        if (states.contains(WidgetState.selected)) {
+          return AppColors.blackLightColor;  // Change this color
+        }
+        return null; // Default background
+      }),
+      rangeSelectionBackgroundColor: AppColors.blackLightColor,
+      todayBackgroundColor: const WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
+      yearForegroundColor:
+      const WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
+      dayForegroundColor:
+      WidgetStateProperty.resolveWith<Color?>((states) {
+        if (states.contains(WidgetState.selected)) {
+          return AppColors.whiteLightColor;   // Change this color
+        }
+        return AppColors.blackLightColor; // Default background
+      }),
+      todayForegroundColor:
+      const WidgetStatePropertyAll<Color>(AppColors.whiteLightColor),
+      confirmButtonStyle: const ButtonStyle(
+        foregroundColor:
+        WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
+      ),
+      rangePickerHeaderHeadlineStyle:
+      const TextStyle(color: AppColors.blackLightColor),
+      rangePickerSurfaceTintColor: AppColors.blackLightColor,
+      cancelButtonStyle: const ButtonStyle(
+        foregroundColor:
+        WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
+      ),
+      backgroundColor: AppColors.blueColor,
+      dividerColor: Colors.transparent,
+      // todayBackgroundColor: const WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
+      yearStyle: TextStyle(
+        color: AppColors.blackLightColor,
+        fontSize: 16.sp,
+      ),
+      inputDecorationTheme: const InputDecorationTheme(
+          fillColor: AppColors.blackLightColor),
+      weekdayStyle: TextStyle(
+        color: AppColors.blackLightColor, // Color for week names
+        fontSize: 14.sp,
+        fontWeight: FontWeight.w500,
+      ),
+      // rangeSelectionBackgroundColor: AppColors.blackLightColor,
+      headerHeadlineStyle: TextStyle(
+        color:
+        AppColors.blackLightColor, // Color for month/year in header
+        fontSize: 16.sp,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+    dropdownMenuTheme: DropdownMenuThemeData(
+      textStyle: TextStyle(
+        color: AppColors.blackLightColor, // Dropdown text color
+        fontSize: 16.sp,
+      ),
+    ),
     // useMaterial3: true,
     // fontFamily: darkThemeFont,
     splashColor: Colors.transparent,

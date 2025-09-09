@@ -169,6 +169,7 @@ class AppStaticString {
   static const String  selectOneYouCreate= "Select the one you want to create";
   static const String  seat= "Seat: ";
   static const String  selectDay= "Select Day";
+  static const String  selectDate= "Select Date";
   static const String  areYouSureWantToReactivate= "Are you sure you want to reactivate this truck?";
   static const String  availableSlot= "Available Slot: ";
   static const String  howManyPeopleCanTrack= "How many people can the track";

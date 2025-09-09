@@ -1,18 +1,23 @@
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:table_calendar/table_calendar.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:table_calendar/table_calendar.dart';
 import 'package:track_trek/controller/profile_controller.dart';
+import 'package:track_trek/core/components/custom_button.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
+import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/init/hive_boxes.dart';
 import 'package:track_trek/core/model/location/place_search_model.dart';
 import 'package:track_trek/core/utils/app_color.dart';
+import 'package:track_trek/view/add/widgets/multiple_date_picker.dart';
 import 'package:track_trek/view/auth/login.dart';
 
 enum SnackBarType { success, failed, alert }
@@ -239,95 +244,88 @@ void logOutCall() {
   Get.delete<ProfileController>();
   Get.offAllNamed(LoginScreen.routeName);
 }
+void showCalendarDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        backgroundColor: Colors.transparent,
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20.r),
+              gradient: LinearGradient(colors: [AppColors.blueColor,AppColors.blueColorDark])),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                MultipleDatePicker(
+                  preSelectedDates: [
+                    DateTime(2021, 3, 2),
+                    DateTime(2021, 3, 14),
+                    DateTime(2021, 3, 21),
+                  ],
+                  onDateSelected: (List<DateTime> selected) {
+                    // setState(() {
+                    //   selectedDates = selected;
+                    // });
+                  },
+                ),
+                // const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Expanded(
+                      child: CustomButton(
+                      textColor:Colors.black,
+                        borderColor:Colors.black,
+                        fillColor: Colors.transparent,
+                        radius: 20.r,
+                        onTap: () {
+                        Navigator.pop(context);
+                        },
+                        title: AppStaticString.cancel,
+                      ),
+                    ),
+                    space12W,
+                    Expanded(
+                      child: CustomButton(
+borderColor: Colors.black,
+                        fillColor: Colors.black,
+                        radius: 20.r,
+                        onTap: () {  Navigator.pop(context); },
+                        textColor: Colors.white,
+                        title: AppStaticString.confrim,
+                      ),
+                    ),
+
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    },
+  );
+}
 
 Future<String> selectDate(
   BuildContext context,
 ) async {
   final DateTime? pickedDate = await showDatePicker(
     barrierDismissible: false,
-    builder: (context, child) {
-      return Theme(
 
-        data: Theme.of(context).copyWith(
-          colorScheme: ColorScheme.light(
-            primary: AppColors.blueColor, // header background color
-            onPrimary: AppColors.blackBackgroundColor, // header text color
-            onSurface: AppColors.blackBackgroundColor, // body text color
-          ),
-          datePickerTheme: DatePickerThemeData(
-dayOverlayColor: const WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
-
-            headerHelpStyle: TextStyle(
-              color: AppColors.blackLightColor,
-              fontSize: 16.sp,
-            ), yearOverlayColor: const WidgetStatePropertyAll<Color>(AppColors.blackLightColor) ,
-            headerForegroundColor: AppColors.blackLightColor,
-            rangePickerHeaderForegroundColor: AppColors.blackLightColor,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.r),
-            ),
-            dayBackgroundColor: WidgetStateProperty.resolveWith<Color?>((states) {
-              if (states.contains(WidgetState.selected)) {
-                return AppColors.blackLightColor;  // Change this color
-              }
-              return null; // Default background
-            }),
-            rangeSelectionBackgroundColor: AppColors.blackLightColor,
-            todayBackgroundColor: const WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
-            yearForegroundColor:
-                const WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
-            dayForegroundColor:
-            WidgetStateProperty.resolveWith<Color?>((states) {
-              if (states.contains(WidgetState.selected)) {
-                return AppColors.whiteLightColor;   // Change this color
-              }
-              return AppColors.blackLightColor; // Default background
-            }),
-            todayForegroundColor:
-                const WidgetStatePropertyAll<Color>(AppColors.whiteLightColor),
-            confirmButtonStyle: const ButtonStyle(
-              foregroundColor:
-                  WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
-            ),
-            rangePickerHeaderHeadlineStyle:
-                const TextStyle(color: AppColors.blackLightColor),
-            rangePickerSurfaceTintColor: AppColors.blackLightColor,
-            cancelButtonStyle: const ButtonStyle(
-              foregroundColor:
-                  WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
-            ),
-            backgroundColor: AppColors.blueColor,
-            dividerColor: Colors.transparent,
-            // todayBackgroundColor: const WidgetStatePropertyAll<Color>(AppColors.blackLightColor),
-            yearStyle: TextStyle(
-              color: AppColors.blackLightColor,
-              fontSize: 16.sp,
-            ),
-            inputDecorationTheme: const InputDecorationTheme(
-                fillColor: AppColors.blackLightColor),
-            weekdayStyle: TextStyle(
-              color: AppColors.blackLightColor, // Color for week names
-              fontSize: 14.sp,
-              fontWeight: FontWeight.w500,
-            ),
-            // rangeSelectionBackgroundColor: AppColors.blackLightColor,
-            headerHeadlineStyle: TextStyle(
-              color:
-                  AppColors.blackLightColor, // Color for month/year in header
-              fontSize: 16.sp,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          dropdownMenuTheme: DropdownMenuThemeData(
-            textStyle: TextStyle(
-              color: AppColors.blackLightColor, // Dropdown text color
-              fontSize: 16.sp,
-            ),
-          ),
-        ),
-        child: child!,
-      );
-    },
+    // builder: (context, child) {
+    //   return Theme(
+    //
+    //
+    //     child: child!,
+    //   );
+    // },
     context: context,
     initialDate: DateTime.now(),
     firstDate: DateTime(2000),

@@ -15,6 +15,7 @@ import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
+import 'package:track_trek/view/add/create_track_event_slot.dart';
 import 'package:track_trek/view/add/widgets/upload_image_widget.dart';
 import 'package:track_trek/view/add/widgets/black_container_with_border.dart';
 import 'package:track_trek/view/add/widgets/buttons.dart';
@@ -434,9 +435,12 @@ class CreateTrackEventScreen extends StatelessWidget {
                                 .to.trackPhotosList.isNotEmpty*/
                             ) {
                           if (argument != null && argument == event) {
+
                             CreateTrackEventController.to.postEventRequest();
                           } else {
-                            CreateTrackEventController.to.postTrackRequest();
+                            Get.toNamed(CreateTrackEventSlotScreen.routeName,
+                                arguments: {'type': 'track', 'id': "trackId.value"});
+                            // CreateTrackEventController.to.postTrackRequest();
                           }
                         } else {
                           showCustomSnackbar(
