@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:track_trek/controller/common_controller.dart';
+import 'package:track_trek/controller/create_track_event_controller.dart';
 import 'package:track_trek/controller/home/host/home_controller.dart';
 import 'package:track_trek/controller/home/user/home_user_controller.dart';
 import 'package:track_trek/core/components/custom_button.dart';
@@ -251,6 +252,8 @@ showCalendarDialog(context,onConfrim: () {
       'type': 'track'
     },
   );
+},     onDateSelected: (List<DateTime> val) {
+
 },);
                         },fillColor: AppColors.blueColor,
                           borderColor: AppColors.blueColor,

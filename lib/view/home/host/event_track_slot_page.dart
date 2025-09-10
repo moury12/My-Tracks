@@ -24,6 +24,7 @@ import 'package:track_trek/view/manage/widgets/event_manage_card_widget.dart';
 
 class EventTrackSlotScreen extends StatefulWidget {
   static const String routeName = '/event-track-slot';
+
   const EventTrackSlotScreen({super.key});
 
   @override
@@ -38,12 +39,13 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
 
   // Determine the title dynamically
   String title = '';
+
   @override
   void initState() {
     type = arguments['type'] as String;
     id = arguments['id'] as String;
     title =
-        type == 'event' ? AppStaticString.eventSlot : AppStaticString.trackSlot;
+    type == 'event' ? AppStaticString.eventSlot : AppStaticString.trackSlot;
     if (id.isNotEmpty && type.isNotEmpty) {
       if (type == event) {
         CreateTrackEventController.to.getEventDetailsCall(eventId: id);
@@ -76,18 +78,18 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
                   // CreateTrackEventController.to.weekDays.clear();
                   if (CreateTrackEventController.to.weekDays.isEmpty) {
                     for (String day in CreateTrackEventController
-                            .to.singleTrack.value.trackDays ??
+                        .to.singleTrack.value.trackDays ??
                         []) {
                       CreateTrackEventController.to.weekDays
                           .add({'day_name': day, 'selected': true});
                     }
                     if (CreateTrackEventController
-                                .to.singleTrack.value.trackDays !=
-                            null &&
+                        .to.singleTrack.value.trackDays !=
+                        null &&
                         CreateTrackEventController
                             .to.singleTrack.value.trackDays!.isNotEmpty) {
                       CreateTrackEventController
-                          .to.selectedWeekDay.value =CreateTrackEventController
+                          .to.selectedWeekDay.value = CreateTrackEventController
                           .to.singleTrack.value.trackDays![0];
                     }
                   }
@@ -101,10 +103,10 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
                     'type': type,
                     'id': id,
                     'edit': CreateTrackEventController
-                                    .to.singleTrack.value.trackDays !=
-                                null &&
-                            CreateTrackEventController
-                                .to.singleTrack.value.trackDays!.isNotEmpty
+                        .to.singleTrack.value.trackDays !=
+                        null &&
+                        CreateTrackEventController
+                            .to.singleTrack.value.trackDays!.isNotEmpty
                         ? true
                         : false,
                   });
@@ -118,26 +120,28 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
                     image: DecorationImage(image: AssetImage(addIconUrl))),
                 child: isLoading
                     ? DefaultProgressIndicator(
-                        strokeWidth: 2,
-                        color: AppColors.primaryColor,
-                      )
+                  strokeWidth: 2,
+                  color: AppColors.primaryColor,
+                )
                     : Image.asset(
-                        plusIconUrl,
-                        height: 17.w,
-                        width: 17.w,
-                        color: AppColors.whiteLightColor,
-                      ),
+                  plusIconUrl,
+                  height: 17.w,
+                  width: 17.w,
+                  color: AppColors.whiteLightColor,
+                ),
               ),
             );
           })
         ],
       ),
-    body:   CustomRefreshIndicator(
+      body: CustomRefreshIndicator(
         onRefresh: () async {
           if (type == event) {
-            await CreateTrackEventController.to.getEventDetailsCall(eventId: id);
+            await CreateTrackEventController.to.getEventDetailsCall(
+                eventId: id);
           } else {
-            await CreateTrackEventController.to.getTrackDetailsCall(trackId: id);
+            await CreateTrackEventController.to.getTrackDetailsCall(
+                trackId: id);
           }
         },
         child: Obx(() {
@@ -145,10 +149,12 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
           bool isLoading = true;
 
           if (type == event) {
-            slotList = CreateTrackEventController.to.singleEvent.value.slots ?? [];
+            slotList =
+                CreateTrackEventController.to.singleEvent.value.slots ?? [];
             isLoading = CreateTrackEventController.to.isLoadingEvent.value;
           } else {
-            slotList = CreateTrackEventController.to.singleTrack.value.slots ?? [];
+            slotList =
+                CreateTrackEventController.to.singleTrack.value.slots ?? [];
             isLoading = CreateTrackEventController.to.isLoadingTrack.value;
           }
 
@@ -160,11 +166,14 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
           )
               : CustomScrollView(
             slivers: [
-              if (type != event)  SliverToBoxAdapter(child: Container(
+              if (type != event) SliverToBoxAdapter(child: Container(
                 margin: padding12H,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20.r),
-                    gradient: LinearGradient(colors: [AppColors.blueColor,AppColors.blueColorDark])),
+                    gradient: LinearGradient(colors: [
+                      AppColors.blueColor,
+                      AppColors.blueColorDark
+                    ])),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: MultipleDatePicker(
@@ -174,27 +183,33 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
                       DateTime(2025, 9, 21),
                     ], // This is an empty list, which is fine now
                     onDateSelected: (selectedDates) {
-
+                      CreateTrackEventController.to.selectedDates.value =
+                          selectedDates;
                       print(selectedDates);
                     },
                   ),
                 ),
-              ),) ,
+              ),),
 
               // ListView Sliver below the calendar
               SliverList(
 
                 delegate: SliverChildBuilderDelegate(
 
-childCount: slotList.length,  (context, index) {
-                    final slot = slotList[index];
+                  childCount: slotList.length, (context, index) {
+                  final slot = slotList[index];
 
-                    return Padding(
-                      padding: padding12H6V,
-                      child: MarronGradientContainerWidget(
-                        child: TrackEventSlotWidget(
+                  return Padding(
+                    padding: padding12H6V,
+                    child: MarronGradientContainerWidget(
+                      child: Obx(() {
+                        return TrackEventSlotWidget(
+                          needToShowCheckbox: CreateTrackEventController.to
+                              .selectedDates.isNotEmpty,
                           needToShowSeat: type == 'event',
-                          eventSlots: type == 'event' ? slot as EventSlots : null,
+                          eventSlots: type == 'event'
+                              ? slot as EventSlots
+                              : null,
                           slots: type == 'track' ? slot as TrackSlots : null,
                           onTap: () {
                             if (type == 'track') {
@@ -214,10 +229,11 @@ childCount: slotList.length,  (context, index) {
                             );
                           },
                           argument: userPanel,
-                        ),
-                      ),
-                    );
-                  },
+                        );
+                      }),
+                    ),
+                  );
+                },
                 ),
 
               ),
@@ -231,6 +247,7 @@ childCount: slotList.length,  (context, index) {
 
 class EmptyTextWidget extends StatelessWidget {
   final String text;
+
   const EmptyTextWidget({
     super.key,
     required this.text,

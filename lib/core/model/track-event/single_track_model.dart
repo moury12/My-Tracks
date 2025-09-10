@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+
 class SingleTrackModel {
   String? sId;
   String? host;
@@ -139,22 +141,27 @@ class TrackSlots {
   String? startTime;
   String? endTime;
   String? currency;
+  RxBool isSelected = false.obs; // 👈 reactive
   int? price;
   int? maxPeople;
   String? description;
 
-  TrackSlots(
-      {this.sId,
-      this.host,
-      this.track,
-      this.day,
-      this.slotNo,
-      this.startTime,
-      this.currency,
-      this.endTime,
-      this.price,
-      this.maxPeople,
-      this.description});
+  TrackSlots({
+    this.sId,
+    this.host,
+    this.track,
+    this.day,
+    this.slotNo,
+    this.startTime,
+    this.currency,
+    this.endTime,
+    this.price,
+    this.maxPeople,
+    this.description,
+    bool? isSelected,
+  }) {
+    this.isSelected.value = isSelected ?? false; // initialize
+  }
 
   TrackSlots.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -168,22 +175,24 @@ class TrackSlots {
     price = json['price'];
     maxPeople = json['maxPeople'];
     description = json['description'];
+    isSelected.value = json['isSelected'] ?? false;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['_id'] = sId;
-    data['host'] = host;
-    data['track'] = track;
-    data['day'] = day;
-    data['slotNo'] = slotNo;
-    data['startTime'] = startTime;
-    data['endTime'] = endTime;
-    data['currency'] = currency;
-    data['price'] = price;
-    data['maxPeople'] = maxPeople;
-    data['description'] = description;
-    return data;
+    return {
+      '_id': sId,
+      'host': host,
+      'track': track,
+      'day': day,
+      'slotNo': slotNo,
+      'startTime': startTime,
+      'endTime': endTime,
+      'currency': currency,
+      'price': price,
+      'maxPeople': maxPeople,
+      'description': description,
+      'isSelected': isSelected.value, // 👈 save bool value
+    };
   }
 }
 

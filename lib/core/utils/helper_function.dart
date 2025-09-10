@@ -244,7 +244,7 @@ void logOutCall() {
   Get.delete<ProfileController>();
   Get.offAllNamed(LoginScreen.routeName);
 }
-void showCalendarDialog(BuildContext context, {Function()? onConfrim}) {
+void showCalendarDialog(BuildContext context, {Function()? onConfrim,List<DateTime>? preSelectedDates,required Function(List<DateTime>) onDateSelected}) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -263,18 +263,10 @@ void showCalendarDialog(BuildContext context, {Function()? onConfrim}) {
               mainAxisSize: MainAxisSize.min,
               children: [
                 MultipleDatePicker(
-                  preSelectedDates: [
-                    DateTime(2021, 3, 2),
-                    DateTime(2021, 3, 14),
-                    DateTime(2021, 3, 21),
-                  ],
-
-                  onDateSelected: (List<DateTime> selected) {
-                    // setState(() {
-                    //   selectedDates = selected;
-                    // });
-                  },
+                  preSelectedDates: preSelectedDates??[],
+                    onDateSelected:onDateSelected
                 ),
+
                 // const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,

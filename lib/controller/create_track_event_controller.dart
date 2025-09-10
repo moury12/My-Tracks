@@ -14,7 +14,7 @@ import 'package:track_trek/view/add/create_track_event_slot.dart';
 
 class CreateTrackEventController extends GetxController {
   static CreateTrackEventController get to => Get.find();
-
+  RxList<DateTime> selectedDates = <DateTime>[].obs;
   ///=======================text editing controller for track =======================///
 
   Rx<TextEditingController> trackNameController =

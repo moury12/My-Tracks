@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:track_trek/core/components/custom_button.dart';
+import 'package:track_trek/core/components/custom_checkbox.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
 import 'package:track_trek/core/constant/fontsize_constant.dart';
@@ -20,6 +22,7 @@ class TrackEventSlotWidget extends StatelessWidget {
   final String? argument;
   final bool? needToShowSeat;
   final bool? needToBook;
+  final bool? needToShowCheckbox;
   final bool? buttonLoading;
   final TrackSlots? slots;
   final EventSlots? eventSlots;
@@ -27,6 +30,7 @@ class TrackEventSlotWidget extends StatelessWidget {
   final Function()? onViewAllParticipant;
   final Function()? onDelete;
   final Function()? onBook;
+
   const TrackEventSlotWidget({
     super.key,
     this.argument,
@@ -38,7 +42,7 @@ class TrackEventSlotWidget extends StatelessWidget {
     this.onViewAllParticipant,
     this.needToBook = false,
     this.onBook,
-    this.buttonLoading = false,
+    this.buttonLoading = false, this.needToShowCheckbox = false,
   });
 
   @override
@@ -48,17 +52,37 @@ class TrackEventSlotWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            '${slots != null ? slots!.slotNo ?? 'n/a' : ''} ${eventSlots != null ? eventSlots!.slotNo ?? 'n/a' : ''} ',
-            style: poppinsRegular.copyWith(
-                fontSize: getFontSizeExtraLarge(context)),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  '${slots != null
+                      ? slots!.slotNo ?? 'n/a'
+                      : ''} ${eventSlots != null
+                      ? eventSlots!.slotNo ?? 'n/a'
+                      : ''} ',
+                  style: poppinsRegular.copyWith(
+                      fontSize: getFontSizeExtraLarge(context)),
+                ),
+              ),
+              needToShowCheckbox == true && slots != null ? Obx(() {
+                return CustomCheckbox(
+                  isChecked: slots!.isSelected.value, onChanged: (value) {
+                  slots!.isSelected.value = value;
+                },);
+              }) : SizedBox.shrink()
+            ],
           ),
           space6H,
 
           ///================= slot price dynamic========================///
           Text(
-            '${slots != null ?( slots!.currency?? '\$' ).toUpperCase(): '' } ${slots != null ? slots!.price ?? 'n/a' : ''}'
-            '${eventSlots != null ? (eventSlots!.currency ?? 'n/a').toUpperCase() : ''} ${eventSlots != null ? eventSlots!.price ?? 'n/a' : ''}',
+            '${slots != null
+                ? (slots!.currency ?? '\$').toUpperCase()
+                : '' } ${slots != null ? slots!.price ?? 'n/a' : ''}'
+                '${eventSlots != null ? (eventSlots!.currency ?? 'n/a')
+                .toUpperCase() : ''} ${eventSlots != null ? eventSlots!.price ??
+                'n/a' : ''}',
             style: poppinsSemiBold.copyWith(
                 fontSize: getFontSizeExtraLarge(context),
                 color: AppColors.primaryColor),
@@ -68,35 +92,44 @@ class TrackEventSlotWidget extends StatelessWidget {
           Row(
             children: needToShowSeat == true
                 ? [
-                    Expanded(
-                      child: BlueTextWidget(
-                        text:
-                            '${AppStaticString.allowedPeople} ${eventSlots != null ? eventSlots!.maxPeople : ''}   ${AppStaticString.unsold} ${eventSlots != null ? (eventSlots!.maxPeople ?? 0) - (eventSlots!.currentPeople ?? 0) : ''}',
-                        textAlign: TextAlign.start,
-                      ),
-                    )
-                  ]
+              Expanded(
+                child: BlueTextWidget(
+                  text:
+                  '${AppStaticString.allowedPeople} ${eventSlots != null
+                      ? eventSlots!.maxPeople
+                      : ''}   ${AppStaticString.unsold} ${eventSlots != null
+                      ? (eventSlots!.maxPeople ?? 0) -
+                      (eventSlots!.currentPeople ?? 0)
+                      : ''}',
+                  textAlign: TextAlign.start,
+                ),
+              )
+            ]
                 : slots != null
-                    ? [
-                        ///================= slot week dynamic========================///
-                        Expanded(
-                          child: argument == userPanel
-                              ? Text(
-                                  ///=================with total seat number================///
-                                  '${slots != null ? slots!.day ?? '' : ''}(${AppStaticString.totalSeatWithClone}${slots != null ? slots!.maxPeople ?? 'n/a' : ''})',
-                                  style: poppinsRegular.copyWith(
-                                      fontSize: getFontSizeSmall(context)),
-                                )
-                              : Text(
-                                  slots != null
-                                      ? slots!.day ?? 'n/a'
-                                      : 'sunday',
-                                  style: poppinsRegular.copyWith(
-                                      fontSize: getFontSizeSmall(context)),
-                                ),
-                        ),
-                      ]
-                    : [],
+                ? [
+
+              ///================= slot week dynamic========================///
+              Expanded(
+                child: argument == userPanel
+                    ? Text(
+
+                  ///=================with total seat number================///
+                  '${slots != null ? slots!.day ?? '' : ''}(${AppStaticString
+                      .totalSeatWithClone}${slots != null ? slots!.maxPeople ??
+                      'n/a' : ''})',
+                  style: poppinsRegular.copyWith(
+                      fontSize: getFontSizeSmall(context)),
+                )
+                    : Text(
+                  slots != null
+                      ? slots!.day ?? 'n/a'
+                      : 'sunday',
+                  style: poppinsRegular.copyWith(
+                      fontSize: getFontSizeSmall(context)),
+                ),
+              ),
+            ]
+                : [],
           ),
           space6H,
 
@@ -118,63 +151,64 @@ class TrackEventSlotWidget extends StatelessWidget {
             text: slots != null
                 ? slots!.description ?? ''
                 : eventSlots != null
-                    ? eventSlots!.description ?? ''
-                    : '',
+                ? eventSlots!.description ?? ''
+                : '',
             maxLines: 4, // Number of lines to show before truncating
           ),
           argument != null && argument == 'track_management'
               ? GestureDetector(
-                  onTap: onViewAllParticipant,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        AppStaticString.viewAllParticipent,
-                        style: poppinsRegular.copyWith(
-                            fontSize: getFontSizeSmall(context)),
-                      ),
-                      space12W,
-                      Image.asset(
-                        arrowTopImgUrl,
-                        color: AppColors.whiteLightColor,
-                        height: 14.w,
-                        width: 14.w,
-                      )
-                    ],
-                  ),
-                )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    argument == userPanel
-                        ? const SizedBox.shrink()
-                        : InkWell(
-                            onTap: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) => DeleteAlertDialog(
-                                  yesFunction: onDelete,
-                                ),
-                              );
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.all(8.sp),
-                              child: Image.asset(
-                                deleteIconUrl,
-                                height: 24.w,
-                                width: 24.w,
-                              ),
-                            ),
-                          ),
-                  ],
+            onTap: onViewAllParticipant,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  AppStaticString.viewAllParticipent,
+                  style: poppinsRegular.copyWith(
+                      fontSize: getFontSizeSmall(context)),
                 ),
+                space12W,
+                Image.asset(
+                  arrowTopImgUrl,
+                  color: AppColors.whiteLightColor,
+                  height: 14.w,
+                  width: 14.w,
+                )
+              ],
+            ),
+          )
+              : Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              argument == userPanel
+                  ? const SizedBox.shrink()
+                  : InkWell(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) =>
+                        DeleteAlertDialog(
+                          yesFunction: onDelete,
+                        ),
+                  );
+                },
+                child: Padding(
+                  padding: EdgeInsets.all(8.sp),
+                  child: Image.asset(
+                    deleteIconUrl,
+                    height: 24.w,
+                    width: 24.w,
+                  ),
+                ),
+              ),
+            ],
+          ),
           needToBook == true
               ? CustomButton(
-                  isLoading: buttonLoading,
-                  marginVerticel: 6.h,
-                  onTap: onBook ?? () {},
-                  title: AppStaticString.bookSlot,
-                )
+            isLoading: buttonLoading,
+            marginVerticel: 6.h,
+            onTap: onBook ?? () {},
+            title: AppStaticString.bookSlot,
+          )
               : const SizedBox.shrink()
         ],
       ),

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:track_trek/controller/create_track_event_controller.dart';
 import 'package:track_trek/core/components/custom_appbar.dart';
 import 'package:track_trek/core/components/custom_button.dart';
@@ -79,78 +80,57 @@ class _CreateTrackEventSlotScreenState
                   type == event
                       ? const SizedBox.shrink()
                       : CustomButton(
-            // isLoading: StripeOnboardingController.to.isLoading.value,
-              title: AppStaticString.selectDate,
-              img: calenderIconUrl,
-              fillColor:AppColors.blueColor ,
-              borderColor:AppColors.blueColor, onTap: () {showCalendarDialog(context);  } ,),
+                          // isLoading: StripeOnboardingController.to.isLoading.value,
+                          title: AppStaticString.selectDate,
+                          img: calenderIconUrl,
+                          fillColor: AppColors.blueColor,
+                          borderColor: AppColors.blueColor,
+                          onTap: () {
+                            showCalendarDialog(
 
-                  // ///======================Week Days==================///
-                  // type == event
-                  //     ? const SizedBox.shrink()
-                  //     : Obx(() {
-                  //         return CreateTrackEventController.to.weekDays
-                  //                 .where((e) => e['selected'] == true)
-                  //                 .map((e) => e['day_name']
-                  //                     as String) // Extract the 'day' field as a String
-                  //                 .toList()
-                  //                 .isEmpty
-                  //             ? const SizedBox.shrink()
-                  //             : SingleChildScrollView(
-                  //                 scrollDirection: Axis.horizontal,
-                  //                 child: Row(
-                  //                   spacing: 10.w,
-                  //                   children: [
-                  //                     ...List.generate(
-                  //                         CreateTrackEventController.to.weekDays
-                  //                             .where(
-                  //                                 (e) => e['selected'] == true)
-                  //                             .map((e) => e['day_name']
-                  //                                 as String) // Extract the 'day' field as a String
-                  //                             .toList()
-                  //                             .length, (index) {
-                  //                       final day = CreateTrackEventController
-                  //                           .to.weekDays
-                  //                           .where((e) => e['selected'] == true)
-                  //                           .map((e) => e['day_name']
-                  //                               as String) // Extract the 'day' field as a String
-                  //                           .toList()[index];
-                  //                       return CreateTrackEventController
-                  //                                   .to.selectedDay.value ==
-                  //                               index
-                  //                           ? GradientContainerWidget(
-                  //                               text: day,
-                  //                               textStyle:
-                  //                                   poppinsRegular.copyWith(
-                  //                                       color: AppColors
-                  //                                           .blackLightColor,
-                  //                                       fontSize:
-                  //                                           getFontSizeDefault(
-                  //                                               context)),
-                  //                             )
-                  //                           : BlackContainerWidget(
-                  //                               textStyle:
-                  //                                   poppinsRegular.copyWith(
-                  //                                       fontSize:
-                  //                                           getFontSizeDefault(
-                  //                                               context)),
-                  //                               onTap: () {
-                  //                                 CreateTrackEventController
-                  //                                     .to
-                  //                                     .selectedDay
-                  //                                     .value = index;
-                  //                                 CreateTrackEventController
-                  //                                     .to
-                  //                                     .selectedWeekDay
-                  //                                     .value = day.toString();
-                  //                               },
-                  //                               text: day,
-                  //                             );
-                  //                     })
-                  //                   ],
-                  //                 ),
-                  //               );
-                  //       }),
+                              context,
+                              onDateSelected: (List<DateTime> val) {
+                                CreateTrackEventController
+                                    .to.selectedDates.value = val;
+                              },
+                                preSelectedDates:CreateTrackEventController
+                                    .to.selectedDates
+                            );
+                          },
+                        ),
+
+                  ///======================Week Days==================///
+                  type == event
+                      ? const SizedBox.shrink()
+                      : Obx(() {
+                          return CreateTrackEventController.to.selectedDates
+                                  .isEmpty
+                              ? const SizedBox.shrink()
+                              : SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    spacing: 10.w,
+                                    children: [
+                                      ...List.generate(
+                                          CreateTrackEventController.to.selectedDates.length, (index) {
+                                        String day = DateFormat('MM/dd/yyyy').
+                                        format(CreateTrackEventController.to.selectedDates[index]);
+
+                                       return GradientContainerWidget(
+                                                text: day,
+                                                textStyle:
+                                                    poppinsRegular.copyWith(
+                                                        color: AppColors
+                                                            .blackLightColor,
+                                                        fontSize:
+                                                            getFontSizeDefault(
+                                                                context)),
+                                              );
+                                      })
+                                    ],
+                                  ),
+                                );
+                        }),
 
                   /* ///===================dynamic available slot===================//
                   argument != null && type==event
@@ -166,14 +146,17 @@ class _CreateTrackEventSlotScreenState
                       title: AppStaticString.currency,
                       selectedValue: CreateTrackEventController
                           .to.selectedCurrencyFrom.value,
-                      items: CreateTrackEventController.to.currencyList.entries.map((e) => '${e.key} - ${e.value}',)
+                      items: CreateTrackEventController.to.currencyList.entries
+                          .map(
+                            (e) => '${e.key} - ${e.value}',
+                          )
                           .toList(),
                       isLoading: CreateTrackEventController
                           .to.isLoadingCurrencies.value,
                       onChanged: (value) {
                         print(value.toString().split(' ').first);
-                        CreateTrackEventController
-                            .to.selectedCurrencyFrom.value = value.toString().split(' ').first;
+                        CreateTrackEventController.to.selectedCurrencyFrom
+                            .value = value.toString().split(' ').first;
                       },
                     );
                   }),
