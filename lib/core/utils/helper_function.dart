@@ -264,7 +264,8 @@ void showCalendarDialog(BuildContext context, {Function()? onConfrim,List<DateTi
               children: [
                 MultipleDatePicker(
                   preSelectedDates: preSelectedDates??[],
-                    onDateSelected:onDateSelected
+                    onDateSelected:onDateSelected,
+
                 ),
 
                 // const SizedBox(height: 16),
@@ -308,17 +309,11 @@ borderColor: Colors.black,
 
 Future<String> selectDate(
   BuildContext context,
-) async {
+) async
+{
   final DateTime? pickedDate = await showDatePicker(
     barrierDismissible: false,
 
-    // builder: (context, child) {
-    //   return Theme(
-    //
-    //
-    //     child: child!,
-    //   );
-    // },
     context: context,
     initialDate: DateTime.now(),
     firstDate: DateTime(2000),
@@ -333,7 +328,71 @@ Future<String> selectDate(
   }
   return ''; // Return null if no date is selected
 }
-
+// Future<String> selectDate(BuildContext context) async {
+//   DateTime selectedDate = DateTime.now(); // Default selected date
+//   DateTime? pickedDate;
+//
+//   // Show custom dialog with TableCalendar
+//   pickedDate = await showDialog<DateTime>(
+//     context: context,
+//     builder: (BuildContext context) {
+//       return Dialog(
+//         child: TableCalendar(
+//           focusedDay: selectedDate,
+//           firstDay: DateTime(2000),
+//           lastDay: DateTime(2100),
+//           selectedDayPredicate: (day) {
+//             return isSameDay(pickedDate, day);
+//           },
+//           onDaySelected: (selectedDay, focusedDay) {
+//             pickedDate = selectedDay; // Set selected day
+//             Navigator.of(context).pop(selectedDay); // Close dialog and return selected date
+//           },
+//           calendarStyle: CalendarStyle(
+//             todayDecoration: BoxDecoration(
+//               color: Colors.black,
+//               shape: BoxShape.rectangle,/*borderRadius: BorderRadius.circular(6.r)*/
+//             ),
+//             selectedDecoration: BoxDecoration(
+//               color: AppColors.primaryColor,
+//               shape: BoxShape.rectangle,/*borderRadius: BorderRadius.circular(6.r)*/
+//             ),
+//             outsideDaysVisible: false,
+//             weekendTextStyle: const TextStyle(color: Colors.black,fontSize: 12),
+//             defaultTextStyle: const TextStyle(color: Colors.black,fontSize: 12),
+//           ),
+//           daysOfWeekHeight: 20,
+//
+//           daysOfWeekStyle: DaysOfWeekStyle(weekdayStyle: TextStyle(color: Colors.black, fontSize: 12),weekendStyle: TextStyle(color: Colors.black, fontSize: 12)),
+//           headerStyle: const HeaderStyle(
+//
+//             formatButtonVisible: false,
+//             titleCentered: true,
+//             titleTextStyle: TextStyle(
+//               fontSize: 16,
+//               fontWeight: FontWeight.bold,
+//               color: Colors.black,
+//             ),
+//           ),
+//             eventLoader: (day) {
+//             // Mark dates as events (pre-selected dates)
+//             return [   DateTime(2025, 9, 2),
+//               DateTime(2025, 9, 14),
+//               DateTime(2025, 9, 21),];
+//           },
+//         ),
+//       );
+//     },
+//   );
+//
+//   if (pickedDate != null) {
+//     // Format the date
+//     String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate!);
+//     return formattedDate;
+//   }
+//
+//   return ''; // Return empty string if no date is selected
+// }
 String formatTimestamp({
   required String timestamp,
   String format = 'yyyy-MM-dd hh:mm a',

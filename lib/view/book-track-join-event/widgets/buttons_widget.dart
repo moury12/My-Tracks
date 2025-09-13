@@ -36,7 +36,7 @@ class ArrowBackwardIconButton extends StatelessWidget {
                   const Duration(milliseconds: 300),
                   curve: Curves.easeIn);
             },
-            icon: const Icon(Icons.arrow_forward_ios)),
+            icon: const Icon(Icons.arrow_forward_ios,color: AppColors.normalDarkWhite,)),
       ),
     );
   }
@@ -80,11 +80,11 @@ class ArrowForwardIconButton extends StatelessWidget {
             },
             icon: Icon(
               Icons.arrow_back_ios_sharp,
-              color: BookTrackJoinEventController
+              color: /*BookTrackJoinEventController
                   .to.currentIndex.value >
                   0
-                  ? AppColors.normalDarkWhite
-                  : null,
+                  ? */AppColors.normalDarkWhite
+                 /* : null*/,
             )),
       ),
     );

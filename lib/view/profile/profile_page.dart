@@ -71,6 +71,7 @@ class ProfileScreen extends StatelessWidget {
                                               null && ProfileController.to.uploadProfileImg.value.isEmpty
                                           ? CustomNetworkImage(
                                               boxShape: BoxShape.circle,
+                                              imageErrorUrl: dummyProfileImgUrl,
                                               imageUrl:
                                                   '${ApiClient.baseUrl}/${ProfileController.to.userModel.value.profileImage}',
                                               height: 70.w,
