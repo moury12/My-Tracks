@@ -238,7 +238,10 @@ class CreateTrackEventController extends GetxController {
       isLoadingCreateSlot.value = true;
       bool isUpdate = await TrackEventService.createTrackSlotRequest(
           trackId: trackId.value,
-          day: selectedWeekDay.value,
+          day:  selectedDates
+          .map((date) => date.day) // take only the day part
+        .toSet()                // convert to Set -> unique
+        .toList(),
           slotNo: slotNoController.value.text,
           startTime: selectedStartTime.value,
           endTime: selectedEndTime.value,
@@ -344,7 +347,7 @@ class CreateTrackEventController extends GetxController {
           maxPeople: uploadEventTotalSeatController.value.text,
           price: uploadEventPriceController.value.text,
           description: uploadEventDescriptionController.value.text,
-          currency: selectedCurrencyFrom.value.toString());
+          currency: selectedCurrencyFrom.value.toString(),);
       if (isUpdate) {
         isLoadingCreateSlot.value = false;
         getEventDetailsCall(eventId: eventId.value);

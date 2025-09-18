@@ -244,7 +244,16 @@ void logOutCall() {
   Get.delete<ProfileController>();
   Get.offAllNamed(LoginScreen.routeName);
 }
-void showCalendarDialog(BuildContext context, {Function()? onConfrim,List<DateTime>? preSelectedDates,required Function(List<DateTime>) onDateSelected}) {
+void showCalendarDialog(
+    BuildContext context, {
+      Function()? onConfrim,
+      List<DateTime>? preSelectedDates,
+      required Function(List<DateTime>) onDateSelected,
+    })
+{
+  // local copy of selected dates
+  List<DateTime> tempSelectedDates = [...(preSelectedDates ?? [])];
+
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -255,31 +264,49 @@ void showCalendarDialog(BuildContext context, {Function()? onConfrim,List<DateTi
         backgroundColor: Colors.transparent,
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20.r),
-              gradient: LinearGradient(colors: [AppColors.blueColor,AppColors.blueColorDark])),
+            borderRadius: BorderRadius.circular(20.r),
+            gradient: LinearGradient(
+              colors: [AppColors.blueColor, AppColors.blueColorDark],
+            ),
+          ),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 MultipleDatePicker(
-                  preSelectedDates: preSelectedDates??[],
-                    onDateSelected:onDateSelected,
+                  preSelectedDates: tempSelectedDates,
+                  onDateSelected: (val) {
+                    tempSelectedDates = [];
+
+                    for (final date in val) {
+                      // Always keep the selected date itself
+                      tempSelectedDates.add(date);
+
+                      // Generate same day for future months in that year
+                      for (int month = date.month + 1; month <= 12; month++) {
+                        try {
+                          final newDate = DateTime(date.year, month, date.day);
+                          tempSelectedDates.add(newDate);
+                        } catch (e) {
+                          // skip invalid days like Feb 30
+                        }
+                      }
+                    }
+                  },
 
                 ),
-
-                // const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Expanded(
                       child: CustomButton(
-                      textColor:Colors.black,
-                        borderColor:Colors.black,
+                        textColor: Colors.black,
+                        borderColor: Colors.black,
                         fillColor: Colors.transparent,
                         radius: 20.r,
                         onTap: () {
-                        Navigator.pop(context);
+                          Navigator.pop(context);
                         },
                         title: AppStaticString.cancel,
                       ),
@@ -287,15 +314,22 @@ void showCalendarDialog(BuildContext context, {Function()? onConfrim,List<DateTi
                     space12W,
                     Expanded(
                       child: CustomButton(
-borderColor: Colors.black,
+                        borderColor: Colors.black,
                         fillColor: Colors.black,
                         radius: 20.r,
-                        onTap: onConfrim??() { ; Navigator.pop(context); },
+                        onTap: () {
+                          // send the collected dates back on confirm
+                          onDateSelected(tempSelectedDates);
+
+                          if (onConfrim != null) {
+                            onConfrim();
+                          }
+                          Navigator.pop(context);
+                        },
                         textColor: Colors.white,
                         title: AppStaticString.confrim,
                       ),
                     ),
-
                   ],
                 ),
               ],
@@ -305,6 +339,24 @@ borderColor: Colors.black,
       );
     },
   );
+}
+List<DateTime> generateMonthlyDates(DateTime selectedDate, {int monthsAhead = 12}) {
+  List<DateTime> dates = [];
+
+  for (int i = 0; i < monthsAhead; i++) {
+    DateTime newDate = DateTime(
+      selectedDate.year,
+      selectedDate.month + i,
+      selectedDate.day,
+    );
+
+    // make sure it's valid (e.g., Feb 30 doesn't exist)
+    if (newDate.month == (selectedDate.month + i) % 12 || newDate.day == selectedDate.day) {
+      dates.add(newDate);
+    }
+  }
+
+  return dates;
 }
 
 Future<String> selectDate(

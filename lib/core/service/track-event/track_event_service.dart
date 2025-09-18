@@ -385,7 +385,7 @@ class TrackEventService {
 
   static Future<bool> createTrackSlotRequest({
     required String trackId,
-    required String day,
+    required List<int> day,
     required String slotNo,
     required String startTime,
     required String endTime,
@@ -404,7 +404,7 @@ class TrackEventService {
       };
       final body = jsonEncode({
         "trackId": trackId,
-        "day": day,
+        "dayNo": day,
         "slotNo": slotNo,
         "startTime": startTime,
         "endTime": endTime,
@@ -701,7 +701,9 @@ class TrackEventService {
         'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
       };
       final body = jsonEncode(
-          {"eventId": eventId, "slotNo": slotNo, "maxPeople": maxPeople, "price": price, "currency": currency, "description": description});
+          {"eventId": eventId,
+            "slotNo": slotNo, "maxPeople": maxPeople,
+            "price": price, "currency": currency, "description": description});
       final response = await http.post(url, headers: headers, body: body);
       final responseData = json.decode(response.body);
       log('-----------------create event slot call--------------------');

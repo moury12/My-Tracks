@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:track_trek/controller/common_controller.dart';
 import 'package:track_trek/controller/create_track_event_controller.dart';
@@ -39,6 +40,7 @@ class TrackCardWidget extends StatelessWidget {
   final TrackForUserPanelModel? trackModelUserPanel;
   final Function()? onActive;
   final Function()? onDeactivate;
+
   const TrackCardWidget({
     super.key,
     this.fromManage = false,
@@ -57,77 +59,77 @@ class TrackCardWidget extends StatelessWidget {
     final String imageUrl = trackModel != null
         ? '${ApiClient.baseUrl}/${trackModel!.trackImage!.first}'
         : trackModelUserPanel != null
-            ? '${ApiClient.baseUrl}/${trackModelUserPanel!.trackImage!.first}'
-            : '';
+        ? '${ApiClient.baseUrl}/${trackModelUserPanel!.trackImage!.first}'
+        : '';
     final String imageHostUrl = trackModel != null
         ? ''
         : trackModelUserPanel != null
-            ? trackModelUserPanel!.host != null
-                ? '${ApiClient.baseUrl}/${trackModelUserPanel!.host!.profileImage}'
-                : ''
-            : '';
+        ? trackModelUserPanel!.host != null
+        ? '${ApiClient.baseUrl}/${trackModelUserPanel!.host!.profileImage}'
+        : ''
+        : '';
     final String sId = trackModel != null
         ? trackModel!.sId ?? ''
         : trackModelUserPanel != null
-            ? trackModelUserPanel!.sId ?? ''
-            : '';
+        ? trackModelUserPanel!.sId ?? ''
+        : '';
     final String name = trackModel != null
         ? trackModel!.trackName ?? ''
         : trackModelUserPanel != null
-            ? trackModelUserPanel!.trackName ?? ''
-            : 'n/a';
+        ? trackModelUserPanel!.trackName ?? ''
+        : 'n/a';
     final String totalSlot = trackModel != null
         ? trackModel!.slots!.length.toString()
         : trackModelUserPanel != null
-            ? trackModelUserPanel!.slots!.length.toString()
-            : 'n/a';
+        ? trackModelUserPanel!.slots!.length.toString()
+        : 'n/a';
     final String location = trackModel != null
         ? trackModel!.address ?? ''
         : trackModelUserPanel != null
-            ? trackModelUserPanel!.address ?? ''
-            : 'n/a';
+        ? trackModelUserPanel!.address ?? ''
+        : 'n/a';
     final bool isReact = trackModel != null
         ? false
         : trackModelUserPanel != null
-            ? trackModelUserPanel!.isLiked ?? false
-            : false;
+        ? trackModelUserPanel!.isLiked ?? false
+        : false;
     final String description = trackModel != null
         ? trackModel!.description ?? ''
         : trackModelUserPanel != null
-            ? trackModelUserPanel!.description ?? ''
-            : 'n/a';
+        ? trackModelUserPanel!.description ?? ''
+        : 'n/a';
     final String totalComment = trackModel != null
         ? trackModel!.totalReview.toString()
         : trackModelUserPanel != null
-            ? trackModelUserPanel!.totalReview.toString()
-            : 'n/a';
+        ? trackModelUserPanel!.totalReview.toString()
+        : 'n/a';
     final String totalReaction = trackModel != null
         ? trackModel!.totalLikes.toString()
         : trackModelUserPanel != null
-            ? trackModelUserPanel!.totalLikes.toString()
-            : 'n/a';
+        ? trackModelUserPanel!.totalLikes.toString()
+        : 'n/a';
     final double lat = trackModel != null
         ? trackModel!.location!.coordinates!.last.toDouble()
         : trackModelUserPanel != null
-            ? trackModelUserPanel!.location!.coordinates!.last.toDouble()
-            : 0.0;
+        ? trackModelUserPanel!.location!.coordinates!.last.toDouble()
+        : 0.0;
     final double lng = trackModel != null
         ? trackModel!.location!.coordinates!.first.toDouble()
         : trackModelUserPanel != null
-            ? trackModelUserPanel!.location!.coordinates!.first.toDouble()
-            : 0.0;
+        ? trackModelUserPanel!.location!.coordinates!.first.toDouble()
+        : 0.0;
     final String hostName = trackModel != null
         ? 'n/a'
         : trackModelUserPanel != null
-            ? trackModelUserPanel!.host != null
-                ? trackModelUserPanel!.host!.name ?? ''
-                : ''
-            : 'n/a';
+        ? trackModelUserPanel!.host != null
+        ? trackModelUserPanel!.host!.name ?? ''
+        : ''
+        : 'n/a';
     final String rating = trackModel != null
         ? '4.5'
         : trackModelUserPanel != null
-            ? (trackModelUserPanel!.rating ?? '0.0').toString()
-            : '0.0';
+        ? (trackModelUserPanel!.rating ?? '0.0').toString()
+        : '0.0';
     return Padding(
       padding: padding12T,
       child: BlackContainerWidget(
@@ -144,10 +146,10 @@ class TrackCardWidget extends StatelessWidget {
               children: [
                 Expanded(
                     child: Text(
-                  name,
-                  style: poppinsMedium.copyWith(
-                      fontSize: getFontSizeLarge(context)),
-                )),
+                      name,
+                      style: poppinsMedium.copyWith(
+                          fontSize: getFontSizeLarge(context)),
+                    )),
                 space16W,
                 Expanded(
                   child: Row(
@@ -164,12 +166,12 @@ class TrackCardWidget extends StatelessWidget {
 
                       Expanded(
                           child: Text(
-                        location,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: poppinsMedium.copyWith(
-                            fontSize: getFontSizeSmall(context)),
-                      ))
+                            location,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: poppinsMedium.copyWith(
+                                fontSize: getFontSizeSmall(context)),
+                          ))
                     ],
                   ),
                 )
@@ -186,81 +188,104 @@ class TrackCardWidget extends StatelessWidget {
             space12H,
             fromUser == true
                 ? Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+
+                ///======================dynamic user profile img=======================///
+
+                imageHostUrl.isNotEmpty
+                    ? CustomNetworkImage(
+                  imageUrl: imageHostUrl,
+                  height: 45.w,
+                  width: 45.w,
+                  boxShape: BoxShape.circle,
+                  imageErrorUrl: dummyProfileImgUrl,
+                )
+                    : const ProfileCircleImageWidget(),
+                space8W,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ///======================dynamic user profile img=======================///
-
-                      imageHostUrl.isNotEmpty
-                          ? CustomNetworkImage(
-                              imageUrl: imageHostUrl,
-                              height: 45.w,
-                              width: 45.w,
-                              boxShape: BoxShape.circle,
-                              imageErrorUrl: dummyProfileImgUrl,
-                            )
-                          : const ProfileCircleImageWidget(),
-                      space8W,
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              hostName,
-                              style: poppinsLight.copyWith(
-                                  fontSize: getFontSizeSmall(context)),
-                            ),
-                            RatingTextWidget(rating: rating),
-                          ],
-                        ),
-                      ),
-                      DividerVertical(
-                        height: 24.h,
-                      ),
-
-                      ///======================dynamic user total slot=======================///
-
-                      Expanded(
-                          child: Text(
-                        textAlign: TextAlign.center,
-                        '${AppStaticString.slotWithClone} $totalSlot',
+                      Text(
+                        hostName,
                         style: poppinsLight.copyWith(
                             fontSize: getFontSizeSmall(context)),
-                      ))
+                      ),
+                      RatingTextWidget(rating: rating),
                     ],
-                  )
+                  ),
+                ),
+                DividerVertical(
+                  height: 24.h,
+                ),
 
-                ///======================dynamic total slot=======================///
+                ///======================dynamic user total slot=======================///
+
+                Expanded(
+                    child: Text(
+                      textAlign: TextAlign.center,
+                      '${AppStaticString.slotWithClone} $totalSlot',
+                      style: poppinsLight.copyWith(
+                          fontSize: getFontSizeSmall(context)),
+                    ))
+              ],
+            )
+
+            ///======================dynamic total slot=======================///
 
                 : Text(
-                    '${AppStaticString.totalSlot}${trackModel != null ? trackModel!.slots != null ? trackModel!.slots!.length : '0' : '0'}',
-                    style: poppinsSemiBold.copyWith(
-                        fontSize: getFontSizeLarge(context)),
-                  ),
+              '${AppStaticString.totalSlot}${trackModel != null ? trackModel!
+                  .slots != null ? trackModel!.slots!.length : '0' : '0'}',
+              style: poppinsSemiBold.copyWith(
+                  fontSize: getFontSizeLarge(context)),
+            ),
             fromUser == true ? const SizedBox.shrink() : space12H,
             fromManage == true || fromUser == true || fromPromote == true
                 ? const SizedBox.shrink()
                 : Row(
-                    children: [
-                      Expanded(
-                        child: CustomButton(onTap: () {
-showCalendarDialog(context,onConfrim: () {
-  Get.toNamed(
-    EventTrackSlotScreen.routeName,
-    arguments: {
-      'id': sId,
-      'slots': trackModel!.slots,
-      'type': 'track'
-    },
-  );
-},     onDateSelected: (List<DateTime> val) {
-
-},);
-                        },fillColor: AppColors.blueColor,
-                          borderColor: AppColors.blueColor,
-                            title: AppStaticString.calender,
-                            img: calenderIconUrl,),
-                      ),
-            /*trackModel!.renters != null&&trackModel!.renters!.isNotEmpty
+              children: [
+                Expanded(
+                  child: CustomButton(
+                      // isLoading: CreateTrackEventController.to.isLoadingTrack
+                      //     .value,
+                      onTap: () async {
+                        Get.put(CreateTrackEventController());
+                        await CreateTrackEventController.to.getTrackDetailsCall(
+                            trackId: trackModel!.sId.toString());
+                       if(CreateTrackEventController
+                           .to.singleTrack.value.slotAvailableDates!=null&&CreateTrackEventController
+                           .to.singleTrack.value.slotAvailableDates!.isNotEmpty) {
+                              showCalendarDialog(
+                                context,
+                                onConfrim: () {
+                                  Get.toNamed(
+                                    EventTrackSlotScreen.routeName,
+                                    arguments: {
+                                      'id': sId,
+                                      'slots': trackModel!.slots,
+                                      'type': 'track'
+                                    },
+                                  );
+                                },
+                                preSelectedDates: CreateTrackEventController
+                                    .to.singleTrack.value.slotAvailableDates!
+                                    .map((date) {
+                                  return DateFormat("MM/dd/yyyy").parse(date);
+                                }).toList(),
+                                onDateSelected: (List<DateTime> val) {},
+                              );
+                            }
+                       else{
+                         showCustomSnackbar(title: "Warning", message: "Sorry! this track doesn't have Available Dates", type: SnackBarType.alert);
+                       }
+                          },
+                      fillColor: AppColors.blueColor,
+                      borderColor: AppColors.blueColor,
+                      title: AppStaticString.calender,
+                      img: calenderIconUrl,),
+                ),
+                /*trackModel!.renters != null&&trackModel!.renters!.isNotEmpty
             ?   Flexible(
                         flex: 5,
                         child: SizedBox(
@@ -290,179 +315,192 @@ showCalendarDialog(context,onConfrim: () {
                           ),
                         ),
                       ):Expanded(flex:4,child: Text("No Renters!!")),*/
-                      space8W,
-                      Expanded(
+                space8W,
+                Expanded(
 
-                          child: CustomButton(
-                            onTap: () {
-                              Get.toNamed(
-                                EventTrackSlotScreen.routeName,
-                                arguments: {
-                                  'id': sId,
-                                  'slots': trackModel!.slots,
-                                  'type': 'track'
-                                },
-                              );
-                            },title: AppStaticString.viewAllSlot,
-                            img: arrowTopImgUrl,
+                    child: CustomButton(
+                      onTap: () async{
+                        Get.put(CreateTrackEventController());
+                        await CreateTrackEventController.to.getTrackDetailsCall(
+                            trackId: trackModel!.sId.toString());
+                        Get.toNamed(
+                          EventTrackSlotScreen.routeName,
+                          arguments: {
+                            'id': sId,
+                            'slots': trackModel!.slots,
+                            'type': 'track',
+                            if(CreateTrackEventController
+                                .to.singleTrack.value.slotAvailableDates!=null&&CreateTrackEventController
+                                .to.singleTrack.value.slotAvailableDates!.isNotEmpty)  "dates":CreateTrackEventController
+                                .to.singleTrack.value.slotAvailableDates
+                          },
+                        );
+                      }, title: AppStaticString.viewAllSlot,
+                      img: arrowTopImgUrl,
 
-                          ))
-                    ],
-                  ),
+                    ))
+              ],
+            ),
             fromManage == true ? const SizedBox.shrink() : space12H,
 
             fromPromote == true
                 ? const SizedBox.shrink()
                 : Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ///================comments==============///
-                      OptionWidget(
-                        icon: commentIconUrl,
-                        function: () {
-                          if (Boxes.getUserData().get(roleKey) == 'USER') {
-                            HomeUserController.to
-                                .getTrackReviewListCall(trackId: sId);
-                            reviewListVar = HomeUserController.to.reviewList;
-                          } else {
-                            HomeController.to
-                                .getTrackReviewListCall(trackId: sId);
-                            reviewListVar = HomeController.to.reviewList;
-                          }
-                          showModalBottomSheet(
-                            constraints: BoxConstraints.tightForFinite(
-                              // height: MediaQuery.of(context).size.height / 2,
-                              width: MediaQuery.of(context).size.width,
-                            ),
-                            context: context,
-                            isScrollControlled:
-                                true, // Allows better control of the height and width
-                            builder: (context) => ReviewListWidget(
-                              reviewList: reviewListVar,
-                            ),
-                          );
-                        },
-                        text: totalComment,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+
+                ///================comments==============///
+                OptionWidget(
+                  icon: commentIconUrl,
+                  function: () {
+                    if (Boxes.getUserData().get(roleKey) == 'USER') {
+                      HomeUserController.to
+                          .getTrackReviewListCall(trackId: sId);
+                      reviewListVar = HomeUserController.to.reviewList;
+                    } else {
+                      HomeController.to
+                          .getTrackReviewListCall(trackId: sId);
+                      reviewListVar = HomeController.to.reviewList;
+                    }
+                    showModalBottomSheet(
+                      constraints: BoxConstraints.tightForFinite(
+                        // height: MediaQuery.of(context).size.height / 2,
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width,
                       ),
+                      context: context,
+                      isScrollControlled:
+                      true, // Allows better control of the height and width
+                      builder: (context) =>
+                          ReviewListWidget(
+                            reviewList: reviewListVar,
+                          ),
+                    );
+                  },
+                  text: totalComment,
+                ),
 
-                      ///================react==============///
+                ///================react==============///
 
-                      /*CommonController.to.isLoadingPostLike.value?DefaultProgressIndicator(color: AppColors.whiteLightColor,):*/
-                      fromUser == true
-                          ? OptionWidget(
-                              function: () {
-                                CommonController.to
-                                    .postLikeDisLikeCall(trackId: sId);
-                              },
-                              icon: /* react!.value*/
-                                  isReact == true
-                                      ? reactFillIconUrl
-                                      : reactIconUrl,
-                              text: totalReaction,
-                            )
-                          : const SizedBox.shrink(),
+                /*CommonController.to.isLoadingPostLike.value?DefaultProgressIndicator(color: AppColors.whiteLightColor,):*/
+                fromUser == true
+                    ? OptionWidget(
+                  function: () {
+                    CommonController.to
+                        .postLikeDisLikeCall(trackId: sId);
+                  },
+                  icon: /* react!.value*/
+                  isReact == true
+                      ? reactFillIconUrl
+                      : reactIconUrl,
+                  text: totalReaction,
+                )
+                    : const SizedBox.shrink(),
 
-                      ///================map==============///
+                ///================map==============///
 
-                      OptionWidget(
-                        icon: mapIconUrl,
-                        text: AppStaticString.map,
-                        function: () {
-                          _showMapBottomSheet(
-                            context,
-                            lat,
-                            lng,
-                          );
-                        },
-                      ),
-                      fromManage == true
-                          ? const SizedBox.shrink()
+                OptionWidget(
+                  icon: mapIconUrl,
+                  text: AppStaticString.map,
+                  function: () {
+                    _showMapBottomSheet(
+                      context,
+                      lat,
+                      lng,
+                    );
+                  },
+                ),
+                fromManage == true
+                    ? const SizedBox.shrink()
 
-                          ///================share==============///
+                ///================share==============///
 
-                          : OptionWidget(
-                              function: () async {
-                                const String deepLink = '${ApiClient.baseUrl}/';
+                    : OptionWidget(
+                  function: () async {
+                    const String deepLink = '${ApiClient.baseUrl}/';
 
 
-                                final String trackId = sId;
-                                final String type = 'track';
-                                final String fullLink =
-                                    '$deepLink?trackId=$trackId&type=$type';
-                                Share.share(
-                                  fullLink,
-                                );
-                                /* await Share.share(
+                    final String trackId = sId;
+                    final String type = 'track';
+                    final String fullLink =
+                        '$deepLink?trackId=$trackId&type=$type';
+                    Share.share(
+                      fullLink,
+                    );
+                    /* await Share.share(
                                     'Check out this cool Flutter app!');*/
-                              },
-                              icon: shareIconUrl,
-                              text: AppStaticString.share,
-                            ),
-                    ],
-                  ),
+                  },
+                  icon: shareIconUrl,
+                  text: AppStaticString.share,
+                ),
+              ],
+            ),
             fromManage == true ? space12H : const SizedBox.shrink(),
             fromManage == true
                 ? Row(
-                    children: [
-                      Expanded(
-                        child: CustomButton(
-                          onTap: onDeactivate ?? () {},
-                          fillColor: Colors.transparent,
-                          borderColor: AppColors.redColor,
-                          // height: 48.h,
-                          title: AppStaticString.deactivate,
-                          textColor: AppColors.redColor,
-                        ),
-                      ),
-                      space12W,
+              children: [
+                Expanded(
+                  child: CustomButton(
+                    onTap: onDeactivate ?? () {},
+                    fillColor: Colors.transparent,
+                    borderColor: AppColors.redColor,
+                    // height: 48.h,
+                    title: AppStaticString.deactivate,
+                    textColor: AppColors.redColor,
+                  ),
+                ),
+                space12W,
 
-                      ///========================active button========================///
-                      Expanded(
-                        child: CustomButton(
-                          fillColor: AppColors.greenColor,
-                          borderColor: AppColors.greenColor,
-                          onTap: () {
-                            showDialog(
-                              barrierDismissible: false,
-                              context: context,
-                              builder: (context) => DefaultDialogWithButton(
-                                secondButtonTap: onActive,
-                                content: Padding(
-                                  padding: EdgeInsets.only(bottom: 12.h),
-                                  child: Text(
-                                    AppStaticString.areYouSureWantToReactivate,
-                                    textAlign: TextAlign.center,
-                                    style: poppinsRegular.copyWith(
-                                        fontSize: getFontSizeDefault(context),
-                                        color: AppColors.whiteLightColor),
-                                  ),
+                ///========================active button========================///
+                Expanded(
+                  child: CustomButton(
+                    fillColor: AppColors.greenColor,
+                    borderColor: AppColors.greenColor,
+                    onTap: () {
+                      showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (context) =>
+                            DefaultDialogWithButton(
+                              secondButtonTap: onActive,
+                              content: Padding(
+                                padding: EdgeInsets.only(bottom: 12.h),
+                                child: Text(
+                                  AppStaticString.areYouSureWantToReactivate,
+                                  textAlign: TextAlign.center,
+                                  style: poppinsRegular.copyWith(
+                                      fontSize: getFontSizeDefault(context),
+                                      color: AppColors.whiteLightColor),
                                 ),
-                                textColor: AppColors.redColor,
-                                borderColor: AppColors.marronColor,
-                                firstButtonText: AppStaticString.no,
-                                secendtButtonText: AppStaticString.yes,
                               ),
-                            );
-                          },
-                          // height: 48.h,
-                          title: AppStaticString.active,
-                        ),
-                      )
-                    ],
-                  )
+                              textColor: AppColors.redColor,
+                              borderColor: AppColors.marronColor,
+                              firstButtonText: AppStaticString.no,
+                              secendtButtonText: AppStaticString.yes,
+                            ),
+                      );
+                    },
+                    // height: 48.h,
+                    title: AppStaticString.active,
+                  ),
+                )
+              ],
+            )
                 : const SizedBox.shrink(),
             fromUser == true
                 ? Padding(
-                    padding: EdgeInsets.only(top: 16.h),
-                    child: CustomButton(
-                      onTap: () {
-                        Get.toNamed(BookTrackJoinEventScreen.routeName,
-                            arguments: {'id': sId, 'type': 'track'});
-                      },
-                      title: AppStaticString.bookSlot,
-                      img: doubleArrowIconUrl,
-                    ),
-                  )
+              padding: EdgeInsets.only(top: 16.h),
+              child: CustomButton(
+                onTap: () {
+                  Get.toNamed(BookTrackJoinEventScreen.routeName,
+                      arguments: {'id': sId, 'type': 'track'});
+                },
+                title: AppStaticString.bookSlot,
+                img: doubleArrowIconUrl,
+              ),
+            )
                 : const SizedBox.shrink()
           ],
         ),
@@ -470,23 +508,33 @@ showCalendarDialog(context,onConfrim: () {
     );
   }
 
-  void _showMapBottomSheet(
-      BuildContext context, double latitude, double longitude) {
+  void _showMapBottomSheet(BuildContext context, double latitude,
+      double longitude) {
     showModalBottomSheet(
       enableDrag: false,
       showDragHandle: true,
       constraints: BoxConstraints.tightForFinite(
-        height: MediaQuery.of(context).size.height / 2,
-        width: MediaQuery.of(context).size.width,
+        height: MediaQuery
+            .of(context)
+            .size
+            .height / 2,
+        width: MediaQuery
+            .of(context)
+            .size
+            .width,
       ),
       context: context,
-      isScrollControlled: true, // Allows full-screen height if needed
+      isScrollControlled: true,
+      // Allows full-screen height if needed
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (context) {
         return SizedBox(
-          height: MediaQuery.of(context).size.height / 2,
+          height: MediaQuery
+              .of(context)
+              .size
+              .height / 2,
           child: GoogleMap(
             zoomGesturesEnabled: true,
             scrollGesturesEnabled: true,
@@ -495,8 +543,10 @@ showCalendarDialog(context,onConfrim: () {
               zoom: 14, // Set a more focused zoom level
             ),
             myLocationEnabled: true,
-            myLocationButtonEnabled: false, // Custom button added
-            zoomControlsEnabled: true, // Custom zoom controls added
+            myLocationButtonEnabled: false,
+            // Custom button added
+            zoomControlsEnabled: true,
+            // Custom zoom controls added
             markers: {
               Marker(
                 markerId: const MarkerId("selected_location"),
@@ -559,7 +609,10 @@ class ReviewListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       // height: MediaQuery.of(context).size.height / 2,
-      width: MediaQuery.of(context).size.width,
+      width: MediaQuery
+          .of(context)
+          .size
+          .width,
       decoration: const BoxDecoration(
         // color: Colors.white, // Background color for the bottom sheet
         borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
@@ -571,114 +624,117 @@ class ReviewListWidget extends StatelessWidget {
               : HomeController.to.isLoadingTrackReviewList.value;
           return isLoading
               ? Center(
-                  child: const DefaultProgressIndicator(
-                  color: AppColors.primaryColor,
-                ))
+              child: const DefaultProgressIndicator(
+                color: AppColors.primaryColor,
+              ))
               : reviewList.isEmpty
-                  ? const EmptyTextWidget(text: 'Review not found!!')
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Text(
-                            AppStaticString.comments,
-                            style: poppinsMedium.copyWith(
-                              fontSize: getFontSizeLarge(context),
-                            ),
-                          ),
-                        ),
-                        Divider(color: Colors.grey[300]),
-                        ...List.generate(
-                          reviewList.length,
-                          (index) {
-                            final review = reviewList[index];
-                            return Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      review.user!.profileImage != null
-                                          ? CustomNetworkImage(
-                                              imageUrl:
-                                                  '${ApiClient.baseUrl}/${review.user!.profileImage ??
-                                                      ''}',
-                                              height: 45.w,
-                                              width: 45.w,
-                                              imageErrorUrl: dummyProfileImgUrl,
-                                              boxShape: BoxShape.circle,
-                                            )
-                                          : const ProfileCircleImageWidget(),
-                                      const SizedBox(width: 16.0),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            /// User name and duration
-                                            RichText(
-                                              text: TextSpan(
-                                                children: [
-                                                  TextSpan(
-                                                    text:
-                                                        '${review.user!.name ?? AppStaticString.dummyName} ',
-                                                    style:
-                                                        poppinsRegular.copyWith(
-                                                      fontSize:
-                                                          getFontSizeDefault(
-                                                              context),
-                                                    ),
-                                                  ),
-                                                  TextSpan(
-                                                    text: formatTimestamp(
-                                                        timestamp:
-                                                            review.createdAt ??
-                                                                ''),
-                                                    style:
-                                                        poppinsRegular.copyWith(
-                                                      color: AppColors
-                                                          .normalDarkWhite,
-                                                      fontSize:
-                                                          getFontSizeSmall(
-                                                              context),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            const SizedBox(height: 6.0),
-                                            RatingTextWidget(
-                                                rating: review.rating != null
-                                                    ? review.rating.toString()
-                                                    : '0.0'),
+              ? const EmptyTextWidget(text: 'Review not found!!')
+              : Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  AppStaticString.comments,
+                  style: poppinsMedium.copyWith(
+                    fontSize: getFontSizeLarge(context),
+                  ),
+                ),
+              ),
+              Divider(color: Colors.grey[300]),
+              ...List.generate(
+                reviewList.length,
+                    (index) {
+                  final review = reviewList[index];
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(
+                          crossAxisAlignment:
+                          CrossAxisAlignment.start,
+                          children: [
+                            review.user!.profileImage != null
+                                ? CustomNetworkImage(
+                              imageUrl:
+                              '${ApiClient.baseUrl}/${review.user!
+                                  .profileImage ??
+                                  ''}',
+                              height: 45.w,
+                              width: 45.w,
+                              imageErrorUrl: dummyProfileImgUrl,
+                              boxShape: BoxShape.circle,
+                            )
+                                : const ProfileCircleImageWidget(),
+                            const SizedBox(width: 16.0),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment:
+                                CrossAxisAlignment.start,
+                                children: [
 
-                                            ///===================== Comment text =================///
-                                            ExpandableText(
-                                            text:  review.review.toString(),
-                                              maxLines: 2 ,
-                                              // style: poppinsRegular.copyWith(
-                                              //   color: const Color(0xffD2D2D2),
-                                              //   fontSize:
-                                              //       getFontSizeDefault(context),
-                                              // ),
-                                            ),
-                                          ],
+                                  /// User name and duration
+                                  RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text:
+                                          '${review.user!.name ??
+                                              AppStaticString.dummyName} ',
+                                          style:
+                                          poppinsRegular.copyWith(
+                                            fontSize:
+                                            getFontSizeDefault(
+                                                context),
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                        TextSpan(
+                                          text: formatTimestamp(
+                                              timestamp:
+                                              review.createdAt ??
+                                                  ''),
+                                          style:
+                                          poppinsRegular.copyWith(
+                                            color: AppColors
+                                                .normalDarkWhite,
+                                            fontSize:
+                                            getFontSizeSmall(
+                                                context),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                Divider(color: Colors.grey[300]),
-                              ],
-                            );
-                          },
+                                  const SizedBox(height: 6.0),
+                                  RatingTextWidget(
+                                      rating: review.rating != null
+                                          ? review.rating.toString()
+                                          : '0.0'),
+
+                                  ///===================== Comment text =================///
+                                  ExpandableText(
+                                    text: review.review.toString(),
+                                    maxLines: 2,
+                                    // style: poppinsRegular.copyWith(
+                                    //   color: const Color(0xffD2D2D2),
+                                    //   fontSize:
+                                    //       getFontSizeDefault(context),
+                                    // ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    );
+                      ),
+                      Divider(color: Colors.grey[300]),
+                    ],
+                  );
+                },
+              ),
+            ],
+          );
         }),
       ),
     );
@@ -688,6 +744,7 @@ class ReviewListWidget extends StatelessWidget {
 class ProfileCircleImageWidget extends StatelessWidget {
   final double? height;
   final double? width;
+
   const ProfileCircleImageWidget({
     super.key,
     this.height,
@@ -698,11 +755,11 @@ class ProfileCircleImageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipOval(
         child: Image.asset(
-      dummyProfileImgUrl,
-      height: height ?? 45.w,
-      width: width ?? 45.w,
-      fit: BoxFit.cover,
-    ));
+          dummyProfileImgUrl,
+          height: height ?? 45.w,
+          width: width ?? 45.w,
+          fit: BoxFit.cover,
+        ));
   }
 }
 
@@ -710,6 +767,7 @@ class OptionWidget extends StatelessWidget {
   final String icon;
   final String text;
   final Function()? function;
+
   const OptionWidget({
     super.key,
     required this.icon,
@@ -793,8 +851,13 @@ class _ExpandableTextState extends State<ExpandableText> {
     final textPainter = TextPainter(
       text: textSpan,
       maxLines: widget.maxLines,
-      textDirection: TextDirection.ltr,
-    )..layout(maxWidth: MediaQuery.of(context).size.width);
+      textDirection: Directionality.of(context), // ✅ dynamic LTR/RTL
+    )
+      ..layout(maxWidth: MediaQuery
+          .of(context)
+          .size
+          .width);
+
 
     if (textPainter.didExceedMaxLines) {
       if (mounted) {

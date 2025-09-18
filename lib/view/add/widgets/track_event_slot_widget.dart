@@ -114,16 +114,15 @@ class TrackEventSlotWidget extends StatelessWidget {
                     ? Text(
 
                   ///=================with total seat number================///
-                  '${slots != null ? slots!.day ?? '' : ''}(${AppStaticString
+                  '${ (slots!.day??0).toString() }-${DateTime.now().month}-${DateTime.now().year} (${AppStaticString
                       .totalSeatWithClone}${slots != null ? slots!.maxPeople ??
                       'n/a' : ''})',
                   style: poppinsRegular.copyWith(
                       fontSize: getFontSizeSmall(context)),
                 )
                     : Text(
-                  slots != null
-                      ? slots!.day ?? 'n/a'
-                      : 'sunday',
+
+                      "${ (slots!.day??0).toString() }-${DateTime.now().month}-${DateTime.now().year}",
                   style: poppinsRegular.copyWith(
                       fontSize: getFontSizeSmall(context)),
                 ),
@@ -143,7 +142,7 @@ class TrackEventSlotWidget extends StatelessWidget {
                 color: AppColors.blueColor,
                 fontSize: getFontSizeSmall(context)),
           ),
-          space6H,
+          // space6H,
 
           ///============================dynamic slot description===========================///
 

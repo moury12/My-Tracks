@@ -87,15 +87,17 @@ class _CreateTrackEventSlotScreenState
                           borderColor: AppColors.blueColor,
                           onTap: () {
                             showCalendarDialog(
-
                               context,
+                              preSelectedDates: CreateTrackEventController.to.selectedDates,
                               onDateSelected: (List<DateTime> val) {
-                                CreateTrackEventController
-                                    .to.selectedDates.value = val;
+                                // Will only be called when CONFIRM is pressed
+                                CreateTrackEventController.to.selectedDates.value = val;
                               },
-                                preSelectedDates:CreateTrackEventController
-                                    .to.selectedDates
+                              onConfrim: () {
+                                print("User confirmed with: ${CreateTrackEventController.to.selectedDates}");
+                              },
                             );
+
                           },
                         ),
 
@@ -325,8 +327,12 @@ class _CreateTrackEventSlotScreenState
                                 if (CreateTrackEventController
                                     .to.formKey.currentState!
                                     .validate()) {
-                                  CreateTrackEventController.to
-                                      .createSlotEventCall();
+                                  if(CreateTrackEventController.to.selectedDates.isNotEmpty){
+                                    CreateTrackEventController.to
+                                        .createSlotEventCall();
+                                  }else{
+                                    showCustomSnackbar(title: "Failed", message: "Please Select Dates!!", type: SnackBarType.failed);
+                                  }
                                 }
                               } else {
                                 if (CreateTrackEventController

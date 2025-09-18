@@ -440,7 +440,7 @@ class CreateTrackEventScreen extends StatelessWidget {
                           } else {
                             Get.toNamed(CreateTrackEventSlotScreen.routeName,
                                 arguments: {'type': 'track', 'id': "trackId.value"});
-                            // CreateTrackEventController.to.postTrackRequest();
+                           CreateTrackEventController.to.postTrackRequest();
                           }
                         } else {
                           showCustomSnackbar(

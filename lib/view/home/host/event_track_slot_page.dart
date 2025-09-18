@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:track_trek/controller/create_track_event_controller.dart';
 import 'package:track_trek/controller/home/host/home_controller.dart';
 import 'package:track_trek/core/components/custom_appbar.dart';
@@ -39,11 +40,18 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
 
   // Determine the title dynamically
   String title = '';
+  List<DateTime> dates=[];
 
   @override
   void initState() {
     type = arguments['type'] as String;
     id = arguments['id'] as String;
+    final List<dynamic>? dateListDynamic = arguments['dates'] as List<dynamic>?;
+
+
+    dates =dateListDynamic != null
+        ? dateListDynamic.map((e) => DateFormat("MM/dd/yyyy").parse(e.toString())).toList()
+        : [];
     title =
     type == 'event' ? AppStaticString.eventSlot : AppStaticString.trackSlot;
     if (id.isNotEmpty && type.isNotEmpty) {
@@ -177,11 +185,7 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: MultipleDatePicker(
-                    preSelectedDates: [
-                      DateTime(2025, 9, 2),
-                      DateTime(2025, 9, 14),
-                      DateTime(2025, 9, 21),
-                    ], // This is an empty list, which is fine now
+                    preSelectedDates: dates, // This is an empty list, which is fine now
                     onDateSelected: (selectedDates) {
                       CreateTrackEventController.to.selectedDates.value =
                           selectedDates;

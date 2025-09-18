@@ -14,13 +14,16 @@ class SingleTrackModel {
   List<String>? trackDays;
   List<Renters>? renters;
   List<TrackSlots>? slots;
-  String? totalLikes; // Changed to String? with conversion
-  String? totalReview; // Changed to String? with conversion
+  String? totalLikes;
+  String? totalReview;
   String? createdAt;
   String? updatedAt;
-  int? iV; // Changed to int? to match the API response
+  int? iV;
   String? totalTrackDayInMonth;
   double? rating;
+
+  /// 👇 Add this new property
+  List<String>? slotAvailableDates;
 
   SingleTrackModel({
     this.sId,
@@ -43,6 +46,7 @@ class SingleTrackModel {
     this.iV,
     this.totalTrackDayInMonth,
     this.rating,
+    this.slotAvailableDates, // add here
   });
 
   SingleTrackModel.fromJson(Map<String, dynamic> json) {
@@ -52,12 +56,11 @@ class SingleTrackModel {
     category = json['category'];
     trackImage = json['track_image']?.cast<String>();
     address = json['address'];
-    location =
-        json['location'] != null ? Location.fromJson(json['location']) : null;
+    location = json['location'] != null ? Location.fromJson(json['location']) : null;
     description = json['description'];
     status = json['status'];
     isPromoted = json['isPromoted'];
-    trackDays = json['trackDays']?.cast<String>();
+    // trackDays = json['trackDays']?.cast<String>();
     if (json['renters'] != null) {
       renters = <Renters>[];
       json['renters'].forEach((v) {
@@ -70,15 +73,18 @@ class SingleTrackModel {
         slots!.add(TrackSlots.fromJson(v));
       });
     }
-
-    // Convert `int` to `String` if necessary
     totalLikes = json['totalLikes']?.toString();
     totalReview = json['totalReview']?.toString();
     createdAt = json['createdAt']?.toString();
     updatedAt = json['updatedAt']?.toString();
-    iV = json['__v']; // Keep as integer
+    iV = json['__v'];
     totalTrackDayInMonth = json['totalTrackDayInMonth']?.toString();
     rating = json['rating']?.toDouble();
+
+    /// 👇 parse slotAvailableDates
+    slotAvailableDates = (json['slotAvailableDates'] as List?)
+        ?.map((e) => e.toString())
+        .toList();
   }
 
   Map<String, dynamic> toJson() {
@@ -106,9 +112,13 @@ class SingleTrackModel {
     data['totalReview'] = totalReview;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
-    data['__v'] = iV; // Serialize as int
+    data['__v'] = iV;
     data['totalTrackDayInMonth'] = totalTrackDayInMonth;
     data['rating'] = rating;
+
+    /// 👇 serialize slotAvailableDates
+    data['slotAvailableDates'] = slotAvailableDates;
+
     return data;
   }
 }
@@ -136,7 +146,7 @@ class TrackSlots {
   String? sId;
   String? host;
   String? track;
-  String? day;
+  int? day;
   String? slotNo;
   String? startTime;
   String? endTime;
@@ -167,7 +177,7 @@ class TrackSlots {
     sId = json['_id'];
     host = json['host'];
     track = json['track'];
-    day = json['day'];
+    day = json['dayNo'];
     slotNo = json['slotNo'];
     startTime = json['startTime'];
     endTime = json['endTime'];
@@ -183,7 +193,7 @@ class TrackSlots {
       '_id': sId,
       'host': host,
       'track': track,
-      'day': day,
+      'dayNo': day,
       'slotNo': slotNo,
       'startTime': startTime,
       'endTime': endTime,
