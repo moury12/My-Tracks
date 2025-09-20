@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:track_trek/controller/booking/book_track_join_event_controller.dart';
 import 'package:track_trek/core/components/custom_appbar.dart';
 import 'package:track_trek/core/components/custom_network_image.dart';
@@ -228,15 +229,28 @@ class _BookTrackJoinEventScreenState extends State<BookTrackJoinEventScreen> {
                                                 .to.selectDate.value
                                             : null,
                                         onTap: () async {
-                                          BookTrackJoinEventController
-                                                  .to.selectDate.value =
-                                              await selectDate(context);
+                                          showCalendarDialog(
+                                            context,
+                                            multipleSelection: false,
+                                            preSelectedDates: BookTrackJoinEventController
+                                                .to.singleTrack.value.slotAvailableDates!
+                                                .map((date) {
+                                              return DateFormat("MM/dd/yyyy").parse(date);
+                                            }).toList(),
+                                            onDateSelected: (List<DateTime> val) {
+                                              // Will only be called when CONFIRM is pressed
+                                              BookTrackJoinEventController
+                                                  .to.selectDate.value = DateFormat("YYYY-MM-DD").parse(val.first.toString()).toString() ;
+BookTrackJoinEventController.to.getTrackSlotListCall(trackId: controller.singleTrack
+    .value.sId.toString());
+                                            },
+                                                                                    );
                                           debugPrint(
                                               BookTrackJoinEventController
                                                   .to.selectDate.value);
-                                          await BookTrackJoinEventController.to
-                                              .getTrackSlotListCall(
-                                                  trackId: sId);
+                                          // await BookTrackJoinEventController.to
+                                          //     .getTrackSlotListCall(
+                                          //         trackId: sId);
                                         },
                                         selectedDay:
                                             BookTrackJoinEventController

@@ -181,7 +181,8 @@ void noInternetShowCustomSnackbar() {
 Future<String?> selectAndFormatTime({
   required BuildContext context,
   required TimeOfDay initialTime,
-}) async {
+})
+async {
   try {
     final ThemeData customTimePickerTheme = Theme.of(context).copyWith(
       timePickerTheme: TimePickerThemeData(
@@ -246,7 +247,7 @@ void logOutCall() {
 }
 void showCalendarDialog(
     BuildContext context, {
-      Function()? onConfrim,  bool? allowSelection,
+      Function()? onConfrim,  bool? allowSelection,bool? multipleSelection,
       List<DateTime>? preSelectedDates,
       List<DateTime>? selectedDates,
       required Function(List<DateTime>) onDateSelected,
@@ -276,6 +277,7 @@ void showCalendarDialog(
               mainAxisSize: MainAxisSize.min,
               children: [
                 MultipleDatePicker(
+                  multipleSelection: multipleSelection??true,
                   allowSelection: allowSelection??true,
                   selectedDates: selectedDates,
                   preSelectedDates: tempSelectedDates,

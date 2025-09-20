@@ -349,12 +349,10 @@ class _CreateTrackEventSlotScreenState
                                 if (CreateTrackEventController
                                     .to.formKey.currentState!
                                     .validate()) {
-                                  if(CreateTrackEventController.to.selectedDates.isNotEmpty){
+
                                     CreateTrackEventController.to
                                         .createSlotEventCall();
-                                  }else{
-                                    showCustomSnackbar(title: "Failed", message: "Please Select Dates!!", type: SnackBarType.failed);
-                                  }
+
                                 }
                               } else {
                                 if (CreateTrackEventController
@@ -363,9 +361,11 @@ class _CreateTrackEventSlotScreenState
                                     CreateTrackEventController
                                         .to.selectedStartTime.isNotEmpty &&
                                     CreateTrackEventController
-                                        .to.selectedEndTime.isNotEmpty) {
+                                        .to.selectedEndTime.isNotEmpty) { if(CreateTrackEventController.to.selectedDates.isNotEmpty){
                                   CreateTrackEventController.to
-                                      .createSlotTrackCall();
+                                      .createSlotTrackCall();  }else{
+                                  showCustomSnackbar(title: "Failed", message: "Please Select Dates!!", type: SnackBarType.failed);
+                                }
                                 } else {
                                   print(CreateTrackEventController
                                       .to.selectedCurrencyFrom.value);

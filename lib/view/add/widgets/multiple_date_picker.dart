@@ -7,10 +7,11 @@ class MultipleDatePicker extends StatefulWidget {
   final List<DateTime>? selectedDates;
   final Function(List<DateTime>) onDateSelected;
   final bool allowSelection;
+  final bool multipleSelection;
   const MultipleDatePicker({
     super.key,
     required this.preSelectedDates,
-    required this.onDateSelected,  this.selectedDates,  this.allowSelection=true,
+    required this.onDateSelected,  this.selectedDates,  this.allowSelection=true,this.multipleSelection=true,
   });
 
   @override
@@ -34,17 +35,21 @@ class _MultipleDatePickerState extends State<MultipleDatePicker> {
 
   void _onDaySelected(DateTime day, DateTime focusedDay) {
     if (!widget.allowSelection) return;
+
     setState(() {
-      if (_selectedDates.any((d) => _isSameDay(d, day))) {
-        // If already selected, remove it
-        _selectedDates.removeWhere((d) => _isSameDay(d, day));
+      if (widget.multipleSelection) {
+        // MULTIPLE SELECTION MODE
+        if (_selectedDates.any((d) => _isSameDay(d, day))) {
+          _selectedDates.removeWhere((d) => _isSameDay(d, day));
+        } else {
+          _selectedDates.add(day);
+        }
       } else {
-        // If not selected, add it
-        _selectedDates.add(day);
+        // SINGLE SELECTION MODE
+        _selectedDates = [day];
       }
     });
 
-    // Notify parent about selection change
     widget.onDateSelected(_selectedDates);
   }
   void _onMonthChanged(DateTime focusedDay) {
