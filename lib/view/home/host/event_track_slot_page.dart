@@ -247,7 +247,11 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
                               borderColor:AppColors.blueColorDark,
                               onTap: () {
                               CreateTrackEventController.to.setSlotTrackCall(
-                                  trackId: id, slotIds: CreateTrackEventController.to.slotIdsList, arrOfDayNo: [],);
+                                  trackId: id,
+                                slotIds: CreateTrackEventController.to.slotIdsList, arrOfDayNo: CreateTrackEventController.to
+                                  .selectedDates.map((element) => element.day,)
+                                  .toSet()
+                                  .toList(),);
                             },
                               title: AppStaticString.setSlot,
 

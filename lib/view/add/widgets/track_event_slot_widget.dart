@@ -68,12 +68,24 @@ class TrackEventSlotWidget extends StatelessWidget {
               ),
               needToShowCheckbox == true && slots != null ? Obx(() {
                 return CustomCheckbox(
-                  isChecked: slots!.isSelected.value, onChanged: (value) {
-                  slots!.isSelected.value = value;
-                  if(slots!.isSelected.value){
-                    CreateTrackEventController.to.slotIdsList.add(slots!.sId.toString());
-                  }
-                },);
+                  isChecked: slots!.isSelected.value,
+                  onChanged: (value) {
+                    slots!.isSelected.value = value;
+
+                    final slotId = slots!.sId.toString();
+
+                    if (value) {
+                      // Add if not already present
+                      if (!CreateTrackEventController.to.slotIdsList.contains(slotId)) {
+                        CreateTrackEventController.to.slotIdsList.add(slotId);
+                      }
+                    } else {
+                      // Remove if unchecked
+                      CreateTrackEventController.to.slotIdsList.remove(slotId);
+                    }
+                  },
+                );
+
               }) : SizedBox.shrink()
             ],
           ),
