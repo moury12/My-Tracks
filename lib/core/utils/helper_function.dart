@@ -246,8 +246,9 @@ void logOutCall() {
 }
 void showCalendarDialog(
     BuildContext context, {
-      Function()? onConfrim,
+      Function()? onConfrim,  bool? allowSelection,
       List<DateTime>? preSelectedDates,
+      List<DateTime>? selectedDates,
       required Function(List<DateTime>) onDateSelected,
     })
 {
@@ -275,6 +276,8 @@ void showCalendarDialog(
               mainAxisSize: MainAxisSize.min,
               children: [
                 MultipleDatePicker(
+                  allowSelection: allowSelection??true,
+                  selectedDates: selectedDates,
                   preSelectedDates: tempSelectedDates,
                   onDateSelected: (val) {
                     tempSelectedDates = [];
@@ -296,7 +299,7 @@ void showCalendarDialog(
                   },
 
                 ),
-                Row(
+             if(onConfrim!=null)   Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Expanded(

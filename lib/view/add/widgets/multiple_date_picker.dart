@@ -4,12 +4,13 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 class MultipleDatePicker extends StatefulWidget {
   final List<DateTime> preSelectedDates;
+  final List<DateTime>? selectedDates;
   final Function(List<DateTime>) onDateSelected;
-
+  final bool allowSelection;
   const MultipleDatePicker({
     super.key,
     required this.preSelectedDates,
-    required this.onDateSelected,
+    required this.onDateSelected,  this.selectedDates,  this.allowSelection=true,
   });
 
   @override
@@ -23,24 +24,16 @@ class _MultipleDatePickerState extends State<MultipleDatePicker> {
   @override
   void initState() {
     super.initState();
-   _selectedDates = [];
-    _focusedDay = DateTime.now(); // Start with the current month
+    _selectedDates = widget.selectedDates != null
+        ? List<DateTime>.from(widget.selectedDates!)
+        : List<DateTime>.from(widget.preSelectedDates);    _focusedDay = DateTime.now(); // Start with the current month
   }
 
   bool _isSameDay(DateTime a, DateTime b) =>
       a.year == b.year && a.month == b.month && a.day == b.day;
 
-  // void _onDaySelected(DateTime day, DateTime focusedDay) {
-  //   // setState(() {
-  //   //   if (_selectedDates.any((d) => _isSameDay(d, day))) {
-  //   //     _selectedDates.removeWhere((d) => _isSameDay(d, day));
-  //   //   } else {
-  //   //     _selectedDates.add(day);
-  //   //   }
-  //   // });
-  //   // widget.onDateSelected(_selectedDates);
-  // }
   void _onDaySelected(DateTime day, DateTime focusedDay) {
+    if (!widget.allowSelection) return;
     setState(() {
       if (_selectedDates.any((d) => _isSameDay(d, day))) {
         // If already selected, remove it
@@ -67,7 +60,8 @@ class _MultipleDatePickerState extends State<MultipleDatePicker> {
       lastDay: DateTime.utc(DateTime.now().year, 12, 31),
       focusedDay: _focusedDay,
       selectedDayPredicate: (day) => _selectedDates.any((d) => _isSameDay(d, day)),
-      onDaySelected: _onDaySelected,
+      onDaySelected:  // 👈 stop selecting
+    _onDaySelected,
       onPageChanged: _onMonthChanged,
       calendarStyle: CalendarStyle(
         todayDecoration: BoxDecoration(

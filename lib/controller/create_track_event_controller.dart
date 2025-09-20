@@ -194,6 +194,7 @@ class CreateTrackEventController extends GetxController {
         isLoadingPostTrack.value = false;
         trackId.value = value;
         clearAfterPostTrack();
+
         Get.toNamed(CreateTrackEventSlotScreen.routeName,
             arguments: {'type': 'track', 'id': trackId.value});
         // navigator!.pop();
@@ -304,7 +305,7 @@ class CreateTrackEventController extends GetxController {
       final slotInitialList = await TrackEventService.getTrackSlotForDayCall(
           trackId: trackId,
           currentEventPage: currentSlotsPage.value.toString(),
-          itemsEventPerPage: itemsSlotsPerPage.value.toString(),
+          itemsEventPerPage: "1000",
           totalEventPages: totalSlotsPages.value.toString(),
         dates: dates
     );
@@ -415,6 +416,8 @@ class CreateTrackEventController extends GetxController {
       bool isUpdate = await TrackEventService.setSlotForDatesRequest(trackId: trackId, slotIds: slotIds, arrOfDayNo: arrOfDayNo);
       if (isUpdate) {
         isLoadingSetSlot.value = false;
+
+       selectedDates.value=[];
         getTrackSlotForDayCall(trackId: trackId);
 
       }

@@ -57,12 +57,12 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
         getDates();
         //
         // // Pagination listener
-        scrollController.addListener(() {
-          if (scrollController.position.pixels ==
-              scrollController.position.maxScrollExtent) {
-            fetchSlots(loadMore: true);
-          }
-        });
+        // scrollController.addListener(() {
+        //   if (scrollController.position.pixels ==
+        //       scrollController.position.maxScrollExtent) {
+        //     fetchSlots(loadMore: true);
+        //   }
+        // });
       }
     } else {
       debugPrint('Error: Missing eventId or trackId.');
@@ -150,6 +150,7 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
                   Get.toNamed(CreateTrackEventSlotScreen.routeName, arguments: {
                     'type': type,
                     'id': id,
+                  if(type == 'track')  'dates':dates,
                     'edit': CreateTrackEventController
                         .to.singleTrack.value.trackDays !=
                         null &&
@@ -188,7 +189,10 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
             await CreateTrackEventController.to.getEventDetailsCall(
                 eventId: id);
           } else {
-            await CreateTrackEventController.to.getTrackDetailsCall(
+            CreateTrackEventController.to
+                .selectedDates.value=[];
+
+            await CreateTrackEventController.to.getTrackSlotForDayCall(
                 trackId: id);
           }
         },

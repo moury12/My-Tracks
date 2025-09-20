@@ -7,6 +7,7 @@ import 'package:track_trek/controller/create_track_event_controller.dart';
 import 'package:track_trek/core/components/custom_appbar.dart';
 import 'package:track_trek/core/components/custom_button.dart';
 import 'package:track_trek/core/components/custom_drop_down_button.dart';
+import 'package:track_trek/core/components/custom_text_button.dart';
 import 'package:track_trek/core/components/custom_textfield.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
@@ -39,6 +40,7 @@ class _CreateTrackEventSlotScreenState
   String? type;
   String? id;
   bool edit = false;
+  List<DateTime> dates = [];
   @override
   void initState() {
     type = Get.arguments['type'] as String;
@@ -48,6 +50,14 @@ class _CreateTrackEventSlotScreenState
     if (type == event) {
       CreateTrackEventController.to.eventId.value = id ?? '';
     } else {
+      if (Get.arguments is Map) {
+        final args = Get.arguments as Map<String, dynamic>;
+
+        if (args.containsKey('dates') && args['dates'] != null) {
+          // Ensure it's List<DateTime>
+          dates = List<DateTime>.from(args['dates']);
+        }
+      }
       CreateTrackEventController.to.trackId.value = id ?? '';
     }
     // TODO: implement initState
@@ -88,7 +98,8 @@ class _CreateTrackEventSlotScreenState
                           onTap: () {
                             showCalendarDialog(
                               context,
-                              preSelectedDates: CreateTrackEventController.to.selectedDates,
+                              preSelectedDates: dates,
+                              selectedDates: CreateTrackEventController.to.selectedDates,
                               onDateSelected: (List<DateTime> val) {
                                 // Will only be called when CONFIRM is pressed
                                 CreateTrackEventController.to.selectedDates.value = val;
@@ -108,30 +119,41 @@ class _CreateTrackEventSlotScreenState
                           return CreateTrackEventController.to.selectedDates
                                   .isEmpty
                               ? const SizedBox.shrink()
-                              : SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Row(
-                                    spacing: 10.w,
-                                    children: [
-                                      ...List.generate(
-                                          CreateTrackEventController.to.selectedDates.length, (index) {
-                                        String day = DateFormat('MM/dd/yyyy').
-                                        format(CreateTrackEventController.to.selectedDates[index]);
+                              : Row(
+                                children: [
 
-                                       return GradientContainerWidget(
-                                                text: day,
-                                                textStyle:
-                                                    poppinsRegular.copyWith(
-                                                        color: AppColors
-                                                            .blackLightColor,
-                                                        fontSize:
-                                                            getFontSizeDefault(
-                                                                context)),
-                                              );
-                                      })
-                                    ],
+                                  Expanded(
+                                    child: SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Row(
+                                          spacing: 10.w,
+                                          children: [
+                                            ...List.generate(
+                                                CreateTrackEventController.to.selectedDates.length, (index) {
+                                              String day = DateFormat('MM/dd/yyyy').
+                                              format(CreateTrackEventController.to.selectedDates[index]);
+
+                                             return GradientContainerWidget(
+                                                      text: day,
+                                                      textStyle:
+                                                          poppinsRegular.copyWith(
+                                                              color: AppColors
+                                                                  .blackLightColor,
+                                                              fontSize:
+                                                                  getFontSizeDefault(
+                                                                      context)),
+                                                    );
+                                            })
+                                          ],
+                                        ),
+                                      ),
                                   ),
-                                );
+                                  space6W,
+                                  GestureDetector(child: Icon(CupertinoIcons.clear_circled_solid,color: AppColors.primaryColor,),onTap: () {
+                                    CreateTrackEventController.to.selectedDates.clear();
+                                  },),
+                                ],
+                              );
                         }),
 
                   /* ///===================dynamic available slot===================//

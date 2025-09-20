@@ -258,22 +258,7 @@ class TrackCardWidget extends StatelessWidget {
                            .to.singleTrack.value.slotAvailableDates!.isNotEmpty) {
                               showCalendarDialog(
                                 context,
-                                onConfrim: () {
-
-                                  Get.toNamed(
-                                    EventTrackSlotScreen.routeName,
-                                    arguments: {
-                                      'id': sId,
-                                      'slots': trackModel!.slots,
-                                      'type': 'track',
-                                      if(CreateTrackEventController
-                                          .to.singleTrack.value.slotAvailableDates!=null&&CreateTrackEventController
-                                          .to.singleTrack.value.slotAvailableDates!.isNotEmpty)
-                                        "dates":CreateTrackEventController
-                                            .to.singleTrack.value.slotAvailableDates
-                                    },
-                                  );
-                                },
+allowSelection: false,
                                 preSelectedDates: CreateTrackEventController
                                     .to.singleTrack.value.slotAvailableDates!
                                     .map((date) {
