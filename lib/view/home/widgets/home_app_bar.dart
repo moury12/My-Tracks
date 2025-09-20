@@ -42,10 +42,13 @@ class HomeAppBar extends StatelessWidget {
                       height: 52.w,
                       width: 52.w,
                     )
-                        : Image.asset(
-                      dummyProfileImgUrl,
-                      height: 52.w,
-                    ),
+                        : ClipRRect(             
+                      borderRadius: BorderRadius.circular(20),
+                          child: Image.asset(
+                                                dummyProfileImgUrl,
+                                                height: 52.w,
+                                              ),
+                        ),
                     space12W,
                     Expanded( // ✅ this is now safe
                       child: Column(

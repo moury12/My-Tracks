@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:track_trek/controller/create_track_event_controller.dart';
 import 'package:track_trek/core/components/custom_button.dart';
 import 'package:track_trek/core/components/custom_checkbox.dart';
 import 'package:track_trek/core/constant/app_strings.dart';
@@ -69,6 +70,9 @@ class TrackEventSlotWidget extends StatelessWidget {
                 return CustomCheckbox(
                   isChecked: slots!.isSelected.value, onChanged: (value) {
                   slots!.isSelected.value = value;
+                  if(slots!.isSelected.value){
+                    CreateTrackEventController.to.slotIdsList.add(slots!.sId.toString());
+                  }
                 },);
               }) : SizedBox.shrink()
             ],

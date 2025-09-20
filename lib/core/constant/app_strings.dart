@@ -91,6 +91,9 @@ class AppStaticString {
   static const String totalSlot = "Total slot : ";
   static const String viewAll = "View all";
   static const String map = "Map";
+  static const String clear = "Clear";
+  static const String setSlot = "Set Slot";
+  static const String filterSlot = "Filter Slots";
   static const String fieldName = "Field Name";
   static const String share = "Share";
   static const String track = "Track";

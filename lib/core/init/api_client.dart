@@ -1,5 +1,5 @@
 class ApiClient {
-  static const String baseUrl = 'http://10.10.20.65:8003';
+  static const String baseUrl = 'http://209.97.134.184:8002';
   // static const String baseUrl = 'https://api.mytrackss.com';
   static const String baseUrlWithoutPort = 'http://209.97.134.184';
   static String get loginUrl => '$baseUrl/auth/login';
@@ -20,6 +20,10 @@ class ApiClient {
   static String get deleteSlotUrl => '$baseUrl/business/delete-slot';
   static String get getSingleBusinessUrl =>
       '$baseUrl/business/get-single-business';
+  static String get postPresetTrackUrl =>
+      '$baseUrl/business/create-track-slots-from-preset';
+  static String get getTrackSlotForDayUrl =>
+      '$baseUrl/business/get-track-slot-for-date';
   static String get createEventUrl => '$baseUrl/business/event';
   static String get getBookingUrl => '$baseUrl/business/get-booking';
   static String get myBusinessUrl => '$baseUrl/business/my-business';

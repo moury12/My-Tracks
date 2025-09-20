@@ -468,7 +468,8 @@ class TrackEventService {
 
   static Future<SingleTrackModel> getSingleTrackData({
     required String trackId,
-  }) async {
+  })
+  async {
     SingleTrackModel singleTrackDetails = SingleTrackModel();
     try {
       final url = Uri.parse('${ApiClient.getSingleBusinessUrl}?trackId=$trackId&getSlots=yes');
@@ -505,6 +506,53 @@ class TrackEventService {
     }
     return singleTrackDetails;
   }
+   static Future<List<TrackSlots>> getTrackSlotForDayCall({
+    required String trackId,  String currentEventPage = "1",
+    String itemsEventPerPage = "5",
+    String totalEventPages = "7", List<int>? dates
+  })
+  async {
+    List<TrackSlots> myEventList = [];
+    try {
+
+      final url = Uri.parse('${ApiClient.getTrackSlotForDayUrl}?trackId=$trackId${dates!=null?"&arrOfDayNo=$dates":""}&page=$currentEventPage&limit=$itemsEventPerPage');
+      final headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
+      };
+
+      final response = await http.get(
+        url,
+        headers: headers,
+      );
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      log('----------------- slot list of a day call--------------------');
+      log(responseData.toString());
+      if (responseData['success'] != null && responseData['success'] == true) {
+        if (responseData['data']["result"] is List) {
+          myEventList = (responseData['data']["result"] as List).map((e) => TrackSlots.fromJson(e)).toList();
+
+
+        }
+        if (responseData["data"]['meta'] != null) {
+          currentEventPage = responseData["data"]['meta']['page'] ?? 1;
+          totalEventPages = responseData["data"]['meta']['total'] ?? 1; // Add this line
+          itemsEventPerPage = responseData["data"]['meta']['limit'] ?? 5;
+        }
+        return myEventList;
+      } else {
+        showCustomSnackbar(title: AppStaticString.failed, message: responseData['message'], type: SnackBarType.failed);
+        return myEventList;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return myEventList;
+  }
+
+
+
 
   static Future<bool> deleteSlotRequest({required String slotId, bool? isEvent}) async {
     try {
@@ -692,7 +740,8 @@ class TrackEventService {
     required String price,
     required String currency,
     required String description,
-  }) async {
+  })
+  async {
     try {
       final url = Uri.parse(ApiClient.createTrackSlotUrl);
       final headers = {
@@ -707,6 +756,44 @@ class TrackEventService {
       final response = await http.post(url, headers: headers, body: body);
       final responseData = json.decode(response.body);
       log('-----------------create event slot call--------------------');
+      log(body.toString());
+      log(responseData.toString());
+      if (responseData['success'] != null && responseData['success'] == true) {
+        showCustomSnackbar(title: AppStaticString.success, message: responseData['message'], type: SnackBarType.success);
+        return true;
+      } else {
+        showCustomSnackbar(title: AppStaticString.failed, message: responseData['message'], type: SnackBarType.failed);
+        return false;
+      }
+    } catch (e) {
+      showCustomSnackbar(title: AppStaticString.failed, message: e.toString(), type: SnackBarType.failed);
+      debugPrint(e.toString());
+      return false;
+    }
+  }
+  static Future<bool> setSlotForDatesRequest({
+    required String trackId,
+    required List<String> slotIds,
+    required List<int> arrOfDayNo,
+
+  })
+  async {
+    try {
+      final url = Uri.parse(ApiClient.postPresetTrackUrl);
+      final headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
+      };
+      final body = jsonEncode(
+          {
+            "trackId": trackId,
+            "slotIds": slotIds,
+            "arrOfDayNo": arrOfDayNo,
+            });
+      final response = await http.post(url, headers: headers, body: body);
+      final responseData = json.decode(response.body);
+      log('-----------------preset slot call--------------------');
       log(body.toString());
       log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {
@@ -939,7 +1026,8 @@ static Future<List<SingleTrackModel>> getMyBusinessTrack({
     String currentEventPage = "1",
     String itemsEventPerPage = "5",
     String totalEventPages = "7",
-  }) async {
+  })
+  async {
     List<SingleEventModel> myEventList = [];
     try {
       final url =

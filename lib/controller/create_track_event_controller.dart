@@ -16,7 +16,7 @@ class CreateTrackEventController extends GetxController {
   static CreateTrackEventController get to => Get.find();
   RxList<DateTime> selectedDates = <DateTime>[].obs;
   ///=======================text editing controller for track =======================///
-
+  List<String> slotIdsList=[];
   Rx<TextEditingController> trackNameController =
       TextEditingController(text: kDebugMode ? 'track name' : '').obs;
 
@@ -29,6 +29,8 @@ class CreateTrackEventController extends GetxController {
                   'Techno is one of the most popular genres in nightclubs all over the world.'
               : '')
       .obs;
+  RxBool isLoadingSlotsList = false.obs;
+
   Rx<TextEditingController> uploadTrackPeopleNumberController =
       TextEditingController().obs;
   Rx<TextEditingController> uploadTrackPriceController =
@@ -65,7 +67,12 @@ class CreateTrackEventController extends GetxController {
                   ? 'A dummy is a type of doll that looks like a person. Entertainers called ventriloquists can make dummies appear to talk. The automobile industry uses dummies in cars to study how safe cars are during a crash. A dummy can also be anything that looks real but doesn\'t work: a fake.'
                   : '')
           .obs;
+  ///====================Slots pagination variable========================///
 
+  final RxInt currentSlotsPage = 1.obs;
+  final RxInt itemsSlotsPerPage = 7.obs;
+  final RxInt totalSlotsPages = 7.obs;
+  final RxBool isSlotsLoadingMore = false.obs;
   ///======================upload event focusnode========================///
   ///
   FocusNode uploadEventTotalSeatFocusNode = FocusNode();
@@ -89,6 +96,7 @@ class CreateTrackEventController extends GetxController {
   Rx<SingleTrackModel> singleTrack = SingleTrackModel().obs;
   Rx<SingleEventModel> singleEvent = SingleEventModel().obs;
   RxList<CategoryModel> catList = <CategoryModel>[].obs;
+  RxList<TrackSlots> slotList = <TrackSlots>[].obs;
   Rx<TextEditingController> fieldNameController =
       TextEditingController(text: kDebugMode ? 'NID' : '').obs;
   RxList<TextEditingController> eventControllerList =
@@ -125,6 +133,7 @@ class CreateTrackEventController extends GetxController {
   RxBool isLoadingCategory = false.obs;
   RxBool isLoadingPostEvent = false.obs;
   RxBool isLoadingCurrencies = false.obs;
+  RxBool isLoadingSetSlot = false.obs;
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   categoryListCall() async {
@@ -262,7 +271,7 @@ class CreateTrackEventController extends GetxController {
     }
   }
 
-  getTrackDetailsCall({required String trackId}) async {
+  Future<void> getTrackDetailsCall({required String trackId}) async {
     if (NetworkController.to.isConnected.value) {
       isLoadingTrack.value = true;
       singleTrack.value = await TrackEventService.getSingleTrackData(
@@ -278,6 +287,41 @@ class CreateTrackEventController extends GetxController {
       noInternetShowCustomSnackbar();
     }
   }
+  Future<void> getTrackSlotForDayCall({required String trackId,bool loadMore = false, List<int>? dates}) async {
+    if (NetworkController.to.isConnected.value) {
+      if (loadMore && currentSlotsPage.value >= totalSlotsPages.value) {
+        return;
+      }
+      if (loadMore) {
+        isSlotsLoadingMore.value = true;
+        currentSlotsPage.value++;
+
+        // Don't increment page here - we'll do it after successful response
+      } else {
+        isLoadingSlotsList.value = true;
+        currentSlotsPage.value = 1;
+      }
+      final slotInitialList = await TrackEventService.getTrackSlotForDayCall(
+          trackId: trackId,
+          currentEventPage: currentSlotsPage.value.toString(),
+          itemsEventPerPage: itemsSlotsPerPage.value.toString(),
+          totalEventPages: totalSlotsPages.value.toString(),
+        dates: dates
+    );
+      isLoadingSlotsList.value = false;
+      isSlotsLoadingMore.value = false;
+      if (loadMore) {
+        slotList.addAll(slotInitialList);
+      } else {
+        slotList.value = slotInitialList;
+      }
+    } else {
+      isLoadingSlotsList.value = false;
+      // noInternetShowCustomSnackbar();
+    }
+  }
+
+
 
   deleteSlotCall({required String slotId, bool? isEvent}) async {
     if (NetworkController.to.isConnected.value) {
@@ -360,7 +404,27 @@ class CreateTrackEventController extends GetxController {
       noInternetShowCustomSnackbar();
     }
   }
+  setSlotTrackCall({
+    required String trackId,
+    required List<String> slotIds,
+    required List<int> arrOfDayNo,
 
+  }) async {
+    if (NetworkController.to.isConnected.value) {
+      isLoadingSetSlot.value = true;
+      bool isUpdate = await TrackEventService.setSlotForDatesRequest(trackId: trackId, slotIds: slotIds, arrOfDayNo: arrOfDayNo);
+      if (isUpdate) {
+        isLoadingSetSlot.value = false;
+        getTrackSlotForDayCall(trackId: trackId);
+
+      }
+
+      isLoadingSetSlot.value = false;
+    } else {
+      isLoadingSetSlot.value = false;
+      noInternetShowCustomSnackbar();
+    }
+  }
   getEventDetailsCall({required String eventId}) async {
     if (NetworkController.to.isConnected.value) {
       isLoadingEvent.value = true;

@@ -33,38 +33,77 @@ class EventTrackSlotScreen extends StatefulWidget {
 }
 
 class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
-  final arguments = Get.arguments;
+  final arguments = Get.arguments as Map<String, dynamic>? ?? {};
 
   String type = '';
   String id = '';
-
-  // Determine the title dynamically
   String title = '';
-  List<DateTime> dates=[];
+  List<DateTime> dates = [];
+  ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
-    type = arguments['type'] as String;
-    id = arguments['id'] as String;
-    final List<dynamic>? dateListDynamic = arguments['dates'] as List<dynamic>?;
+    super.initState();
 
-
-    dates =dateListDynamic != null
-        ? dateListDynamic.map((e) => DateFormat("MM/dd/yyyy").parse(e.toString())).toList()
-        : [];
+    type = arguments['type']?.toString() ?? '';
+    id = arguments['id']?.toString() ?? '';
     title =
     type == 'event' ? AppStaticString.eventSlot : AppStaticString.trackSlot;
+
     if (id.isNotEmpty && type.isNotEmpty) {
       if (type == event) {
         CreateTrackEventController.to.getEventDetailsCall(eventId: id);
       } else {
-        CreateTrackEventController.to.getTrackDetailsCall(trackId: id);
-        // CreateTrackEventController.to.getTrackSlotListCall(trackId: sId);
+        getDates();
+        //
+        // // Pagination listener
+        scrollController.addListener(() {
+          if (scrollController.position.pixels ==
+              scrollController.position.maxScrollExtent) {
+            fetchSlots(loadMore: true);
+          }
+        });
       }
     } else {
       debugPrint('Error: Missing eventId or trackId.');
     }
-    super.initState();
+  }
+
+  void getDates() async {
+    await CreateTrackEventController.to.getTrackDetailsCall(trackId: id).then((
+        _) {
+      final slotDates = CreateTrackEventController
+          .to.singleTrack.value.slotAvailableDates;
+
+      if (slotDates != null && slotDates.isNotEmpty) {
+        final parsedDates = slotDates
+            .map((e) => DateFormat("MM/dd/yyyy").parse(e.toString()))
+            .toList();
+
+        final List<DateTime> expandedDates = [];
+        for (final date in parsedDates) {
+          for (int month = 1; month <= 12; month++) {
+            try {
+              final lastDayOfMonth = DateTime(date.year, month + 1, 0).day;
+
+              if (date.day <= lastDayOfMonth) {
+                expandedDates.add(DateTime(date.year, month, date.day));
+              }            } catch (_) {}
+          }
+        }
+
+        setState(() {
+          dates = {...parsedDates, ...expandedDates}.toList()
+            ..sort();
+        });
+      }
+      fetchSlots();
+    });
+  }
+
+  void fetchSlots({bool loadMore = false}) async {
+    await CreateTrackEventController.to.getTrackSlotForDayCall(
+        trackId: id, loadMore: loadMore);
   }
 
   @override
@@ -76,7 +115,8 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
           Obx(() {
             bool isLoading = true;
             if (type == 'track') {
-              isLoading = CreateTrackEventController.to.isLoadingTrack.value;
+              isLoading =
+                  CreateTrackEventController.to.isLoadingSlotsList.value;
             } else {
               isLoading = CreateTrackEventController.to.isLoadingEvent.value;
             }
@@ -162,17 +202,13 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
             isLoading = CreateTrackEventController.to.isLoadingEvent.value;
           } else {
             slotList =
-                CreateTrackEventController.to.singleTrack.value.slots ?? [];
-            isLoading = CreateTrackEventController.to.isLoadingTrack.value;
+                CreateTrackEventController.to.slotList;
+            isLoading = CreateTrackEventController.to.isLoadingTrack.value ||
+                CreateTrackEventController.to.isLoadingSlotsList.value;
           }
 
-          return isLoading
-              ? SlotListHorizontalLoadingWidget()
-              : slotList.isEmpty
-              ? const EmptyTextWidget(
-            text: AppStaticString.slotListIsEmpty,
-          )
-              : CustomScrollView(
+          return CustomScrollView(
+            controller: scrollController,
             slivers: [
               if (type != event) SliverToBoxAdapter(child: Container(
                 margin: padding12H,
@@ -185,18 +221,81 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: MultipleDatePicker(
-                    preSelectedDates: dates, // This is an empty list, which is fine now
+                    preSelectedDates: dates,
+                    // This is an empty list, which is fine now
                     onDateSelected: (selectedDates) {
+
                       CreateTrackEventController.to.selectedDates.value =
                           selectedDates;
-                      print(selectedDates);
+                      print(  CreateTrackEventController.to.selectedDates);
                     },
                   ),
                 ),
               ),),
+              Obx(() {
+                return SliverToBoxAdapter(
+                    child: CreateTrackEventController.to
+                        .selectedDates.isNotEmpty ?
+                    Padding(
+                      padding: padding12H6V,
+                      child: Row(spacing: 6.w,
+                        children: [
+                          Expanded(
+                            child: CustomButton(
+                              isLoading: CreateTrackEventController.to.isLoadingSetSlot.value,
+                              fillColor:AppColors.blueColorDark,
+                              borderColor:AppColors.blueColorDark,
+                              onTap: () {
+                              CreateTrackEventController.to.setSlotTrackCall(
+                                  trackId: id, slotIds: CreateTrackEventController.to.slotIdsList, arrOfDayNo: [],);
+                            },
+                              title: AppStaticString.setSlot,
+
+                            ),
+                          ),Expanded(
+                            child: CustomButton(
+
+                              onTap: () {
+                              CreateTrackEventController.to.getTrackSlotForDayCall(
+                                  trackId: id, dates: CreateTrackEventController.to
+                                  .selectedDates.map((element) => element.day,)
+                                  .toSet()
+                                  .toList());
+                            },
+                              title: AppStaticString.filterSlot,
+
+                            ),
+                          ),Expanded(
+                            child: CustomButton(onTap: () {
+                              print("CreateTrackEventController.to.selectedDates");
+                              CreateTrackEventController.to
+                                  .selectedDates.clear();
+                              CreateTrackEventController.to
+                                  .selectedDates.value=[];
+                              CreateTrackEventController.to.getTrackSlotForDayCall(
+                                  trackId: id,);
+                            },
+                              fillColor:AppColors.greenColor,
+                              borderColor:AppColors.greenColor,
+                              title: AppStaticString.clear,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                        : SizedBox.shrink());
+              }),
 
               // ListView Sliver below the calendar
-              SliverList(
+              isLoading
+                  ? SliverToBoxAdapter(child: SlotListHorizontalLoadingWidget())
+                  : slotList.isEmpty
+                  ? SliverToBoxAdapter(
+                child: const EmptyTextWidget(
+                  text: AppStaticString.slotListIsEmpty,
+                ),
+              )
+                  : SliverList(
 
                 delegate: SliverChildBuilderDelegate(
 

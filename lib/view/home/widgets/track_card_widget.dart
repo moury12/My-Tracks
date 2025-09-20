@@ -259,12 +259,18 @@ class TrackCardWidget extends StatelessWidget {
                               showCalendarDialog(
                                 context,
                                 onConfrim: () {
+
                                   Get.toNamed(
                                     EventTrackSlotScreen.routeName,
                                     arguments: {
                                       'id': sId,
                                       'slots': trackModel!.slots,
-                                      'type': 'track'
+                                      'type': 'track',
+                                      if(CreateTrackEventController
+                                          .to.singleTrack.value.slotAvailableDates!=null&&CreateTrackEventController
+                                          .to.singleTrack.value.slotAvailableDates!.isNotEmpty)
+                                        "dates":CreateTrackEventController
+                                            .to.singleTrack.value.slotAvailableDates
                                     },
                                   );
                                 },
@@ -320,19 +326,15 @@ class TrackCardWidget extends StatelessWidget {
 
                     child: CustomButton(
                       onTap: () async{
-                        Get.put(CreateTrackEventController());
-                        await CreateTrackEventController.to.getTrackDetailsCall(
-                            trackId: trackModel!.sId.toString());
+                        // Get.put(CreateTrackEventController());
+                        // await CreateTrackEventController.to.getTrackDetailsCall(
+                        //     trackId: trackModel!.sId.toString());
                         Get.toNamed(
                           EventTrackSlotScreen.routeName,
                           arguments: {
                             'id': sId,
                             'slots': trackModel!.slots,
-                            'type': 'track',
-                            if(CreateTrackEventController
-                                .to.singleTrack.value.slotAvailableDates!=null&&CreateTrackEventController
-                                .to.singleTrack.value.slotAvailableDates!.isNotEmpty)  "dates":CreateTrackEventController
-                                .to.singleTrack.value.slotAvailableDates
+                            'type': 'track'
                           },
                         );
                       }, title: AppStaticString.viewAllSlot,

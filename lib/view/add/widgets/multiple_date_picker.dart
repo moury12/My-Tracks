@@ -23,7 +23,7 @@ class _MultipleDatePickerState extends State<MultipleDatePicker> {
   @override
   void initState() {
     super.initState();
-    _selectedDates = List.from(widget.preSelectedDates);
+   _selectedDates = [];
     _focusedDay = DateTime.now(); // Start with the current month
   }
 
@@ -43,11 +43,15 @@ class _MultipleDatePickerState extends State<MultipleDatePicker> {
   void _onDaySelected(DateTime day, DateTime focusedDay) {
     setState(() {
       if (_selectedDates.any((d) => _isSameDay(d, day))) {
+        // If already selected, remove it
         _selectedDates.removeWhere((d) => _isSameDay(d, day));
       } else {
+        // If not selected, add it
         _selectedDates.add(day);
       }
     });
+
+    // Notify parent about selection change
     widget.onDateSelected(_selectedDates);
   }
   void _onMonthChanged(DateTime focusedDay) {
@@ -59,12 +63,13 @@ class _MultipleDatePickerState extends State<MultipleDatePicker> {
   Widget build(BuildContext context) {
     return TableCalendar(
 
-      firstDay: DateTime.utc(2020, 1, 1),
-      lastDay: DateTime.utc(2030, 12, 31),
+      firstDay: DateTime.utc(DateTime.now().year, 1, 1),
+      lastDay: DateTime.utc(DateTime.now().year, 12, 31),
       focusedDay: _focusedDay,
       selectedDayPredicate: (day) => _selectedDates.any((d) => _isSameDay(d, day)),
       onDaySelected: _onDaySelected,
-      onPageChanged: _onMonthChanged,       calendarStyle: CalendarStyle(
+      onPageChanged: _onMonthChanged,
+      calendarStyle: CalendarStyle(
         todayDecoration: BoxDecoration(
           color: Colors.black,
           shape: BoxShape.rectangle,/*borderRadius: BorderRadius.circular(6.r)*/
@@ -73,12 +78,27 @@ class _MultipleDatePickerState extends State<MultipleDatePicker> {
           color: AppColors.primaryColor,
           shape: BoxShape.rectangle,/*borderRadius: BorderRadius.circular(6.r)*/
         ),
+
         outsideDaysVisible: false,
         weekendTextStyle: const TextStyle(color: Colors.black,fontSize: 12),
         defaultTextStyle: const TextStyle(color: Colors.black,fontSize: 12),
       ),
       daysOfWeekHeight: 20,
+calendarBuilders: CalendarBuilders(defaultBuilder: (context, day, focusedDay) {
+      if ( widget.preSelectedDates.any((d) => _isSameDay(d, day))) {
+        return Container(
+          margin: EdgeInsets.all(3.sp),
+          decoration: BoxDecoration(
+            color: AppColors.greenColor,
 
+          ),
+          alignment: Alignment.center,
+          child: Text('${day.day}', style: TextStyle(color: Colors.white)),
+        );
+      }
+
+
+},),
 daysOfWeekStyle: DaysOfWeekStyle(weekdayStyle: TextStyle(color: Colors.black, fontSize: 12),weekendStyle: TextStyle(color: Colors.black, fontSize: 12)),
       headerStyle: const HeaderStyle(
 
