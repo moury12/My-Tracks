@@ -27,7 +27,7 @@ class NotificationService {
       );
       final Map<String, dynamic> responseData = json.decode(response.body);
       log('----------------- notification List call--------------------');
-      log(responseData.toString());
+      // log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {
         if (responseData['data'] is List) {
           notificationList = (responseData['data'] as List)

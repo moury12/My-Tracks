@@ -71,7 +71,7 @@ class ManageService {
       );
       final Map<String, dynamic> responseData = json.decode(response.body);
       log('----------------- privacy policy call--------------------');
-      log(responseData.toString());
+      // log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {
         privacyPolicy = ManageModel.fromJson(responseData['data']);
 
@@ -166,7 +166,7 @@ class ManageService {
       );
       final Map<String, dynamic> responseData = json.decode(response.body);
       log('----------------- terms condition call--------------------');
-      log(responseData.toString());
+      // log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {
         terms = ManageModel.fromJson(responseData['data']);
 

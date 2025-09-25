@@ -52,7 +52,7 @@ class ProfileController extends GetxController {
 
   RxString uploadProfileImg = ''.obs;
   RxString selectedAddress = ''.obs;
-  getUserProfileData() async {
+  Future<void> getUserProfileData() async {
     if (NetworkController.to.isConnected.value) {
       isLoadingUserData.value = true;
       if (Boxes.getUserData().get(tokenKey) != null &&

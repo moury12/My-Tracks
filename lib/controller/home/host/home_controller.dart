@@ -69,17 +69,18 @@ class HomeController extends GetxController {
   RxInt currentPageForReview = 1.obs;
   var isLoadingMoreForReview = false.obs;
   Future<void> refreshCall() async {
-    await getTrackListCall();
-    await getEventListCall();
-    trackList.refresh();
-    eventList.refresh();
+   Future.wait([getTrackListCall(),
+   getEventListCall(),
+    ProfileController.to.getUserProfileData()]);
+    // trackList.refresh();
+    // eventList.refresh();
     selectedLabel.value = 0;
     Get.put(ProfileController());
 
-    await ProfileController.to.getUserProfileData();
+
   }
 
-  getTrackListCall({
+  Future<void> getTrackListCall({
     bool loadMore = false,
   }) async {
     if (NetworkController.to.isConnected.value) {
@@ -116,7 +117,7 @@ class HomeController extends GetxController {
     }
   }
 
-  getEventListCall({bool loadMore = false}) async {
+  Future<void> getEventListCall({bool loadMore = false}) async {
     if (NetworkController.to.isConnected.value) {
       if (loadMore && currentEventPage.value >= totalEventPages.value) {
         return;
@@ -300,8 +301,10 @@ class HomeController extends GetxController {
 
   @override
   void onInit() {
-    getTrackListCall();
-    getEventListCall();
+   Future.wait([
+   getTrackListCall(),
+   getEventListCall(),
+   ]);
     super.onInit();
   }
 }

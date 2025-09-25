@@ -30,7 +30,7 @@ class UserService {
       );
       final Map<String, dynamic> responseData = json.decode(response.body);
       log('-----------------user profile call--------------------');
-      log(responseData.toString());
+      // log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {
         user = UserModel.fromJson(responseData['data']);
 

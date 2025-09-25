@@ -130,7 +130,7 @@ class TrackEventSlotWidget extends StatelessWidget {
                     ? Text(
 
                   ///=================with total seat number================///
-                  '${ (slots!.day??0).toString() }-${DateTime.now().month}-${DateTime.now().year} (${AppStaticString
+                  '${ (slots!.day??0).toString() }-${(slots!.month??0).toString()}-${(slots!.year??0).toString()} (${AppStaticString
                       .totalSeatWithClone}${slots != null ? slots!.maxPeople ??
                       'n/a' : ''})',
                   style: poppinsRegular.copyWith(
@@ -194,7 +194,7 @@ class TrackEventSlotWidget extends StatelessWidget {
               : Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              argument == userPanel
+             onDelete==null
                   ? const SizedBox.shrink()
                   : InkWell(
                 onTap: () {

@@ -163,7 +163,7 @@ class TrackEventService {
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = json.decode(response.body);
         log('-----------------Category Call--------------------');
-        log(responseData.toString());
+        // log(responseData.toString());
 
         if (responseData['success'] != null && responseData['success'] == true) {
           // Safely parse the category data
@@ -219,7 +219,7 @@ class TrackEventService {
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = json.decode(response.body);
         log('-----------------Promote Track Call--------------------');
-        log(responseData.toString());
+        // log(responseData.toString());
 
         if (responseData['success'] != null && responseData['success'] == true) {
           // Parse the response data into a list
@@ -317,8 +317,8 @@ class TrackEventService {
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = json.decode(response.body);
         log('-----------------Booking Track List Call--------------------');
-        log(url.toString());
-        log(responseData.toString());
+        // log(url.toString());
+        // log(responseData.toString());
 
         if (responseData['success'] != null && responseData['success'] == true) {
           // Correctly parse the data into a list of TrackHistoryRunningModel
@@ -663,7 +663,7 @@ class TrackEventService {
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = json.decode(response.body);
         log('-----------------Booking Event List Call--------------------');
-        log(responseData.toString());
+        // log(responseData.toString());
 
         if (responseData['success'] != null && responseData['success'] == true) {
           final data = responseData['data'] as List<dynamic>?;
@@ -974,7 +974,7 @@ static Future<List<SingleTrackModel>> getMyBusinessTrack({
       );
       final Map<String, dynamic> responseData = json.decode(response.body);
       log('----------------- my Track List call--------------------');
-      log(responseData.toString());
+      // log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {
         if (responseData['data']["tracks"] is List) {
           myTrackList = (responseData['data']["tracks"] as List).map((e) => SingleTrackModel.fromJson(e)).toList();
@@ -999,7 +999,7 @@ static Future<List<SingleTrackModel>> getMyBusinessTrack({
               .whereType<String>() // removes nulls
               .toList();
 
-          preloadImagesFromUrls(imageUrlsOfRenters);
+          // preloadImagesFromUrls(imageUrlsOfRenters);
 
 
           preloadImagesFromUrls(imageUrls);

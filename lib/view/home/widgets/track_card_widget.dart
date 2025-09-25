@@ -246,35 +246,40 @@ class TrackCardWidget extends StatelessWidget {
                 : Row(
               children: [
                 Expanded(
-                  child: CustomButton(
-                      // isLoading: CreateTrackEventController.to.isLoadingTrack
-                      //     .value,
+                  child: Obx(() {
+                    return CustomButton(
+                      isLoading: CreateTrackEventController.to.isLoadingTrack
+                          .value,
                       onTap: () async {
-                        Get.put(CreateTrackEventController());
                         await CreateTrackEventController.to.getTrackDetailsCall(
                             trackId: trackModel!.sId.toString());
-                       if(CreateTrackEventController
-                           .to.singleTrack.value.slotAvailableDates!=null&&CreateTrackEventController
-                           .to.singleTrack.value.slotAvailableDates!.isNotEmpty) {
-                              showCalendarDialog(
-                                context,
-allowSelection: false,
-                                preSelectedDates: CreateTrackEventController
-                                    .to.singleTrack.value.slotAvailableDates!
-                                    .map((date) {
-                                  return DateFormat("MM/dd/yyyy").parse(date);
-                                }).toList(),
-                                onDateSelected: (List<DateTime> val) {},
-                              );
-                            }
-                       else{
-                         showCustomSnackbar(title: "Warning", message: "Sorry! this track doesn't have Available Dates", type: SnackBarType.alert);
-                       }
-                          },
+                        if (CreateTrackEventController
+                            .to.singleTrack.value.slotAvailableDates != null &&
+                            CreateTrackEventController
+                                .to.singleTrack.value.slotAvailableDates!
+                                .isNotEmpty) {
+                          showCalendarDialog(
+                            context,
+                            allowSelection: false,
+                            preSelectedDates: CreateTrackEventController
+                                .to.singleTrack.value.slotAvailableDates!
+                                .map((date) {
+                              return DateFormat("MM/dd/yyyy").parse(date);
+                            }).toList(),
+                            onDateSelected: (List<DateTime> val) {},
+                          );
+                        }
+                        else {
+                          showCustomSnackbar(title: "Warning",
+                              message: "Sorry! this track doesn't have Available Dates",
+                              type: SnackBarType.alert);
+                        }
+                      },
                       fillColor: AppColors.blueColor,
                       borderColor: AppColors.blueColor,
                       title: AppStaticString.calender,
-                      img: calenderIconUrl,),
+                      img: calenderIconUrl,);
+                  }),
                 ),
                 /*trackModel!.renters != null&&trackModel!.renters!.isNotEmpty
             ?   Flexible(
@@ -310,7 +315,7 @@ allowSelection: false,
                 Expanded(
 
                     child: CustomButton(
-                      onTap: () async{
+                      onTap: () async {
                         // Get.put(CreateTrackEventController());
                         // await CreateTrackEventController.to.getTrackDetailsCall(
                         //     trackId: trackModel!.sId.toString());

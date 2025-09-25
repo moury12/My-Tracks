@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:track_trek/controller/booking/booking_management_controller.dart';
 import 'package:track_trek/controller/common_controller.dart';
+import 'package:track_trek/controller/create_track_event_controller.dart';
 import 'package:track_trek/controller/home/host/home_controller.dart';
 import 'package:track_trek/controller/home/user/home_user_controller.dart';
 import 'package:track_trek/controller/notification_controller.dart';
@@ -38,11 +39,15 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
     super.initState();
 
     if (Boxes.getUserData().get(roleKey) == 'HOST') {
-      Get.put(TrackManagementController());
       Get.put(HomeController());
+
+      Get.put(TrackManagementController());
+      Get.put(CreateTrackEventController());
+
     } else {
       Get.put(HomeUserController());
       Get.put(BookingManagementController());
+
     }
     Get.put(ProfileController());
     Get.put(NotificationController());

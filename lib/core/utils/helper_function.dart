@@ -249,7 +249,7 @@ void showCalendarDialog(
     BuildContext context, {
       Function()? onConfrim,  bool? allowSelection,bool? multipleSelection,
       List<DateTime>? preSelectedDates,
-      List<DateTime>? selectedDates,
+      List<DateTime>?  selectedDates,
       required Function(List<DateTime>) onDateSelected,
     })
 {
@@ -288,15 +288,7 @@ void showCalendarDialog(
                       // Always keep the selected date itself
                       tempSelectedDates.add(date);
 
-                      // Generate same day for future months in that year
-                      for (int month = date.month + 1; month <= 12; month++) {
-                        try {
-                          final newDate = DateTime(date.year, month, date.day);
-                          tempSelectedDates.add(newDate);
-                        } catch (e) {
-                          // skip invalid days like Feb 30
-                        }
-                      }
+
                     }
                   },
 

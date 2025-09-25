@@ -70,7 +70,7 @@ class HomeUserController extends GetxController {
 
   Rx<TextEditingController> searchFieldController = TextEditingController().obs;
 
-  getCategoryListCall() async {
+  Future<void> getCategoryListCall() async {
     if (NetworkController.to.isConnected.value) {
       isLoadingCategory.value = true;
       catList.value = await TrackEventService.getCategoryListCall();
@@ -89,7 +89,7 @@ class HomeUserController extends GetxController {
     }
   }
 
-  getPromoteTrackListCall() async {
+  Future<void> getPromoteTrackListCall() async {
     if (NetworkController.to.isConnected.value) {
       isLoadingPromoteTrack.value = true;
       promoteTrackList.value = await TrackEventService.getPromoteTrackListCall();
@@ -233,18 +233,22 @@ class HomeUserController extends GetxController {
 
   ///=========================== Refresh method ===========================///
   onRefreshUserPanel() {
+    Future.wait([
+    fetchLocation(),
+    getPromoteTrackListCall(),
+    getCategoryListCall(),
+    ]);
     categorySearch.value = '';
     Get.put(ProfileController());
     ProfileController.to.getUserProfileData();
     selectedIndexCategory.value = 0;
 
-    getPromoteTrackListCall();
-    getCategoryListCall();
-    fetchLocation();
+
+
     // updateCategorySearch();
   }
 
-  void fetchLocation() async {
+  Future<void> fetchLocation() async {
     try {
       isLoadingTrackList.value = true;
       isLoadingEventList.value = true;
@@ -308,7 +312,6 @@ class HomeUserController extends GetxController {
     totalEventPages.value = 7; // Reset total pages
     itemsEventPerPage.value = 7; // Reset item limit
     isEventLoadingMore.value = false; // Reset loading flags
-    // getEventListCall();
   }
 
   void resetTrackList() {
@@ -317,6 +320,5 @@ class HomeUserController extends GetxController {
     totalTrackPages.value = 7; // Reset total pages
     itemsTrackPerPage.value = 7; // Reset item limit
     isTrackLoadingMore.value = false; // Reset loading flags
-    // getEventListCall();
   }
 }

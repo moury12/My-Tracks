@@ -53,9 +53,9 @@ class _MultipleDatePickerState extends State<MultipleDatePicker> {
     widget.onDateSelected(_selectedDates);
   }
   void _onMonthChanged(DateTime focusedDay) {
-    setState(() {
-      _focusedDay = focusedDay; // Update only when user navigates months
-    });
+    // setState(() {
+    //   _focusedDay = focusedDay; // Update only when user navigates months
+    // });
   }
   @override
   Widget build(BuildContext context) {
@@ -67,6 +67,23 @@ class _MultipleDatePickerState extends State<MultipleDatePicker> {
       selectedDayPredicate: (day) => _selectedDates.any((d) => _isSameDay(d, day)),
       onDaySelected:  // 👈 stop selecting
     _onDaySelected,
+      // ❌ Disable swiping between months
+      pageJumpingEnabled: false,
+      pageAnimationEnabled: false,
+      availableGestures: AvailableGestures.none,
+
+      // ❌ Hide header arrows so user cannot click next/prev month
+      headerStyle: const HeaderStyle(
+        formatButtonVisible: false,
+        titleCentered: true,
+        leftChevronVisible: false,
+        rightChevronVisible: false,
+        titleTextStyle: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
+      ),
       onPageChanged: _onMonthChanged,
       calendarStyle: CalendarStyle(
         todayDecoration: BoxDecoration(
@@ -99,16 +116,16 @@ calendarBuilders: CalendarBuilders(defaultBuilder: (context, day, focusedDay) {
 
 },),
 daysOfWeekStyle: DaysOfWeekStyle(weekdayStyle: TextStyle(color: Colors.black, fontSize: 12),weekendStyle: TextStyle(color: Colors.black, fontSize: 12)),
-      headerStyle: const HeaderStyle(
-
-        formatButtonVisible: false,
-        titleCentered: true,
-        titleTextStyle: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-        ),
-      ),
+      // headerStyle: const HeaderStyle(
+      //
+      //   formatButtonVisible: false,
+      //   titleCentered: true,
+      //   titleTextStyle: TextStyle(
+      //     fontSize: 16,
+      //     fontWeight: FontWeight.bold,
+      //     color: Colors.black,
+      //   ),
+      // ),
     );
   }
 }

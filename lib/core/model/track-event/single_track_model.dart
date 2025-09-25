@@ -50,41 +50,50 @@ class SingleTrackModel {
   });
 
   SingleTrackModel.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
-    host = json['host'];
-    trackName = json['trackName'];
-    category = json['category'];
-    trackImage = json['track_image']?.cast<String>();
-    address = json['address'];
-    location = json['location'] != null ? Location.fromJson(json['location']) : null;
-    description = json['description'];
-    status = json['status'];
-    isPromoted = json['isPromoted'];
-    // trackDays = json['trackDays']?.cast<String>();
+    sId = json['_id']?.toString();
+    host = json['host']?.toString();
+    trackName = json['trackName']?.toString();
+    category = json['category']?.toString();
+
+    trackImage = (json['track_image'] as List?)
+        ?.map((e) => e.toString())
+        .toList() ?? [];
+
+    address = json['address']?.toString();
+    location = json['location'] != null
+        ? Location.fromJson(json['location'])
+        : null;
+    description = json['description']?.toString();
+    status = json['status']?.toString();
+    isPromoted = json['isPromoted'] ?? false;
+
+    trackDays = (json['trackDays'] as List?)
+        ?.map((e) => e.toString())
+        .toList() ?? [];
+
     if (json['renters'] != null) {
-      renters = <Renters>[];
-      json['renters'].forEach((v) {
-        renters!.add(Renters.fromJson(v));
-      });
+      renters = (json['renters'] as List)
+          .map((v) => Renters.fromJson(v))
+          .toList();
     }
+
     if (json['slots'] != null) {
-      slots = <TrackSlots>[];
-      json['slots'].forEach((v) {
-        slots!.add(TrackSlots.fromJson(v));
-      });
+      slots = (json['slots'] as List)
+          .map((v) => TrackSlots.fromJson(v))
+          .toList();
     }
+
     totalLikes = json['totalLikes']?.toString();
     totalReview = json['totalReview']?.toString();
     createdAt = json['createdAt']?.toString();
     updatedAt = json['updatedAt']?.toString();
     iV = json['__v'];
     totalTrackDayInMonth = json['totalTrackDayInMonth']?.toString();
-    rating = json['rating']?.toDouble();
+    rating = (json['rating'] as num?)?.toDouble();
 
-    /// 👇 parse slotAvailableDates
     slotAvailableDates = (json['slotAvailableDates'] as List?)
         ?.map((e) => e.toString())
-        .toList();
+        .toList() ?? [];
   }
 
   Map<String, dynamic> toJson() {
@@ -147,6 +156,8 @@ class TrackSlots {
   String? host;
   String? track;
   int? day;
+  int? month;
+  int? year;
   String? slotNo;
   String? startTime;
   String? endTime;
@@ -161,6 +172,8 @@ class TrackSlots {
     this.host,
     this.track,
     this.day,
+    this.month,
+    this.year,
     this.slotNo,
     this.startTime,
     this.currency,
@@ -178,6 +191,8 @@ class TrackSlots {
     host = json['host'];
     track = json['track'];
     day = json['dayNo'];
+    month = json['month'];
+    year = json['year'];
     slotNo = json['slotNo'];
     startTime = json['startTime'];
     endTime = json['endTime'];
@@ -194,6 +209,8 @@ class TrackSlots {
       'host': host,
       'track': track,
       'dayNo': day,
+      'month': month,
+      'year': year,
       'slotNo': slotNo,
       'startTime': startTime,
       'endTime': endTime,

@@ -60,7 +60,7 @@ class TrackForUserPanelModel {
     description = json['description'].toString()=="null"?"":json['description'].toString();
     status = json['status'].toString()=="null"?"":json['status'].toString();
     isPromoted = json['isPromoted'];
-    trackDays = json['trackDays'].cast<String>();
+    trackDays = (json['trackDays'] as List?)?.map((e) => e.toString()).toList() ?? [];
     renters = json['renters'].cast<String>();
     slots = json['slots'].cast<String>();
     totalLikes = json['totalLikes'].toString()=="null"?"":json['totalLikes'].toString();

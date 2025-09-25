@@ -40,6 +40,7 @@ class _BookTrackJoinEventScreenState extends State<BookTrackJoinEventScreen> {
   late String sId;
   late String type;
   final controller = BookTrackJoinEventController.to;
+  DateTime date =DateTime.now();
   @override
   void initState() {
     super.initState();
@@ -239,23 +240,28 @@ class _BookTrackJoinEventScreenState extends State<BookTrackJoinEventScreen> {
                                             onDateSelected: (List<DateTime> val) {
                                               if (val.isNotEmpty) {
                                                 // ✅ Correct way to format picked date
-                                                final selectedDate = DateFormat("yyyy-MM-dd").format(val.first);
+                                                // final selectedDate = DateFormat("yyyy-MM-dd").format(val.first);
 
-                                                BookTrackJoinEventController.to.selectDate.value = selectedDate;
+                                                date = val.first;
 
-                                                BookTrackJoinEventController.to.getTrackSlotListCall(
-                                                  trackId: controller.singleTrack.value.sId.toString(),
-                                                );
+
                                               }
+                                            },
+                                            onConfrim: () {
+controller.selectDate.value=DateFormat('yyyy-MM-dd').format(date);
+print(controller.selectDate.value);
+                                              BookTrackJoinEventController.to.getTrackSlotListCall(
+                                                trackId: controller.singleTrack.value.sId.toString(),
+                                              );
                                             },
 
                                           );
 
-                                          debugPrint(BookTrackJoinEventController.to.selectDate.value);
+                                          // debugPrint(BookTrackJoinEventController.to.selectDate.value);
                                         },
-                                        selectedDay:
-                                            BookTrackJoinEventController
-                                                .to.selectDate.value,
+                                        // selectedDay:
+                                        //     BookTrackJoinEventController
+                                        //         .to.selectDate.toString(),
                                       );
                                     })),
                         ],
