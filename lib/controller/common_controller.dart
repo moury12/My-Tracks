@@ -9,7 +9,6 @@ import 'package:track_trek/core/global/string_variable.dart';
 import 'package:track_trek/core/init/api_client.dart';
 import 'package:track_trek/core/init/hive_boxes.dart';
 import 'package:track_trek/core/service/review/review_service.dart';
-import 'package:track_trek/core/service/track-event/track_event_service.dart';
 import 'package:track_trek/core/utils/google_map_api_key.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:http/http.dart' as http;
@@ -29,7 +28,7 @@ class CommonController extends GetxController {
   getCurrenciesList() async {
     // if (NetworkController.to.isConnected.value) {
     isLoadingCurrencies.value = true;
-    currencyList.value = await TrackEventService.fetchCurrencies();
+    currencyList.value = {"AUD":"Australian Dollar","GBP":"Pound Sterling"};
     isLoadingCurrencies.value = false;
     /*} else {
       isLoadingCurrencies.value = false;

@@ -86,6 +86,27 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
 
   }
 
+  Future<void> refreshAndClearSlots() async {
+    // Clear selected dates and slot IDs safely after build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      CreateTrackEventController.to.selectedDates.clear();
+      CreateTrackEventController.to.slotIdsList.clear();
+      CreateTrackEventController.to.selectedDates.value = [];
+    });
+
+    if (type == event) {
+      await CreateTrackEventController.to.getEventDetailsCall(eventId: id);
+    } else {
+      // Fetch track details
+      await CreateTrackEventController.to.getTrackDetailsCall(trackId: id);
+
+      // Get dates for the track slots
+      getDates();
+
+      // Fetch the slots for the track
+      await CreateTrackEventController.to.getTrackSlotForDayCall(trackId: id);
+    }
+  }
 
 
   @override
@@ -167,15 +188,7 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
       ),
       body: CustomRefreshIndicator(
         onRefresh: () async {
-          if (type == event) {
-            await CreateTrackEventController.to
-                .getEventDetailsCall(eventId: id);
-          } else {
-            CreateTrackEventController.to.selectedDates.value = [];
-
-            await CreateTrackEventController.to
-                .getTrackSlotForDayCall(trackId: id);
-          }
+         refreshAndClearSlots();
         },
         child: Obx(() {
           List<dynamic> slotList = [];
@@ -272,21 +285,7 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
                               Expanded(
                                 child: CustomButton(
                                   onTap: () {
-                                    print(
-                                        "CreateTrackEventController.to.selectedDates");
-                                    // Use post frame callback to avoid build phase conflicts
-                                    WidgetsBinding.instance
-                                        .addPostFrameCallback((_) {
-                                      CreateTrackEventController
-                                          .to.selectedDates
-                                          .clear();
-                                      CreateTrackEventController
-                                          .to.selectedDates.value = [];
-                                      CreateTrackEventController.to
-                                          .getTrackSlotForDayCall(
-                                        trackId: id,
-                                      );
-                                    });
+                                    refreshAndClearSlots();
                                   },
                                   fillColor: AppColors.greenColor,
                                   borderColor: AppColors.greenColor,
@@ -346,11 +345,14 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
                                         arguments: type,
                                       );
                                     },
-                                    onDelete: () {
-                                      CreateTrackEventController.to
-                                          .deleteSlotCall(
-                                              slotId: slot.sId ?? '');
+                                    onDelete: () async{
+                                      await CreateTrackEventController.to
+                                          .deleteSlotCall(slotId: slot.sId ?? '', fromTrackSlot: true);
+
                                       Navigator.pop(context);
+                                      await refreshAndClearSlots();
+
+
                                     },
                                     argument: userPanel,
                                   ),

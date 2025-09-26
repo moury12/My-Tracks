@@ -810,32 +810,32 @@ class TrackEventService {
     }
   }
 
-  static Future<Map<String, String>> fetchCurrencies() async {
-    Map<String, String> currencyList = {};
-    final url = 'https://v6.exchangerate-api.com/v6/${GoogleClient.currencyApiKey}/codes';
-
-    debugPrint('Fetching currencies from: $url');
-
-    try {
-      final response = await http.get(Uri.parse(url));
-
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> data = json.decode(response.body);
-
-        if (data['result'] == 'success' && data['supported_codes'] is List) {
-          // Convert the list of lists into a Map<String, String>
-          currencyList = {for (var item in data['supported_codes']) item[0] as String: item[1] as String};
-        }
-        debugPrint('Currencies fetched: $data');
-      } else {
-        debugPrint('Failed to load currencies. Status Code: ${response.statusCode}');
-      }
-    } catch (e) {
-      debugPrint('Error fetching currencies: $e');
-    }
-
-    return currencyList;
-  }
+  // static Future<Map<String, String>> fetchCurrencies() async {
+  //   Map<String, String> currencyList = {};
+  //   final url = 'https://v6.exchangerate-api.com/v6/${GoogleClient.currencyApiKey}/codes';
+  //
+  //   debugPrint('Fetching currencies from: $url');
+  //
+  //   try {
+  //     final response = await http.get(Uri.parse(url));
+  //
+  //     if (response.statusCode == 200) {
+  //       final Map<String, dynamic> data = json.decode(response.body);
+  //
+  //       if (data['result'] == 'success' && data['supported_codes'] is List) {
+  //         // Convert the list of lists into a Map<String, String>
+  //         currencyList = {for (var item in data['supported_codes']) item[0] as String: item[1] as String};
+  //       }
+  //       debugPrint('Currencies fetched: $data');
+  //     } else {
+  //       debugPrint('Failed to load currencies. Status Code: ${response.statusCode}');
+  //     }
+  //   } catch (e) {
+  //     debugPrint('Error fetching currencies: $e');
+  //   }
+  //
+  //   return currencyList;
+  // }
 
   static Future<List<dynamic>> joinEventSlotRequest({
     required String eventId,

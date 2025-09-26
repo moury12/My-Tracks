@@ -240,7 +240,7 @@ class CreateTrackEventController extends GetxController {
 
   getCurrenciesList() async {
     isLoadingCurrencies.value = true;
-    currencyList.value = await TrackEventService.fetchCurrencies();
+    currencyList.value = {'AUD':"Australian Dollar","GBP":"Pound Sterling"};
     isLoadingCurrencies.value = false;
   }
 
@@ -325,11 +325,11 @@ class CreateTrackEventController extends GetxController {
 
 
 
-  deleteSlotCall({required String slotId, bool? isEvent}) async {
+  deleteSlotCall({required String slotId, bool? isEvent,bool fromTrackSlot = false}) async {
     if (NetworkController.to.isConnected.value) {
       bool isDeleted = await TrackEventService.deleteSlotRequest(
           slotId: slotId, isEvent: isEvent);
-      if (isDeleted) {
+      if (isDeleted&&!fromTrackSlot) {
         if (isEvent == true) {
           getEventDetailsCall(eventId: eventId.value);
         } else {
@@ -414,17 +414,21 @@ class CreateTrackEventController extends GetxController {
   })
   async {
     if (NetworkController.to.isConnected.value) {
-      isLoadingSetSlot.value = true;
-      bool isUpdate = await TrackEventService.setSlotForDatesRequest(trackId: trackId, slotIds: slotIds, arrOfDayNo: arrOfDayNo);
-      if (isUpdate) {
+      if(slotIds.isNotEmpty&& arrOfDayNo.isNotEmpty){
+        isLoadingSetSlot.value = true;
+        bool isUpdate = await TrackEventService.setSlotForDatesRequest(
+            trackId: trackId, slotIds: slotIds, arrOfDayNo: arrOfDayNo);
+        if (isUpdate) {
+          isLoadingSetSlot.value = false;
+          slotIdsList.clear();
+          selectedDates.value = [];
+          getTrackSlotForDayCall(trackId: trackId);
+        }
+
         isLoadingSetSlot.value = false;
-
-       selectedDates.value=[];
-        getTrackSlotForDayCall(trackId: trackId);
-
+      }else{
+        showCustomSnackbar(title: "Failed!!", message: "Select slots and dates", type: SnackBarType.failed);
       }
-
-      isLoadingSetSlot.value = false;
     } else {
       isLoadingSetSlot.value = false;
       noInternetShowCustomSnackbar();

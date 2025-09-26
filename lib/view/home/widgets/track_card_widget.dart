@@ -314,24 +314,30 @@ class TrackCardWidget extends StatelessWidget {
                 space8W,
                 Expanded(
 
-                    child: CustomButton(
-                      onTap: () async {
-                        // Get.put(CreateTrackEventController());
-                        await CreateTrackEventController.to.getTrackDetailsCall(
-                            trackId: trackModel!.sId.toString());
-                        CreateTrackEventController.to.getTrackSlotForDayCall(trackId: sId);
-                        Get.toNamed(
-                          EventTrackSlotScreen.routeName,
-                          arguments: {
-                            'id': sId,
-                            'slots': trackModel!.slots,
-                            'type': 'track'
-                          },
-                        );
-                      }, title: AppStaticString.viewAllSlot,
-                      img: arrowTopImgUrl,
+                    child: Obx(() {
+                      return CustomButton(
+                        isLoading: CreateTrackEventController.to.isLoadingTrack
+                            .value,
+                        onTap: () async {
+                          // Get.put(CreateTrackEventController());
+                          await CreateTrackEventController.to
+                              .getTrackDetailsCall(
+                              trackId: trackModel!.sId.toString());
+                          CreateTrackEventController.to.getTrackSlotForDayCall(
+                              trackId: sId);
+                          Get.toNamed(
+                            EventTrackSlotScreen.routeName,
+                            arguments: {
+                              'id': sId,
+                              'slots': trackModel!.slots,
+                              'type': 'track'
+                            },
+                          );
+                        }, title: AppStaticString.viewAllSlot,
+                        img: arrowTopImgUrl,
 
-                    ))
+                      );
+                    }))
               ],
             ),
             fromManage == true ? const SizedBox.shrink() : space12H,
