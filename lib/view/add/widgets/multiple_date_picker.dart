@@ -27,7 +27,7 @@ class _MultipleDatePickerState extends State<MultipleDatePicker> {
     super.initState();
     _selectedDates = widget.selectedDates != null
         ? List<DateTime>.from(widget.selectedDates!)
-        : List<DateTime>.from(widget.preSelectedDates);    _focusedDay = DateTime.now(); // Start with the current month
+        : [];    _focusedDay = DateTime.now(); // Start with the current month
   }
 
   bool _isSameDay(DateTime a, DateTime b) =>

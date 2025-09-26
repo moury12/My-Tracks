@@ -15,6 +15,7 @@ import 'package:track_trek/view/add/create_track_event_slot.dart';
 class CreateTrackEventController extends GetxController {
   static CreateTrackEventController get to => Get.find();
   RxList<DateTime> selectedDates = <DateTime>[].obs;
+  RxList<DateTime> preSelectedDates = <DateTime>[].obs;
   ///=======================text editing controller for track =======================///
   List<String> slotIdsList=[];
   Rx<TextEditingController> trackNameController =
@@ -410,7 +411,8 @@ class CreateTrackEventController extends GetxController {
     required List<String> slotIds,
     required List<int> arrOfDayNo,
 
-  }) async {
+  })
+  async {
     if (NetworkController.to.isConnected.value) {
       isLoadingSetSlot.value = true;
       bool isUpdate = await TrackEventService.setSlotForDatesRequest(trackId: trackId, slotIds: slotIds, arrOfDayNo: arrOfDayNo);

@@ -43,7 +43,8 @@ class TrackEventSlotWidget extends StatelessWidget {
     this.onViewAllParticipant,
     this.needToBook = false,
     this.onBook,
-    this.buttonLoading = false, this.needToShowCheckbox = false,
+    this.buttonLoading = false,
+    this.needToShowCheckbox = false,
   });
 
   @override
@@ -57,11 +58,7 @@ class TrackEventSlotWidget extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  '${slots != null
-                      ? slots!.slotNo ?? 'n/a'
-                      : ''} ${eventSlots != null
-                      ? eventSlots!.slotNo ?? 'n/a'
-                      : ''} ',
+                  '${slots != null ? slots!.slotNo ?? 'n/a' : ''} ${eventSlots != null ? eventSlots!.slotNo ?? 'n/a' : ''} ',
                   style: poppinsRegular.copyWith(
                       fontSize: getFontSizeExtraLarge(context)),
                 ),
@@ -72,7 +69,7 @@ class TrackEventSlotWidget extends StatelessWidget {
                   onChanged: (value) {
                     slots!.isSelected.value = value;
 
-                    final slotId = slots!.sId.toString();
+                                final slotId = slots!.sId.toString();
 
                     if (value) {
                       // Add if not already present
@@ -108,43 +105,33 @@ class TrackEventSlotWidget extends StatelessWidget {
           Row(
             children: needToShowSeat == true
                 ? [
-              Expanded(
-                child: BlueTextWidget(
-                  text:
-                  '${AppStaticString.allowedPeople} ${eventSlots != null
-                      ? eventSlots!.maxPeople
-                      : ''}   ${AppStaticString.unsold} ${eventSlots != null
-                      ? (eventSlots!.maxPeople ?? 0) -
-                      (eventSlots!.currentPeople ?? 0)
-                      : ''}',
-                  textAlign: TextAlign.start,
-                ),
-              )
-            ]
+                    Expanded(
+                      child: BlueTextWidget(
+                        text:
+                            '${AppStaticString.allowedPeople} ${eventSlots != null ? eventSlots!.maxPeople : ''}   ${AppStaticString.unsold} ${eventSlots != null ? (eventSlots!.maxPeople ?? 0) - (eventSlots!.currentPeople ?? 0) : ''}',
+                        textAlign: TextAlign.start,
+                      ),
+                    )
+                  ]
                 : slots != null
-                ? [
-
-              ///================= slot week dynamic========================///
-              Expanded(
-                child: argument == userPanel
-                    ? Text(
-
-                  ///=================with total seat number================///
-                  '${ (slots!.day??0).toString() }-${(slots!.month??0).toString()}-${(slots!.year??0).toString()} (${AppStaticString
-                      .totalSeatWithClone}${slots != null ? slots!.maxPeople ??
-                      'n/a' : ''})',
-                  style: poppinsRegular.copyWith(
-                      fontSize: getFontSizeSmall(context)),
-                )
-                    : Text(
-
-                      "${ (slots!.day??0).toString() }-${DateTime.now().month}-${DateTime.now().year}",
-                  style: poppinsRegular.copyWith(
-                      fontSize: getFontSizeSmall(context)),
-                ),
-              ),
-            ]
-                : [],
+                    ? [
+                        ///================= slot week dynamic========================///
+                        Expanded(
+                          child: argument == userPanel
+                              ? Text(
+                                  ///=================with total seat number================///
+                                  '${(slots!.day ?? 0).toString()}-${(slots!.month ?? 0).toString()}-${(slots!.year ?? 0).toString()} (${AppStaticString.totalSeatWithClone}${slots != null ? slots!.maxPeople ?? 'n/a' : ''})',
+                                  style: poppinsRegular.copyWith(
+                                      fontSize: getFontSizeSmall(context)),
+                                )
+                              : Text(
+                                  "${(slots!.day ?? 0).toString()}-${DateTime.now().month}-${DateTime.now().year}",
+                                  style: poppinsRegular.copyWith(
+                                      fontSize: getFontSizeSmall(context)),
+                                ),
+                        ),
+                      ]
+                    : [],
           ),
           space6H,
 
@@ -166,64 +153,63 @@ class TrackEventSlotWidget extends StatelessWidget {
             text: slots != null
                 ? slots!.description ?? ''
                 : eventSlots != null
-                ? eventSlots!.description ?? ''
-                : '',
+                    ? eventSlots!.description ?? ''
+                    : '',
             maxLines: 4, // Number of lines to show before truncating
           ),
           argument != null && argument == 'track_management'
               ? GestureDetector(
-            onTap: onViewAllParticipant,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  AppStaticString.viewAllParticipent,
-                  style: poppinsRegular.copyWith(
-                      fontSize: getFontSizeSmall(context)),
-                ),
-                space12W,
-                Image.asset(
-                  arrowTopImgUrl,
-                  color: AppColors.whiteLightColor,
-                  height: 14.w,
-                  width: 14.w,
-                )
-              ],
-            ),
-          )
-              : Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-             onDelete==null
-                  ? const SizedBox.shrink()
-                  : InkWell(
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) =>
-                        DeleteAlertDialog(
-                          yesFunction: onDelete,
-                        ),
-                  );
-                },
-                child: Padding(
-                  padding: EdgeInsets.all(8.sp),
-                  child: Image.asset(
-                    deleteIconUrl,
-                    height: 24.w,
-                    width: 24.w,
+                  onTap: onViewAllParticipant,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        AppStaticString.viewAllParticipent,
+                        style: poppinsRegular.copyWith(
+                            fontSize: getFontSizeSmall(context)),
+                      ),
+                      space12W,
+                      Image.asset(
+                        arrowTopImgUrl,
+                        color: AppColors.whiteLightColor,
+                        height: 14.w,
+                        width: 14.w,
+                      )
+                    ],
                   ),
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    onDelete == null
+                        ? const SizedBox.shrink()
+                        : InkWell(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => DeleteAlertDialog(
+                                  yesFunction: onDelete,
+                                ),
+                              );
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.all(8.sp),
+                              child: Image.asset(
+                                deleteIconUrl,
+                                height: 24.w,
+                                width: 24.w,
+                              ),
+                            ),
+                          ),
+                  ],
                 ),
-              ),
-            ],
-          ),
           needToBook == true
               ? CustomButton(
-            isLoading: buttonLoading,
-            marginVerticel: 6.h,
-            onTap: onBook ?? () {},
-            title: AppStaticString.bookSlot,
-          )
+                  isLoading: buttonLoading,
+                  marginVerticel: 6.h,
+                  onTap: onBook ?? () {},
+                  title: AppStaticString.bookSlot,
+                )
               : const SizedBox.shrink()
         ],
       ),

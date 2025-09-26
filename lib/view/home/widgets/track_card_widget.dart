@@ -317,8 +317,9 @@ class TrackCardWidget extends StatelessWidget {
                     child: CustomButton(
                       onTap: () async {
                         // Get.put(CreateTrackEventController());
-                        // await CreateTrackEventController.to.getTrackDetailsCall(
-                        //     trackId: trackModel!.sId.toString());
+                        await CreateTrackEventController.to.getTrackDetailsCall(
+                            trackId: trackModel!.sId.toString());
+                        CreateTrackEventController.to.getTrackSlotForDayCall(trackId: sId);
                         Get.toNamed(
                           EventTrackSlotScreen.routeName,
                           arguments: {

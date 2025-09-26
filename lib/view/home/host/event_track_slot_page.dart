@@ -38,7 +38,6 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
   String type = '';
   String id = '';
   String title = '';
-  List<DateTime> dates = [];
   ScrollController scrollController = ScrollController();
 
   @override
@@ -55,6 +54,8 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
         CreateTrackEventController.to.getEventDetailsCall(eventId: id);
       } else {
         getDates();
+        // CreateTrackEventController.to.getTrackDetailsCall(trackId: id);
+        // getDates();
         //
         // // Pagination listener
         // scrollController.addListener(() {
@@ -70,9 +71,7 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
   }
 
   void getDates() async {
-    await CreateTrackEventController.to
-        .getTrackDetailsCall(trackId: id)
-        .then((_) {
+
       final slotDates =
           CreateTrackEventController.to.singleTrack.value.slotAvailableDates;
 
@@ -81,24 +80,13 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
             .map((e) => DateFormat("MM/dd/yyyy").parse(e.toString()))
             .toList();
 
-        // 👇 Schedule setState safely after build
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (mounted) {
-
-              dates = {...parsedDates}.toList()..sort();
-
-          }
-        });
+      CreateTrackEventController.to.preSelectedDates.value=parsedDates;
       }
 
-      fetchSlots();
-    });
+
   }
 
-  void fetchSlots({bool loadMore = false}) async {
-    await CreateTrackEventController.to
-        .getTrackSlotForDayCall(trackId: id, loadMore: loadMore);
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -144,7 +132,7 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
                   Get.toNamed(CreateTrackEventSlotScreen.routeName, arguments: {
                     'type': type,
                     'id': id,
-                    if (type == 'track') 'dates': dates,
+                    if (type == 'track') 'dates': CreateTrackEventController.to.preSelectedDates,
                     'edit': CreateTrackEventController
                                     .to.singleTrack.value.trackDays !=
                                 null &&
@@ -219,72 +207,76 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: MultipleDatePicker(
-                        preSelectedDates: dates,
+                        preSelectedDates: CreateTrackEventController.to.preSelectedDates,
                         // This is an empty list, which is fine now
                         onDateSelected: (selectedDates) {
-                          CreateTrackEventController.to.selectedDates.value =
-                              selectedDates;
-                          print(CreateTrackEventController.to.selectedDates);
+                          // Use post frame callback to avoid build phase conflicts
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            CreateTrackEventController.to.selectedDates.value =
+                                selectedDates;
+                            print(CreateTrackEventController.to.selectedDates);
+                          });
                         },
                       ),
                     ),
                   ),
                 ),
-              Obx(() {
-                return SliverToBoxAdapter(
-                    child: CreateTrackEventController
-                            .to.selectedDates.isNotEmpty
-                        ? Padding(
-                            padding: padding12H6V,
-                            child: Row(
-                              spacing: 6.w,
-                              children: [
-                                Expanded(
-                                  child: CustomButton(
-                                    isLoading: CreateTrackEventController
-                                        .to.isLoadingSetSlot.value,
-                                    fillColor: AppColors.blueColorDark,
-                                    borderColor: AppColors.blueColorDark,
-                                    onTap: () {
-                                      CreateTrackEventController.to
-                                          .setSlotTrackCall(
-                                        trackId: id,
-                                        slotIds: CreateTrackEventController
-                                            .to.slotIdsList,
-                                        arrOfDayNo: CreateTrackEventController
-                                            .to.selectedDates
-                                            .map(
-                                              (element) => element.day,
-                                            )
-                                            .toSet()
-                                            .toList(),
-                                      );
-                                    },
-                                    title: AppStaticString.setSlot,
-                                  ),
+              SliverToBoxAdapter(
+                  child: CreateTrackEventController.to.selectedDates.isNotEmpty
+                      ? Padding(
+                          padding: padding12H6V,
+                          child: Row(
+                            spacing: 6.w,
+                            children: [
+                              Expanded(
+                                child: CustomButton(
+                                  isLoading: CreateTrackEventController
+                                      .to.isLoadingSetSlot.value,
+                                  fillColor: AppColors.blueColorDark,
+                                  borderColor: AppColors.blueColorDark,
+                                  onTap: () {
+                                    CreateTrackEventController.to
+                                        .setSlotTrackCall(
+                                      trackId: id,
+                                      slotIds: CreateTrackEventController
+                                          .to.slotIdsList,
+                                      arrOfDayNo: CreateTrackEventController
+                                          .to.selectedDates
+                                          .map(
+                                            (element) => element.day,
+                                          )
+                                          .toSet()
+                                          .toList(),
+                                    );
+                                  },
+                                  title: AppStaticString.setSlot,
                                 ),
-                                Expanded(
-                                  child: CustomButton(
-                                    onTap: () {
-                                      CreateTrackEventController.to
-                                          .getTrackSlotForDayCall(
-                                              trackId: id,
-                                              dates: CreateTrackEventController
-                                                  .to.selectedDates
-                                                  .map(
-                                                    (element) => element.day,
-                                                  )
-                                                  .toSet()
-                                                  .toList());
-                                    },
-                                    title: AppStaticString.filterSlot,
-                                  ),
+                              ),
+                              Expanded(
+                                child: CustomButton(
+                                  onTap: () {
+                                    CreateTrackEventController.to
+                                        .getTrackSlotForDayCall(
+                                            trackId: id,
+                                            dates: CreateTrackEventController
+                                                .to.selectedDates
+                                                .map(
+                                                  (element) => element.day,
+                                                )
+                                                .toSet()
+                                                .toList());
+                                  },
+                                  title: AppStaticString.filterSlot,
                                 ),
-                                Expanded(
-                                  child: CustomButton(
-                                    onTap: () {
-                                      print(
-                                          "CreateTrackEventController.to.selectedDates");
+                              ),
+                              Expanded(
+                                child: CustomButton(
+                                  onTap: () {
+                                    print(
+                                        "CreateTrackEventController.to.selectedDates");
+                                    // Use post frame callback to avoid build phase conflicts
+                                    WidgetsBinding.instance
+                                        .addPostFrameCallback((_) {
                                       CreateTrackEventController
                                           .to.selectedDates
                                           .clear();
@@ -294,17 +286,17 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
                                           .getTrackSlotForDayCall(
                                         trackId: id,
                                       );
-                                    },
-                                    fillColor: AppColors.greenColor,
-                                    borderColor: AppColors.greenColor,
-                                    title: AppStaticString.clear,
-                                  ),
+                                    });
+                                  },
+                                  fillColor: AppColors.greenColor,
+                                  borderColor: AppColors.greenColor,
+                                  title: AppStaticString.clear,
                                 ),
-                              ],
-                            ),
-                          )
-                        : SizedBox.shrink());
-              }),
+                              ),
+                            ],
+                          ),
+                        )
+                      : SizedBox.shrink()),
 
               // ListView Sliver below the calendar
               isLoading
@@ -324,46 +316,44 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
                               return Padding(
                                 padding: padding12H6V,
                                 child: MarronGradientContainerWidget(
-                                  child: Obx(() {
-                                    return TrackEventSlotWidget(
-                                      needToShowCheckbox:
-                                          CreateTrackEventController
-                                              .to.selectedDates.isNotEmpty,
-                                      needToShowSeat: type == 'event',
-                                      eventSlots: type == 'event'
-                                          ? slot as EventSlots
-                                          : null,
-                                      slots: type == 'track'
-                                          ? slot as TrackSlots
-                                          : null,
-                                      onTap: () {
-                                        if (type == 'track') {
-                                          debugPrint('slotId');
-                                          debugPrint(slot.sId);
-                                          HomeController.to
-                                              .getTrackParticipantListCall(
-                                            trackSlotId: slot.sId,
-                                          );
-                                        } else {
-                                          HomeController.to
-                                              .getEventParticipantListCall(
-                                            eventSlotID: slot.sId!,
-                                          );
-                                        }
-                                        Get.toNamed(
-                                          EventUserScreen.routeName,
-                                          arguments: type,
+                                  child: TrackEventSlotWidget(
+                                    needToShowCheckbox:
+                                        CreateTrackEventController
+                                            .to.selectedDates.isNotEmpty,
+                                    needToShowSeat: type == 'event',
+                                    eventSlots: type == 'event'
+                                        ? slot as EventSlots
+                                        : null,
+                                    slots: type == 'track'
+                                        ? slot as TrackSlots
+                                        : null,
+                                    onTap: () {
+                                      if (type == 'track') {
+                                        debugPrint('slotId');
+                                        debugPrint(slot.sId);
+                                        HomeController.to
+                                            .getTrackParticipantListCall(
+                                          trackSlotId: slot.sId,
                                         );
-                                      },
-                                      onDelete: () {
-                                        CreateTrackEventController.to
-                                            .deleteSlotCall(
-                                                slotId: slot.sId ?? '');
-                                        Navigator.pop(context);
-                                      },
-                                      argument: userPanel,
-                                    );
-                                  }),
+                                      } else {
+                                        HomeController.to
+                                            .getEventParticipantListCall(
+                                          eventSlotID: slot.sId!,
+                                        );
+                                      }
+                                      Get.toNamed(
+                                        EventUserScreen.routeName,
+                                        arguments: type,
+                                      );
+                                    },
+                                    onDelete: () {
+                                      CreateTrackEventController.to
+                                          .deleteSlotCall(
+                                              slotId: slot.sId ?? '');
+                                      Navigator.pop(context);
+                                    },
+                                    argument: userPanel,
+                                  ),
                                 ),
                               );
                             },
