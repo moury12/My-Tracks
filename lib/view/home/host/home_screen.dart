@@ -110,53 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
 
-          /// Track/Event List
-          Obx(() {
-            final isTrackTab = HomeController.to.currentTabIndex.value == 0;
-            final isLoading = isTrackTab
-                ? HomeController.to.isLoadingTrackList.value
-                : HomeController.to.isLoadingEventList.value;
 
-            final isEmpty = isTrackTab
-                ? HomeController.to.trackList.isEmpty
-                : HomeController.to.eventList.isEmpty;
-
-            if (isLoading) {
-              return SliverToBoxAdapter(
-                child: Padding(
-                  padding: padding6V,
-                  child: isTrackTab
-                      ? const LoadingTrackListWidget()
-                      : const ListOfEventLoadingWidget(),
-                ),
-              );
-            }
-
-            if (isEmpty) {
-              return SliverToBoxAdapter(
-                child: Padding(
-                  padding: padding12V,
-                  child: Text(
-                    isTrackTab ? AppStaticString.trackNotFound : AppStaticString.eventNotFound,
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                ),
-              );
-            }
-
-            final list = isTrackTab ? HomeController.to.trackList : HomeController.to.eventList;
-
-            return SliverList(
-              delegate: SliverChildBuilderDelegate(
-                    (context, i) {
-                  return isTrackTab
-                      ? TrackCardWidget(trackModel:HomeController.to.trackList[i])
-                      : EventCardWidget(eventModel: HomeController.to.eventList[i]);
-                },
-                childCount: list.length,
-              ),
-            );
-          }),
 
           /// Bottom loading indicator
           SliverToBoxAdapter(
@@ -197,6 +151,7 @@ class EventListWidget extends StatelessWidget {
             : HomeController.to.eventList.isEmpty
                 ? const EmptyTextWidget(text: AppStaticString.eventNotFound)
                 : Column(
+          spacing: 12,
                     children: List.generate(
                         HomeController.to.eventList.length,
                         (i) => EventCardWidget(
