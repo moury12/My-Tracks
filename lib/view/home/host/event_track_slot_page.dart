@@ -234,7 +234,7 @@ class _EventTrackSlotScreenState extends State<EventTrackSlotScreen> {
                     ),
                   ),
                 ),
-              SliverToBoxAdapter(
+              if (type != event)  SliverToBoxAdapter(
                   child: CreateTrackEventController.to.selectedDates.isNotEmpty
                       ? Padding(
                           padding: padding12H6V,

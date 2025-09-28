@@ -530,19 +530,19 @@ class CreateTrackEventController extends GetxController {
     clearAfterPostTrack();
   }
 
-  @override
-  void onClose() {
-    trackNameController.value.dispose();
-    trackLocationController.value.dispose();
-    trackDescriptionController.value.dispose();
-    eventNameController.value.dispose();
-    eventLocationController.value.dispose();
-    eventDescriptionController.value.dispose();
-    eventStartDateController.value.dispose();
-    eventEndDateController.value.dispose();
-    uploadEventDescriptionController.value.dispose();
-    uploadEventTotalSeatController.value.dispose();
-    uploadEventPriceController.value.dispose();
-    super.onClose();
-  }
+  // @override
+  // void onClose() {
+  //   trackNameController.value.dispose();
+  //   trackLocationController.value.dispose();
+  //   trackDescriptionController.value.dispose();
+  //   eventNameController.value.dispose();
+  //   eventLocationController.value.dispose();
+  //   eventDescriptionController.value.dispose();
+  //   eventStartDateController.value.dispose();
+  //   eventEndDateController.value.dispose();
+  //   uploadEventDescriptionController.value.dispose();
+  //   uploadEventTotalSeatController.value.dispose();
+  //   uploadEventPriceController.value.dispose();
+  //   super.onClose();
+  // }
 }

@@ -39,6 +39,8 @@ class HistoryContentWidget extends StatelessWidget {
         trackModel != null ? trackModel!.sId.toString() : 'n/a';
     final String selectedCurrencyFrom =
         trackModel != null ? trackModel!.currency.toString() : 'n/a';
+
+    ///-------- need to fix----------./...
     final String day =
         trackModel != null ? trackModel!.trackSlot!.day.toString() : 'n/a';
     final String status =
@@ -78,20 +80,21 @@ class HistoryContentWidget extends StatelessWidget {
         ),
 
         ///===================dynamic week day =============================///
+        addRating == true ? RattingButtonWidget(ratingValue: ratingVal??0.0, trackId: trackModel!.track??'',) : const SizedBox.shrink(),
 
-        Row(
-          children: [
-            Text(
-              day,
-              style:
-                  poppinsMedium.copyWith(fontSize: getFontSizeDefault(context)),
-            ),
-            const Spacer(),
-
-            ///=======================rating button=================///
-            addRating == true ? RattingButtonWidget(ratingValue: ratingVal??0.0, trackId: trackModel!.track??'',) : const SizedBox.shrink()
-          ],
-        ),
+        // Row(
+        //   children: [
+        //     Text(
+        //       day,
+        //       style:
+        //           poppinsMedium.copyWith(fontSize: getFontSizeDefault(context)),
+        //     ),
+        //     const Spacer(),
+        //
+        //     ///=======================rating button=================///
+        //     addRating == true ? RattingButtonWidget(ratingValue: ratingVal??0.0, trackId: trackModel!.track??'',) : const SizedBox.shrink()
+        //   ],
+        // ),
         Text(
           AppStaticString.startDateTime,
           style: poppinsMedium.copyWith(fontSize: getFontSizeSmall(context)),
