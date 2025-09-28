@@ -32,8 +32,8 @@ android {
         applicationId = "com.mytracksdarren.roe"
         minSdk = 24
         targetSdk = flutter.targetSdkVersion
-        versionCode 5
-        versionName "1.0.4"
+        versionCode 7
+        versionName "1.0.6"
 
     }
 
