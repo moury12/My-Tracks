@@ -37,21 +37,24 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   @override
   void initState() {
     super.initState();
+if(!CommonController.to.isLoggedIn){
+  Get.put(HomeUserController());
 
-    if (Boxes.getUserData().get(roleKey) == 'HOST') {
-      Get.put(HomeController());
+}
 
-      Get.put(TrackManagementController());
-      Get.put(CreateTrackEventController());
+    else{
+      if (Boxes.getUserData().get(roleKey) == 'HOST') {
+        Get.put(HomeController());
 
-    } else {
-      Get.put(HomeUserController());
-      Get.put(BookingManagementController());
-
+        Get.put(TrackManagementController());
+        Get.put(CreateTrackEventController());
+      } else {
+        Get.put(HomeUserController());
+        Get.put(BookingManagementController());
+      }
+      Get.put(ProfileController());
+      Get.put(NotificationController());
     }
-    Get.put(ProfileController());
-    Get.put(NotificationController());
-
   }
 
   String? getAppBarTitle(int index) {

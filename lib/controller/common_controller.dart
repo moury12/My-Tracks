@@ -24,7 +24,10 @@ class CommonController extends GetxController {
   RxString stripeUrl = ''.obs;
   RxList<dynamic> addressSuggestion = [].obs;
   RxMap currencyList = {}.obs;
-
+  bool get isLoggedIn {
+    final token = Boxes.getUserData().get(tokenKey);
+    return token != null && token.toString().isNotEmpty;
+  }
   getCurrenciesList() async {
     // if (NetworkController.to.isConnected.value) {
     isLoadingCurrencies.value = true;

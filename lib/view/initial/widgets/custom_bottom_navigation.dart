@@ -9,6 +9,7 @@ import 'package:track_trek/core/constant/image_constants.dart';
 import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/text_style.dart';
+import 'package:track_trek/view/auth/login.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
   @override
@@ -82,44 +83,55 @@ class CustomBottomNavBar extends StatelessWidget {
   }
 
   Widget _buildNavItem(
-    BuildContext context,
-    String icon,
-    String selectedIcon,
-    int index,
-    String label,
-  ) {
+      BuildContext context,
+      String icon,
+      String selectedIcon,
+      int index,
+      String label,
+      ) {
     return Tooltip(
       message: label,
-      /*decoration: BoxDecoration(
-      color: Colors.black,
-      borderRadius: BorderRadius.circular(8),
-    ),*/
-      waitDuration: Duration(milliseconds: 500),
+      waitDuration: const Duration(milliseconds: 500),
       child: InkWell(
-        onTap: () => CommonController.to.updateIndex(index),
-        child: Obx(
-          () {
-            bool isSelected = CommonController.to.selectedIndex.value == index;
+        onTap: () {
+          // ✅ Allow index 0 always (home)
+          if (index == 0) {
+            CommonController.to.updateIndex(index);
+            return;
+          }
 
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Image.asset(isSelected ? selectedIcon : icon, height: 24.w),
-                space8H,
-                Flexible(
-                  child: Text(
-                    label,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: poppinsRegular.copyWith(
-                        fontSize: getFontSizeSemiSmall(context)),
+          // ✅ If not logged in, go to LoginScreen
+          if (!CommonController.to.isLoggedIn) {
+            Get.toNamed(LoginScreen.routeName);
+            return;
+          }
+
+          // ✅ Otherwise, allow normal navigation
+          CommonController.to.updateIndex(index);
+        },
+        child: Obx(() {
+          bool isSelected = CommonController.to.selectedIndex.value == index;
+
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(isSelected ? selectedIcon : icon, height: 24.w),
+              space8H,
+              Flexible(
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: poppinsRegular.copyWith(
+                    fontSize: getFontSizeSemiSmall(context),
                   ),
                 ),
-              ],
-            );
-          },
-        ),
+              ),
+            ],
+          );
+        }),
       ),
     );
   }
+
 }

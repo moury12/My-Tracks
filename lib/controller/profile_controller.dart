@@ -62,7 +62,7 @@ class ProfileController extends GetxController {
       } else {
         isLoadingUserData.value = false;
         Boxes.getUserData().delete(roleKey);
-        Get.offAllNamed(LoginScreen.routeName);
+        // Get.offAllNamed(LoginScreen.routeName);
       }
       isLoadingUserData.value = false;
     } else {

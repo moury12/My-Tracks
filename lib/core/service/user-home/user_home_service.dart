@@ -28,7 +28,7 @@ class UserHomeService {
       final headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
+        if(Boxes.getUserData().get(tokenKey)!=null)'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
       };
 
       final response = await http.get(
@@ -87,7 +87,7 @@ class UserHomeService {
       final headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
+        if(Boxes.getUserData().get(tokenKey)!=null)'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
       };
 
       final response = await http.get(
