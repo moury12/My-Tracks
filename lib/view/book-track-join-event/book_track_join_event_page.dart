@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:track_trek/controller/booking/book_track_join_event_controller.dart';
+import 'package:track_trek/controller/common_controller.dart';
 import 'package:track_trek/core/components/custom_appbar.dart';
 import 'package:track_trek/core/components/custom_network_image.dart';
 import 'package:track_trek/core/components/custom_refresh_indicator.dart';
@@ -16,6 +17,7 @@ import 'package:track_trek/core/utils/helper_function.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/add/widgets/select_date_button.dart';
 import 'package:track_trek/view/add/widgets/track_event_slot_widget.dart';
+import 'package:track_trek/view/auth/login.dart';
 import 'package:track_trek/view/book-track-join-event/book_track_payment_page.dart';
 import 'package:track_trek/view/book-track-join-event/join_event_payment_page.dart';
 import 'package:track_trek/view/book-track-join-event/widgets/buttons_widget.dart';
@@ -329,7 +331,7 @@ print(controller.selectDate.value);
                                                 needToBook: type == event
                                                     ? true
                                                     : false,
-                                                onBook: () {
+                                                onBook:CommonController.to.isLoggedIn? () {
                                                   Get.toNamed(
                                                       JoinEventPaymentScreen
                                                           .routeName,
@@ -340,6 +342,8 @@ print(controller.selectDate.value);
                                                         'event': controller
                                                             .singleEvent.value
                                                       });
+                                                }:(){
+                                                  Get.toNamed(LoginScreen.routeName);
                                                 },
                                                 slots: /*argument != null &&*/
                                                         type == event
@@ -430,7 +434,7 @@ print(controller.selectDate.value);
                                                             .value
                                                             .slots![index],
                                                         argument: userPanel,
-                                                        onBook: () {
+                                                        onBook:CommonController.to.isLoggedIn?  () {
                                                           Get.toNamed(
                                                               BookTrackPaymentScreen
                                                                   .routeName,
@@ -440,6 +444,8 @@ print(controller.selectDate.value);
                                                                 index],
                                                                 /*'event':controller.singleEvent*/
                                                               });
+                                                        }:(){
+                                                          Get.toNamed(LoginScreen.routeName);
                                                         },
                                                         needToBook: true,
                                                       ),

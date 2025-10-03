@@ -31,20 +31,20 @@ class SplashController extends GetxController {
 
     log(Boxes.getUserData().values.toString());
     _initializeApp();
-    // // Initialize AppLinks for deep link handling
-    // _appLinks = AppLinks();
-    //
-    // _appLinks.getInitialLink().then((Uri? uri) {
-    //   if (uri != null) {
-    //     _handleDeepLink(uri);
-    //   }
-    // });
-    //
-    // _appLinks.uriLinkStream.listen((Uri? uri) {
-    //   if (uri != null) {
-    //     _handleDeepLink(uri);
-    //   }
-    // });
+    // Initialize AppLinks for deep link handling
+    _appLinks = AppLinks();
+
+    _appLinks.getInitialLink().then((Uri? uri) {
+      if (uri != null) {
+        _handleDeepLink(uri);
+      }
+    });
+
+    _appLinks.uriLinkStream.listen((Uri? uri) {
+      if (uri != null) {
+        _handleDeepLink(uri);
+      }
+    });
 
     // Initialize app state and handle navigation
 

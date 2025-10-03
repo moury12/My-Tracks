@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:track_trek/controller/home/user/home_user_controller.dart';
 import 'package:track_trek/controller/profile_controller.dart';
 import 'package:track_trek/core/components/custom_network_image.dart';
 import 'package:track_trek/core/constant/custom_space.dart';
@@ -11,13 +14,45 @@ import 'package:track_trek/core/init/api_client.dart';
 import 'package:track_trek/core/utils/text_style.dart';
 import 'package:track_trek/view/home/host/widget/loading_event_card.dart';
 
-class HomeAppBar extends StatelessWidget {
+class HomeAppBar extends StatefulWidget {
   final Function()? openDrawer;
   const HomeAppBar({
     super.key,
     this.openDrawer,
   });
 
+  @override
+  State<HomeAppBar> createState() => _HomeAppBarState();
+}
+
+class _HomeAppBarState extends State<HomeAppBar> {
+String devicePlace= "Unknown location";
+//
+//   void getAddressFromLatLng() async {
+//     try {
+//       List<Placemark> placemarks =
+//       await placemarkFromCoordinates(double.parse(HomeUserController.to.lat.value), double.parse(HomeUserController.to.lng.value));
+//
+//       if (placemarks.isEmpty) {
+//         devicePlace="Unknown location";
+//       } ;
+//
+//       final place = placemarks.first;
+//       print("&*^RRRRRRRRRRRRR${place.name}");
+//      setState(() {
+//        devicePlace= "${place.name}, ${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
+//      });
+//     } catch (e) {
+//       debugPrint(e.toString());
+//       devicePlace= "Unknown location";
+//     }
+//   }
+// @override
+//   void initState() {
+//     getAddressFromLatLng();
+//     // TODO: implement initState
+//     super.initState();
+//   }
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -42,7 +77,7 @@ class HomeAppBar extends StatelessWidget {
                       height: 52.w,
                       width: 52.w,
                     )
-                        : ClipRRect(             
+                        : ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                           child: Image.asset(
                                                 dummyProfileImgUrl,
@@ -55,7 +90,7 @@ class HomeAppBar extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            ProfileController.to.userModel.value.name ?? 'n/a',
+                            ProfileController.to.userModel.value.name ?? 'Guest User',
                             style: poppinsMedium.copyWith(fontSize: getFontSizeLarge(context)),
                           ),
                           Row(
@@ -66,7 +101,7 @@ class HomeAppBar extends StatelessWidget {
                               ),
                               Flexible(
                                 child: Text(
-                                  ProfileController.to.userModel.value.address ?? 'n/a',
+                                  ProfileController.to.userModel.value.address ?? devicePlace,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: poppinsMedium.copyWith(
@@ -83,7 +118,7 @@ class HomeAppBar extends StatelessWidget {
                 ),
               ),
               GestureDetector(
-                onTap: openDrawer ?? () {},
+                onTap: widget.openDrawer ?? () {},
                 child: Image.asset(
                   drawerIconUrl,
                   height: 50.w,

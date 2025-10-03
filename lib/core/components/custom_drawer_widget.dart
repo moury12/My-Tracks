@@ -36,7 +36,7 @@ class CustomDrawerWidget extends StatelessWidget {
                   children: [
                     Image.asset(splashImgUrl),
                     Image.asset(horizontalDividerUrl),
-                    CommonController.to.selectedRoleOption.value == 0
+                    CommonController.to.selectedRoleOption.value == 0 && CommonController.to.isLoggedIn
                         ?  DrawerContentWidget(
                       icon: historyIconUrl,
                       text: AppStaticString.history,
@@ -63,7 +63,7 @@ class CustomDrawerWidget extends StatelessWidget {
                       icon: privacyPolicyIconUrl,
                       text: AppStaticString.privacyPolicy,
                     ),
-                    DrawerContentWidget(
+                 if (CommonController.to.isLoggedIn)DrawerContentWidget(
                       onTap: () {
                         Navigator.pop(context);
                         Get.toNamed(FeedbackScreen.routeName);
@@ -71,7 +71,7 @@ class CustomDrawerWidget extends StatelessWidget {
                       icon: feedBackIconUrl,
                       text: AppStaticString.feedback,
                     ),
-                    CommonController.to.selectedRoleOption.value == 0
+                    CommonController.to.selectedRoleOption.value == 0&& !CommonController.to.isLoggedIn
                         ? const SizedBox.shrink()
                         : DrawerContentWidget(
                             icon: profileIconUrl,
@@ -82,7 +82,7 @@ class CustomDrawerWidget extends StatelessWidget {
                             },
                           ),
 
-                    DrawerContentWidget(
+                  if( CommonController.to.isLoggedIn)  DrawerContentWidget(
                       onTap: () {
                         Navigator.pop(context);
                         Get.toNamed(SettingsScreen.routeName);
@@ -94,7 +94,7 @@ class CustomDrawerWidget extends StatelessWidget {
                 ),
               ),
             ),
-            BlackContainerWidget(
+            if( CommonController.to.isLoggedIn) BlackContainerWidget(
               onTap: () {
               logOutCall();
               },
