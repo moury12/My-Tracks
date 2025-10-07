@@ -117,7 +117,8 @@ class BookTrackJoinEventController extends GetxController {
     required String selectedCurrencyFrom,
     required String selectedCurrencyTo,
     required String amount,
-  }) async {
+  })
+  async {
     isLoadingCurrencyConvert.value = true;
     convertPrice.value = await TrackEventService.convertCurrency(
         selectedCurrencyFrom: selectedCurrencyFrom,
@@ -146,7 +147,8 @@ class BookTrackJoinEventController extends GetxController {
     required String slotId,
     required String currency,
     required String price,
-  }) async {
+  })
+  async {
     if (NetworkController.to.isConnected.value) {
       isLoadingBookTrack.value = true;
       String bookingId = await TrackEventService.bookTrackSlotRequest(
@@ -193,7 +195,8 @@ class BookTrackJoinEventController extends GetxController {
     required String eventId,
     required String currency,
     required double price,
-  }) async {
+  })
+  async {
     if (NetworkController.to.isConnected.value) {
       isLoadingBookTrack.value = true;
       List<dynamic> bookingId = await TrackEventService.joinEventSlotRequest(

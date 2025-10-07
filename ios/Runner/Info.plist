@@ -56,13 +56,16 @@
 			<true/>
 		</dict>
 	</dict>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>This app requires access to your location to function properly.</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>This app requires access to your location to function properly.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app requires access to your location to function properly.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Your location is used to suggest nearby tracks and events, and to help you search for activities around you.</string>
+
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>Your location is used to suggest nearby tracks and events, and to help you discover local activities even when the app is running in the background.</string>
+
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Your location is used to suggest nearby tracks and events, and to keep showing relevant results even if the app is not open.</string>
+
+    <key>NSPhotoLibraryUsageDescription</key>
 	<string>This app requires access to change images uploading.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>

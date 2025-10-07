@@ -176,7 +176,7 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
                                         onTap: () {
                                           HomeUserController.to.selectedIndexCategory.value = index;
                                           HomeUserController.to.categorySearch.value =
-                                              HomeUserController.to.catList[HomeUserController.to.selectedIndexCategory.value].name.toString();
+                                              HomeUserController.to.catList[HomeUserController.to.selectedIndexCategory.value].sId.toString();
                                           HomeUserController.to.getTrackListCall();
                                         },
                                       ),
