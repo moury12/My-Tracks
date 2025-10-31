@@ -33,6 +33,7 @@ migrate_working_dir/
 .pub/
 /build/
 google_map_api_key.dart
+android/fastlane/keys/*.json
 
 # Symbolication related
 app.*.symbols

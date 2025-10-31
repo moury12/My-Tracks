@@ -1,0 +1,24 @@
+default_platform(:android)
+
+platform :android do
+  desc "Build & upload to Google Play (internal)"
+  lane :release do
+    # প্রজেক্ট রুটে গিয়ে AAB বিল্ড
+    sh("cd .. && flutter pub get && flutter build appbundle --release")
+
+    # আপনার আসল AAB পাথ
+    aab_path = "/Users/sadiabenntheazad/Documents/Flutter_projects(Sadia)/My-Tracks/build/app/outputs/bundle/release/app-release.aab"
+    UI.user_error!("AAB not found at #{aab_path}") unless File.exist?(aab_path)
+
+    upload_to_play_store(
+      track: 'internal',     # প্রথমে internal দিয়ে টেস্ট করুন; পরে production
+      aab: aab_path,
+
+      # ১) লোকাল ফাইল পাথ ব্যবহার করতে:
+      json_key: "fastlane/keys/my-tracks-476809-9e8e6fcbfff3.json"
+
+      # ২) অথবা সিক্রেট/CI ব্যবহার করলে (ফাইল না রেখে):
+      # json_key_data: ENV['GOOGLE_PLAY_JSON_KEY']
+    )
+  end
+end
