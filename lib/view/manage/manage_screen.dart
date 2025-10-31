@@ -10,6 +10,7 @@ import 'package:track_trek/core/constant/padding_constant.dart';
 import 'package:track_trek/core/model/track-event/single_event_model.dart';
 import 'package:track_trek/core/utils/app_color.dart';
 import 'package:track_trek/core/utils/helper_function.dart';
+import 'package:track_trek/view/add/create_track_event_page.dart';
 import 'package:track_trek/view/add/widgets/track_event_slot_widget.dart';
 import 'package:track_trek/view/home/host/event_track_slot_page.dart';
 import 'package:track_trek/view/home/user/widget/loading_widgets.dart';
@@ -67,6 +68,9 @@ class _ManagementScreenState extends State<ManagementScreen> {
                     children: List.generate(
                         HomeController.to.trackList.length,
                         (i) => TrackCardWidget(
+canEdit: () {
+  Get.toNamed(CreateTrackEventScreen.routeName,arguments: HomeController.to.trackList[i]);
+},
                               onActive: () {
                                 Navigator.pop(context);
                                 TrackManagementController.to

@@ -214,6 +214,8 @@ class CreateTrackEventController extends GetxController {
       String isUpdate = await TrackEventService.updateTrackRequest(
         totalTrackDayInMonth: days.value,
         trackId: trackId.value,
+        trackName: trackNameController.value.text,
+        desc: trackDescriptionController.value.text,
         trackDays: weekDays
             .where((e) => e['selected'] == true)
             .map((e) =>
@@ -240,7 +242,7 @@ class CreateTrackEventController extends GetxController {
 
   getCurrenciesList() async {
     isLoadingCurrencies.value = true;
-    currencyList.value = {'AUD':"Australian Dollar","GBP":"Pound Sterling"};
+    currencyList.value = {'AUD':"Australian Dollar","GBP":"Pound Sterling","EUR":"Euro"};
     isLoadingCurrencies.value = false;
   }
 
@@ -456,6 +458,8 @@ class CreateTrackEventController extends GetxController {
     categoryListCall();
 
     getCurrenciesList();
+    debugPrint("arg ${Get.arguments}");
+
     super.onInit();
   }
 

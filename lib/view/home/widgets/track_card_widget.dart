@@ -35,10 +35,12 @@ class TrackCardWidget extends StatelessWidget {
   final bool? fromManage;
   final bool? fromUser;
   final bool? fromPromote;
+
   final RxBool? react;
   final SingleTrackModel? trackModel;
   final TrackForUserPanelModel? trackModelUserPanel;
   final Function()? onActive;
+  final Function()? canEdit;
   final Function()? onDeactivate;
 
   const TrackCardWidget({
@@ -50,7 +52,7 @@ class TrackCardWidget extends StatelessWidget {
     this.onActive,
     this.onDeactivate,
     this.trackModelUserPanel,
-    this.fromPromote = false,
+    this.fromPromote = false, this.canEdit,
   });
 
   @override
@@ -412,7 +414,11 @@ class TrackCardWidget extends StatelessWidget {
                   },
                 ),
                 fromManage == true
-                    ? const SizedBox.shrink()
+                    ? OptionWidget(
+                  icon: editIconUrl,
+                  text: AppStaticString.editTrack,
+                  function: canEdit,
+                )
 
                 ///================share==============///
 

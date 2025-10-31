@@ -348,11 +348,13 @@ class _CreateTrackEventSlotScreenState
                               if (type == event) {
                                 if (CreateTrackEventController
                                     .to.formKey.currentState!
-                                    .validate()) {
+                                    .validate() &&  CreateTrackEventController.to.selectedCurrencyFrom.value!=null) {
 
                                     CreateTrackEventController.to
                                         .createSlotEventCall();
 
+                                }else{
+                                  showCustomSnackbar(title: AppStaticString.failed, message: "Provide all required fields!!", type:SnackBarType.alert);
                                 }
                               } else {
                                 if (CreateTrackEventController

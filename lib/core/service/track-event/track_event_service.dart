@@ -38,7 +38,8 @@ class TrackEventService {
         Uri.parse(ApiClient.addBusinessTrackUrl),
       );
 
-      request.headers['Authorization'] = 'Bearer ${Boxes.getUserData().get(tokenKey)}';
+      request.headers['Authorization'] =
+          'Bearer ${Boxes.getUserData().get(tokenKey)}';
 
       request.fields['trackName'] = trackName;
       request.fields['category'] = category;
@@ -50,7 +51,8 @@ class TrackEventService {
       if (files != null && files.isNotEmpty) {
         for (File file in files) {
           if (await file.exists()) {
-            final mimeType = lookupMimeType(file.path) ?? 'application/octet-stream';
+            final mimeType =
+                lookupMimeType(file.path) ?? 'application/octet-stream';
             final mimeSplit = mimeType.split('/');
             request.files.add(
               await http.MultipartFile.fromPath(
@@ -79,10 +81,16 @@ class TrackEventService {
       final Map<String, dynamic> data = json.decode(responseData.body);
 
       if (data['success'] != null && data['success'] == true) {
-        showCustomSnackbar(title: AppStaticString.success, message: data['message'], type: SnackBarType.success);
+        showCustomSnackbar(
+            title: AppStaticString.success,
+            message: data['message'],
+            type: SnackBarType.success);
         return data['data']['_id'];
       } else {
-        showCustomSnackbar(title: AppStaticString.failed, message: data['message'], type: SnackBarType.failed);
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: data['message'],
+            type: SnackBarType.failed);
         return data['data']['_id'] ?? '';
       }
     } catch (e) {
@@ -103,14 +111,16 @@ class TrackEventService {
         Uri.parse(ApiClient.checkoutPromotionUrl),
       );
 
-      request.headers['Authorization'] = 'Bearer ${Boxes.getUserData().get(tokenKey)}';
+      request.headers['Authorization'] =
+          'Bearer ${Boxes.getUserData().get(tokenKey)}';
 
       request.fields['trackId'] = trackId;
       request.fields['amount'] = amount;
       request.fields['currency'] = currency;
 
       if (file != null && await file.exists()) {
-        final mimeType = lookupMimeType(file.path) ?? 'application/octet-stream';
+        final mimeType =
+            lookupMimeType(file.path) ?? 'application/octet-stream';
         final mimeSplit = mimeType.split('/');
         request.files.add(
           await http.MultipartFile.fromPath(
@@ -133,10 +143,16 @@ class TrackEventService {
       final Map<String, dynamic> data = json.decode(responseData.body);
 
       if (data['success'] != null && data['success'] == true) {
-        showCustomSnackbar(title: AppStaticString.success, message: data['message'], type: SnackBarType.success);
+        showCustomSnackbar(
+            title: AppStaticString.success,
+            message: data['message'],
+            type: SnackBarType.success);
         return data['data'];
       } else {
-        showCustomSnackbar(title: AppStaticString.failed, message: data['message'], type: SnackBarType.failed);
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: data['message'],
+            type: SnackBarType.failed);
         return '';
       }
     } catch (e) {
@@ -152,7 +168,8 @@ class TrackEventService {
       final headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        if(Boxes.getUserData().get(tokenKey)!=null)'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
+        if (Boxes.getUserData().get(tokenKey) != null)
+          'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
       };
 
       final response = await http.get(
@@ -165,19 +182,22 @@ class TrackEventService {
         log('-----------------Category Call--------------------');
         // log(responseData.toString());
 
-        if (responseData['success'] != null && responseData['success'] == true) {
+        if (responseData['success'] != null &&
+            responseData['success'] == true) {
           // Safely parse the category data
           final data = responseData['data']['category'] as List<dynamic>?;
           if (data != null) {
-            category = data.map((e) => CategoryModel.fromJson(e as Map<String, dynamic>)).toList();
+            category = data
+                .map((e) => CategoryModel.fromJson(e as Map<String, dynamic>))
+                .toList();
 
-            final imageUrls =
-            category
+            final imageUrls = category
                 .map((cat) => "${ApiClient.baseUrl}/${cat.categoryImage}")
                 .where((url) => url.isNotEmpty)
                 .toList();
 
-            preloadImagesFromUrls(imageUrls);}
+            preloadImagesFromUrls(imageUrls);
+          }
         } else {
           // Handle API-level errors
           showCustomSnackbar(
@@ -208,7 +228,8 @@ class TrackEventService {
       final headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        if(Boxes.getUserData().get(tokenKey)!=null)'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
+        if (Boxes.getUserData().get(tokenKey) != null)
+          'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
       };
 
       final response = await http.get(
@@ -221,20 +242,22 @@ class TrackEventService {
         log('-----------------Promote Track Call--------------------');
         // log(responseData.toString());
 
-        if (responseData['success'] != null && responseData['success'] == true) {
+        if (responseData['success'] != null &&
+            responseData['success'] == true) {
           // Parse the response data into a list
           final data = responseData['data'] as List<dynamic>?;
           if (data != null) {
-            promoteTrackList = data.map((e) => PromoteTrackModel.fromJson(e as Map<String, dynamic>)).toList();
+            promoteTrackList = data
+                .map((e) =>
+                    PromoteTrackModel.fromJson(e as Map<String, dynamic>))
+                .toList();
 
-            final imageUrls =
-            promoteTrackList
+            final imageUrls = promoteTrackList
                 .map((cat) => "${ApiClient.baseUrl}/${cat.bannerImage}")
                 .where((url) => url.isNotEmpty)
                 .toList();
 
             preloadImagesFromUrls(imageUrls);
-
           }
         } else {
           // Handle API failure
@@ -262,15 +285,16 @@ class TrackEventService {
   static Future<List<TrackSlots>> getSlotListCall({
     required String date,
     required String trackId,
-  })
-  async {
+  }) async {
     List<TrackSlots> slotList = [];
     try {
-      final url = Uri.parse('${ApiClient.searchForSlotUrl}?${date.isNotEmpty ? 'date=$date&' : ''}trackId=$trackId');
+      final url = Uri.parse(
+          '${ApiClient.searchForSlotUrl}?${date.isNotEmpty ? 'date=$date&' : ''}trackId=$trackId');
       final headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        if( Boxes.getUserData().get(tokenKey)!=null) 'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
+        if (Boxes.getUserData().get(tokenKey) != null)
+          'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
       };
 
       final response = await http.get(
@@ -284,10 +308,15 @@ class TrackEventService {
 
       if (responseData['success'] != null && responseData['success'] == true) {
         // Correctly map the data to a list of TrackSlots
-        slotList = (responseData['data']['availableSlots'] as List).map((e) => TrackSlots.fromJson(e)).toList();
+        slotList = (responseData['data']['availableSlots'] as List)
+            .map((e) => TrackSlots.fromJson(e))
+            .toList();
         return slotList;
       } else {
-        showCustomSnackbar(title: AppStaticString.failed, message: responseData['message'], type: SnackBarType.failed);
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
         return slotList; // Return empty list on failure
       }
     } catch (e) {
@@ -298,11 +327,11 @@ class TrackEventService {
 
   static Future<List<TrackHistoryRunningModel>> getTrackBookingCall({
     String history = '',
-  })
-  async {
+  }) async {
     List<TrackHistoryRunningModel> trackBookingList = [];
     try {
-      final url = Uri.parse('${ApiClient.getBookingUrl}${history.isNotEmpty ? '?history=yes' : ''}');
+      final url = Uri.parse(
+          '${ApiClient.getBookingUrl}${history.isNotEmpty ? '?history=yes' : ''}');
       final headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -318,13 +347,17 @@ class TrackEventService {
         final Map<String, dynamic> responseData = json.decode(response.body);
         log('-----------------Booking Track List Call--------------------');
         // log(url.toString());
-       log(responseData.toString());
+        log(responseData.toString());
 
-        if (responseData['success'] != null && responseData['success'] == true) {
+        if (responseData['success'] != null &&
+            responseData['success'] == true) {
           // Correctly parse the data into a list of TrackHistoryRunningModel
           final data = responseData['data'] as List<dynamic>?;
           if (data != null) {
-            trackBookingList = data.map((e) => TrackHistoryRunningModel.fromJson(e as Map<String, dynamic>)).toList();
+            trackBookingList = data
+                .map((e) => TrackHistoryRunningModel.fromJson(
+                    e as Map<String, dynamic>))
+                .toList();
           }
         } else {
           // Handle API-level errors
@@ -349,12 +382,12 @@ class TrackEventService {
     return trackBookingList;
   }
 
-  static Future<String> updateTrackRequest({
-    required String trackId,
-    required String totalTrackDayInMonth,
-    required List<String> trackDays,
-  })
-  async {
+  static Future<String> updateTrackRequest(
+      {required String trackId,
+      String? totalTrackDayInMonth,
+      List<String>? trackDays,
+      String? trackName,
+      String? desc}) async {
     try {
       final url = Uri.parse(ApiClient.updateTrackUrl);
       final headers = {
@@ -362,22 +395,38 @@ class TrackEventService {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
       };
-      final body = jsonEncode({"trackId": trackId, "trackDays": trackDays});
+      final body = jsonEncode({
+        "trackId": trackId,
+        if (trackDays != null && trackDays.isNotEmpty) "trackDays": trackDays,
+        if (desc != null)
+          "description": desc, // only when editing track description
+        if (trackName != null) "trackName": trackName
+      });
       final response = await http.patch(url, headers: headers, body: body);
       final responseData = json.decode(response.body);
       log('-----------------update track call--------------------');
       log(body.toString());
       log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {
-        totalTrackDayInMonth = responseData['data']['totalTrackDayInMonth'].toString();
-        showCustomSnackbar(title: AppStaticString.success, message: responseData['message'], type: SnackBarType.success);
+        totalTrackDayInMonth =
+            responseData['data']['totalTrackDayInMonth'].toString();
+        showCustomSnackbar(
+            title: AppStaticString.success,
+            message: responseData['message'],
+            type: SnackBarType.success);
         return responseData['data']['totalTrackDayInMonth'].toString();
       } else {
-        showCustomSnackbar(title: AppStaticString.failed, message: responseData['message'], type: SnackBarType.failed);
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
         return '';
       }
     } catch (e) {
-      showCustomSnackbar(title: AppStaticString.failed, message: e.toString(), type: SnackBarType.failed);
+      showCustomSnackbar(
+          title: AppStaticString.failed,
+          message: e.toString(),
+          type: SnackBarType.failed);
       debugPrint(e.toString());
       return '';
     }
@@ -393,8 +442,7 @@ class TrackEventService {
     required String currency,
     required String maxPeople,
     required String description,
-  })
-  async {
+  }) async {
     try {
       final url = Uri.parse(ApiClient.createTrackSlotUrl);
       final headers = {
@@ -419,14 +467,23 @@ class TrackEventService {
       log(body.toString());
       log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {
-        showCustomSnackbar(title: AppStaticString.success, message: responseData['message'], type: SnackBarType.success);
+        showCustomSnackbar(
+            title: AppStaticString.success,
+            message: responseData['message'],
+            type: SnackBarType.success);
         return true;
       } else {
-        showCustomSnackbar(title: AppStaticString.failed, message: responseData['message'], type: SnackBarType.failed);
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
         return false;
       }
     } catch (e) {
-      showCustomSnackbar(title: AppStaticString.failed, message: e.toString(), type: SnackBarType.failed);
+      showCustomSnackbar(
+          title: AppStaticString.failed,
+          message: e.toString(),
+          type: SnackBarType.failed);
       debugPrint(e.toString());
       return false;
     }
@@ -437,8 +494,7 @@ class TrackEventService {
     required String numOfPeople,
     required String date,
     required String currency,
-  })
-  async {
+  }) async {
     try {
       final url = Uri.parse(ApiClient.getBookASlotUrl);
       final headers = {
@@ -446,21 +502,35 @@ class TrackEventService {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
       };
-      final body = jsonEncode({"slotId": slotId, "numOfPeople": numOfPeople, "date": date, "currency": currency});
+      final body = jsonEncode({
+        "slotId": slotId,
+        "numOfPeople": numOfPeople,
+        "date": date,
+        "currency": currency
+      });
       final response = await http.post(url, headers: headers, body: body);
       final responseData = json.decode(response.body);
       log('-----------------book track slot call--------------------');
       log(body.toString());
       log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {
-        showCustomSnackbar(title: AppStaticString.success, message: responseData['message'], type: SnackBarType.success);
+        showCustomSnackbar(
+            title: AppStaticString.success,
+            message: responseData['message'],
+            type: SnackBarType.success);
         return responseData['data']['_id'];
       } else {
-        showCustomSnackbar(title: AppStaticString.failed, message: responseData['message'], type: SnackBarType.failed);
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
         return '';
       }
     } catch (e) {
-      showCustomSnackbar(title: AppStaticString.failed, message: e.toString(), type: SnackBarType.failed);
+      showCustomSnackbar(
+          title: AppStaticString.failed,
+          message: e.toString(),
+          type: SnackBarType.failed);
       debugPrint(e.toString());
       return '';
     }
@@ -468,15 +538,16 @@ class TrackEventService {
 
   static Future<SingleTrackModel> getSingleTrackData({
     required String trackId,
-  })
-  async {
+  }) async {
     SingleTrackModel singleTrackDetails = SingleTrackModel();
     try {
-      final url = Uri.parse('${ApiClient.getSingleBusinessUrl}?trackId=$trackId&getSlots=yes');
+      final url = Uri.parse(
+          '${ApiClient.getSingleBusinessUrl}?trackId=$trackId&getSlots=yes');
       final headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        if(Boxes.getUserData().get(tokenKey)!=null) 'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
+        if (Boxes.getUserData().get(tokenKey) != null)
+          'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
       };
 
       final response = await http.get(
@@ -488,7 +559,7 @@ class TrackEventService {
       log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {
         singleTrackDetails = SingleTrackModel.fromJson(responseData['data']);
-       if(singleTrackDetails.trackImage!=null) {
+        if (singleTrackDetails.trackImage != null) {
           final imageUrls = singleTrackDetails.trackImage!
               .map((cat) => "${ApiClient.baseUrl}/${cat}")
               .where((url) => url.isNotEmpty)
@@ -498,7 +569,10 @@ class TrackEventService {
         }
         return singleTrackDetails;
       } else {
-        showCustomSnackbar(title: AppStaticString.failed, message: responseData['message'], type: SnackBarType.failed);
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
         return singleTrackDetails;
       }
     } catch (e) {
@@ -506,16 +580,17 @@ class TrackEventService {
     }
     return singleTrackDetails;
   }
-   static Future<List<TrackSlots>> getTrackSlotForDayCall({
-    required String trackId,  String currentEventPage = "1",
-    String itemsEventPerPage = "5",
-    String totalEventPages = "7", List<int>? dates
-  })
-  async {
+
+  static Future<List<TrackSlots>> getTrackSlotForDayCall(
+      {required String trackId,
+      String currentEventPage = "1",
+      String itemsEventPerPage = "5",
+      String totalEventPages = "7",
+      List<int>? dates}) async {
     List<TrackSlots> myEventList = [];
     try {
-
-      final url = Uri.parse('${ApiClient.getTrackSlotForDayUrl}?trackId=$trackId${dates!=null?"&arrOfDayNo=$dates":""}&page=$currentEventPage&limit=$itemsEventPerPage');
+      final url = Uri.parse(
+          '${ApiClient.getTrackSlotForDayUrl}?trackId=$trackId${dates != null ? "&arrOfDayNo=$dates" : ""}&page=$currentEventPage&limit=$itemsEventPerPage');
       final headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -531,18 +606,22 @@ class TrackEventService {
       log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {
         if (responseData['data']["result"] is List) {
-          myEventList = (responseData['data']["result"] as List).map((e) => TrackSlots.fromJson(e)).toList();
-
-
+          myEventList = (responseData['data']["result"] as List)
+              .map((e) => TrackSlots.fromJson(e))
+              .toList();
         }
         if (responseData["data"]['meta'] != null) {
           currentEventPage = responseData["data"]['meta']['page'] ?? 1;
-          totalEventPages = responseData["data"]['meta']['total'] ?? 1; // Add this line
+          totalEventPages =
+              responseData["data"]['meta']['total'] ?? 1; // Add this line
           itemsEventPerPage = responseData["data"]['meta']['limit'] ?? 5;
         }
         return myEventList;
       } else {
-        showCustomSnackbar(title: AppStaticString.failed, message: responseData['message'], type: SnackBarType.failed);
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
         return myEventList;
       }
     } catch (e) {
@@ -551,10 +630,8 @@ class TrackEventService {
     return myEventList;
   }
 
-
-
-
-  static Future<bool> deleteSlotRequest({required String slotId, bool? isEvent}) async {
+  static Future<bool> deleteSlotRequest(
+      {required String slotId, bool? isEvent}) async {
     try {
       final url = Uri.parse(ApiClient.deleteSlotUrl);
       final headers = {
@@ -573,14 +650,23 @@ class TrackEventService {
       log(body.toString());
       log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {
-        showCustomSnackbar(title: AppStaticString.success, message: responseData['message'], type: SnackBarType.success);
+        showCustomSnackbar(
+            title: AppStaticString.success,
+            message: responseData['message'],
+            type: SnackBarType.success);
         return true;
       } else {
-        showCustomSnackbar(title: AppStaticString.failed, message: responseData['message'], type: SnackBarType.failed);
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
         return false;
       }
     } catch (e) {
-      showCustomSnackbar(title: AppStaticString.failed, message: e.toString(), type: SnackBarType.failed);
+      showCustomSnackbar(
+          title: AppStaticString.failed,
+          message: e.toString(),
+          type: SnackBarType.failed);
       debugPrint(e.toString());
       return false;
     }
@@ -588,21 +674,25 @@ class TrackEventService {
 
   ///===============================Event Functionality==============================///
 
-  static Future<String> addEventCall({required Map<String, dynamic> bodyData, required List<File>? files}) async {
+  static Future<String> addEventCall(
+      {required Map<String, dynamic> bodyData,
+      required List<File>? files}) async {
     try {
       final request = http.MultipartRequest(
         'POST',
         Uri.parse(ApiClient.createEventUrl),
       );
 
-      request.headers['Authorization'] = 'Bearer ${Boxes.getUserData().get(tokenKey)}';
+      request.headers['Authorization'] =
+          'Bearer ${Boxes.getUserData().get(tokenKey)}';
 
       request.fields['data'] = jsonEncode(bodyData);
 
       if (files != null && files.isNotEmpty) {
         for (File file in files) {
           if (await file.exists()) {
-            final mimeType = lookupMimeType(file.path) ?? 'application/octet-stream';
+            final mimeType =
+                lookupMimeType(file.path) ?? 'application/octet-stream';
             final mimeSplit = mimeType.split('/');
             request.files.add(
               await http.MultipartFile.fromPath(
@@ -631,10 +721,16 @@ class TrackEventService {
       final Map<String, dynamic> data = json.decode(responseData.body);
 
       if (data['success'] != null && data['success'] == true) {
-        showCustomSnackbar(title: AppStaticString.success, message: data['message'], type: SnackBarType.success);
+        showCustomSnackbar(
+            title: AppStaticString.success,
+            message: data['message'],
+            type: SnackBarType.success);
         return data['data']['_id'];
       } else {
-        showCustomSnackbar(title: AppStaticString.failed, message: data['message'], type: SnackBarType.failed);
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: data['message'],
+            type: SnackBarType.failed);
         return data['data']['_id'] ?? '';
       }
     } catch (e) {
@@ -643,12 +739,15 @@ class TrackEventService {
     }
   }
 
+  ///===============================update Track Functionality==============================///
+
   static Future<List<EventHistoryRunningModel>> getEventBookingCall({
     String history = '',
   }) async {
     List<EventHistoryRunningModel> eventBookingList = [];
     try {
-      final url = Uri.parse('${ApiClient.getBookingUrl}?data=event${history.isNotEmpty ? '&history=yes' : ''}');
+      final url = Uri.parse(
+          '${ApiClient.getBookingUrl}?data=event${history.isNotEmpty ? '&history=yes' : ''}');
       final headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -665,10 +764,14 @@ class TrackEventService {
         log('-----------------Booking Event List Call--------------------');
         // log(responseData.toString());
 
-        if (responseData['success'] != null && responseData['success'] == true) {
+        if (responseData['success'] != null &&
+            responseData['success'] == true) {
           final data = responseData['data'] as List<dynamic>?;
           if (data != null) {
-            eventBookingList = data.map((e) => EventHistoryRunningModel.fromJson(e as Map<String, dynamic>)).toList();
+            eventBookingList = data
+                .map((e) => EventHistoryRunningModel.fromJson(
+                    e as Map<String, dynamic>))
+                .toList();
           }
         } else {
           showCustomSnackbar(
@@ -697,11 +800,13 @@ class TrackEventService {
   }) async {
     SingleEventModel singleEventDetails = SingleEventModel();
     try {
-      final url = Uri.parse('${ApiClient.getSingleBusinessUrl}?eventId=$eventId&getSlots=yes');
+      final url = Uri.parse(
+          '${ApiClient.getSingleBusinessUrl}?eventId=$eventId&getSlots=yes');
       final headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-       if(Boxes.getUserData().get(tokenKey)!=null) 'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
+        if (Boxes.getUserData().get(tokenKey) != null)
+          'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
       };
 
       final response = await http.get(
@@ -714,7 +819,7 @@ class TrackEventService {
       if (responseData['success'] != null && responseData['success'] == true) {
         singleEventDetails = SingleEventModel.fromJson(responseData['data']);
 
-        if(singleEventDetails.eventImage!=null) {
+        if (singleEventDetails.eventImage != null) {
           final imageUrls = singleEventDetails.eventImage!
               .map((cat) => "${ApiClient.baseUrl}/${cat}")
               .where((url) => url.isNotEmpty)
@@ -724,7 +829,10 @@ class TrackEventService {
         }
         return singleEventDetails;
       } else {
-        showCustomSnackbar(title: AppStaticString.failed, message: responseData['message'], type: SnackBarType.failed);
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
         return singleEventDetails;
       }
     } catch (e) {
@@ -740,8 +848,7 @@ class TrackEventService {
     required String price,
     required String currency,
     required String description,
-  })
-  async {
+  }) async {
     try {
       final url = Uri.parse(ApiClient.createTrackSlotUrl);
       final headers = {
@@ -749,35 +856,48 @@ class TrackEventService {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
       };
-      final body = jsonEncode(
-          {"eventId": eventId,
-            "slotNo": slotNo, "maxPeople": maxPeople,
-            "price": price, "currency": currency, "description": description});
+      final body = jsonEncode({
+        "eventId": eventId,
+        "slotNo": slotNo,
+        "maxPeople": maxPeople,
+        "price": price,
+        "currency": currency,
+        "description": description
+      });
       final response = await http.post(url, headers: headers, body: body);
       final responseData = json.decode(response.body);
       log('-----------------create event slot call--------------------');
       log(body.toString());
       log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {
-        showCustomSnackbar(title: AppStaticString.success, message: responseData['message'], type: SnackBarType.success);
+        showCustomSnackbar(
+            title: AppStaticString.success,
+            message: responseData['message'],
+            type: SnackBarType.success);
         return true;
       } else {
-        showCustomSnackbar(title: AppStaticString.failed, message: responseData['message'], type: SnackBarType.failed);
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
         return false;
       }
     } catch (e) {
-      showCustomSnackbar(title: AppStaticString.failed, message: e.toString(), type: SnackBarType.failed);
+      showCustomSnackbar(
+          title: AppStaticString.failed,
+          message: e.toString(),
+          type: SnackBarType.failed);
       debugPrint(e.toString());
       return false;
     }
   }
+
+
   static Future<bool> setSlotForDatesRequest({
     required String trackId,
     required List<String> slotIds,
     required List<int> arrOfDayNo,
-
-  })
-  async {
+  }) async {
     try {
       final url = Uri.parse(ApiClient.postPresetTrackUrl);
       final headers = {
@@ -785,26 +905,34 @@ class TrackEventService {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
       };
-      final body = jsonEncode(
-          {
-            "trackId": trackId,
-            "slotIds": slotIds,
-            "arrOfDayNo": arrOfDayNo,
-            });
+      final body = jsonEncode({
+        "trackId": trackId,
+        "slotIds": slotIds,
+        "arrOfDayNo": arrOfDayNo,
+      });
       final response = await http.post(url, headers: headers, body: body);
       final responseData = json.decode(response.body);
       log('-----------------preset slot call--------------------');
       log(body.toString());
       log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {
-        showCustomSnackbar(title: AppStaticString.success, message: responseData['message'], type: SnackBarType.success);
+        showCustomSnackbar(
+            title: AppStaticString.success,
+            message: responseData['message'],
+            type: SnackBarType.success);
         return true;
       } else {
-        showCustomSnackbar(title: AppStaticString.failed, message: responseData['message'], type: SnackBarType.failed);
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
         return false;
       }
     } catch (e) {
-      showCustomSnackbar(title: AppStaticString.failed, message: e.toString(), type: SnackBarType.failed);
+      showCustomSnackbar(
+          title: AppStaticString.failed,
+          message: e.toString(),
+          type: SnackBarType.failed);
       debugPrint(e.toString());
       return false;
     }
@@ -868,18 +996,28 @@ class TrackEventService {
       log(responseData.toString());
 
       if (responseData['success'] != null && responseData['success'] == true) {
-        showCustomSnackbar(title: AppStaticString.success, message: responseData['message'], type: SnackBarType.success);
+        showCustomSnackbar(
+            title: AppStaticString.success,
+            message: responseData['message'],
+            type: SnackBarType.success);
         log('-----------------booking id before--------------------');
-        bookingIds = responseData['data'].map((e) => e['_id'].toString()).toList();
+        bookingIds =
+            responseData['data'].map((e) => e['_id'].toString()).toList();
         log('-----------------booking id--------------------');
         log(bookingIds.toString());
         return bookingIds;
       } else {
-        showCustomSnackbar(title: AppStaticString.failed, message: responseData['message'], type: SnackBarType.failed);
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
         return bookingIds;
       }
     } catch (e) {
-      showCustomSnackbar(title: AppStaticString.failed, message: e.toString(), type: SnackBarType.failed);
+      showCustomSnackbar(
+          title: AppStaticString.failed,
+          message: e.toString(),
+          type: SnackBarType.failed);
       debugPrint(ApiClient.getJoinEventUrl);
       debugPrint(e.toString());
       return bookingIds;
@@ -900,7 +1038,8 @@ class TrackEventService {
         'Authorization': 'Bearer ${Boxes.getUserData().get(tokenKey)}',
       };
       final body = jsonEncode({
-        "bookingIds": bookingIds /*is List ? bookingId.toList() : bookingId.toString()*/,
+        "bookingIds":
+            bookingIds /*is List ? bookingId.toList() : bookingId.toString()*/,
         "currency": currency,
         "bookingId": bookingId,
         "amount": amount,
@@ -911,14 +1050,23 @@ class TrackEventService {
       log(body.toString());
       log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {
-        showCustomSnackbar(title: AppStaticString.success, message: responseData['message'], type: SnackBarType.success);
+        showCustomSnackbar(
+            title: AppStaticString.success,
+            message: responseData['message'],
+            type: SnackBarType.success);
         return responseData['data'];
       } else {
-        showCustomSnackbar(title: AppStaticString.failed, message: responseData['message'], type: SnackBarType.failed);
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
         return '';
       }
     } catch (e) {
-      showCustomSnackbar(title: AppStaticString.failed, message: e.toString(), type: SnackBarType.failed);
+      showCustomSnackbar(
+          title: AppStaticString.failed,
+          message: e.toString(),
+          type: SnackBarType.failed);
       debugPrint('checkout booking');
       debugPrint(e.toString());
       return '';
@@ -940,28 +1088,38 @@ class TrackEventService {
       log(url.toString());
       log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {
-        showCustomSnackbar(title: AppStaticString.success, message: responseData['message'], type: SnackBarType.success);
+        showCustomSnackbar(
+            title: AppStaticString.success,
+            message: responseData['message'],
+            type: SnackBarType.success);
         return true;
       } else {
-        showCustomSnackbar(title: AppStaticString.failed, message: responseData['message'], type: SnackBarType.failed);
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
         return false;
       }
     } catch (e) {
-      showCustomSnackbar(title: AppStaticString.failed, message: e.toString(), type: SnackBarType.failed);
+      showCustomSnackbar(
+          title: AppStaticString.failed,
+          message: e.toString(),
+          type: SnackBarType.failed);
 
       debugPrint(e.toString());
       return false;
     }
   }
 
-static Future<List<SingleTrackModel>> getMyBusinessTrack({
+  static Future<List<SingleTrackModel>> getMyBusinessTrack({
     String currentTrackPage = "1",
     String itemsTrackPerPage = "5",
     String totalTrackPages = "7",
   }) async {
     List<SingleTrackModel> myTrackList = [];
     try {
-      final url = Uri.parse("${ApiClient.myBusinessUrl}?page=$currentTrackPage&limit=$itemsTrackPerPage");
+      final url = Uri.parse(
+          "${ApiClient.myBusinessUrl}?page=$currentTrackPage&limit=$itemsTrackPerPage");
       final headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -977,42 +1135,48 @@ static Future<List<SingleTrackModel>> getMyBusinessTrack({
       // log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {
         if (responseData['data']["tracks"] is List) {
-          myTrackList = (responseData['data']["tracks"] as List).map((e) => SingleTrackModel.fromJson(e)).toList();
+          myTrackList = (responseData['data']["tracks"] as List)
+              .map((e) => SingleTrackModel.fromJson(e))
+              .toList();
           final imageUrls = myTrackList
               .map((cat) {
-            if (cat.trackImage != null && cat.trackImage!.isNotEmpty) {
-              return "${ApiClient.baseUrl}/${cat.trackImage![0]}";
-            }
-            return null;
-          })
+                if (cat.trackImage != null && cat.trackImage!.isNotEmpty) {
+                  return "${ApiClient.baseUrl}/${cat.trackImage![0]}";
+                }
+                return null;
+              })
               .whereType<String>() // filters out nulls safely
               .where((url) => url.isNotEmpty)
               .toList();
           final imageUrlsOfRenters = myTrackList
-              .expand((cat) => cat.renters ?? []) // flatten all renters from each track
+              .expand((cat) =>
+                  cat.renters ?? []) // flatten all renters from each track
               .map((renter) {
-            if (renter.profileImage != null && renter.profileImage!.isNotEmpty) {
-              return "${ApiClient.baseUrl}/${renter.profileImage!}";
-            }
-            return null;
-          })
+                if (renter.profileImage != null &&
+                    renter.profileImage!.isNotEmpty) {
+                  return "${ApiClient.baseUrl}/${renter.profileImage!}";
+                }
+                return null;
+              })
               .whereType<String>() // removes nulls
               .toList();
 
           // preloadImagesFromUrls(imageUrlsOfRenters);
 
-
           preloadImagesFromUrls(imageUrls);
-
         }
         if (responseData["data"]['pagination'] != null) {
           currentTrackPage = responseData["data"]['pagination']['page'] ?? 1;
-          totalTrackPages = responseData["data"]['pagination']['totalCount'] ?? 1; // Add this line
+          totalTrackPages = responseData["data"]['pagination']['totalCount'] ??
+              1; // Add this line
           itemsTrackPerPage = responseData["data"]['pagination']['limit'] ?? 5;
         }
         return myTrackList;
       } else {
-        showCustomSnackbar(title: AppStaticString.failed, message: responseData['message'], type: SnackBarType.failed);
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
         return myTrackList;
       }
     } catch (e) {
@@ -1026,12 +1190,11 @@ static Future<List<SingleTrackModel>> getMyBusinessTrack({
     String currentEventPage = "1",
     String itemsEventPerPage = "5",
     String totalEventPages = "7",
-  })
-  async {
+  }) async {
     List<SingleEventModel> myEventList = [];
     try {
-      final url =
-          Uri.parse('${ApiClient.myBusinessUrl}?data=event${booked.isNotEmpty ? '&booked=yes' : ''}&page=$currentEventPage&limit=$itemsEventPerPage');
+      final url = Uri.parse(
+          '${ApiClient.myBusinessUrl}?data=event${booked.isNotEmpty ? '&booked=yes' : ''}&page=$currentEventPage&limit=$itemsEventPerPage');
       final headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -1047,29 +1210,34 @@ static Future<List<SingleTrackModel>> getMyBusinessTrack({
       log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {
         if (responseData['data']["events"] is List) {
-          myEventList = (responseData['data']["events"] as List).map((e) => SingleEventModel.fromJson(e)).toList();
+          myEventList = (responseData['data']["events"] as List)
+              .map((e) => SingleEventModel.fromJson(e))
+              .toList();
           final imageUrls = myEventList
               .map((cat) {
-            if (cat.eventImage != null && cat.eventImage!.isNotEmpty) {
-              return "${ApiClient.baseUrl}/${cat.eventImage![0]}";
-            }
-            return null;
-          })
+                if (cat.eventImage != null && cat.eventImage!.isNotEmpty) {
+                  return "${ApiClient.baseUrl}/${cat.eventImage![0]}";
+                }
+                return null;
+              })
               .whereType<String>() // filters out nulls safely
               .where((url) => url.isNotEmpty)
               .toList();
 
           preloadImagesFromUrls(imageUrls);
-
         }
         if (responseData["data"]['pagination'] != null) {
           currentEventPage = responseData["data"]['pagination']['page'] ?? 1;
-          totalEventPages = responseData["data"]['pagination']['totalCount'] ?? 1; // Add this line
+          totalEventPages = responseData["data"]['pagination']['totalCount'] ??
+              1; // Add this line
           itemsEventPerPage = responseData["data"]['pagination']['limit'] ?? 5;
         }
         return myEventList;
       } else {
-        showCustomSnackbar(title: AppStaticString.failed, message: responseData['message'], type: SnackBarType.failed);
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
         return myEventList;
       }
     } catch (e) {
@@ -1078,10 +1246,12 @@ static Future<List<SingleTrackModel>> getMyBusinessTrack({
     return myEventList;
   }
 
-  static Future<List<EventParticipantsModel>> getEventParticipants({required String eventSlotId}) async {
+  static Future<List<EventParticipantsModel>> getEventParticipants(
+      {required String eventSlotId}) async {
     List<EventParticipantsModel> myEventList = [];
     try {
-      final url = Uri.parse('${ApiClient.getParticipantsUrl}?eventSlotId=$eventSlotId');
+      final url =
+          Uri.parse('${ApiClient.getParticipantsUrl}?eventSlotId=$eventSlotId');
       final headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -1097,19 +1267,22 @@ static Future<List<SingleTrackModel>> getMyBusinessTrack({
       log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {
         if (responseData['data'] is List) {
-          myEventList = (responseData['data'] as List).map((e) => EventParticipantsModel.fromJson(e)).toList();
-          final imageUrls =
-          myEventList
+          myEventList = (responseData['data'] as List)
+              .map((e) => EventParticipantsModel.fromJson(e))
+              .toList();
+          final imageUrls = myEventList
               .map((cat) => "${ApiClient.baseUrl}/${cat.user!.profileImage}")
               .where((url) => url.isNotEmpty)
               .toList();
 
           preloadImagesFromUrls(imageUrls);
-
         }
         return myEventList;
       } else {
-        showCustomSnackbar(title: AppStaticString.failed, message: responseData['message'], type: SnackBarType.failed);
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
         return myEventList;
       }
     } catch (e) {
@@ -1118,10 +1291,12 @@ static Future<List<SingleTrackModel>> getMyBusinessTrack({
     return myEventList;
   }
 
-  static Future<List<TrackParticipantsModel>> getTrackParticipants({required String trackSlotId}) async {
+  static Future<List<TrackParticipantsModel>> getTrackParticipants(
+      {required String trackSlotId}) async {
     List<TrackParticipantsModel> myEventList = [];
     try {
-      final url = Uri.parse('${ApiClient.getParticipantsUrl}?trackSlotId=$trackSlotId');
+      final url =
+          Uri.parse('${ApiClient.getParticipantsUrl}?trackSlotId=$trackSlotId');
       final headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -1137,18 +1312,23 @@ static Future<List<SingleTrackModel>> getMyBusinessTrack({
       log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {
         if (responseData['data'] is List) {
-          myEventList = (responseData['data'] as List).map((e) => TrackParticipantsModel.fromJson(e)).toList();
+          myEventList = (responseData['data'] as List)
+              .map((e) => TrackParticipantsModel.fromJson(e))
+              .toList();
 
-          final imageUrls =
-          myEventList
+          final imageUrls = myEventList
               .map((cat) => "${ApiClient.baseUrl}/${cat.user!.profileImage}")
               .where((url) => url.isNotEmpty)
               .toList();
 
-          preloadImagesFromUrls(imageUrls); }
+          preloadImagesFromUrls(imageUrls);
+        }
         return myEventList;
       } else {
-        showCustomSnackbar(title: AppStaticString.failed, message: responseData['message'], type: SnackBarType.failed);
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
         return myEventList;
       }
     } catch (e) {
@@ -1157,7 +1337,8 @@ static Future<List<SingleTrackModel>> getMyBusinessTrack({
     return myEventList;
   }
 
-  static Future<List<RentersModel>> getRentersOnDate({required String date}) async {
+  static Future<List<RentersModel>> getRentersOnDate(
+      {required String date}) async {
     List<RentersModel> renterList = [];
     try {
       final url = Uri.parse('${ApiClient.getAllRentersOnDateUrl}?date=$date');
@@ -1177,17 +1358,22 @@ static Future<List<SingleTrackModel>> getMyBusinessTrack({
       log(url.toString());
       if (responseData['success'] != null && responseData['success'] == true) {
         if (responseData['data']['renters'] is List) {
-          renterList = (responseData['data']['renters'] as List).map((e) => RentersModel.fromJson(e)).toList();
-          final imageUrls =
-          renterList
+          renterList = (responseData['data']['renters'] as List)
+              .map((e) => RentersModel.fromJson(e))
+              .toList();
+          final imageUrls = renterList
               .map((cat) => "${ApiClient.baseUrl}/${cat.user!.profileImage}")
               .where((url) => url.isNotEmpty)
               .toList();
 
-          preloadImagesFromUrls(imageUrls); }
+          preloadImagesFromUrls(imageUrls);
+        }
         return renterList;
       } else {
-        showCustomSnackbar(title: AppStaticString.failed, message: responseData['message'], type: SnackBarType.failed);
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
         return renterList;
       }
     } catch (e) {
@@ -1217,14 +1403,23 @@ static Future<List<SingleTrackModel>> getMyBusinessTrack({
       log(body.toString());
       log(responseData.toString());
       if (responseData['success'] != null && responseData['success'] == true) {
-        showCustomSnackbar(title: AppStaticString.success, message: responseData['message'], type: SnackBarType.success);
+        showCustomSnackbar(
+            title: AppStaticString.success,
+            message: responseData['message'],
+            type: SnackBarType.success);
         return true;
       } else {
-        showCustomSnackbar(title: AppStaticString.failed, message: responseData['message'], type: SnackBarType.failed);
+        showCustomSnackbar(
+            title: AppStaticString.failed,
+            message: responseData['message'],
+            type: SnackBarType.failed);
         return false;
       }
     } catch (e) {
-      showCustomSnackbar(title: AppStaticString.failed, message: e.toString(), type: SnackBarType.failed);
+      showCustomSnackbar(
+          title: AppStaticString.failed,
+          message: e.toString(),
+          type: SnackBarType.failed);
       debugPrint(e.toString());
       return false;
     }
@@ -1235,7 +1430,8 @@ static Future<List<SingleTrackModel>> getMyBusinessTrack({
     required String selectedCurrencyTo,
     required String amount,
   }) async {
-    final url = 'https://v6.exchangerate-api.com/v6/${GoogleClient.currencyApiKey}/pair/$selectedCurrencyFrom/$selectedCurrencyTo/$amount';
+    final url =
+        'https://v6.exchangerate-api.com/v6/${GoogleClient.currencyApiKey}/pair/$selectedCurrencyFrom/$selectedCurrencyTo/$amount';
     final response = await http.get(Uri.parse(url));
     String convertedAmount = '';
     if (response.statusCode == 200) {

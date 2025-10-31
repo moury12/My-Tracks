@@ -490,7 +490,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/RunnerProfile.entitlements;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = P6DUBGJFDH;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -500,7 +500,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = "";
-				"MARKETING_VERSION[sdk=iphoneos*]" = 1.1.3;
+				"MARKETING_VERSION[sdk=iphoneos*]" = 1.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mytracksdarren.roe.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -681,7 +681,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = P6DUBGJFDH;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -691,7 +691,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = "";
-				"MARKETING_VERSION[sdk=iphoneos*]" = 1.1.3;
+				"MARKETING_VERSION[sdk=iphoneos*]" = 1.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mytracksdarren.roe.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -712,7 +712,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = P6DUBGJFDH;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -722,7 +722,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = "";
-				"MARKETING_VERSION[sdk=iphoneos*]" = 1.1.3;
+				"MARKETING_VERSION[sdk=iphoneos*]" = 1.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mytracksdarren.roe.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

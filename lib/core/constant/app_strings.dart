@@ -17,6 +17,7 @@ class AppStaticString {
   static const String createTrack = "Create Track";
   static const String createEvent = "Create Event";
   static const String editProfile = "Edit Profile";
+  static const String editTrack = "Edit Track";
   static const String profile = "Profile";
   static const String history = "History";
   static const String eventUser = "Event User";
@@ -74,7 +75,7 @@ class AppStaticString {
   static const String signIn = "Sign In";
   static const String emailRequired = "Email is required.";
   static const String nameRequired = "Username is required.";
-  static const String slotNoRequired = "Slot no is required.";
+  static const String slotNoRequired = "Slot name is required.";
   static const String fieldRequired = "Field is required.";
   static const String otpFieldRequired = "Otp field is required.";
   static const String passRequired = "Password is required.";
@@ -156,9 +157,9 @@ class AppStaticString {
   static const String  uploadPhoto= "Upload photo";
   static const String  uploadImageLimit= "Only you can upload 5 images";
   static const String  uploadImage= "Upload Image";
-  static const String  slotNo= "Slot No:";
-  static const String  totalSeat= "Total Seat";
-  static const String  totalSeatWithClone= "Total Seat: ";
+  static const String  slotNo= "Slot Name:";
+  static const String  totalSeat= "Total entrys";
+  static const String  totalSeatWithClone= "Total entrys: ";
   static const String  price= "Price";
   static const String  publish= "Publish";
   static const String  wantDltMsg= "Are you sure you want to delete this content ?";
@@ -174,9 +175,9 @@ class AppStaticString {
   static const String  seat= "Seat: ";
   static const String  selectDay= "Select Day";
   static const String  selectDate= "Select Date";
-  static const String  areYouSureWantToReactivate= "Are you sure you want to reactivate this truck?";
+  static const String  areYouSureWantToReactivate= "Are you sure you want to reactivate this track?";
   static const String  availableSlot= "Available Slot: ";
-  static const String  howManyPeopleCanTrack= "How many people can the track";
+  static const String  howManyPeopleCanTrack= "Booking Capacity";
   static const String  contactNumber= "Contact Number";
   static const String  enterEmailToSendCode= "Enter your email and we will send you a verification code";
   static const String  searchHerr= "Search here...";
@@ -194,7 +195,7 @@ class AppStaticString {
   static const String  bookSlot= "Book a Slot";
 
   static const String  priceAmount= "Price amount";
-  static const String  selectPeople= "Select People";
+  static const String  selectPeople= "No. of participants";
   static const String  drivingLicence= "Driving Licence";
   static const String  carLicence= "Car Licence";
   static const String  bookingFor= "Booking For";

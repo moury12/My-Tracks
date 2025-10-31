@@ -184,42 +184,42 @@ class ProfileScreen extends StatelessWidget {
                           ProfileController.to.contactNumberController.value,
                     );
                   }),
-                  Obx(() {
-                    return CustomTextField(
-                      title: AppStaticString.location,
-                      onChanged: (val) {
-                        CommonController.to.fetchSuggestedPlaces(val);
-                      },
-                      isEnable:
-                          argument != null && argument == 'edit' ? true : false,
-                      textEditingController:
-                          ProfileController.to.locationController.value,
-                    );
-                  }),
-                  Obx(() {
-                    return CommonController.to.isLoadingOnLocationSuggestion.value
-                        ? DefaultProgressIndicator(
-                      color: AppColors.primaryColor,
-                    )
-                        : Column(
-                      children: List.generate(
-                        CommonController.to.addressSuggestion.length,
-                            (index) {
-                          final address =
-                          CommonController.to.addressSuggestion[index];
-                          return SearchAddress(
-                            onTap: () async {
-
-                              ProfileController.to.locationController.value.text =
-                                  address["description"].toString();
-                              CommonController.to.addressSuggestion.clear();
-                            },
-                            title: address['description'],
-                          );
-                        },
-                      ),
-                    );
-                  }),
+                  // Obx(() {
+                  //   return CustomTextField(
+                  //     title: AppStaticString.location,
+                  //     onChanged: (val) {
+                  //       CommonController.to.fetchSuggestedPlaces(val);
+                  //     },
+                  //     isEnable:
+                  //         argument != null && argument == 'edit' ? true : false,
+                  //     textEditingController:
+                  //         ProfileController.to.locationController.value,
+                  //   );
+                  // }),
+                  // Obx(() {
+                  //   return CommonController.to.isLoadingOnLocationSuggestion.value
+                  //       ? DefaultProgressIndicator(
+                  //     color: AppColors.primaryColor,
+                  //   )
+                  //       : Column(
+                  //     children: List.generate(
+                  //       CommonController.to.addressSuggestion.length,
+                  //           (index) {
+                  //         final address =
+                  //         CommonController.to.addressSuggestion[index];
+                  //         return SearchAddress(
+                  //           onTap: () async {
+                  //
+                  //             ProfileController.to.locationController.value.text =
+                  //                 address["description"].toString();
+                  //             CommonController.to.addressSuggestion.clear();
+                  //           },
+                  //           title: address['description'],
+                  //         );
+                  //       },
+                  //     ),
+                  //   );
+                  // }),
                   argument != null && argument == 'edit'
                       ? Obx(
                       () {

@@ -19,12 +19,13 @@ class BlackContainerWithBroder extends StatelessWidget {
         padding: padding12V,
         alignment: Alignment.center,
         decoration: BoxDecoration(
+          color: AppColors.blueColorDark,
             borderRadius: BorderRadius.circular(4.r),
             border: Border.all(width: 1, color: AppColors.textFieldColor)),
         child: Text(
           text ?? AppStaticString.customerInfo,
-          style: poppinsRegular.copyWith(
-              color: AppColors.normalDarkWhite,
+          style: poppinsMedium.copyWith(
+              color: AppColors.whiteBrightColor,
               fontSize: getFontSizeDefault(context)),
         ));
   }

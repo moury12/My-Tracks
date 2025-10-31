@@ -102,7 +102,7 @@ class AddButtonInContainer extends StatelessWidget {
         alignment: Alignment.center,
         decoration: const BoxDecoration(
           shape: BoxShape.circle,
-          color: AppColors.textFieldColor,
+          color: AppColors.blueColorDark,
         ),
         child: Image.asset(
           plusIconUrl,

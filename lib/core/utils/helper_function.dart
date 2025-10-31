@@ -188,31 +188,38 @@ async {
       timePickerTheme: TimePickerThemeData(
 
         backgroundColor:
-            AppColors.blackLightColor, // Background color of the dialog
+            AppColors.blueColor, // Background color of the dialog
         hourMinuteShape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),
-        dialHandColor: AppColors.blueColor,
+        dialHandColor: AppColors.blackColor,
         hourMinuteTextColor: WidgetStateColor.resolveWith(
             (states) => states.contains(WidgetState.selected)
                 ? Colors.white // Text color when selected
                 : Colors.grey[300]!),
+        cancelButtonStyle: ButtonStyle(foregroundColor:WidgetStateColor.resolveWith(
+                (states) => states.contains(WidgetState.selected)
+                ? AppColors.blackColor // Background color when selected
+                : AppColors.blackColor)), confirmButtonStyle: ButtonStyle(foregroundColor:WidgetStateColor.resolveWith(
+                (states) => states.contains(WidgetState.selected)
+                ? AppColors.blackColor // Background color when selected
+                : AppColors.blackColor)),
         hourMinuteColor: WidgetStateColor.resolveWith(
             (states) => states.contains(WidgetState.selected)
-                ? AppColors.blueColor // Background color when selected
-                : Colors.grey[800]!),
+                ? AppColors.blackColor // Background color when selected
+                : AppColors.blackColor),
         dialBackgroundColor: Colors.grey[800], // Dial's background color
         dialTextColor: WidgetStateColor.resolveWith(
             (states) => states.contains(WidgetState.selected)
                 ? Colors.white // Dial text color when selected
                 : Colors.grey[400]!),
-        entryModeIconColor: AppColors.blueColor, // Color of the entry mode icon
+        entryModeIconColor: AppColors.blackColor, // Color of the entry mode icon
       ),
     );
     // Show time picker dialog
     final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
-      initialTime: initialTime,
+      initialTime: initialTime,  initialEntryMode: TimePickerEntryMode.input,
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: customTimePickerTheme,
