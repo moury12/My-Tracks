@@ -32,25 +32,25 @@ class HistoryContentWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String name =
-        trackModel != null ? trackModel!.trackSlot!.slotNo.toString() : 'n/a';
+        trackModel != null&& trackModel!.trackSlot!=null  && trackModel!.trackSlot!=null? trackModel!.trackSlot!.slotNo.toString() : 'no Data provided';
     final String price =
-        trackModel != null ? trackModel!.price.toString() : 'n/a';
+        trackModel != null&& trackModel!.trackSlot!=null ? trackModel!.price.toString() : '0.00';
     final String bookingId =
-        trackModel != null ? trackModel!.sId.toString() : 'n/a';
+        trackModel != null&& trackModel!.trackSlot!=null ? trackModel!.sId.toString() : 'no Data provided';
     final String selectedCurrencyFrom =
-        trackModel != null ? trackModel!.currency.toString() : 'n/a';
+        trackModel != null&& trackModel!.trackSlot!=null ? trackModel!.currency.toString() : 'no Data provided';
 
     ///-------- need to fix----------./...
     final String day =
-        trackModel != null ? trackModel!.trackSlot!.day.toString() : 'n/a';
+        trackModel != null&& trackModel!.trackSlot!=null ? trackModel!.trackSlot!.day.toString() : 'no Data provided';
     final String status =
-        trackModel != null ? trackModel!.status.toString() : 'n/a';
-    final String startDateTime = trackModel != null
+        trackModel != null&& trackModel!.trackSlot!=null ? trackModel!.status.toString() : 'no Data provided';
+    final String startDateTime = trackModel != null&& trackModel!.trackSlot!=null
         ? formatDateTime(trackModel!.startDateTime ?? '').toString()
-        : 'n/a';
-    final String endDateTime = trackModel != null
+        : 'no Data provided';
+    final String endDateTime = trackModel != null&& trackModel!.trackSlot!=null
         ? formatDateTime(trackModel!.endDateTime ?? '').toString()
-        : 'n/a';
+        : 'no Data provided';
     return Column(
       spacing: 6.h,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,11 +59,11 @@ class HistoryContentWidget extends StatelessWidget {
           spacing: 12.w,
           children: [
             ///===================dynamic slot no =============================///
-            Expanded(
+            Expanded(flex: 2,
                 child: Text(
               '${AppStaticString.slotNumber} $name',
               style: poppinsSemiBold.copyWith(
-                  fontSize: getFontSizeExtraLarge(context)),
+                  fontSize: getFontSizeLarge(context)),
             )),
 
             ///===================dynamic price =============================///
@@ -74,13 +74,17 @@ class HistoryContentWidget extends StatelessWidget {
               textAlign: TextAlign.end,
               style: poppinsSemiBold.copyWith(
                   color: AppColors.normalDarkWhite,
-                  fontSize: getFontSizeExtraLarge(context)),
+                  fontSize: getFontSizeLarge(context)),
             )),
           ],
         ),
 
         ///===================dynamic week day =============================///
-        addRating == true ? RattingButtonWidget(ratingValue: ratingVal??0.0, trackId: trackModel!.track??'',) : const SizedBox.shrink(),
+        addRating == true ? RattingButtonWidget(
+
+          ratingValue: ratingVal??0.0,
+          trackId: trackModel!.track??'',)
+            : const SizedBox.shrink(),
 
         // Row(
         //   children: [
