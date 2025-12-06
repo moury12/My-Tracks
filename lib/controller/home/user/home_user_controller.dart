@@ -20,7 +20,7 @@ class HomeUserController extends GetxController {
   static HomeUserController get to => Get.find();
   RxInt currentPage = 0.obs;
   RxInt currentTabIndex = 0.obs;
-  RxInt selectedIndexCategory = 0.obs;
+  Rxn<int> selectedIndexCategory = Rxn<int>();
   RxBool react = false.obs;
   Timer? timer;
   Rx<PageController> controller = PageController(initialPage: 0, viewportFraction: 0.9, keepPage: true).obs;
@@ -223,11 +223,16 @@ class HomeUserController extends GetxController {
     }
   }
 
+
   void updateCategorySearch() {
-    if (catList.isNotEmpty && selectedIndexCategory < catList.length) {
-      categorySearch.value = catList[selectedIndexCategory.value].name ?? ''; // Safely update
+    // Check if selectedIndexCategory is not null and within bounds of the list
+    if (selectedIndexCategory.value != null &&
+        selectedIndexCategory.value! < catList.length) {
+      // Safely update the categorySearch if the index is valid
+      categorySearch.value = catList[selectedIndexCategory.value!].name ?? '';
     } else {
-      categorySearch.value = ''; // Fallback to empty if the list or index is invalid
+      // Fallback to empty if the index is null or out of bounds
+      categorySearch.value = '';
     }
   }
 
@@ -241,7 +246,7 @@ class HomeUserController extends GetxController {
     categorySearch.value = '';
     Get.put(ProfileController());
     ProfileController.to.getUserProfileData();
-    selectedIndexCategory.value = 0;
+    selectedIndexCategory.value = null;
 
 
 

@@ -26,7 +26,7 @@ class CategoryCircleWidget extends StatelessWidget {
               // padding: EdgeInsets.all(4.sp),
               clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
-                  border: Border.all(color:HomeUserController.to.selectedIndexCategory.value==index? AppColors.pinkColor:AppColors.blackBorderColor),
+                  border: Border.all(color:HomeUserController.to.selectedIndexCategory.value!=null&&HomeUserController.to.selectedIndexCategory.value==index? AppColors.pinkColor:AppColors.blackBorderColor),
                   shape: BoxShape.circle),
               child: InkWell(
                 onTap:onTap?? () {
